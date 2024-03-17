@@ -20,7 +20,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
         height: 300),
     appBar: AppBar(
       title: Align(
-          alignment: Alignment.center, child: Text('Welcome to Procumate')),
+          alignment: Alignment.center, child: Text('Customised Dietery Plan')),
     ),
   );
 
