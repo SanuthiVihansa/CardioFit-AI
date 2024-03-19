@@ -5,7 +5,8 @@ class PMBDeviceConnectionScreen extends StatefulWidget {
   const PMBDeviceConnectionScreen({super.key});
 
   @override
-  State<PMBDeviceConnectionScreen> createState() => _PMBDeviceConnectionScreenState();
+  State<PMBDeviceConnectionScreen> createState() =>
+      _PMBDeviceConnectionScreenState();
 }
 
 class _PMBDeviceConnectionScreenState extends State<PMBDeviceConnectionScreen> {
@@ -20,7 +21,7 @@ class _PMBDeviceConnectionScreenState extends State<PMBDeviceConnectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ,
+      body: Container(),
     );
   }
 }
