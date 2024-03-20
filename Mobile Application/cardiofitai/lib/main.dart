@@ -2,7 +2,7 @@ import 'package:cardiofitai/screens/palm_analysis/pmb_device_connection_screen.d
 import 'package:flutter/material.dart';
 
 void main(){
-  runApp(CardioFitAi());
+  runApp(const CardioFitAi());
 }
 
 class CardioFitAi extends StatelessWidget {
@@ -10,7 +10,7 @@ class CardioFitAi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: PMBDeviceConnectionScreen(),
     );
   }
