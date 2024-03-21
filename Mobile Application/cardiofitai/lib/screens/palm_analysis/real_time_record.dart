@@ -20,7 +20,7 @@ class _RealTimeRecordState extends State<RealTimeRecord> {
   }
 
   void startCountdown() {
-    const oneSec = const Duration(seconds: 1);
+    const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
@@ -52,7 +52,7 @@ class _RealTimeRecordState extends State<RealTimeRecord> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   "Real-time Lead II ECG Signal",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
@@ -60,14 +60,17 @@ class _RealTimeRecordState extends State<RealTimeRecord> {
               ],
             ),
           ),
-          Row(
-            children: [
-              Image.asset(
-                "assets/palm_analysis/recording.gif",
-                scale: 15,
-              ),
-              const Text("Capturing")
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            child: Row(
+              children: [
+                Image.asset(
+                  "assets/palm_analysis/recording.gif",
+                  scale: 15,
+                ),
+                const Text("Capturing")
+              ],
+            ),
           )
         ],
       ),
