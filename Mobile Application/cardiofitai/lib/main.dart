@@ -12,7 +12,8 @@ class CardioFitAi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: SampleBluetoothScreen(),
+      color: Colors.red,
+      home: PMBDeviceConnectionScreen(),
     );
   }
 }
