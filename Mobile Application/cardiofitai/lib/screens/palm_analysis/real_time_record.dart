@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class RealTimeRecord extends StatefulWidget {
   const RealTimeRecord({super.key});
@@ -13,10 +14,17 @@ class _RealTimeRecordState extends State<RealTimeRecord> {
   int _countdown = 10;
   late Timer _timer;
 
+  late TooltipBehavior _tooltipBehavior;
+
   @override
   void initState() {
     super.initState();
     startCountdown();
+    _tooltipBehavior = TooltipBehavior(enable: true);
+  }
+
+  void switch_capturing() {
+    // TODO
   }
 
   void startCountdown() {
@@ -45,34 +53,45 @@ class _RealTimeRecordState extends State<RealTimeRecord> {
         ),
         backgroundColor: Colors.red,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Real-time Lead II ECG Signal",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text("Remaining time: $_countdown s")
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Real-time Lead II ECG Signal",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text("Remaining time: $_countdown s")
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-            child: Row(
-              children: [
-                Image.asset(
-                  "assets/palm_analysis/recording.gif",
-                  scale: 15,
-                ),
-                const Text("Capturing")
-              ],
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+              child: Row(
+                children: [
+                  Image.asset(
+                    "assets/palm_analysis/recording.gif",
+                    scale: 15,
+                  ),
+                  const Text("Capturing")
+                ],
+              ),
             ),
-          )
-        ],
+            SfCartesianChart(
+              primaryXAxis: CategoryAxis(),
+              title: ChartTitle(text: "Lead II"),
+              legend: Legend(isVisible: true),
+              tooltipBehavior: _tooltipBehavior,
+              // series: [],
+            )
+          ],
+        ),
       ),
     );
   }
