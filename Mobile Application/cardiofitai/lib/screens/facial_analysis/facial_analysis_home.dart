@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'facial_analysis_reading.dart';
+
 class FacialAnalysisHome extends StatelessWidget {
   const FacialAnalysisHome(this._width, this._height, {super.key});
 
@@ -7,9 +9,18 @@ class FacialAnalysisHome extends StatelessWidget {
   final double _width;
   final double _height;
 
+  //
   final double iconSize = 100;
   final double iconPadding = 18;
   final double iconTextFontSize = 30;
+
+  void _onTapTakeECGBtn(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => const FacialAnalysisReading(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +41,9 @@ class FacialAnalysisHome extends StatelessWidget {
                   IconButton(
                     iconSize: iconSize,
                     icon: const Icon(Icons.face_sharp),
-                    onPressed: (){},
+                    onPressed: (){
+                      _onTapTakeECGBtn(context);
+                    },
                   ),
                   Text(
                       'Take ECG',
