@@ -14,7 +14,7 @@ class CardioFitAi extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       color: Colors.red,
-      home: RealTimeRecord(),
+      home: SampleBluetoothScreen(),
     );
   }
 }
