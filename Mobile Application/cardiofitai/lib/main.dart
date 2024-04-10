@@ -1,19 +1,20 @@
 import 'package:cardiofitai/screens/dietaryplanprediction-homepage.dart';
+import 'package:cardiofitai/screens/ocr_reader.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const DietaryPlanHomePage());
+  runApp(const CardioFitAi());
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+class CardioFitAi extends StatefulWidget {
+  const CardioFitAi({super.key});
+
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<CardioFitAi> createState() => _CardioFitAiState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _CardioFitAiState extends State<CardioFitAi> {
   late double _width;
   late double _height;
   @override
@@ -21,6 +22,6 @@ class _MyHomePageState extends State<MyHomePage> {
     //Geeting the screen width and height for screen responsiveness
     _width = MediaQuery.of(context).size.width;
     _height = MediaQuery.of(context).size.height;
-    return MaterialApp(home: DietaryPlanHomePage(_width, _height));
+    return MaterialApp(home: MyHomePage());
   }
 }

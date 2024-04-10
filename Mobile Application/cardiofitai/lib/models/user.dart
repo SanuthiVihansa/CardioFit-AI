@@ -3,7 +3,7 @@ class User{
   String email;
   String age;
   String height;
-  bool weight;
+  String weight;
   String phone;
 
 
