@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+// void main() {
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -68,8 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: const EdgeInsets.only(top: 10),
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                onPrimary: Colors.grey,
+                                foregroundColor: Colors.grey, backgroundColor: Colors.white,
                                 shadowColor: Colors.grey[400],
                                 elevation: 10,
                                 shape: RoundedRectangleBorder(
@@ -102,8 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: const EdgeInsets.only(top: 10),
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                onPrimary: Colors.grey,
+                                foregroundColor: Colors.grey, backgroundColor: Colors.white,
                                 shadowColor: Colors.grey[400],
                                 elevation: 10,
                                 shape: RoundedRectangleBorder(

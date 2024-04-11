@@ -3,7 +3,7 @@ import 'package:cardiofitai/screens/ocr_reader.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const CardioFitAi());
+  runApp(MyApp());
 }
 
 class CardioFitAi extends StatefulWidget {
