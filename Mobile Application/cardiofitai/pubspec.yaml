@@ -38,6 +38,8 @@ dependencies:
   flutter_blue_plus: ^1.31.17
 #  flutter_blue_plus: ^2.0.0
   flutter_blue: ^0.8.0
+  firebase_core: ^2.29.0
+  cloud_firestore: ^4.16.1
 
   syncfusion_flutter_charts: ^25.1.35
 
