@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "885122827085",
+    "project_id": "cardioresp-ai",
+    "storage_bucket": "cardioresp-ai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885122827085:android:fc9c1b661e260fc19e6d04",
+        "android_client_info": {
+          "package_name": "com.example.testing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVR5bgGq6LV-NPFc6rf1leaa4RnoVYXDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885122827085:android:d7db55ac74c73e6b9e6d04",
+        "android_client_info": {
+          "package_name": "com.spsh.cardiofitai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVR5bgGq6LV-NPFc6rf1leaa4RnoVYXDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
