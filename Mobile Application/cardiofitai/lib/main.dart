@@ -1,5 +1,5 @@
+import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
-// import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
 import 'package:flutter/material.dart';
 import 'package:cardiofitai/screens/firebase_testing/testing_firebase_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +10,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp( CardioFitAi());
+  runApp( MyApp());
 }
 
 class CardioFitAi extends StatelessWidget {
