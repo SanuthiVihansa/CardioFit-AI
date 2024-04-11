@@ -10,9 +10,13 @@ class FacialAnalysisReading extends StatefulWidget {
 }
 
 class _FacialAnalysisReadingState extends State<FacialAnalysisReading> {
+  // list of all available cameras in the device
   late List<CameraDescription> cameras;
+
+  // controller to manipulate the camera
   late CameraController cameraController;
 
+  // camera direction, indicate front and back camera
   int direction = 0;
 
   //camera window padding values
@@ -28,6 +32,7 @@ class _FacialAnalysisReadingState extends State<FacialAnalysisReading> {
   void startCamera(int direction) async {
     // WidgetsFlutterBinding.ensureInitialized();
 
+    // get all available cameras
     cameras = await availableCameras();
 
     cameraController = CameraController(
