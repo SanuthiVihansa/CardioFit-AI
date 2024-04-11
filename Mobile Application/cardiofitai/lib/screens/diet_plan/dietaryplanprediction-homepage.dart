@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../components/navbar_component.dart';
+import '../../components/navbar_component.dart';
 
 class DietaryPlanHomePage extends StatefulWidget {
   const DietaryPlanHomePage(double width, double height, {super.key});
