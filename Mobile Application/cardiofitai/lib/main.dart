@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:flutter/material.dart';
 import 'package:cardiofitai/screens/firebase_testing/testing_firebase_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,17 +9,24 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const CardioFitAi());
+  runApp( CardioFitAi());
 }
 
 class CardioFitAi extends StatelessWidget {
-  const CardioFitAi({super.key});
+   CardioFitAi({super.key});
+
+  late double _width;
+  late double _height;
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
+
+    return  MaterialApp(
       color: Colors.red,
-      home: TestingFirebaseScreen(),
+      // home: TestingFirebaseScreen(),
+      home: FacialAnalysisHome(_width, _height)
     );
   }
 }
