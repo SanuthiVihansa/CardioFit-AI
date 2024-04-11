@@ -5,30 +5,30 @@ import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
 
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+//
+//   // This widget is the root of your application.
+//   @override
+//   // Widget build(BuildContext context) {
+//   //   return MaterialApp(
+//   //     debugShowCheckedModeBanner: false,
+//   //     theme: ThemeData(
+//   //       primarySwatch: Colors.green,
+//   //     ),
+//   //     home: const MyHomePage(),
+//   //   );
+//   // }
+// }
 
-  // This widget is the root of your application.
+class OcrReader extends StatefulWidget {
+  const OcrReader({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const MyHomePage(),
-    );
-  }
+  State<OcrReader> createState() => _OcrReaderState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _OcrReaderState extends State<OcrReader> {
   bool textScanning = false;
 
   XFile? imageFile;

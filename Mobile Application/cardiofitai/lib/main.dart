@@ -10,7 +10,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp( MyApp());
+  runApp( OcrReader());
 }
 
 class CardioFitAi extends StatelessWidget {
@@ -26,6 +26,7 @@ class CardioFitAi extends StatelessWidget {
 
     return  MaterialApp(
       color: Colors.red,
+      debugShowCheckedModeBanner: false,
       // home: TestingFirebaseScreen(),
       home: FacialAnalysisHome(_width, _height)
     );
