@@ -144,8 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     bottom: widget._height / 26.76363636363636,
                     left: widget._width / 6.545454545454545,
                     right: widget._width / 6.545454545454545),
-                child: Icon(Icons.account_circle,semanticLabel: "Hello There ",),
+                child: Icon(Icons.account_circle,size: 50,),
               ),
+              Text("H E L L O   W E L C O M E   B A C K ! ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+              Text("Enter credentials to login"),
               Form(
                 key: _formKey,
                 child: Padding(
@@ -197,15 +199,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: EdgeInsets.only(
                             top: widget._height / 26.76363636363636),
+
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState?.save();
-                              _validateLogin(context);
-                            }
-                          },
-                          child: const Text("Login"),
-                        ),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                  side: BorderSide(color: Colors.black, width: 2.0),
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState?.save();
+                                _validateLogin(context);
+                              }
+                            },
+                            child: const Text("LOGIN",style:TextStyle(color: Colors.black),),
+                          )
+                          ,
                       ),
 
 
