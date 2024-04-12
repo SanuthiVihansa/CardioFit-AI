@@ -85,10 +85,12 @@ class _LoginScreenState extends State<LoginScreen> {
         '"}';
 
     User user = User(
-
         doc["email"],
-        doc["password"]
-
+        doc["pas"],
+        doc["age"],
+        doc["height"],
+        doc["weight"],
+        doc["phone"]);
 
 
       final directory = await getApplicationDocumentsDirectory();
