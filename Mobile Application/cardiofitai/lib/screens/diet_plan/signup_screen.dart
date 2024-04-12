@@ -66,7 +66,7 @@ class _SignUpPageState extends State<SignUpPage> {
           backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0);
-      Navigator.push(
+      Navigator.pop(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen(_width, _height)),
       );
