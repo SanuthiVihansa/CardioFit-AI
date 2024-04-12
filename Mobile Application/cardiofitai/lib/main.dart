@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/diet_plan/login_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp( OcrReader());
+  runApp( CardioFitAi());
 }
 
 class CardioFitAi extends StatelessWidget {
@@ -28,7 +29,7 @@ class CardioFitAi extends StatelessWidget {
       color: Colors.red,
       debugShowCheckedModeBanner: false,
       // home: TestingFirebaseScreen(),
-      home: FacialAnalysisHome(_width, _height)
+      home: LoginScreen(_width, _height)
     );
   }
 }
