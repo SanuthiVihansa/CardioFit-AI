@@ -218,7 +218,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: const Text("Login"),
                         ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: widget._height / 26.76363636363636),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    OcrReader()));
+                          },
+                          child: const Text("Sign Up"),
+                        ),
                       )
+
                     ],
                   ),
                 ),
