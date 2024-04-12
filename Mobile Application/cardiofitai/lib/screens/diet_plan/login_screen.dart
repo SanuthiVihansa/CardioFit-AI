@@ -1,18 +1,11 @@
-
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../../models/user.dart';
 import '../../services/user_information_service.dart';
-
 import 'package:path_provider/path_provider.dart';
-
 import 'ocr_reader.dart';
-
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen(this._width, this._height, {super.key});
@@ -34,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     _emailController.addListener(() => setState(() {}));
   }
-
+//Email Field Validation
   String? _validateEmail(String text) {
     if (text == "") {
       return "Email / Username is required!";
@@ -43,17 +36,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     return null;
   }
-
+//Password Field Validation
   String? _validatePassword(String text) {
     if (text == "") {
       return "Password is required!";
     }
     return null;
   }
-
+//Login Validation Method
   Future<void> _validateLogin(BuildContext context) async {
     QuerySnapshot snapshot =
-    await EmployeeOnboardingService.getUserByEmail(_emailController.text);
+    await UserLoginService.getUserByEmail(_emailController.text);
     if (snapshot.docs.isEmpty) {
       Fluttertoast.showToast(
           msg: "Please Register Your Account!",
@@ -99,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["phone"]+
         '"}';
 
-    User employee = User(
+    User user = User(
 
         doc["name"],
         doc["email"],
@@ -114,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
       File file = File('$path/userdata.txt');
       file.writeAsString(userData);
 
-    return employee;
+    return user;
   }
 
 
