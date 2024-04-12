@@ -1,5 +1,6 @@
 import 'package:cardiofitai/screens/diet_plan/login_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
+import 'package:cardiofitai/screens/diet_plan/signup_screen.dart';
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:flutter/material.dart';
 import 'package:cardiofitai/screens/firebase_testing/testing_firebase_screen.dart';
@@ -29,7 +30,7 @@ class CardioFitAi extends StatelessWidget {
       color: Colors.red,
       debugShowCheckedModeBanner: false,
       // home: TestingFirebaseScreen(),
-      home: LoginScreen(_width, _height)
+      home: SignUpPage()
     );
   }
 }

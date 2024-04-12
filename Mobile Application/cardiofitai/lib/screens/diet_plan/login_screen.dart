@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
             fontSize: 16.0);
       } else {
         // print(snapshot.docs[0]["email"]);
-        User employee = await _saveCredentials(snapshot.docs[0]);
+        User user = await _saveCredentials(snapshot.docs[0]);
         Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) =>
                     OcrReader()));
@@ -78,28 +78,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<User> _saveCredentials(QueryDocumentSnapshot doc) async {
 
-    String userData = '{"name" : "' +
-        doc["name"] +
-        '", "email" : "' +
+    String userData = '{"email" : "' +
         doc["email"] +
-        '", "age" : "' +
-        doc["age"] +
-        '", "height" : "' +
-        doc["height"] +
-        '", "weight" : "' +
-        doc["weight"] +
-        '", "phone" : "' +
-        doc["phone"]+
+        '", "password" : "' +
+        doc["password"]+
         '"}';
 
     User user = User(
 
-        doc["name"],
         doc["email"],
-        doc["age"],
-        doc["height"],
-        doc["weight"],
-        doc["phone"]);
+        doc["password"]
+
 
 
       final directory = await getApplicationDocumentsDirectory();
@@ -153,10 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     bottom: widget._height / 26.76363636363636,
                     left: widget._width / 6.545454545454545,
                     right: widget._width / 6.545454545454545),
-                child: Image.asset(
-                  "assets/logo.png",
-                  // scale: 3,
-                ),
+                child: Icon(Icons.account_circle,semanticLabel: "Hello There ",),
               ),
               Form(
                 key: _formKey,
@@ -219,18 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: const Text("Login"),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: widget._height / 26.76363636363636),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    OcrReader()));
-                          },
-                          child: const Text("Sign Up"),
-                        ),
-                      )
+
 
                     ],
                   ),

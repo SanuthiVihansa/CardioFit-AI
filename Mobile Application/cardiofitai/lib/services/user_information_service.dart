@@ -6,12 +6,36 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference userCollectionReference =
 _firestore.collection("User");
 
+//Get User for Login
 class UserLoginService {
   static Future<QuerySnapshot<Object?>> getUserByEmail(String email) async {
     return await userCollectionReference
         .where("email", isEqualTo: email)
         .get();
   }
+//Create User when sign up
+  static Future<Response> addAccount(
+      String email,
+      String password,
+      ) async {
+    Response response = Response();
+    Map<String, dynamic> data = <String, dynamic>{
+      "email": email,
+      "password": password,
+
+    };
+
+    await userCollectionReference.doc().set(data).whenComplete(() {
+      response.code = 200;
+      response.message = "Account Created";
+    }).catchError((e) {
+      response.code = 500;
+      response.message = e;
+    });
+
+    return response;
+  }
+
 
   static Future<Response> updateUser(User user) async {
     Response response = Response();
