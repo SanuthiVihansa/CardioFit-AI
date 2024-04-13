@@ -1,5 +1,8 @@
+import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -9,12 +12,98 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final double coverHeight = 280;
+  final double profileHeight = 144;
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-      title:Text("Profile",style: Theme.of(context).textTheme.headlineLarge),
+        backgroundColor: Colors.amberAccent.shade100,
+        leading: IconButton(
+          icon: Icon(
+              Icons.arrow_back_ios
+          ),
+          onPressed: () {
+            Navigator.pop(
+              context,
+              MaterialPageRoute(builder: (context) => DietHomePage()
+              ),
+            );
+          },
+        ),
+      ),
+      body: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget> [
+          buildTop(),
+        ]
       ),
     );
   }
+
+  Widget buildTop() {
+    final top = coverHeight - profileHeight/2;
+    final bottom = (coverHeight + profileHeight/2);
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        buildCoverImage(),
+        Positioned(
+          top: top,
+          child:buildProfileImage()
+        ),
+        Positioned(
+          top:bottom,
+          child: buildUserName()
+        )
+      ],
+    );
+  }
+  Widget buildCoverImage() => Container(
+    color : Colors.grey,
+    child:Image.asset(
+      'assets/coverimage.jpg',
+      width: double.infinity,
+      height: coverHeight,
+      fit: BoxFit.cover
+    ),
+  );
+  Widget buildProfileImage() {
+    final imageUrl = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D';
+
+    if (imageUrl != null && imageUrl.isNotEmpty) {
+      return CircleAvatar(
+        radius: profileHeight / 2,
+        backgroundColor: Colors.grey.shade800,
+        backgroundImage: NetworkImage(imageUrl),
+          foregroundColor: Colors.white,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white,
+                width: 3.0, // Adjust the width as needed
+              ),
+            ),
+          )
+      );
+    } else {
+      return const SizedBox(); // Placeholder or alternative widget if URL is invalid
+    }
+  }
+  Widget buildUserName(){
+    return Text("NAME",
+      style:
+      TextStyle(
+          fontWeight: FontWeight.bold,
+        letterSpacing: 4.0
+      ),
+    );
+  }
+
+
 }

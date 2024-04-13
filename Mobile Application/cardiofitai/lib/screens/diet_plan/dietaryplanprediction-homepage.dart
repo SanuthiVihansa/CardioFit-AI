@@ -15,7 +15,6 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
     drawer: LeftNavBar(
         name: 'widget.user.name',
         email: 'widget.user.email',
-        countDN:10,
         width: 150,
         height: 300),
     appBar: AppBar(
