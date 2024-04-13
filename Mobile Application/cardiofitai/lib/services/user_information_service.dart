@@ -17,10 +17,12 @@ class UserLoginService {
   static Future<Response> addAccount(
       String email,
       String password,
+      String name,
       ) async {
     Response response = Response();
     Map<String, dynamic> data = <String, dynamic>{
       "email": email,
+      "name ": name,
       "password": password,
 
     };

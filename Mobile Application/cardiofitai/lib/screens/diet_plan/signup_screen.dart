@@ -17,10 +17,19 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   late double _width;
   late double _height;
+
+  //Name Field Validation
+  String? _validateName(String text) {
+    if (text == "") {
+      return "Name is required!";
+    }
+    return null;
+  }
 
   //Email Field Validation
   String? _validateEmail(String text) {
@@ -54,6 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<void> _onTapCreateAccount() async {
     Response response = await UserLoginService.addAccount(
+        _nameController.text,
         _emailController.text,
         _passwordController.text
     );
@@ -113,6 +123,29 @@ class _SignUpPageState extends State<SignUpPage> {
                       horizontal: _width / 7.854545454545454),
                   child: Column(
                     children: [
+                      Padding(
+                        padding: EdgeInsets.all(_width / 49.09090909090909),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          controller: _nameController,
+                          validator: (text) {
+                            return _validateName(text!);
+                          },
+                          onSaved: (text) {},
+                          decoration: InputDecoration(
+                            hintText: 'name@gmail.com',
+                            prefixIcon: const Icon(Icons.mail),
+                            suffixIcon: _emailController.text.isEmpty
+                                ? Container(width: 0)
+                                : IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () => _emailController.clear(),
+                            ),
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding: EdgeInsets.all(_width / 49.09090909090909),
                         child: TextFormField(
