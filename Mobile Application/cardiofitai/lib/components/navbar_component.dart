@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class LeftNavBar extends StatelessWidget {
@@ -13,6 +14,7 @@ class LeftNavBar extends StatelessWidget {
     required this.height,
   });
 
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -22,13 +24,21 @@ class LeftNavBar extends StatelessWidget {
           UserAccountsDrawerHeader(
             accountName: Text('name'),
             accountEmail: Text('email'),
-            currentAccountPicture: CircleAvatar(
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/avatarpic.jpg',
-                  width: 90,
-                  height: 90,
-                  fit: BoxFit.cover,
+            currentAccountPicture: ElevatedButton(
+              onPressed: (){
+                Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+                },
+              child: CircleAvatar(
+                child: ClipOval(
+                  child: Image.network(
+                    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
+                    width: double.infinity,
+                    height: 90,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             ),
@@ -84,4 +94,7 @@ class LeftNavBar extends StatelessWidget {
       ),
     );
   }
+
+
+
 }
