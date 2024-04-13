@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -69,10 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         // print(snapshot.docs[0]["email"]);
         User user = await _saveCredentials(snapshot.docs[0]);
-        // Navigator.of(context).push(MaterialPageRoute(
-        //             builder: (BuildContext context) =>
-        //             OcrReader())
-        //);
+
       }
     }
   }
@@ -215,6 +213,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState?.save();
                                 _validateLogin(context);
+                                Navigator.pushReplacement(context,MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        DietHomePage())
+                                );
                               }
                             },
                             child: const Text("LOGIN",style:TextStyle(color: Colors.black),),

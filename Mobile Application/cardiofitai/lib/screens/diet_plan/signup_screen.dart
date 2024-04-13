@@ -28,7 +28,6 @@ class _SignUpPageState extends State<SignUpPage> {
     if (text == "") {
       return "Name is required!";
     }
-    return null;
   }
 
   //Email Field Validation
@@ -63,9 +62,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<void> _onTapCreateAccount() async {
     Response response = await UserLoginService.addAccount(
-        _nameController.text,
         _emailController.text,
-        _passwordController.text
+        _passwordController.text,
+        _nameController.text
     );
     if (response.code == 200) {
       Fluttertoast.showToast(
@@ -76,10 +75,6 @@ class _SignUpPageState extends State<SignUpPage> {
           backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0);
-      Navigator.pop(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen(_width, _height)),
-      );
     } else {
       Fluttertoast.showToast(
           msg: "Opps !! We have trouble in signin, Please try again.☹️",
@@ -134,13 +129,13 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           onSaved: (text) {},
                           decoration: InputDecoration(
-                            hintText: 'name@gmail.com',
-                            prefixIcon: const Icon(Icons.mail),
-                            suffixIcon: _emailController.text.isEmpty
+                            hintText: 'Sara Lauranco',
+                            prefixIcon: const Icon(Icons.person),
+                            suffixIcon: _nameController.text.isEmpty
                                 ? Container(width: 0)
                                 : IconButton(
                               icon: const Icon(Icons.close),
-                              onPressed: () => _emailController.clear(),
+                              onPressed: () => _nameController.clear(),
                             ),
                             border: const OutlineInputBorder(),
                           ),
@@ -221,6 +216,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState?.save();
                               _onTapCreateAccount();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginScreen(_width, _height)),
+                              );
                             }
                           },
                           child: const Text("SIGN UP",style: TextStyle(color: Colors.black),),

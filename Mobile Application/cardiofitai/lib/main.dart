@@ -31,7 +31,7 @@ class CardioFitAi extends StatelessWidget {
       color: Colors.red,
       debugShowCheckedModeBanner: false,
       // home: TestingFirebaseScreen(),
-      home: ProfilePage()
+      home: SignUpPage()
     );
   }
 }

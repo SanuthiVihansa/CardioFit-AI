@@ -22,8 +22,8 @@ class UserLoginService {
     Response response = Response();
     Map<String, dynamic> data = <String, dynamic>{
       "email": email,
-      "name ": name,
       "password": password,
+      "name ": name,
 
     };
 
