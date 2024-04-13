@@ -1,4 +1,5 @@
 import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LeftNavBar extends StatelessWidget {
@@ -24,23 +25,36 @@ class LeftNavBar extends StatelessWidget {
           UserAccountsDrawerHeader(
             accountName: Text('name'),
             accountEmail: Text('email'),
-            currentAccountPicture: ElevatedButton(
-              onPressed: (){
-                Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
-                },
-              child: CircleAvatar(
-                child: ClipOval(
-                  child: Image.network(
-                    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
-                    width: double.infinity,
-                    height: 90,
-                    fit: BoxFit.fill,
+            currentAccountPicture: Stack(
+              children: [
+                // Circular progress indicator
+                CircularProgressIndicator(
+                  value: 0.5, // Set the value (e.g., 50%)
+                  strokeWidth: 8, // Customize the stroke width
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+                ),
+                //Profile Picture
+                CupertinoButton(
+                  minSize: 600,
+                  padding: EdgeInsets.all(16.0),
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  onPressed: (){
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()),
+                    );
+                  },
+                child: CircleAvatar(
+                  child: ClipOval(
+                    child: Image.network(
+                      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
-              ),
+              ),],
             ),
             decoration: BoxDecoration(
               color: Colors.blueAccent,
