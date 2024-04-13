@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 
 class LeftNavBar extends StatelessWidget {
-  final String name;
-  final String email;
-  final int countDN;
-  final double width;
-  final double height;
+   final String name;
+   final String email;
+   final double width;
+   final double height;
 
   LeftNavBar({
     required this.name,
     required this.email,
-    required this.countDN,
     required this.width,
     required this.height,
   });
@@ -22,8 +20,8 @@ class LeftNavBar extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text(name),
-            accountEmail: Text(email),
+            accountName: Text('name'),
+            accountEmail: Text('email'),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
                 child: Image.asset(
@@ -49,37 +47,6 @@ class LeftNavBar extends StatelessWidget {
                 // ),
               // );
             },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.analytics_outlined),
-            title: Text("View Delivery Notes"),
-            onTap: () {
-              Navigator.of(context).pop(); // Close the drawer
-              // Navigator.of(context).push(
-              //   // MaterialPageRoute(
-              //   //   builder: (context) => ViewDeliveryNotesScreen(width, height),
-              //   // ),
-              // );
-            },
-            trailing: countDN != 0
-                ? ClipOval(
-              child: Container(
-                color: Colors.red,
-                width: 20,
-                height: 20,
-                child: Center(
-                  child: Text(
-                    countDN.toString(),
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ),
-            )
-                : null,
           ),
           Divider(),
           ListTile(
