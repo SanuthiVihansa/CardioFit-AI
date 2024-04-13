@@ -69,9 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         // print(snapshot.docs[0]["email"]);
         User user = await _saveCredentials(snapshot.docs[0]);
-        Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                    OcrReader()));
+        // Navigator.of(context).push(MaterialPageRoute(
+        //             builder: (BuildContext context) =>
+        //             OcrReader())
+        //);
       }
     }
   }
