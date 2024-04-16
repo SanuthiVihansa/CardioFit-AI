@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'camera_page.dart';
 import 'facial_analysis_reading.dart';
 
 class FacialAnalysisHome extends StatelessWidget {
@@ -17,7 +18,7 @@ class FacialAnalysisHome extends StatelessWidget {
   void _onTapTakeECGBtn(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (BuildContext context) => const FacialAnalysisReading(),
+        builder: (BuildContext context) => CameraPage(_width, _height),
       ),
     );
   }
