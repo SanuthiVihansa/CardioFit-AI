@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 // import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
+//import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 
 
@@ -129,7 +130,7 @@ class _OcrReaderState extends State<OcrReader> {
 
   void getImage(ImageSource source) async {
     try {
-      final pickedImage = await ImagePicker().pickImage(source: source);
+      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
         textScanning = true;
         imageFile = pickedImage;
@@ -146,17 +147,20 @@ class _OcrReaderState extends State<OcrReader> {
 
   void getRecognisedText(XFile image) async {
     final inputImage = InputImage.fromFilePath(image.path);
-    final textDetector = GoogleMlKit.vision.textDetector();
-    RecognisedText recognisedText = await textDetector.processImage(inputImage);
-    await textDetector.close();
-    scannedText = "";
-    for (TextBlock block in recognisedText.blocks) {
-      for (TextLine line in block.lines) {
-        scannedText = scannedText + line.text + "\n";
-      }
-    }
-    textScanning = false;
-    setState(() {});
+    final textRecognizer = TextRecognizer();
+    // final textDetector = GoogleMlKit.vision.textDetector();
+    final RecognizedText recognisedText = await textRecognizer.processImage(inputImage);
+    String extractedText = recognisedText.text;
+    print(extractedText);
+    // await textDetector.close();
+    // scannedText = "";
+    // for (TextBlock block in recognisedText.blocks) {
+    //   for (TextLine line in block.lines) {
+    //     scannedText = scannedText + line.text + "\n";
+    //   }
+    // }
+    // textScanning = false;
+    // setState(() {});
   }
 
   @override
