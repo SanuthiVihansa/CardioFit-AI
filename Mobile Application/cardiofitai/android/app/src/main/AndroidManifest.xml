@@ -6,6 +6,9 @@
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <!-- New Bluetooth permissions in Android 12
     https://developer.android.com/about/versions/12/features/bluetooth-permissions -->
@@ -30,7 +33,7 @@
         android:name="android.permission.ACCESS_COARSE_LOCATION"
         android:maxSdkVersion="28" />
 
-
+    <uses-permission android:name="android.permission.CAMERA"/>
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"

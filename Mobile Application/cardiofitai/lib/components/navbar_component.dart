@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
 import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,14 +63,14 @@ class LeftNavBar extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: Text("Purchase Request"),
+            title: Text("OCR Reader"),
             onTap: () {
               Navigator.of(context).pop(); // Close the drawer
-              // Navigator.of(context).push(
-                // MaterialPageRoute(
-                //   builder: (context) => PurchaseRequestScreen(width, height),
-                // ),
-              // );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => OcrReader(),
+                ),
+              );
             },
           ),
           Divider(),
