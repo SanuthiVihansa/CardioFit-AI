@@ -152,15 +152,15 @@ class _OcrReaderState extends State<OcrReader> {
     final RecognizedText recognisedText = await textRecognizer.processImage(inputImage);
     String extractedText = recognisedText.text;
     print(extractedText);
-    // await textDetector.close();
-    // scannedText = "";
-    // for (TextBlock block in recognisedText.blocks) {
-    //   for (TextLine line in block.lines) {
-    //     scannedText = scannedText + line.text + "\n";
-    //   }
-    // }
-    // textScanning = false;
-    // setState(() {});
+    await textRecognizer.close();
+    scannedText = "";
+    for (TextBlock block in recognisedText.blocks) {
+      for (TextLine line in block.lines) {
+        scannedText = scannedText + line.text + "\n";
+      }
+    }
+    textScanning = false;
+    setState(() {});
   }
 
   @override
