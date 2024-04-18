@@ -27,7 +27,16 @@ class _FileSelectingScreenState extends State<FileSelectingScreen> {
 
     final file = File(result.files.single.path.toString());
     String contents = await file.readAsString();
-    print(contents);
+    contents = contents.substring(1);
+    // print(contents);
+
+    List<double> dataList = contents.split(',').map((String value) {
+      return double.tryParse(value) ?? 0.0;
+    }).toList();
+
+    List<double> tenSecData = dataList.sublist(0, 2560);
+
+    print(tenSecData);
 
     await DefaultCacheManager().emptyCache();
   }
