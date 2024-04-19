@@ -86,7 +86,7 @@ class _FileSelectingScreenState extends State<FileSelectingScreen> {
             bottomTitles: SideTitles(
               showTitles: true,
               getTitles: (value) {
-                return value.toInt().toString();
+                return (value ~/ 256).toString();
               },
             ),
             leftTitles: SideTitles(
