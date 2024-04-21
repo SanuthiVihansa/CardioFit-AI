@@ -149,6 +149,7 @@ class _OcrReaderState extends State<OcrReader> {
     final inputImage = InputImage.fromFilePath(image.path);
     final textRecognizer = TextRecognizer();
     // final textDetector = GoogleMlKit.vision.textDetector();
+
     final RecognizedText recognisedText = await textRecognizer.processImage(inputImage);
     String extractedText = recognisedText.text;
     print(extractedText);
