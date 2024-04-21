@@ -15,6 +15,14 @@ class _ProfilePageState extends State<ProfilePage> {
   final double coverHeight = 280;
   final double profileHeight = 144;
 
+  //Initialising form Controllers
+  final _userNameController = TextEditingController();
+  final _ageController = TextEditingController();
+  final _heightController = TextEditingController();
+  final _weightController = TextEditingController();
+  final _caluclateBMIController = TextEditingController();
+  final DateTime _dateOfBirth = DateTime.now();
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +112,70 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
+  //Build a Form Widget to display profile data
+  Widget userName() => TextField(
+    controller: _userNameController,
+    decoration: InputDecoration(
+      errorText: "",
+      labelText: 'Name',
+      border: OutlineInputBorder(),
+    ),
+    onChanged: (text) {    },
+  );
+  Widget dateOfBirth() {
+    return TextFormField(
+      readOnly: true,
+      decoration: InputDecoration(
+        labelText: 'DOB',
+        border: OutlineInputBorder(),
+      ),
+      controller: TextEditingController(
+        text: _dateOfBirth.toString().substring(
+            0, 10), // Display selected date in the format yyyy-MM-dd.
+      ),
+    );
+  }
+  Widget Age() => TextField(
+    controller: _ageController,
+    keyboardType: TextInputType.number,
+    decoration: InputDecoration(
+      errorText: "",
+      labelText: 'Age',
+      border: OutlineInputBorder(),
+    ),
+    onChanged: (text) {    },
+  );
+  Widget Height() => TextField(
+    controller: _heightController,
+    keyboardType: TextInputType.number,
+    decoration: InputDecoration(
+      errorText: "",
+      labelText: 'Height',
+      border: OutlineInputBorder(),
+    ),
+    onChanged: (text) {    },
+  );
+  Widget Weight() => TextField(
+    controller: _weightController,
+    keyboardType: TextInputType.number,
+    decoration: InputDecoration(
+      errorText: "",
+      labelText: 'Weight',
+      border: OutlineInputBorder(),
+    ),
+    onChanged: (text) {    },
+  );
+  Widget BMI() => TextField(
+    controller: _caluclateBMIController,
+    keyboardType: TextInputType.number,
+    decoration: InputDecoration(
+      errorText: "",
+      labelText: 'BMI',
+      border: OutlineInputBorder(),
+    ),
+    onChanged: (text) {    },
+  );
+//Rate how active you are
+//Taking medicines for...(dropdown)
 
 }
