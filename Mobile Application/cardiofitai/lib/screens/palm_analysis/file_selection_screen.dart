@@ -129,6 +129,8 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     if (response.statusCode == 200) {
       print('Data sent successfully!');
       print(response.body);
+      var decodedData = jsonDecode(response.body);
+      print(decodedData["l2"].runtimeType);
     } else {
       print('Failed to send data. Status code: ${response.statusCode}');
     }
