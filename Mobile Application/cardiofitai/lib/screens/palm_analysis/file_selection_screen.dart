@@ -18,7 +18,10 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
   late List<double> _tenSecData = [];
   double _maxValue = 0;
   double _minValue = 0;
-  String _apiUrl = '';
+  final String _predictionApiUrl =
+      'http://poornasenadheera100.pythonanywhere.com/predict';
+  final String _upServerUrl =
+      'http://poornasenadheera100.pythonanywhere.com/upforunet';
 
   @override
   void initState() {
@@ -27,7 +30,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
 
-    print(_tenSecData.length);
+    _upServer();
   }
 
   void _pickFile() async {
@@ -117,7 +120,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     };
     String jsonString = jsonEncode(data);
     print(jsonString);
-    var response = await http.post(Uri.parse(_apiUrl),
+    var response = await http.post(Uri.parse(_predictionApiUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -125,9 +128,16 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
 
     if (response.statusCode == 200) {
       print('Data sent successfully!');
+      print(response.body);
     } else {
       print('Failed to send data. Status code: ${response.statusCode}');
     }
+  }
+
+  Future<void> _upServer() async {
+    await http.get(Uri.parse(_upServerUrl), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
   }
 
   @override
