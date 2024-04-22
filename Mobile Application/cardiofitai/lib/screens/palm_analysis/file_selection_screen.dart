@@ -1,10 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:http/http.dart' as http;
 
 class FileSelectionScreen extends StatefulWidget {
   const FileSelectionScreen({super.key});
@@ -17,6 +18,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
   late List<double> _tenSecData = [];
   double _maxValue = 0;
   double _minValue = 0;
+  String _apiUrl = '';
 
   @override
   void initState() {
@@ -108,8 +110,24 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     );
   }
 
-  void _onClickBtnProceed() {
-    print(_tenSecData);
+  Future<void> _onClickBtnProceed() async {
+    // print(_tenSecData);
+    Map<String, dynamic> data = {
+      'l2': _tenSecData,
+    };
+    String jsonString = jsonEncode(data);
+    print(jsonString);
+    var response = await http.post(Uri.parse(_apiUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonString);
+
+    if (response.statusCode == 200) {
+      print('Data sent successfully!');
+    } else {
+      print('Failed to send data. Status code: ${response.statusCode}');
+    }
   }
 
   @override
