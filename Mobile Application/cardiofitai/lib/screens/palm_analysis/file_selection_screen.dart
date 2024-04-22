@@ -1,18 +1,19 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
-class FileSelectingScreen extends StatefulWidget {
-  const FileSelectingScreen({super.key});
+class FileSelectionScreen extends StatefulWidget {
+  const FileSelectionScreen({super.key});
 
   @override
-  State<FileSelectingScreen> createState() => _FileSelectingScreenState();
+  State<FileSelectionScreen> createState() => _FileSelectionScreenState();
 }
 
-class _FileSelectingScreenState extends State<FileSelectingScreen> {
+class _FileSelectionScreenState extends State<FileSelectionScreen> {
   late List<double> _tenSecData = [];
   double _maxValue = 0;
   double _minValue = 0;
@@ -107,6 +108,10 @@ class _FileSelectingScreenState extends State<FileSelectingScreen> {
     );
   }
 
+  void _onClickBtnProceed() {
+    print(_tenSecData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,15 +119,26 @@ class _FileSelectingScreenState extends State<FileSelectingScreen> {
         title: Text("File Selector"),
         backgroundColor: Colors.red,
       ),
-      body: Center(
-          child: _tenSecData.length == 0
-              ? ElevatedButton(
-                  child: const Text("Select file"),
-                  onPressed: () {
-                    _pickFile();
-                  },
-                )
-              : _ecgPlot()),
+      body: _tenSecData.length == 0
+          ? Center(
+              child: ElevatedButton(
+                child: const Text("Select file"),
+                onPressed: () {
+                  _pickFile();
+                },
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(child: SizedBox(child: _ecgPlot())),
+                ElevatedButton(
+                    onPressed: () {
+                      _onClickBtnProceed();
+                    },
+                    child: const Text("Proceed"))
+              ],
+            ),
     );
   }
 }
