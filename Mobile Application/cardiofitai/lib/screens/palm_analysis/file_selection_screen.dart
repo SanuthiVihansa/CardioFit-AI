@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cardiofitai/screens/palm_analysis/all_lead_prediction_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
   late List<double> _tenSecData = [];
   double _maxValue = 0;
   double _minValue = 0;
-  final String _predictionApiUrl =
-      'http://poornasenadheera100.pythonanywhere.com/predict';
+
   final String _upServerUrl =
       'http://poornasenadheera100.pythonanywhere.com/upforunet';
 
@@ -114,26 +114,11 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
   }
 
   Future<void> _onClickBtnProceed() async {
-    // print(_tenSecData);
-    Map<String, dynamic> data = {
-      'l2': _tenSecData,
-    };
-    String jsonString = jsonEncode(data);
-    print(jsonString);
-    var response = await http.post(Uri.parse(_predictionApiUrl),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonString);
-
-    if (response.statusCode == 200) {
-      print('Data sent successfully!');
-      print(response.body);
-      var decodedData = jsonDecode(response.body);
-      print(decodedData["l2"].runtimeType);
-    } else {
-      print('Failed to send data. Status code: ${response.statusCode}');
-    }
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                AllLeadPredictionScreen(_tenSecData)));
   }
 
   Future<void> _upServer() async {
