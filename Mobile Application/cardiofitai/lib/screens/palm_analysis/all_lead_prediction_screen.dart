@@ -32,9 +32,12 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
   List<double> _v5Data = [];
   List<double> _v6Data = [];
 
+  int _resCode = 0;
+
   @override
   void initState() {
     super.initState();
+    _getPredictions();
   }
 
   double _calcMin(List<double> data) {
@@ -110,38 +113,52 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
         },
         body: jsonString);
 
-    if (response.statusCode == 200) {
+    _resCode = response.statusCode;
+
+    if (_resCode == 200) {
       print('Data sent successfully!');
       print(response.body);
       var decodedData = jsonDecode(response.body);
-      _l2Data = decodedData["l2"];
+      _l2Data = List<double>.from(
+          decodedData["l2"].map((element) => element.toDouble()));
+
+      // _l2Data = decodedData["l2"].map((element) => element.toDouble()).toList();
+
       print(decodedData["l2"].runtimeType);
     } else {
-      print('Failed to send data. Status code: ${response.statusCode}');
+      print('Failed to send data. Status code: ${_resCode}');
     }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Results"),
-        backgroundColor: Colors.red,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Expanded(
-              child: SizedBox(
-                  child: _ecgPlot(widget.l2Data, _calcMin(widget.l2Data),
-                      _calcMax(widget.l2Data)))),
-          Expanded(
-              child: SizedBox(
-                  child: _ecgPlot(widget.l2Data, _calcMin(widget.l2Data),
-                      _calcMax(widget.l2Data)))),
-          ElevatedButton(onPressed: () {}, child: const Text("Back"))
-        ],
-      ),
-    );
+        appBar: AppBar(
+          title: const Text("Results"),
+          backgroundColor: Colors.red,
+        ),
+        body: _resCode == 200
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                      child: SizedBox(
+                          child: _ecgPlot(
+                              widget.l2Data,
+                              _calcMin(widget.l2Data),
+                              _calcMax(widget.l2Data)))),
+                  Expanded(
+                      child: SizedBox(
+                          child: _ecgPlot(
+                              _l2Data, _calcMin(_l2Data), _calcMax(_l2Data)))),
+                  ElevatedButton(onPressed: () {}, child: const Text("Back"))
+                ],
+              )
+            : _resCode == 0
+                ? Center(child: CircularProgressIndicator())
+                : Center(
+                    child: Text("Error"),
+                  ));
   }
 }
