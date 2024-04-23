@@ -22,41 +22,15 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
   List<double> _l1Data = [];
   List<double> _l2Data = [];
   List<double> _l3Data = [];
-  List<double> _lavrData = [];
-  List<double> _lavlData = [];
-  List<double> _lavfData = [];
-  List<double> _lv1Data = [];
-  List<double> _lv2Data = [];
-  List<double> _lv3Data = [];
-  List<double> _lv4Data = [];
-  List<double> _lv5Data = [];
-  List<double> _lv6Data = [];
-
-  double _l1MinValue = 0;
-  double _l2MinValue = 0;
-  double _l3MinValue = 0;
-  double _lavrMinValue = 0;
-  double _lavlMinValue = 0;
-  double _lavfMinValue = 0;
-  double _lv1MinValue = 0;
-  double _lv2MinValue = 0;
-  double _lv3MinValue = 0;
-  double _lv4MinValue = 0;
-  double _lv5MinValue = 0;
-  double _lv6MinValue = 0;
-
-  double _l1MaxValue = 0;
-  double _l2MaxValue = 0;
-  double _l3MaxValue = 0;
-  double _lavrMaxValue = 0;
-  double _lavlMaxValue = 0;
-  double _lavfMaxValue = 0;
-  double _lv1MaxValue = 0;
-  double _lv2MaxValue = 0;
-  double _lv3MaxValue = 0;
-  double _lv4MaxValue = 0;
-  double _lv5MaxValue = 0;
-  double _lv6MaxValue = 0;
+  List<double> _avrData = [];
+  List<double> _avlData = [];
+  List<double> _avfData = [];
+  List<double> _v1Data = [];
+  List<double> _v2Data = [];
+  List<double> _v3Data = [];
+  List<double> _v4Data = [];
+  List<double> _v5Data = [];
+  List<double> _v6Data = [];
 
   @override
   void initState() {
@@ -157,6 +131,10 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          Expanded(
+              child: SizedBox(
+                  child: _ecgPlot(widget.l2Data, _calcMin(widget.l2Data),
+                      _calcMax(widget.l2Data)))),
           Expanded(
               child: SizedBox(
                   child: _ecgPlot(widget.l2Data, _calcMin(widget.l2Data),
