@@ -41,8 +41,8 @@ class CardioFitAi extends StatelessWidget {
     return MaterialApp(
       color: Colors.red,
       // home: TestingFirebaseScreen(),
-      // home: FacialAnalysisHome(_width, _height)
-      home: CameraPage(_width, _height),
+      home: FacialAnalysisHome(_width, _height)
+      // home: CameraPage(_width, _height),
     );
   }
 }

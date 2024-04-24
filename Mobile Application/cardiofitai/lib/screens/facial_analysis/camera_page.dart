@@ -53,10 +53,10 @@ class _CameraPageState extends State<CameraPage> {
   @override
   void initState() {
     // orientation
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.portraitUp,
+    //   DeviceOrientation.portraitDown,
+    // ]);
 
     // paddings and sizes
     recordBtnBottomPadding =
