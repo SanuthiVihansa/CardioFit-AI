@@ -22,36 +22,77 @@ class _ProfilePageState extends State<ProfilePage> {
   final _weightController = TextEditingController();
   final _caluclateBMIController = TextEditingController();
   final DateTime _dateOfBirth = DateTime.now();
-
+  String dropdownValue = 'Less Active';
 
   @override
+  // Widget build(BuildContext context) {
+  //
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       backgroundColor: Colors.amberAccent.shade100,
+  //       leading: IconButton(
+  //         icon: Icon(
+  //             Icons.arrow_back_ios
+  //         ),
+  //         onPressed: () {
+  //           Navigator.pop(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => DietHomePage()
+  //             ),
+  //           );
+  //         },
+  //       ),
+  //     ),
+  //     body: ListView(
+  //       padding: EdgeInsets.zero,
+  //       children: <Widget> [
+  //         buildTop(),
+  //         userName(),
+  //         dateOfBirth(),
+  //         Age(),
+  //         Height(),
+  //         Weight(),
+  //         BMI(),
+  //         ActiveLevel()
+  //       ]
+  //     ),
+  //   );
+  // }
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amberAccent.shade100,
-        leading: IconButton(
-          icon: Icon(
-              Icons.arrow_back_ios
-          ),
-          onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => DietHomePage()
+      appBar: AppBar(), // Assuming you have an AppBar
+      body: SingleChildScrollView(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            // Top Section
+            buildTop(),
+        
+            // Main Content
+            Padding(
+              padding: const EdgeInsets.all(30.0), // Add some padding
+              child: Column(
+                children: [
+                  userName(),
+                  dateOfBirth(),
+                  Row( // Arrange Age and Height widgets horizontally
+                    children: [
+                      Expanded(child: Age()), // Use Expanded to fill available space
+                      SizedBox(width: 16.0), // Add some horizontal spacing between widgets
+                      Expanded(child: Height()),
+                    ],
+                  ),
+                  Weight(),
+                  BMI(),
+                  ActiveLevel(),
+                ],
               ),
-            );
-          },
+            ),
+          ],
         ),
-      ),
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget> [
-          buildTop(),
-        ]
       ),
     );
   }
-
   Widget buildTop() {
     final top = coverHeight - profileHeight/2;
     final bottom = (coverHeight + profileHeight/2);
@@ -174,6 +215,30 @@ class _ProfilePageState extends State<ProfilePage> {
       border: OutlineInputBorder(),
     ),
     onChanged: (text) {    },
+  );
+  Widget ActiveLevel() => DropdownButton<String>(
+    // Ensure dropdownValue is initialized with a value from the items list
+    value: dropdownValue ?? 'Less Active',  // Default to 'Less Active'
+    icon: const Icon(Icons.arrow_drop_down_circle_rounded),
+    onChanged: (String? newValue) {
+      setState(() {
+        dropdownValue = newValue!;
+      });
+    },
+    items: const[
+      DropdownMenuItem<String>(
+        value: 'Less Active',
+        child: Text('Less Active')
+    ),
+      DropdownMenuItem<String>(
+          value: 'Intermediate',
+          child: Text('Intermediate')
+      ),
+      DropdownMenuItem<String>(
+          value: 'Very Active',
+          child: Text('Very Active')
+      ),
+    ],
   );
 //Rate how active you are
 //Taking medicines for...(dropdown)
