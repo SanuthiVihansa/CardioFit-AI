@@ -32,8 +32,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
   List<double> _v5Data = [];
   List<double> _v6Data = [];
 
-  // TODO - Change this to 0
-  int _resCode = 200;
+  int _resCode = 0;
 
   @override
   void initState() {
@@ -152,10 +151,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                     SizedBox(
                         height: 200,
                         child: _ecgPlot(
-                            // TODO - Change this to _l2Data
-                            widget.l2Data,
-                            _calcMin(widget.l2Data),
-                            _calcMax(widget.l2Data))),
+                            _l2Data, _calcMin(_l2Data), _calcMax(_l2Data))),
                     ElevatedButton(onPressed: () {}, child: const Text("Back"))
                   ],
                 ),
