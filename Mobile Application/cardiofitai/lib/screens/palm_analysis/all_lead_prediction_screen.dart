@@ -32,7 +32,8 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
   List<double> _v5Data = [];
   List<double> _v6Data = [];
 
-  int _resCode = 0;
+  // TODO - Change this to 0
+  int _resCode = 200;
 
   @override
   void initState() {
@@ -122,8 +123,6 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
       _l2Data = List<double>.from(
           decodedData["l2"].map((element) => element.toDouble()));
 
-      // _l2Data = decodedData["l2"].map((element) => element.toDouble()).toList();
-
       print(decodedData["l2"].runtimeType);
     } else {
       print('Failed to send data. Status code: ${_resCode}');
@@ -139,21 +138,24 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
           backgroundColor: Colors.red,
         ),
         body: _resCode == 200
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                      child: SizedBox(
-                          child: _ecgPlot(
-                              widget.l2Data,
-                              _calcMin(widget.l2Data),
-                              _calcMax(widget.l2Data)))),
-                  Expanded(
-                      child: SizedBox(
-                          child: _ecgPlot(
-                              _l2Data, _calcMin(_l2Data), _calcMax(_l2Data)))),
-                  ElevatedButton(onPressed: () {}, child: const Text("Back"))
-                ],
+            ? SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                        height: 200,
+                        child: _ecgPlot(widget.l2Data, _calcMin(widget.l2Data),
+                            _calcMax(widget.l2Data))),
+                    SizedBox(
+                        height: 200,
+                        child: _ecgPlot(
+                            // TODO - Change this to _l2Data
+                            widget.l2Data,
+                            _calcMin(widget.l2Data),
+                            _calcMax(widget.l2Data))),
+                    ElevatedButton(onPressed: () {}, child: const Text("Back"))
+                  ],
+                ),
               )
             : _resCode == 0
                 ? Center(child: CircularProgressIndicator())
