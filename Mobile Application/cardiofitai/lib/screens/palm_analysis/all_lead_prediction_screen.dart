@@ -58,45 +58,48 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
   Widget _ecgPlot(List<double> data, double minValue, double maxValue) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: LineChart(
-        LineChartData(
-          lineBarsData: [
-            LineChartBarData(
-              spots: List.generate(
-                data.length,
-                (index) => FlSpot(index.toDouble(), data[index]),
+      child: IgnorePointer(
+        ignoring: true,
+        child: LineChart(
+          LineChartData(
+            lineBarsData: [
+              LineChartBarData(
+                spots: List.generate(
+                  data.length,
+                  (index) => FlSpot(index.toDouble(), data[index]),
+                ),
+                isCurved: false,
+                colors: [Colors.blue],
+                barWidth: 2,
+                isStrokeCapRound: true,
+                dotData: FlDotData(
+                  show: false,
+                ),
               ),
-              isCurved: false,
-              colors: [Colors.blue],
-              barWidth: 2,
-              isStrokeCapRound: true,
-              dotData: FlDotData(
-                show: false,
+            ],
+            minY: minValue,
+            // Adjust these values based on your data range
+            maxY: maxValue,
+            titlesData: FlTitlesData(
+              bottomTitles: SideTitles(
+                showTitles: true,
+                getTitles: (value) {
+                  return (value ~/ 256).toString();
+                },
+              ),
+              leftTitles: SideTitles(
+                showTitles: true,
               ),
             ),
-          ],
-          minY: minValue,
-          // Adjust these values based on your data range
-          maxY: maxValue,
-          titlesData: FlTitlesData(
-            bottomTitles: SideTitles(
-              showTitles: true,
-              getTitles: (value) {
-                return (value ~/ 256).toString();
-              },
+            borderData: FlBorderData(
+              show: true,
+              border: Border.all(color: Colors.black),
             ),
-            leftTitles: SideTitles(
-              showTitles: true,
+            gridData: FlGridData(
+              show: true,
+              drawHorizontalLine: true,
+              drawVerticalLine: true,
             ),
-          ),
-          borderData: FlBorderData(
-            show: true,
-            border: Border.all(color: Colors.black),
-          ),
-          gridData: FlGridData(
-            show: true,
-            drawHorizontalLine: true,
-            drawVerticalLine: true,
           ),
         ),
       ),
