@@ -122,6 +122,8 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
       print('Data sent successfully!');
       print(response.body);
       var decodedData = jsonDecode(response.body);
+      _l1Data = List<double>.from(
+          decodedData["l1"].map((element) => element.toDouble()));
       _l2Data = List<double>.from(
           decodedData["l2"].map((element) => element.toDouble()));
 
@@ -146,8 +148,8 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                   children: [
                     SizedBox(
                         height: 200,
-                        child: _ecgPlot(widget.l2Data, _calcMin(widget.l2Data),
-                            _calcMax(widget.l2Data))),
+                        child: _ecgPlot(_l1Data, _calcMin(_l1Data),
+                            _calcMax(_l1Data))),
                     SizedBox(
                         height: 200,
                         child: _ecgPlot(
