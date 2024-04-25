@@ -1,5 +1,7 @@
+import 'package:cardiofitai/screens/common/dashboard_screen.dart';
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:cardiofitai/screens/palm_analysis/file_selection_screen.dart';
+
 // import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
 import 'package:flutter/material.dart';
 import 'package:cardiofitai/screens/firebase_testing/testing_firebase_screen.dart';
@@ -11,11 +13,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp( CardioFitAi());
+  runApp(CardioFitAi());
 }
 
 class CardioFitAi extends StatelessWidget {
-   CardioFitAi({super.key});
+  CardioFitAi({super.key});
 
   late double _width;
   late double _height;
@@ -25,9 +27,9 @@ class CardioFitAi extends StatelessWidget {
     _width = MediaQuery.of(context).size.width;
     _height = MediaQuery.of(context).size.height;
 
-    return  MaterialApp(
+    return MaterialApp(
       color: Colors.red,
-      home: FileSelectionScreen(),
+      home: DashboardScreen(),
       // home: FacialAnalysisHome(_width, _height)
     );
   }
