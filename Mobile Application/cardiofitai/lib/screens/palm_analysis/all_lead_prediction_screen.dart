@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class AllLeadPredictionScreen extends StatefulWidget {
@@ -167,65 +168,89 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Results"),
+          title: const Text("Cardiac Analysis Through Palms"),
           backgroundColor: Colors.red,
         ),
         body: _resCode == 200
-            ? SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _l1Data, _calcMin(_l1Data), _calcMax(_l1Data))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _l2Data, _calcMin(_l2Data), _calcMax(_l2Data))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _l3Data, _calcMin(_l3Data), _calcMax(_l3Data))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _avrData, _calcMin(_avrData), _calcMax(_avrData))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _avlData, _calcMin(_avlData), _calcMax(_avlData))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _avfData, _calcMin(_avfData), _calcMax(_avfData))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _v1Data, _calcMin(_v1Data), _calcMax(_v1Data))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _v2Data, _calcMin(_v2Data), _calcMax(_v2Data))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _v3Data, _calcMin(_v3Data), _calcMax(_v3Data))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _v4Data, _calcMin(_v4Data), _calcMax(_v4Data))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _v5Data, _calcMin(_v5Data), _calcMax(_v5Data))),
-                    SizedBox(
-                        height: 200,
-                        child: _ecgPlot(
-                            _v6Data, _calcMin(_v6Data), _calcMax(_v6Data))),
-                    ElevatedButton(onPressed: () {}, child: const Text("Back"))
-                  ],
-                ),
+            ? Column(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 10, left: 20, right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "ECG Results",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        ElevatedButton(onPressed: () {}, child: Text("Home"))
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_l1Data, _calcMin(_l1Data),
+                                    _calcMax(_l1Data))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_l2Data, _calcMin(_l2Data),
+                                    _calcMax(_l2Data))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_l3Data, _calcMin(_l3Data),
+                                    _calcMax(_l3Data))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_avrData, _calcMin(_avrData),
+                                    _calcMax(_avrData))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_avlData, _calcMin(_avlData),
+                                    _calcMax(_avlData))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_avfData, _calcMin(_avfData),
+                                    _calcMax(_avfData))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_v1Data, _calcMin(_v1Data),
+                                    _calcMax(_v1Data))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_v2Data, _calcMin(_v2Data),
+                                    _calcMax(_v2Data))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_v3Data, _calcMin(_v3Data),
+                                    _calcMax(_v3Data))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_v4Data, _calcMin(_v4Data),
+                                    _calcMax(_v4Data))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_v5Data, _calcMin(_v5Data),
+                                    _calcMax(_v5Data))),
+                            SizedBox(
+                                height: 200,
+                                child: _ecgPlot(_v6Data, _calcMin(_v6Data),
+                                    _calcMax(_v6Data))),
+                            ElevatedButton(
+                                onPressed: () {}, child: const Text("Back"))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               )
             : _resCode == 0
                 ? Center(child: CircularProgressIndicator())
