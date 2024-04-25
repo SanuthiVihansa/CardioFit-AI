@@ -23,6 +23,7 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Colors.white,
         title: Text(
           "ECG Monitoring",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),

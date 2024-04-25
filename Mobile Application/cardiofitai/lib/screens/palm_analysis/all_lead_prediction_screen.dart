@@ -173,7 +173,11 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Cardiac Analysis Through Palms"),
+          foregroundColor: Colors.white,
+          title: const Text(
+            "Cardiac Analysis Through Palms",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          ),
           backgroundColor: Colors.red,
         ),
         body: _resCode == 200
