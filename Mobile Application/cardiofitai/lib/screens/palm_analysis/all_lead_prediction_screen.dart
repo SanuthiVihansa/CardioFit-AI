@@ -40,6 +40,11 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
     _getPredictions();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   double _calcMin(List<double> data) {
     double minValue =
         data.reduce((value, element) => value < element ? value : element) -
