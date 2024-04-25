@@ -69,10 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
             fontSize: 16.0);
       } else {
         // print(snapshot.docs[0]["email"]);
-        //User user = await _saveCredentials(snapshot.docs[0]);
-        Navigator.pushReplacement(context,MaterialPageRoute(
+        User user = await _saveCredentials(snapshot.docs[0]);
+        Navigator.pop(context,MaterialPageRoute(
             builder: (BuildContext context) =>
-            DietHomePage()));
+            DietHomePage(user)));
       }
     }
   }

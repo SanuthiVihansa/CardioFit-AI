@@ -1,8 +1,13 @@
 import 'package:cardiofitai/components/navbar_component.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/user.dart';
+
 class DietHomePage extends StatefulWidget {
-  const DietHomePage({super.key});
+  const DietHomePage(this.user,{super.key});
+
+  final User user;
+
 
 
   @override
@@ -25,8 +30,8 @@ class _DietHomePageState extends State<DietHomePage> {
       ),
       ),
       drawer:LeftNavBar(
-          name: 'widget.user.name',
-          email: 'widget.user.email',
+          name: widget.user.name,
+          email: widget.user.email,
           width: 150,
           height: 300
       ),
