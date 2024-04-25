@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'package:cardiofitai/services/ocr_temp_service.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 //import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../models/response.dart';
 
 
 class OcrReader extends StatefulWidget {
@@ -164,7 +167,8 @@ class _OcrReaderState extends State<OcrReader> {
     textScanning = false;
     if(scannedText != ""){
       print("Has a value");
-      // TODO - addRecord from service
+      Response response = await OCRServiceTemp.addReportContent("username", 123, scannedText);
+      print(response.message);
     }
     setState(() {});
   }
