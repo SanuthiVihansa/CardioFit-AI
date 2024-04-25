@@ -24,39 +24,6 @@ class _ProfilePageState extends State<ProfilePage> {
   String dropdownValue = 'Less Active';
 
   @override
-  // Widget build(BuildContext context) {
-  //
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       backgroundColor: Colors.amberAccent.shade100,
-  //       leading: IconButton(
-  //         icon: Icon(
-  //             Icons.arrow_back_ios
-  //         ),
-  //         onPressed: () {
-  //           Navigator.pop(
-  //             context,
-  //             MaterialPageRoute(builder: (context) => DietHomePage()
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //     ),
-  //     body: ListView(
-  //       padding: EdgeInsets.zero,
-  //       children: <Widget> [
-  //         buildTop(),
-  //         userName(),
-  //         dateOfBirth(),
-  //         Age(),
-  //         Height(),
-  //         Weight(),
-  //         BMI(),
-  //         ActiveLevel()
-  //       ]
-  //     ),
-  //   );
-  // }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(), // Assuming you have an AppBar
