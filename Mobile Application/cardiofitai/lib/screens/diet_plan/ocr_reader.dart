@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:cardiofitai/services/ocr_temp_service.dart';
+import 'package:cardiofitai/services/user_information_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 //import 'package:google_ml_kit/google_ml_kit.dart';
@@ -12,6 +14,7 @@ import '../../models/response.dart';
 class OcrReader extends StatefulWidget {
   const OcrReader({Key? key}) : super(key: key);
 
+
   @override
   State<OcrReader> createState() => _OcrReaderState();
 }
@@ -22,6 +25,15 @@ class _OcrReaderState extends State<OcrReader> {
   XFile? imageFile;
 
   String scannedText = "";
+
+  late Future <QuerySnapshot <Object?>> _allReportsUploaded;
+
+  Set<String> processedCombinations = Set<String>();
+
+  //Function to generate a Report number
+  Future<void> _generateReportNumber() async{
+    _allReportsUploaded= OCRServiceTemp.getUserReportsNo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,8 +179,15 @@ class _OcrReaderState extends State<OcrReader> {
     textScanning = false;
     if(scannedText != ""){
       print("Has a value");
-      Response response = await OCRServiceTemp.addReportContent("username", 123, scannedText);
+      //check if username and number duplicate
+     String combinationKey = '';
+      if (!processedCombinations.contains(combinationKey)) {
+        processedCombinations.add(combinationKey);
+      Response response = await OCRServiceTemp.addReportContent("username", _generateReportNumber() as int, scannedText);
       print(response.message);
+    }else{
+        print("Duplicate combination detected");
+      }
     }
     setState(() {});
   }

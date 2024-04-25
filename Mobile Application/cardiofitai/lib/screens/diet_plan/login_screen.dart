@@ -69,8 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
             fontSize: 16.0);
       } else {
         // print(snapshot.docs[0]["email"]);
-        User user = await _saveCredentials(snapshot.docs[0]);
-
+        //User user = await _saveCredentials(snapshot.docs[0]);
+        Navigator.pushReplacement(context,MaterialPageRoute(
+            builder: (BuildContext context) =>
+            DietHomePage()));
       }
     }
   }
@@ -213,10 +215,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState?.save();
                                 _validateLogin(context);
-                                Navigator.pushReplacement(context,MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        DietHomePage())
-                                );
                               }
                             },
                             child: const Text("LOGIN",style:TextStyle(color: Colors.black),),

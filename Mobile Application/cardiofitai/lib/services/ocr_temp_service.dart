@@ -24,4 +24,9 @@ class OCRServiceTemp {
 
     return response;
   }
+
+  static Future<QuerySnapshot<Object?>> getUserReportsNo() async {
+    return await ocrDataTempCollectionReference
+        .orderBy('reportID', descending: true).limit(1).get();
+  }
 }
