@@ -136,7 +136,6 @@ class _OcrReaderState extends State<OcrReader> {
         imageFile = pickedImage;
         setState(() {});
         getRecognisedText(pickedImage);
-        print(scannedText);
       }
     } catch (e) {
       textScanning = false;
@@ -154,6 +153,7 @@ class _OcrReaderState extends State<OcrReader> {
     final RecognizedText recognisedText = await textRecognizer.processImage(inputImage);
     String extractedText = recognisedText.text;
     print(extractedText);
+
     await textRecognizer.close();
     scannedText = "";
     for (TextBlock block in recognisedText.blocks) {
@@ -162,6 +162,10 @@ class _OcrReaderState extends State<OcrReader> {
       }
     }
     textScanning = false;
+    if(scannedText != ""){
+      print("Has a value");
+      // TODO - addRecord from service
+    }
     setState(() {});
   }
 
