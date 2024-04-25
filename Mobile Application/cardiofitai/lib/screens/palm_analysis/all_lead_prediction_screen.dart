@@ -43,14 +43,14 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
   double _calcMin(List<double> data) {
     double minValue =
         data.reduce((value, element) => value < element ? value : element) -
-            0.5;
+            0.1;
     return minValue;
   }
 
   double _calcMax(List<double> data) {
     double maxValue =
         data.reduce((value, element) => value > element ? value : element) +
-            0.5;
+            0.1;
     return maxValue;
   }
 
@@ -83,7 +83,11 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
               bottomTitles: SideTitles(
                 showTitles: true,
                 getTitles: (value) {
-                  return (value ~/ 256).toString();
+                  if (value % 500 == 0) {
+                    return (value ~/ 500).toString();
+                  } else {
+                    return "";
+                  }
                 },
               ),
               leftTitles: SideTitles(
