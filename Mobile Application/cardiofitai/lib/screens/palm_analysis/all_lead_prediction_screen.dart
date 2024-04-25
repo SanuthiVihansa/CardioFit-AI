@@ -62,7 +62,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
 
   Widget _ecgPlot(List<double> data, double minValue, double maxValue) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(top: 1.0, left: 16, right: 16, bottom: 16),
       child: IgnorePointer(
         ignoring: true,
         child: LineChart(
@@ -193,58 +193,68 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                     child: SizedBox(
                       child: SingleChildScrollView(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            Text("Lead I"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_l1Data, _calcMin(_l1Data),
                                     _calcMax(_l1Data))),
+                            Text("Lead II"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_l2Data, _calcMin(_l2Data),
                                     _calcMax(_l2Data))),
+                            Text("Lead III"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_l3Data, _calcMin(_l3Data),
                                     _calcMax(_l3Data))),
+                            Text("Lead aVR"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_avrData, _calcMin(_avrData),
                                     _calcMax(_avrData))),
+                            Text("Lead aVL"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_avlData, _calcMin(_avlData),
                                     _calcMax(_avlData))),
+                            Text("Lead aVF"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_avfData, _calcMin(_avfData),
                                     _calcMax(_avfData))),
+                            Text("Lead V1"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_v1Data, _calcMin(_v1Data),
                                     _calcMax(_v1Data))),
+                            Text("Lead V2"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_v2Data, _calcMin(_v2Data),
                                     _calcMax(_v2Data))),
+                            Text("Lead V3"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_v3Data, _calcMin(_v3Data),
                                     _calcMax(_v3Data))),
+                            Text("Lead V4"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_v4Data, _calcMin(_v4Data),
                                     _calcMax(_v4Data))),
+                            Text("Lead V5"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_v5Data, _calcMin(_v5Data),
                                     _calcMax(_v5Data))),
+                            Text("Lead V6"),
                             SizedBox(
                                 height: 200,
                                 child: _ecgPlot(_v6Data, _calcMin(_v6Data),
                                     _calcMax(_v6Data))),
-                            ElevatedButton(
-                                onPressed: () {}, child: const Text("Back"))
                           ],
                         ),
                       ),
