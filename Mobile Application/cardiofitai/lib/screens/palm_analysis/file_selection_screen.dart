@@ -67,7 +67,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
 
   Widget _ecgPlot() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(top: 16.0, bottom: 1, left: 16, right: 16),
       child: LineChart(
         LineChartData(
           lineBarsData: [
@@ -135,7 +135,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("File Selector"),
+        title: Text("Cardiac Analysis Through Palms"),
         backgroundColor: Colors.red,
       ),
       body: _tenSecData.length == 0
@@ -148,14 +148,29 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
               ),
             )
           : Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 20),
+                  child: Text(
+                    "Lead II ECG Signal",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
                 Expanded(child: SizedBox(child: _ecgPlot())),
-                ElevatedButton(
-                    onPressed: () {
-                      _onClickBtnProceed();
-                    },
-                    child: const Text("Proceed"))
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0, right: 10),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            _onClickBtnProceed();
+                          },
+                          child: const Text("Proceed")),
+                    ),
+                  ],
+                )
               ],
             ),
     );
