@@ -92,7 +92,11 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
             bottomTitles: SideTitles(
               showTitles: true,
               getTitles: (value) {
-                return (value ~/ 256).toString();
+                if (value % 250 == 0) {
+                  return (value ~/ 250).toString();
+                } else {
+                  return "";
+                }
               },
             ),
             leftTitles: SideTitles(
