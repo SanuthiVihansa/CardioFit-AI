@@ -136,6 +136,7 @@ class _OcrReaderState extends State<OcrReader> {
         imageFile = pickedImage;
         setState(() {});
         getRecognisedText(pickedImage);
+        print(scannedText);
       }
     } catch (e) {
       textScanning = false;
