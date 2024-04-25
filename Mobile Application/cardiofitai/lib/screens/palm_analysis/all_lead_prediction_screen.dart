@@ -164,6 +164,11 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
     setState(() {});
   }
 
+  void _onClickHomeBtn() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -185,7 +190,11 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
-                        ElevatedButton(onPressed: () {}, child: Text("Home"))
+                        ElevatedButton(
+                            onPressed: () {
+                              _onClickHomeBtn();
+                            },
+                            child: Text("Home"))
                       ],
                     ),
                   ),
