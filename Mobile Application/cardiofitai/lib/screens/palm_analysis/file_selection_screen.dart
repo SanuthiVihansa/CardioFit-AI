@@ -71,10 +71,13 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     print('Connectivity changed: $_connectionStatus');
   }
 
-  void _connectionErrorMsg(){}
+  void _connectionErrorMsg() {}
 
   void _pickFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    final result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ["txt"]);
 
     if (result == null) return;
 
