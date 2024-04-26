@@ -7,7 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+
+import 'all_lead_prediction_screen.dart';
 
 class CameraPage extends StatefulWidget {
   CameraPage(this._width, this._height, {Key? key})
@@ -53,9 +57,16 @@ class _CameraPageState extends State<CameraPage> {
   //
   String message = "Please make sure your face is visible in the camera";
 
+  late List<double> _tenSecData = [];
+  double _maxValue = 0;
+  double _minValue = 0;
+  final String _upServerUrl =
+      'http://poornasenadheera100.pythonanywhere.com/upforunet';
+
   // METHODS
   @override
   void initState() {
+    _upServer();
     // orientation
     // SystemChrome.setPreferredOrientations([
     //   DeviceOrientation.portraitUp,
@@ -140,6 +151,7 @@ class _CameraPageState extends State<CameraPage> {
             if (file != null) {
               // show snackbar
               callToast('Recording completed');
+              _pickFile();
 
               message = "Please make sure your face is visible in the camera";
               setState(() {
@@ -221,6 +233,47 @@ class _CameraPageState extends State<CameraPage> {
         fontSize: 16.0);
   }
 
+  void _onTapViewECGBtn(BuildContext context) {
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                AllLeadPredictionScreen(_tenSecData)));
+  }
+
+  void _pickFile() async {
+
+    final file = File('/data/user/0/com.spsh.cardiofitai/cache/file_picker/1714153553401/411_2024_03_11_12_54_2.txt');
+    String contents = await file.readAsString();
+    contents = contents.substring(1);
+
+    List<double> dataList = contents.split(',').map((String value) {
+      return double.tryParse(value) ?? 0.0;
+    }).toList();
+
+    _tenSecData = dataList.sublist(0, 2560);
+    _calcMinMax(_tenSecData);
+    setState(() {});
+
+    await DefaultCacheManager().emptyCache();
+  }
+
+  Future<void> _upServer() async {
+    await http.get(Uri.parse(_upServerUrl), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
+  }
+
+  void _calcMinMax(List<double> data) {
+    _minValue =
+        data.reduce((value, element) => value < element ? value : element) -
+            0.5;
+    _maxValue =
+        data.reduce((value, element) => value > element ? value : element) +
+            0.5;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -262,21 +315,26 @@ class _CameraPageState extends State<CameraPage> {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: FloatingActionButton.extended(
-                      onPressed: () {},
+                      onPressed: () {
+                        _onTapViewECGBtn(context);
+                      },
                       label: const Text('View ECG reading'),
                       icon: const Icon(Icons.file_present_rounded),
                     ),
                   ),
                 )
               : Container(),
-          Align(
-            alignment: AlignmentDirectional.topCenter,
-            child: Text(
-              message,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.only(top: 70),
+            child: Align(
+              alignment: AlignmentDirectional.topCenter,
+              child: Text(
+                message,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
