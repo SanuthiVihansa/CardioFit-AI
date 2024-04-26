@@ -40,6 +40,7 @@ class _CameraPageState extends State<CameraPage> {
 
   bool _isLoading = true;
   bool _isRecording = false;
+  bool _isCancelled = false;
   late CameraController _cameraController;
 
   // paddings and sizes
@@ -99,21 +100,18 @@ class _CameraPageState extends State<CameraPage> {
         //saves the file temporarily
         if (file != null) {
           // show snackbar
-          callToast('Recording completed');
+          callToast('Recording cancelled');
 
           message = "Please make sure your face is visible in the camera";
-          setState(() => _isRecording = false);
+          setState(() {
+            _isRecording = false;
+            _isCancelled = true;
+          } );
 
-          // previews the video
-          // final route = MaterialPageRoute(
-          //   fullscreenDialog: true,
-          //   builder: (_) => VideoPage(filePath: file.path),
-          // );
-          //
-          // Navigator.push(context, route);
+          deleteSpecificFile(file.path);
 
           if (kDebugMode) {
-            print('Video saved to path: ${file.path}');
+            print('File deleted with path: ${file.path}');
           }
         }
       });
@@ -125,16 +123,40 @@ class _CameraPageState extends State<CameraPage> {
       setState(() => _isRecording = true);
 
       // Stop recording after 10 seconds
-      Future.delayed(const Duration(seconds: 10), () {
+      Future.delayed(const Duration(seconds: 10), () async {
         if (_isRecording) {
-          _recordVideo();
+          setState(() {
+            _isCancelled = false;
+          });
+          await _cameraController.stopVideoRecording().then((XFile? file) {
+            //saves the file temporarily
+            if (file != null) {
+              // show snackbar
+              callToast('Recording completed');
+
+              message = "Please make sure your face is visible in the camera";
+              setState(() => _isRecording = false);
+
+              // previews the video
+              // final route = MaterialPageRoute(
+              //   fullscreenDialog: true,
+              //   builder: (_) => VideoPage(filePath: file.path),
+              // );
+              //
+              // Navigator.push(context, route);
+
+              if (kDebugMode) {
+                print('Video saved to path: ${file.path}');
+              }
+            }
+          });
         }
       });
     }
   }
 
   // delete all files in a directory
-  void deleteAllFiles(String path) {
+  Future<void> deleteAllFiles(String path) async {
     try {
       Directory directory = Directory(path);
       if (directory.existsSync()) {
@@ -146,7 +168,7 @@ class _CameraPageState extends State<CameraPage> {
               i++;
               print('Deleting file: $i');
             }
-            // await file.delete();
+            await file.delete();
           }
         }
       }
@@ -159,6 +181,19 @@ class _CameraPageState extends State<CameraPage> {
 
   // String path = '/data/user/0/com.spsh.cardiofitai/cache/';
   // deleteAllFiles(path);
+
+  Future<void> deleteSpecificFile(String path) async {
+    try {
+      File file = File(path);
+      if (file.existsSync()) {
+        await file.delete();
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error deleting file: $e');
+      }
+    }
+  }
 
   void callToast(String msg) {
     Toast duration = Toast.LENGTH_LONG;
