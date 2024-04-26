@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:cardiofitai/screens/facial_analysis/video_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CameraPage extends StatefulWidget {
@@ -41,6 +43,7 @@ class _CameraPageState extends State<CameraPage> {
   bool _isLoading = true;
   bool _isRecording = false;
   bool _isCancelled = false;
+  bool _isVideoCaptured = false;
   late CameraController _cameraController;
 
   // paddings and sizes
@@ -105,8 +108,9 @@ class _CameraPageState extends State<CameraPage> {
           message = "Please make sure your face is visible in the camera";
           setState(() {
             _isRecording = false;
+            _isVideoCaptured = false;
             _isCancelled = true;
-          } );
+          });
 
           deleteSpecificFile(file.path);
 
@@ -118,9 +122,12 @@ class _CameraPageState extends State<CameraPage> {
     } else {
       await _cameraController.prepareForVideoRecording();
       await _cameraController.startVideoRecording();
-      message = "";
+      message = "Try not to move too much...";
       callToast('Recording started...');
-      setState(() => _isRecording = true);
+      setState(() {
+        _isVideoCaptured = false;
+        _isRecording = true;
+      });
 
       // Stop recording after 10 seconds
       Future.delayed(const Duration(seconds: 10), () async {
@@ -135,7 +142,10 @@ class _CameraPageState extends State<CameraPage> {
               callToast('Recording completed');
 
               message = "Please make sure your face is visible in the camera";
-              setState(() => _isRecording = false);
+              setState(() {
+                _isVideoCaptured = true;
+                _isRecording = false;
+              });
 
               // previews the video
               // final route = MaterialPageRoute(
@@ -225,7 +235,10 @@ class _CameraPageState extends State<CameraPage> {
         child: Stack(alignment: Alignment.bottomCenter, children: [
           CameraPreview(_cameraController),
           Padding(
-              padding: EdgeInsets.only(bottom: recordBtnBottomPadding),
+            padding:
+                EdgeInsets.only(right: _isVideoCaptured ? 150 : 0, bottom: recordBtnBottomPadding),
+            child: Align(
+              alignment: Alignment.bottomCenter,
               child: FloatingActionButton(
                 backgroundColor: Colors.white,
                 shape: const CircleBorder(),
@@ -239,7 +252,23 @@ class _CameraPageState extends State<CameraPage> {
                   // deleteAllFiles(path);
                   _recordVideo();
                 },
-              )),
+              ),
+            ),
+          ),
+          _isVideoCaptured
+              ? Padding(
+                  padding: EdgeInsets.only(
+                      left: 150, bottom: recordBtnBottomPadding),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: FloatingActionButton.extended(
+                      onPressed: () {},
+                      label: const Text('View ECG reading'),
+                      icon: const Icon(Icons.file_present_rounded),
+                    ),
+                  ),
+                )
+              : Container(),
           Align(
             alignment: AlignmentDirectional.topCenter,
             child: Text(
