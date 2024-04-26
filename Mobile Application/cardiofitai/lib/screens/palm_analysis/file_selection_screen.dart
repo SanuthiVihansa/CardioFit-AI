@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:cardiofitai/screens/palm_analysis/all_lead_prediction_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -22,6 +21,8 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
   double _maxValue = 0;
   double _minValue = 0;
 
+  bool _hasConnection = false;
+
   final String _upServerUrl =
       'http://poornasenadheera100.pythonanywhere.com/upforunet';
 
@@ -40,23 +41,16 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-
-    _upServer();
   }
 
   Future<void> initConnectivity() async {
     late List<ConnectivityResult> result;
-    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       result = await _connectivity.checkConnectivity();
     } on PlatformException catch (e) {
       print('Couldn\'t check connectivity status $e');
       return;
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) {
       return Future.value(null);
     }
@@ -68,10 +62,41 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     setState(() {
       _connectionStatus = result;
     });
-    print('Connectivity changed: $_connectionStatus');
+    // print('Connectivity changed: $_connectionStatus');
+    _checkNetwork(_connectionStatus[0]);
   }
 
-  void _connectionErrorMsg() {}
+  void _checkNetwork(ConnectivityResult result) {
+    if (result != ConnectivityResult.none) {
+      _hasConnection = true;
+      _upServer();
+    } else {
+      _hasConnection = false;
+    }
+    setState(() {});
+
+    if (!_hasConnection) {
+      _showNetworkErrorMsg();
+    }
+  }
+
+  Future<void> _showNetworkErrorMsg() async {
+    await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text("No Internet"),
+              actionsAlignment: MainAxisAlignment.center,
+              content: const Text('Please connect to the network!'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () async {
+                    return Navigator.pop(context, true);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ));
+  }
 
   void _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
@@ -84,7 +109,6 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     final file = File(result.files.single.path.toString());
     String contents = await file.readAsString();
     contents = contents.substring(1);
-    // print(contents);
 
     List<double> dataList = contents.split(',').map((String value) {
       return double.tryParse(value) ?? 0.0;
@@ -93,8 +117,6 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     _tenSecData = dataList.sublist(0, 2560);
     _calcMinMax(_tenSecData);
     setState(() {});
-
-    // print(_tenSecData);
 
     await DefaultCacheManager().emptyCache();
   }
@@ -179,7 +201,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           "Cardiac Analysis Through Palms",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -187,18 +209,31 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
       ),
       body: _tenSecData.length == 0
           ? Center(
-              child: ElevatedButton(
-                child: const Text("Select file"),
-                onPressed: () {
-                  _pickFile();
-                },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: _hasConnection
+                        ? () {
+                            _pickFile();
+                          }
+                        : null,
+                    child: const Text("Select file"),
+                  ),
+                  !_hasConnection
+                      ? const Text(
+                          "No Network Connection!",
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : const SizedBox()
+                ],
               ),
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 20),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10, left: 20),
                   child: Text(
                     "Lead II ECG Signal",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -208,12 +243,24 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    !_hasConnection
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: const Text(
+                              "No Network Connection!",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          )
+                        : const SizedBox(),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0, right: 10),
+                      padding: const EdgeInsets.only(
+                          bottom: 10.0, right: 10, left: 10),
                       child: ElevatedButton(
-                          onPressed: () {
-                            _onClickBtnProceed();
-                          },
+                          onPressed: _hasConnection
+                              ? () {
+                                  _onClickBtnProceed();
+                                }
+                              : null,
                           child: const Text("Proceed")),
                     ),
                   ],
