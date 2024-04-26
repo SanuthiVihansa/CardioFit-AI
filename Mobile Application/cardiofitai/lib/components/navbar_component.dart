@@ -59,8 +59,8 @@ class LeftNavBar extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text('name'),
-            accountEmail: Text('email'),
+            accountName: Text(name),
+            accountEmail: Text(email),
             currentAccountPicture: Stack(
               children: [
                 // Circular progress indicator
