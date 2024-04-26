@@ -1,13 +1,17 @@
+import 'dart:io';
+
 import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
+import 'package:cardiofitai/screens/diet_plan/signup_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class LeftNavBar extends StatelessWidget {
-   final String name;
-   final String email;
-   final double width;
-   final double height;
+  final String name;
+  final String email;
+  final double width;
+  final double height;
 
   LeftNavBar({
     required this.name,
@@ -16,6 +20,37 @@ class LeftNavBar extends StatelessWidget {
     required this.height,
   });
 
+  Future<void> _onTapLogOutBtn(BuildContext context) async {
+    var dialogRes = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+              actionsAlignment: MainAxisAlignment.spaceBetween,
+              content: const Text('Are you sure you want to logout?'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('No'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    return Navigator.pop(context, true);
+                  },
+                  child: const Text('Yes'),
+                ),
+              ],
+            ));
+
+    if (dialogRes == true) {
+      final directory = await getApplicationDocumentsDirectory();
+      final path = directory.path;
+      File file = File('$path/userdata.txt');
+      await file.delete();
+
+      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) => SignUpPage()));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,23 +74,24 @@ class LeftNavBar extends StatelessWidget {
                   minSize: 600,
                   padding: EdgeInsets.all(16.0),
                   borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => ProfilePage()),
                     );
                   },
-                child: CircleAvatar(
-                  child: ClipOval(
-                    child: Image.network(
-                      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.fill,
+                  child: CircleAvatar(
+                    child: ClipOval(
+                      child: Image.network(
+                        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                 ),
-              ),],
+              ],
             ),
             decoration: BoxDecoration(
               color: Colors.blueAccent,
@@ -91,25 +127,12 @@ class LeftNavBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text("LOG OUT"),
-            // onTap: () async {
-            //   final directory = await getApplicationDocumentsDirectory();
-            //   final path = directory.path;
-            //   File file = File('$path/userdata.txt');
-            //   await file.delete();
-            //
-            //   Navigator.of(context).pop(); // Close the drawer
-            //   Navigator.of(context).push(
-            //     MaterialPageRoute(
-            //       builder: (BuildContext context) => LoginScreen(width, height),
-            //     ),
-            //   );
-            // },
+            onTap: () {
+              _onTapLogOutBtn(context);
+            },
           )
         ],
       ),
     );
   }
-
-
-
 }
