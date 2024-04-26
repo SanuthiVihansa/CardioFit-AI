@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     _emailController.addListener(() => setState(() {}));
   }
+
 //Email Field Validation
   String? _validateEmail(String text) {
     if (text == "") {
@@ -37,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     return null;
   }
+
 //Password Field Validation
   String? _validatePassword(String text) {
     if (text == "") {
@@ -44,10 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     return null;
   }
+
 //Login Validation Method
   Future<void> _validateLogin(BuildContext context) async {
     QuerySnapshot snapshot =
-    await UserLoginService.getUserByEmail(_emailController.text);
+        await UserLoginService.getUserByEmail(_emailController.text);
     if (snapshot.docs.isEmpty) {
       Fluttertoast.showToast(
           msg: "Please Register Your Account!",
@@ -68,68 +71,51 @@ class _LoginScreenState extends State<LoginScreen> {
             textColor: Colors.white,
             fontSize: 16.0);
       } else {
-        // print(snapshot.docs[0]["email"]);
         User user = await _saveCredentials(snapshot.docs[0]);
-        Navigator.pop(context,MaterialPageRoute(
-            builder: (BuildContext context) =>
-            DietHomePage(user)));
+        _navigate(user);
       }
     }
   }
 
   Future<User> _saveCredentials(QueryDocumentSnapshot doc) async {
-
-    String userData = '{"email" : "' +
+    String userData = '{"name" : "' +
+        doc["name"] +
+        '", "email" : "' +
         doc["email"] +
         '", "password" : "' +
-        doc["password"]+
+        doc["password"] +
+        '", "age" : "' +
+        doc["age"] +
+        '", "height" : "' +
+        doc["height"] +
+        '", "weight" : "' +
+        doc["weight"] +
+        '", "phone" : "' +
+        doc["phone"] +
+        '", "type" : "' +
+        doc["type"] +
         '"}';
 
-    User user = User(
-        doc["email"],
-        doc["pas"],
-        doc["age"],
-        doc["height"],
-        doc["weight"],
-        doc["phone"]);
+    User user = User(doc["name"], doc["email"], doc["password"], doc["age"],
+        doc["height"], doc["weight"], doc["phone"], doc["type"]);
 
-
-      final directory = await getApplicationDocumentsDirectory();
-      final path = directory.path;
-      File file = File('$path/userdata.txt');
-      file.writeAsString(userData);
+    final directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+    File file = File('$path/userdata.txt');
+    file.writeAsString(userData);
 
     return user;
   }
 
-
-  // void _navigate(User employee, BuildContext context) {
-  //   if (employee.empType == "finadmin") {
-  //     Navigator.of(context).pushReplacement(MaterialPageRoute(
-  //         builder: (BuildContext context) =>
-  //             FinanceAdminHomeScreen(widget._width, widget._height, employee)));
-  //   } else if (employee.empType == "hod") {
-  //     if (employee.firstLogin == false) {
-  //       Navigator.of(context).pushReplacement(MaterialPageRoute(
-  //           builder: (BuildContext context) => ApproverDashboardScreen(
-  //               widget._width, widget._height, employee)));
-  //     } else {
-  //       Navigator.of(context).push(MaterialPageRoute(
-  //           builder: (BuildContext context) =>
-  //               ChangePasswordScreen(widget._width, widget._height, employee)));
-  //     }
-  //   } else {
-  //     if (employee.firstLogin == false) {
-  //       Navigator.of(context).pushReplacement(MaterialPageRoute(
-  //           builder: (BuildContext context) =>
-  //               EmployeeHomeScreen(widget._width, widget._height, employee)));
-  //     } else {
-  //       Navigator.of(context).push(MaterialPageRoute(
-  //           builder: (BuildContext context) =>
-  //               ChangePasswordScreen(widget._width, widget._height, employee)));
-  //     }
-  //   }
-  // }
+  void _navigate(User user) {
+    if (user.type == "user") {
+      Navigator.pop(context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => DietHomePage(user)));
+    } else {
+      // For Doctor login
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,9 +131,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     bottom: widget._height / 26.76363636363636,
                     left: widget._width / 6.545454545454545,
                     right: widget._width / 6.545454545454545),
-                child: Icon(Icons.account_circle,size: 50,),
+                child: Icon(
+                  Icons.account_circle,
+                  size: 50,
+                ),
               ),
-              Text("H E L L O   W E L C O M E   B A C K ! ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+              Text("H E L L O   W E L C O M E   B A C K ! ",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               Text("Enter credentials to login"),
               Form(
                 key: _formKey,
@@ -157,7 +147,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(widget._width / 49.09090909090909),
+                        padding:
+                            EdgeInsets.all(widget._width / 49.09090909090909),
                         child: TextFormField(
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.next,
@@ -172,15 +163,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             suffixIcon: _emailController.text.isEmpty
                                 ? Container(width: 0)
                                 : IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () => _emailController.clear(),
-                            ),
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () => _emailController.clear(),
+                                  ),
                             border: const OutlineInputBorder(),
                           ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(widget._width / 49.09090909090909),
+                        padding:
+                            EdgeInsets.all(widget._width / 49.09090909090909),
                         child: TextFormField(
                           controller: _passwordController,
                           keyboardType: TextInputType.text,
@@ -200,29 +192,30 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: EdgeInsets.only(
                             top: widget._height / 26.76363636363636),
-
                         child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                              shape: MaterialStateProperty.all<OutlinedBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0),
-                                  side: BorderSide(color: Colors.black, width: 2.0),
-                                ),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            shape: MaterialStateProperty.all<OutlinedBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0),
+                                side:
+                                    BorderSide(color: Colors.black, width: 2.0),
                               ),
                             ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState?.save();
-                                _validateLogin(context);
-                              }
-                            },
-                            child: const Text("LOGIN",style:TextStyle(color: Colors.black),),
-                          )
-                          ,
+                          ),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState?.save();
+                              _validateLogin(context);
+                            }
+                          },
+                          child: const Text(
+                            "LOGIN",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
                       ),
-
-
                     ],
                   ),
                 ),
@@ -234,4 +227,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
