@@ -244,9 +244,9 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     !_hasConnection
-                        ? Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: const Text(
+                        ? const Padding(
+                            padding: EdgeInsets.only(bottom: 10.0),
+                            child: Text(
                               "No Network Connection!",
                               style: TextStyle(color: Colors.red),
                             ),
