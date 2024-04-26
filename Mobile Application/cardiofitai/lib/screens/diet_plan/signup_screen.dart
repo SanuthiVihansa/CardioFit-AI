@@ -9,7 +9,6 @@ import '../../services/user_information_service.dart';
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
-
   @override
   State<SignUpPage> createState() => _SignUpPageState();
 }
@@ -58,14 +57,17 @@ class _SignUpPageState extends State<SignUpPage> {
     }
     return null;
   }
-  
 
   Future<void> _onTapCreateAccount() async {
     Response response = await UserLoginService.addAccount(
+        _nameController.text,
         _emailController.text,
         _passwordController.text,
-        _nameController.text
-    );
+        "-1",
+        "-1",
+        "-1",
+        "-1",
+        "user");
     if (response.code == 200) {
       Fluttertoast.showToast(
           msg: "Account Created Successfully!🎉",
@@ -87,15 +89,12 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
     _width = MediaQuery.of(context).size.width;
     _height = MediaQuery.of(context).size.height;
 
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
@@ -107,9 +106,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     bottom: _height / 26.76363636363636,
                     left: _width / 6.545454545454545,
                     right: _width / 6.545454545454545),
-                child: Icon(Icons.account_circle,size: 50,),
+                child: Icon(
+                  Icons.account_circle,
+                  size: 50,
+                ),
               ),
-              Text("H E L L O   T H E R E ! ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+              Text("H E L L O   T H E R E ! ",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               Text("Register below with details"),
               Form(
                 key: _formKey,
@@ -134,9 +137,9 @@ class _SignUpPageState extends State<SignUpPage> {
                             suffixIcon: _nameController.text.isEmpty
                                 ? Container(width: 0)
                                 : IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () => _nameController.clear(),
-                            ),
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () => _nameController.clear(),
+                                  ),
                             border: const OutlineInputBorder(),
                           ),
                         ),
@@ -157,9 +160,9 @@ class _SignUpPageState extends State<SignUpPage> {
                             suffixIcon: _emailController.text.isEmpty
                                 ? Container(width: 0)
                                 : IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () => _emailController.clear(),
-                            ),
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () => _emailController.clear(),
+                                  ),
                             border: const OutlineInputBorder(),
                           ),
                         ),
@@ -201,47 +204,59 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                            top: _height / 26.76363636363636),
-                        child: ElevatedButton(style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0),
-                            side: BorderSide(color: Colors.black, width: 2.0),
+                        padding:
+                            EdgeInsets.only(top: _height / 26.76363636363636),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            shape: MaterialStateProperty.all<OutlinedBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0),
+                                side:
+                                    BorderSide(color: Colors.black, width: 2.0),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState?.save();
                               _onTapCreateAccount();
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => LoginScreen(_width, _height)),
+                                MaterialPageRoute(
+                                    builder: (context) => SignUpPage()),
                               );
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          LoginScreen(_width, _height)));
                             }
                           },
-                          child: const Text("SIGN UP",style: TextStyle(color: Colors.black),),
+                          child: const Text(
+                            "SIGN UP",
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => LoginScreen(_width, _height)),
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    LoginScreen(_width, _height)),
                           );
                         },
                         child: Text(
                           "Already have an Account! Login",
                           textDirection: TextDirection.ltr,
                           style: TextStyle(
-                            color: Colors.blue, 
+                            color: Colors.blue,
                           ),
                         ),
                       )
-
-
                     ],
                   ),
                 ),
@@ -253,4 +268,3 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
-
