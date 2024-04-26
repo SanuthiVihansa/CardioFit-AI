@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/common/login_exchange_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/login_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
 import 'package:cardiofitai/screens/diet_plan/signup_screen.dart';
@@ -14,12 +15,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-
-  runApp( CardioFitAi());
+  runApp(CardioFitAi());
 }
 
 class CardioFitAi extends StatelessWidget {
-   CardioFitAi({super.key});
+  CardioFitAi({super.key});
 
   late double _width;
   late double _height;
@@ -29,11 +29,10 @@ class CardioFitAi extends StatelessWidget {
     _width = MediaQuery.of(context).size.width;
     _height = MediaQuery.of(context).size.height;
 
-    return  MaterialApp(
-      color: Colors.red,
-      debugShowCheckedModeBanner: false,
-      // home: TestingFirebaseScreen(),
-      home: SignUpPage()
-    );
+    return MaterialApp(
+        color: Colors.red,
+        debugShowCheckedModeBanner: false,
+        // home: TestingFirebaseScreen(),
+        home: LoginExchangeScreen());
   }
 }
