@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 // import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class CardioFitAi extends StatelessWidget {
     return  MaterialApp(
       color: Colors.red,
       // home: TestingFirebaseScreen(),
-      home: FacialAnalysisHome(_width, _height)
+      home: ReportHome()
     );
   }
 }
