@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../models/user.dart';
 import '../../services/user_information_service.dart';
+import 'diet_plan_home_page.screen.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage(this.user,{super.key});
@@ -70,6 +71,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 Weight(),
                 BMI(),
                 ActiveLevel(),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+                child: Row(children: [
+                saveInfoBtn(),
+                backBtn(),
+                ],
+                ),
+            )
               ],
             ),
           ),
@@ -216,13 +225,21 @@ class _ProfilePageState extends State<ProfilePage> {
               value: 'Very Active', child: Text('Very Active')),
         ],
       );
+  Widget backBtn()=>ElevatedButton(
+      child: Text("Back"),
+      onPressed: (){
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => DietHomePage(widget.user)));
 
+      });
 
-  Widget SaveInfo()=>ElevatedButton(
-      child: Text("Successfully Saved Profile Information ! "),
+  Widget saveInfoBtn()=>ElevatedButton(
+      child: Text("Save"),
       onPressed: (){
         User updatedUserInfo = User(widget.user.name, widget.user.email, widget.user.password, _ageController.text, _heightController.text, _weightController.text, _caluclateBMIController.text, _dateOfBirth.toString(), dropdownValue.characters.string, widget.user.type);
       UserLoginService.updateUser(updatedUserInfo);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => DietHomePage(widget.user)));
 
   });
 }
