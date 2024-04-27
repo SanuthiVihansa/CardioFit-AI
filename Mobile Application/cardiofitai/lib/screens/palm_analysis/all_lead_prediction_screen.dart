@@ -168,9 +168,30 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
       print('Error: $e');
       print("Timeout done");
       _resCode = 408;
+      _showTimeoutErrorMsg();
     }
 
     setState(() {});
+  }
+
+  Future<void> _showTimeoutErrorMsg() async {
+    await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text("Request Timed Out!"),
+              actionsAlignment: MainAxisAlignment.center,
+              content: const Text(
+                  'The request timed out. Please check your network connection.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () async {
+                    return Navigator.pop(context, true);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ));
+    Navigator.pop(context);
   }
 
   void _onClickHomeBtn() {
@@ -299,7 +320,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                   )
                 : _resCode == 408
                     ? Center(
-                        child: Text("Request Timedout"),
+                        child: Text("The request timed out!"),
                       )
                     : Center(
                         child: Text("Error"),
