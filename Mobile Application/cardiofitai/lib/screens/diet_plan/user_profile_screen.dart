@@ -13,6 +13,7 @@ class ProfilePage extends StatefulWidget {
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
+  
 }
 
 class _ProfilePageState extends State<ProfilePage> {
@@ -215,6 +216,13 @@ class _ProfilePageState extends State<ProfilePage> {
               value: 'Very Active', child: Text('Very Active')),
         ],
       );
-//Rate how active you are
-//Taking medicines for...(dropdown)
+
+
+  Widget SaveInfo()=>ElevatedButton(
+      child: Text("Successfully Saved Profile Information ! "),
+      onPressed: (){
+        User updatedUserInfo = User(widget.user.name, widget.user.email, widget.user.password, _ageController.text, _heightController.text, _weightController.text, _caluclateBMIController.text, _dateOfBirth.toString(), dropdownValue.characters.string, widget.user.type);
+      UserLoginService.updateUser(updatedUserInfo);
+
+  });
 }

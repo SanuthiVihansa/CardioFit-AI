@@ -67,6 +67,8 @@ class _SignUpPageState extends State<SignUpPage> {
         "-1",
         "-1",
         "-1",
+        "-1",
+        "-1",
         "user");
     if (response.code == 200) {
       Fluttertoast.showToast(

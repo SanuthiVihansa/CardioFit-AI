@@ -5,10 +5,14 @@ class User{
   String age;
   String height;
   String weight;
-  String phone;
+  String bmi;
+  String dob;
+  String activelevel;
   String type;
 
 
+
+
   User(this.name, this.email, this.password, this.age, this.height, this.weight,
-      this.phone, this.type);
+      this.bmi, this.dob,this.activelevel,this.type);
 }

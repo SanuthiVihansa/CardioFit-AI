@@ -20,7 +20,9 @@ class UserLoginService {
       String age,
       String height,
       String weight,
-      String phone,
+      String bmi,
+      String dob,
+      String activelevel,
       String type) async {
     Response response = Response();
     Map<String, dynamic> data = <String, dynamic>{
@@ -30,7 +32,9 @@ class UserLoginService {
       "age": age,
       "height": height,
       "weight": weight,
-      "phone": phone,
+      "bmi":bmi,
+      "dob":dob,
+      "activelevel":activelevel,
       "type": type,
     };
 
@@ -62,7 +66,10 @@ class UserLoginService {
           "age": user.age,
           "height": user.height,
           "weight": user.weight,
-          "phone": user.phone,
+          "bmi":user.bmi,
+          "dob":user.dob,
+          "activelevel":user.activelevel,
+
         };
 
         await document.reference.update(data); // Update the document
