@@ -133,49 +133,52 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
   Widget _ecgPlot() {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0, bottom: 1, left: 16, right: 16),
-      child: LineChart(
-        LineChartData(
-          lineBarsData: [
-            LineChartBarData(
-              spots: List.generate(
-                _tenSecData.length,
-                (index) => FlSpot(index.toDouble(), _tenSecData[index]),
+      child: IgnorePointer(
+        ignoring: true,
+        child: LineChart(
+          LineChartData(
+            lineBarsData: [
+              LineChartBarData(
+                spots: List.generate(
+                  _tenSecData.length,
+                  (index) => FlSpot(index.toDouble(), _tenSecData[index]),
+                ),
+                isCurved: false,
+                colors: [Colors.blue],
+                barWidth: 2,
+                isStrokeCapRound: true,
+                dotData: FlDotData(
+                  show: false,
+                ),
               ),
-              isCurved: false,
-              colors: [Colors.blue],
-              barWidth: 2,
-              isStrokeCapRound: true,
-              dotData: FlDotData(
-                show: false,
+            ],
+            minY: _minValue,
+            // Adjust these values based on your data range
+            maxY: _maxValue,
+            titlesData: FlTitlesData(
+              bottomTitles: SideTitles(
+                showTitles: true,
+                getTitles: (value) {
+                  if (value % 250 == 0) {
+                    return (value ~/ 250).toString();
+                  } else {
+                    return "";
+                  }
+                },
+              ),
+              leftTitles: SideTitles(
+                showTitles: true,
               ),
             ),
-          ],
-          minY: _minValue,
-          // Adjust these values based on your data range
-          maxY: _maxValue,
-          titlesData: FlTitlesData(
-            bottomTitles: SideTitles(
-              showTitles: true,
-              getTitles: (value) {
-                if (value % 250 == 0) {
-                  return (value ~/ 250).toString();
-                } else {
-                  return "";
-                }
-              },
+            borderData: FlBorderData(
+              show: true,
+              border: Border.all(color: Colors.black),
             ),
-            leftTitles: SideTitles(
-              showTitles: true,
+            gridData: FlGridData(
+              show: true,
+              drawHorizontalLine: true,
+              drawVerticalLine: true,
             ),
-          ),
-          borderData: FlBorderData(
-            show: true,
-            border: Border.all(color: Colors.black),
-          ),
-          gridData: FlGridData(
-            show: true,
-            drawHorizontalLine: true,
-            drawVerticalLine: true,
           ),
         ),
       ),
