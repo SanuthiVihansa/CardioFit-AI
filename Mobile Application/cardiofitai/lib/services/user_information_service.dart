@@ -22,7 +22,7 @@ class UserLoginService {
       String weight,
       String bmi,
       String dob,
-      String activelevel,
+      String activeLevel,
       String type) async {
     Response response = Response();
     Map<String, dynamic> data = <String, dynamic>{
@@ -34,7 +34,7 @@ class UserLoginService {
       "weight": weight,
       "bmi":bmi,
       "dob":dob,
-      "activelevel":activelevel,
+      "activeLevel":activeLevel,
       "type": type,
     };
 
@@ -68,7 +68,7 @@ class UserLoginService {
           "weight": user.weight,
           "bmi":user.bmi,
           "dob":user.dob,
-          "activelevel":user.activelevel,
+          "activeLevel":user.activeLevel,
 
         };
 
