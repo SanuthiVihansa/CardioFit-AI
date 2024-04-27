@@ -9,11 +9,20 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  late double _width;
+  // ignore: unused_field
+  late double _height;
+
+  final double _devWidth = 753.4545454545455;
+  // ignore: unused_field
+  final double _devHeight = 392.72727272727275;
+
   void _onClickEcgMonitoringBtn() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) => ECGMonitoringHomeScreen()));
+            builder: (BuildContext context) =>
+                const ECGMonitoringHomeScreen()));
   }
 
   void _onClickDietPlanBtn() {}
@@ -22,9 +31,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "CardioFit AI",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -36,7 +47,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Text(
             "Welcome !",
             style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
+                fontWeight: FontWeight.bold,
+                fontSize: _width / (_devWidth / 20),
+                color: Colors.red),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -45,17 +58,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   onPressed: () {
                     _onClickEcgMonitoringBtn();
                   },
-                  child: Text("ECG Monitoring")),
+                  child: const Text("ECG Monitoring")),
               ElevatedButton(
                   onPressed: () {
                     _onClickDietPlanBtn();
                   },
-                  child: Text("Diet Plan")),
+                  child: const Text("Diet Plan")),
               ElevatedButton(
                   onPressed: () {
                     _onClickReportingAndAnalyticsBtn();
                   },
-                  child: Text("Reporting & Analytics"))
+                  child: const Text("Reporting & Analytics"))
             ],
           )
         ],
