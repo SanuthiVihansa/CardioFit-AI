@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class AllLeadPredictionScreen extends StatefulWidget {
@@ -18,6 +16,11 @@ class AllLeadPredictionScreen extends StatefulWidget {
 }
 
 class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
+  late double _width;
+  late double _height;
+  final double _devWidth = 753.4545454545455;
+  final double _devHeight = 392.72727272727275;
+
   final String _predictionApiUrl =
       'http://poornasenadheera100.pythonanywhere.com/predict';
 
@@ -66,7 +69,11 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
 
   Widget _ecgPlot(List<double> data, double minValue, double maxValue) {
     return Padding(
-      padding: const EdgeInsets.only(top: 1.0, left: 16, right: 16, bottom: 16),
+      padding: EdgeInsets.only(
+          top: _height / (_devHeight / 1),
+          left: _width / (_devWidth / 16),
+          right: _width / (_devWidth / 16),
+          bottom: _height / (_devHeight / 16)),
       child: IgnorePointer(
         ignoring: true,
         child: LineChart(
@@ -136,8 +143,6 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
       _resCode = response.statusCode;
 
       if (_resCode == 200) {
-        print('Data sent successfully!');
-        print(response.body);
         var decodedData = jsonDecode(response.body);
         _l1Data = List<double>.from(
             decodedData["l1"].map((element) => element.toDouble()));
@@ -163,14 +168,10 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
             decodedData["v5"].map((element) => element.toDouble()));
         _v6Data = List<double>.from(
             decodedData["v6"].map((element) => element.toDouble()));
-
-        print(decodedData["l2"].runtimeType);
       } else {
-        print('Failed to send data. Status code: ${_resCode}');
+        // print('Failed to send data. Status code: ${_resCode}');
       }
     } catch (e) {
-      print('Error: $e');
-      print("Timeout done");
       _resCode = 408;
       _showTimeoutErrorMsg();
     }
@@ -205,6 +206,8 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           foregroundColor: Colors.white,
@@ -218,21 +221,24 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
             ? Column(
                 children: [
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 20, right: 20),
+                    padding: EdgeInsets.only(
+                        top: _height / (_devHeight / 10),
+                        left: _width / (_devWidth / 20),
+                        right: _width / (_devWidth / 20)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           "ECG Results",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+                              fontWeight: FontWeight.bold,
+                              fontSize: _width / (_devWidth / 20)),
                         ),
                         ElevatedButton(
                             onPressed: () {
                               _onClickHomeBtn();
                             },
-                            child: Text("Home"))
+                            child: const Text("Home"))
                       ],
                     ),
                   ),
@@ -242,64 +248,64 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text("Lead I"),
+                            const Text("Lead I"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_l1Data, _calcMin(_l1Data),
                                     _calcMax(_l1Data))),
-                            Text("Lead II"),
+                            const Text("Lead II"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_l2Data, _calcMin(_l2Data),
                                     _calcMax(_l2Data))),
-                            Text("Lead III"),
+                            const Text("Lead III"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_l3Data, _calcMin(_l3Data),
                                     _calcMax(_l3Data))),
-                            Text("Lead aVR"),
+                            const Text("Lead aVR"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_avrData, _calcMin(_avrData),
                                     _calcMax(_avrData))),
-                            Text("Lead aVL"),
+                            const Text("Lead aVL"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_avlData, _calcMin(_avlData),
                                     _calcMax(_avlData))),
-                            Text("Lead aVF"),
+                            const Text("Lead aVF"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_avfData, _calcMin(_avfData),
                                     _calcMax(_avfData))),
-                            Text("Lead V1"),
+                            const Text("Lead V1"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v1Data, _calcMin(_v1Data),
                                     _calcMax(_v1Data))),
-                            Text("Lead V2"),
+                            const Text("Lead V2"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v2Data, _calcMin(_v2Data),
                                     _calcMax(_v2Data))),
-                            Text("Lead V3"),
+                            const Text("Lead V3"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v3Data, _calcMin(_v3Data),
                                     _calcMax(_v3Data))),
-                            Text("Lead V4"),
+                            const Text("Lead V4"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v4Data, _calcMin(_v4Data),
                                     _calcMax(_v4Data))),
-                            Text("Lead V5"),
+                            const Text("Lead V5"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v5Data, _calcMin(_v5Data),
                                     _calcMax(_v5Data))),
-                            Text("Lead V6"),
+                            const Text("Lead V6"),
                             SizedBox(
-                                height: 200,
+                                height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v6Data, _calcMin(_v6Data),
                                     _calcMax(_v6Data))),
                           ],
@@ -314,19 +320,20 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircularProgressIndicator(),
+                        const CircularProgressIndicator(),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Text("Loading..."),
+                          padding:
+                              EdgeInsets.only(top: _height / (_devHeight / 10)),
+                          child: const Text("Loading..."),
                         )
                       ],
                     ),
                   )
                 : _resCode == 408
-                    ? Center(
+                    ? const Center(
                         child: Text("The request timed out!"),
                       )
-                    : Center(
+                    : const Center(
                         child: Text("Error"),
                       ));
   }
