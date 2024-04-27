@@ -1,7 +1,10 @@
 import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import '../../services/user_information_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -22,6 +25,12 @@ class _ProfilePageState extends State<ProfilePage> {
   final _caluclateBMIController = TextEditingController();
   final DateTime _dateOfBirth = DateTime.now();
   String dropdownValue = 'Less Active';
+  late Future <QuerySnapshot <Object?>> _userSignUpInfo;
+
+  //Function to generate a Report number
+  Future<void> _userInfo() async{
+    _userSignUpInfo= UserLoginService.getUserByEmail('sanuthi@gmail.com');
+  }
 
   @override
   Widget build(BuildContext context) {

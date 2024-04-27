@@ -20,6 +20,8 @@ class LeftNavBar extends StatelessWidget {
     required this.height,
   });
 
+
+
   Future<void> _onTapLogOutBtn(BuildContext context) async {
     var dialogRes = await showDialog<bool>(
         context: context,
