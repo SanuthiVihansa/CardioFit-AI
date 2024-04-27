@@ -116,51 +116,60 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
   }
 
   Future<void> _getPredictions() async {
-    Map<String, dynamic> data = {
-      'l2': widget.l2Data,
-    };
-    String jsonString = jsonEncode(data);
-    var response = await http.post(Uri.parse(_predictionApiUrl),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonString);
+    try {
+      Map<String, dynamic> data = {
+        'l2': widget.l2Data,
+      };
+      String jsonString = jsonEncode(data);
+      var response = await http
+          .post(Uri.parse(_predictionApiUrl),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+              },
+              body: jsonString)
+          .timeout(const Duration(seconds: 30));
 
-    _resCode = response.statusCode;
+      _resCode = response.statusCode;
 
-    if (_resCode == 200) {
-      print('Data sent successfully!');
-      print(response.body);
-      var decodedData = jsonDecode(response.body);
-      _l1Data = List<double>.from(
-          decodedData["l1"].map((element) => element.toDouble()));
-      _l2Data = List<double>.from(
-          decodedData["l2"].map((element) => element.toDouble()));
-      _l3Data = List<double>.from(
-          decodedData["l3"].map((element) => element.toDouble()));
-      _avrData = List<double>.from(
-          decodedData["avr"].map((element) => element.toDouble()));
-      _avlData = List<double>.from(
-          decodedData["avl"].map((element) => element.toDouble()));
-      _avfData = List<double>.from(
-          decodedData["avf"].map((element) => element.toDouble()));
-      _v1Data = List<double>.from(
-          decodedData["v1"].map((element) => element.toDouble()));
-      _v2Data = List<double>.from(
-          decodedData["v2"].map((element) => element.toDouble()));
-      _v3Data = List<double>.from(
-          decodedData["v3"].map((element) => element.toDouble()));
-      _v4Data = List<double>.from(
-          decodedData["v4"].map((element) => element.toDouble()));
-      _v5Data = List<double>.from(
-          decodedData["v5"].map((element) => element.toDouble()));
-      _v6Data = List<double>.from(
-          decodedData["v6"].map((element) => element.toDouble()));
+      if (_resCode == 200) {
+        print('Data sent successfully!');
+        print(response.body);
+        var decodedData = jsonDecode(response.body);
+        _l1Data = List<double>.from(
+            decodedData["l1"].map((element) => element.toDouble()));
+        _l2Data = List<double>.from(
+            decodedData["l2"].map((element) => element.toDouble()));
+        _l3Data = List<double>.from(
+            decodedData["l3"].map((element) => element.toDouble()));
+        _avrData = List<double>.from(
+            decodedData["avr"].map((element) => element.toDouble()));
+        _avlData = List<double>.from(
+            decodedData["avl"].map((element) => element.toDouble()));
+        _avfData = List<double>.from(
+            decodedData["avf"].map((element) => element.toDouble()));
+        _v1Data = List<double>.from(
+            decodedData["v1"].map((element) => element.toDouble()));
+        _v2Data = List<double>.from(
+            decodedData["v2"].map((element) => element.toDouble()));
+        _v3Data = List<double>.from(
+            decodedData["v3"].map((element) => element.toDouble()));
+        _v4Data = List<double>.from(
+            decodedData["v4"].map((element) => element.toDouble()));
+        _v5Data = List<double>.from(
+            decodedData["v5"].map((element) => element.toDouble()));
+        _v6Data = List<double>.from(
+            decodedData["v6"].map((element) => element.toDouble()));
 
-      print(decodedData["l2"].runtimeType);
-    } else {
-      print('Failed to send data. Status code: ${_resCode}');
+        print(decodedData["l2"].runtimeType);
+      } else {
+        print('Failed to send data. Status code: ${_resCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      print("Timeout done");
+      _resCode = 408;
     }
+
     setState(() {});
   }
 
@@ -288,8 +297,12 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                       ],
                     ),
                   )
-                : Center(
-                    child: Text("Error"),
-                  ));
+                : _resCode == 408
+                    ? Center(
+                        child: Text("Request Timedout"),
+                      )
+                    : Center(
+                        child: Text("Error"),
+                      ));
   }
 }
