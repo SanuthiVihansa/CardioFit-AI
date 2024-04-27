@@ -1,5 +1,6 @@
 import 'package:cardiofitai/screens/common/ecg_monitoring_home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -16,6 +17,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final double _devWidth = 753.4545454545455;
   // ignore: unused_field
   final double _devHeight = 392.72727272727275;
+
+  @override
+  void initState() {
+    super.initState();
+
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+  }
 
   void _onClickEcgMonitoringBtn() {
     Navigator.push(
