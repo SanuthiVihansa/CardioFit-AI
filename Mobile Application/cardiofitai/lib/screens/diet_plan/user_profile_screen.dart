@@ -1,4 +1,3 @@
-import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget buildUserName() {
     return Text(
-      "NAME",
+      widget.user.name,
       style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 4.0),
     );
   }
@@ -134,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
         controller: _userNameController,
         decoration: InputDecoration(
           errorText: "",
-          labelText: 'Name',
+          labelText: widget.user.name,
           border: OutlineInputBorder(),
         ),
         onChanged: (text) {},
