@@ -30,6 +30,7 @@ class _DietHomePageState extends State<DietHomePage> {
       ),
       ),
       drawer:LeftNavBar(
+        user: widget.user,
           name: widget.user.name,
           email: widget.user.email,
           width: 150,

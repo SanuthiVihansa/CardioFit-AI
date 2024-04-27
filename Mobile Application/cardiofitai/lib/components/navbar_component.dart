@@ -7,13 +7,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../models/user.dart';
+
 class LeftNavBar extends StatelessWidget {
   final String name;
   final String email;
   final double width;
   final double height;
+  final User user;
 
   LeftNavBar({
+    required this.user,
     required this.name,
     required this.email,
     required this.width,
@@ -79,7 +83,7 @@ class LeftNavBar extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()),
+                      MaterialPageRoute(builder: (context) => ProfilePage(user)),
                     );
                   },
                   child: CircleAvatar(

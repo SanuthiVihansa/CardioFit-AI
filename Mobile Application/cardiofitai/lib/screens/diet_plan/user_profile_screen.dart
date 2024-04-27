@@ -4,10 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../models/user.dart';
 import '../../services/user_information_service.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage(this.user,{super.key});
+
+  final User user;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
