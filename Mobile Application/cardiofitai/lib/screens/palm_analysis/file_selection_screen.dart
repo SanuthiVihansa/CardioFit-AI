@@ -17,6 +17,11 @@ class FileSelectionScreen extends StatefulWidget {
 }
 
 class _FileSelectionScreenState extends State<FileSelectionScreen> {
+  late double _width;
+  late double _height;
+  final double _devWidth = 753.4545454545455;
+  final double _devHeight = 392.72727272727275;
+
   late List<double> _tenSecData = [];
   double _maxValue = 0;
   double _minValue = 0;
@@ -28,6 +33,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
 
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
   final Connectivity _connectivity = Connectivity();
+  // ignore: unused_field
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   @override
@@ -47,8 +53,9 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     late List<ConnectivityResult> result;
     try {
       result = await _connectivity.checkConnectivity();
+    // ignore: unused_catch_clause
     } on PlatformException catch (e) {
-      print('Couldn\'t check connectivity status $e');
+      // print('Could not check connectivity status $e');
       return;
     }
     if (!mounted) {
@@ -132,7 +139,11 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
 
   Widget _ecgPlot() {
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0, bottom: 1, left: 16, right: 16),
+      padding: EdgeInsets.only(
+          top: _height / (_devHeight / 16),
+          bottom: _height / (_devHeight / 1),
+          left: _width / (_devWidth / 16),
+          right: _width / (_devWidth / 16)),
       child: IgnorePointer(
         ignoring: true,
         child: LineChart(
@@ -201,6 +212,8 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
@@ -210,6 +223,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
         ),
         backgroundColor: Colors.red,
       ),
+      // ignore: prefer_is_empty
       body: _tenSecData.length == 0
           ? Center(
               child: Column(
@@ -235,11 +249,15 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 10, left: 20),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: _height / (_devHeight / 10),
+                      left: _width / (_devWidth / 20)),
                   child: Text(
                     "Lead II ECG Signal",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: _width / (_devWidth / 20)),
                   ),
                 ),
                 Expanded(child: SizedBox(child: _ecgPlot())),
@@ -247,17 +265,20 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     !_hasConnection
-                        ? const Padding(
-                            padding: EdgeInsets.only(bottom: 10.0),
-                            child: Text(
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                                bottom: _height / (_devHeight / 10)),
+                            child: const Text(
                               "No Network Connection!",
                               style: TextStyle(color: Colors.red),
                             ),
                           )
                         : const SizedBox(),
                     Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 10.0, right: 10, left: 10),
+                      padding: EdgeInsets.only(
+                          bottom: _height / (_devHeight / 10),
+                          right: _width / (_devWidth / 10),
+                          left: _width / (_devWidth / 10)),
                       child: ElevatedButton(
                           onPressed: _hasConnection
                               ? () {
