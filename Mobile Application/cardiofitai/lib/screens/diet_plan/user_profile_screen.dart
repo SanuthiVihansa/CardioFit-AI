@@ -8,13 +8,12 @@ import '../../services/user_information_service.dart';
 import 'diet_plan_home_page.screen.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage(this.user,{super.key});
+  const ProfilePage(this.user, {super.key});
 
   final User user;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
-  
 }
 
 class _ProfilePageState extends State<ProfilePage> {
@@ -29,22 +28,27 @@ class _ProfilePageState extends State<ProfilePage> {
   final _caluclateBMIController = TextEditingController();
   final DateTime _dateOfBirth = DateTime.now();
   String dropdownValue = 'Less Active';
-  late Future <QuerySnapshot <Object?>> _userSignUpInfo;
+  late Future<QuerySnapshot<Object?>> _userSignUpInfo;
 
   get height => double.parse(_heightController.text);
+
   get weight => double.parse(_weightController.text);
 
+  @override
+  void initState() {
+    super.initState();
+    _userNameController.text = widget.user.name;
+  }
 
-   // in kilograms
-
+  // in kilograms
 
   //Function to generate a Report number
-  Future<void> _userInfo() async{
-    _userSignUpInfo= UserLoginService.getUserByEmail('sanuthi@gmail.com');
+  Future<void> _userInfo() async {
+    _userSignUpInfo = UserLoginService.getUserByEmail('sanuthi@gmail.com');
   }
 
   //Function to calculate BMI
-  double calculateBMI(double weight,double height){
+  double calculateBMI(double weight, double height) {
     double bmi = weight / (height * height);
     return bmi;
   }
@@ -84,14 +88,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 Weight(),
                 BMI(),
                 ActiveLevel(),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-                child: Row(children: [
-                saveInfoBtn(),
-                backBtn(),
-                ],
-                ),
-            )
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    children: [
+                      saveInfoBtn(),
+                      backBtn(),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -156,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
         controller: _userNameController,
         decoration: InputDecoration(
           errorText: "",
-          labelText: widget.user.name,
+          labelText: "Name",
           border: OutlineInputBorder(),
         ),
         onChanged: (text) {},
@@ -207,10 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
           labelText: 'Weight',
           border: OutlineInputBorder(),
         ),
-        onChanged: (text) {
-
-
-        },
+        onChanged: (text) {},
       );
 
   Widget BMI() => TextField(
@@ -243,21 +245,30 @@ class _ProfilePageState extends State<ProfilePage> {
               value: 'Very Active', child: Text('Very Active')),
         ],
       );
-  Widget backBtn()=>ElevatedButton(
+
+  Widget backBtn() => ElevatedButton(
       child: Text("Back"),
-      onPressed: (){
+      onPressed: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => DietHomePage(widget.user)));
-
       });
 
-  Widget saveInfoBtn()=>ElevatedButton(
+  Widget saveInfoBtn() => ElevatedButton(
       child: Text("Save"),
-      onPressed: (){
-        User updatedUserInfo = User(widget.user.name, widget.user.email, widget.user.password, _ageController.text, _heightController.text, _weightController.text, _caluclateBMIController.text, _dateOfBirth.toString(), dropdownValue.characters.string, widget.user.type);
-      UserLoginService.updateUser(updatedUserInfo);
+      onPressed: () {
+        User updatedUserInfo = User(
+            widget.user.name,
+            widget.user.email,
+            widget.user.password,
+            _ageController.text,
+            _heightController.text,
+            _weightController.text,
+            _caluclateBMIController.text,
+            _dateOfBirth.toString(),
+            dropdownValue.characters.string,
+            widget.user.type);
+        UserLoginService.updateUser(updatedUserInfo);
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => DietHomePage(widget.user)));
-
-  });
+      });
 }
