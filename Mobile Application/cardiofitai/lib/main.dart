@@ -28,7 +28,6 @@ class CardioFitAi extends StatelessWidget {
     _height = MediaQuery.of(context).size.height;
 
     return MaterialApp(
-      color: Colors.red,
       home: DashboardScreen(),
       // home: FacialAnalysisHome(_width, _height)
     );
