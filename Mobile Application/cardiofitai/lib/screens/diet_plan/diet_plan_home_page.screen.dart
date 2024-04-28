@@ -22,22 +22,22 @@ class _DietHomePageState extends State<DietHomePage> {
     _height = MediaQuery.of(context).size.height;
     return Scaffold(
       key:_scaffoldKey ,
-      appBar: AppBar(
-        leading:
-      IconButton(
-        icon:Icon(Icons.menu),
-        onPressed: (){
-          _scaffoldKey.currentState?.openDrawer();
-        },
-      ),
-      ),
-      drawer:LeftNavBar(
-        user: widget.user,
-          name: widget.user.name,
-          email: widget.user.email,
-          width: 150,
-          height: 300
-      ),
+      // appBar: AppBar(
+      //   leading:
+      // IconButton(
+      //   icon:Icon(Icons.menu),
+      //   onPressed: (){
+      //     _scaffoldKey.currentState?.openDrawer();
+      //   },
+      // ),
+      // ),
+      // drawer:LeftNavBar(
+      //   user: widget.user,
+      //     name: widget.user.name,
+      //     email: widget.user.email,
+      //     width: 150,
+      //     height: 300
+      // ),
       body: Stack(
         children:
           <Widget>[
@@ -59,7 +59,7 @@ class _DietHomePageState extends State<DietHomePage> {
             ),
             Positioned(
                 child: Container(
-                  height: _height,
+                  height: _height*0.6,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: (
@@ -91,7 +91,40 @@ class _DietHomePageState extends State<DietHomePage> {
                         ),
                         Expanded(
                           child:Container(
-                            color: Colors.blueAccent,
+                            margin: const EdgeInsets.only(bottom: 10,left: 32,right: 32),
+                            decoration: BoxDecoration(
+                              borderRadius:BorderRadius.all(Radius.circular(30)),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  const Color(0xFF8C001A),
+                                  const Color(0xF56C0609),
+                                ]
+                              )
+                            ),
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                    "YOUR CURRENT",
+                                  style: TextStyle(
+                                    color: Colors.white60,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700
+                                  ),
+                                ),
+                                Text("BODY MASS INDEX",
+                                    style: TextStyle(
+                                    color: Colors.white54,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w700)),
+                                Text(widget.user.bmi,
+                                    style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w700)),
+                              ],
+                            ),
                           ) ,
                         ),
                       ]
