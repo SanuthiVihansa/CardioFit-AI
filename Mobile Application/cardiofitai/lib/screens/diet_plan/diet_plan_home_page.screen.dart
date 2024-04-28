@@ -1,7 +1,3 @@
-import 'dart:ffi';
-import 'dart:ffi';
-import 'dart:js';
-
 import 'package:cardiofitai/components/navbar_component.dart';
 import 'package:flutter/material.dart';
 
@@ -20,9 +16,10 @@ class DietHomePage extends StatefulWidget {
 
 class _DietHomePageState extends State<DietHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final height = MediaQuery.of(context as BuildContext).size.height;
+  late double _height;
   @override
   Widget build(BuildContext context) {
+    _height = MediaQuery.of(context).size.height;
     return Scaffold(
       key:_scaffoldKey ,
       appBar: AppBar(
@@ -47,7 +44,7 @@ class _DietHomePageState extends State<DietHomePage> {
             //Top App Bar Like Structure
             Positioned(
                 top: 0,
-                height: height*0.35,
+                height: _height*0.35,
                 left: 0,
                 right: 0,
                 child: ClipRRect(
@@ -62,7 +59,7 @@ class _DietHomePageState extends State<DietHomePage> {
             ),
             Positioned(
                 child: Container(
-                  height: height,
+                  height: _height,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: (
