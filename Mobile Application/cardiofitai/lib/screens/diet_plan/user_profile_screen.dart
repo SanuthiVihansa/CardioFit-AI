@@ -45,8 +45,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   //Function to calculate BMI
   double calculateBMI(double weight,double height){
-
-    return BMI;
+    double bmi = weight / (height * height);
+    return bmi;
   }
 
   @override
