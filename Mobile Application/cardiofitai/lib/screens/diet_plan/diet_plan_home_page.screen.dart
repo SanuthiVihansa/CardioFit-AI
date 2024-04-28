@@ -22,23 +22,21 @@ class _DietHomePageState extends State<DietHomePage> {
     _height = MediaQuery.of(context).size.height;
     return Scaffold(
       key:_scaffoldKey ,
-      // appBar: AppBar(
-      //   leading:
-      // IconButton(
-      //   icon:Icon(Icons.menu),
-      //   onPressed: (){
-      //     _scaffoldKey.currentState?.openDrawer();
-      //   },
-      // ),
-      // ),
-      // drawer:LeftNavBar(
-      //   user: widget.user,
-      //     name: widget.user.name,
-      //     email: widget.user.email,
-      //     width: 150,
-      //     height: 300
-      // ),
-      body: Stack(
+      appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer();
+            },
+          ),
+        ),
+        drawer: LeftNavBar(
+            user: widget.user,
+            name: widget.user.name,
+            email: widget.user.email,
+            width: 150,
+            height: 300),
+        body: Stack(
         children:
           <Widget>[
             //Top App Bar Like Structure
