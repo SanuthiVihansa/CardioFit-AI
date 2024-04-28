@@ -22,6 +22,7 @@ class _OcrReaderState extends State<OcrReader> {
   XFile? imageFile;
 
   String scannedText = "";
+  String dropdownValue = 'Full Blood Count (FBC)';
 
   late Future <QuerySnapshot <Object?>> _allReportsUploaded;
 
@@ -46,6 +47,7 @@ class _OcrReaderState extends State<OcrReader> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    scannedReports(),
                     if (textScanning) const CircularProgressIndicator(),
                     if (!textScanning && imageFile == null)
                       Container(
@@ -193,4 +195,23 @@ class _OcrReaderState extends State<OcrReader> {
   void initState() {
     super.initState();
   }
+
+  Widget scannedReports() => DropdownButton<String>(
+    // Ensure dropdownValue is initialized with a value from the items list
+    value: dropdownValue ?? 'Less Active', // Default to 'Less Active'
+    icon: const Icon(Icons.arrow_drop_down_circle_rounded),
+    onChanged: (String? newValue) {
+      setState(() {
+        dropdownValue = newValue!;
+      });
+    },
+    items: const [
+      DropdownMenuItem<String>(
+          value: 'Full Blood Count (FBC)', child: Text('Full Blood Count (FBC)')),
+      // DropdownMenuItem<String>(
+      //     value: 'Intermediate', child: Text('Intermediate')),
+      // DropdownMenuItem<String>(
+      //     value: 'Very Active', child: Text('Very Active')),
+    ],
+  );
 }
