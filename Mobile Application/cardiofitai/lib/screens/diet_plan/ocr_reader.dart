@@ -175,12 +175,26 @@ class _OcrReaderState extends State<OcrReader> {
 
     await textRecognizer.close();
     scannedText = "";
-    for (TextBlock block in recognisedText.blocks) {
-      for (TextLine line in block.lines) {
-        for (TextElement element in line.elements) {
-          scannedText = scannedText + element.text + "\n";
+    // for (TextBlock block in recognisedText.blocks) {
+    //   for (TextLine line in block.lines) {
+    //     for (TextElement element in line.elements) {
+    //       scannedText = scannedText + element.text + "\n";
+    //     }
+    //   }
+    // }
+    List<List<String>> tableData =[];
+    for(TextBlock block in recognisedText.blocks){
+      for(TextLine line in block.lines){
+        List<String> row = [];
+        for(TextElement element in line.elements){
+          row.add(element.text);
         }
+        tableData.add(row);
       }
+    }
+    //Print table values horizontally
+    for(List<String> row in tableData){
+      print(row.join('\t'));
     }
     textScanning = false;
     if (scannedText != "") {
