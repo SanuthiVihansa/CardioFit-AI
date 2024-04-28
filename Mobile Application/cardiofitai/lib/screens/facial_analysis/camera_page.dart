@@ -55,7 +55,7 @@ class _CameraPageState extends State<CameraPage> {
   double recordingBtnIconSize = 25;
 
   //
-  String message = "Please make sure your face is visible in the camera";
+  String message = "Please make sure your face\n is visible in the camera";
 
   late List<double> _tenSecData = [];
   double _maxValue = 0;
@@ -68,10 +68,10 @@ class _CameraPageState extends State<CameraPage> {
   void initState() {
     _upServer();
     // orientation
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.portraitUp,
-    //   DeviceOrientation.portraitDown,
-    // ]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
     // paddings and sizes
     recordBtnBottomPadding =
@@ -116,7 +116,7 @@ class _CameraPageState extends State<CameraPage> {
           // show snackbar
           callToast('Recording cancelled');
 
-          message = "Please make sure your face is visible in the camera";
+          message = "Please make sure your face\n is visible in the camera";
           setState(() {
             _isRecording = false;
             _isVideoCaptured = false;
@@ -153,7 +153,7 @@ class _CameraPageState extends State<CameraPage> {
               callToast('Recording completed');
               _pickFile();
 
-              message = "Please make sure your face is visible in the camera";
+              message = "Please make sure your face\n is visible in the camera";
               setState(() {
                 _isVideoCaptured = true;
                 _isRecording = false;
@@ -284,61 +284,65 @@ class _CameraPageState extends State<CameraPage> {
         ),
       );
     } else {
-      return Center(
-        child: Stack(alignment: Alignment.bottomCenter, children: [
-          CameraPreview(_cameraController),
-          Padding(
-            padding:
-                EdgeInsets.only(right: _isVideoCaptured ? 150 : 0, bottom: recordBtnBottomPadding),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: FloatingActionButton(
-                backgroundColor: Colors.white,
-                shape: const CircleBorder(),
-                child: Icon(
-                  _isRecording ? Icons.stop : Icons.circle,
-                  color: Colors.red,
-                  size: recordingBtnIconSize,
+      return Scaffold(
+        backgroundColor: Colors.black,
+        body:
+          Center(
+            child: Stack(alignment: Alignment.bottomCenter, children: [
+              CameraPreview(_cameraController),
+              Padding(
+                padding:
+                    EdgeInsets.only(right: _isVideoCaptured ? 150 : 0, bottom: recordBtnBottomPadding),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    shape: const CircleBorder(),
+                    child: Icon(
+                      _isRecording ? Icons.stop : Icons.circle,
+                      color: Colors.red,
+                      size: recordingBtnIconSize,
+                    ),
+                    onPressed: () {
+                      // String path = '/data/user/0/com.spsh.cardiofitai/cache/';
+                      // deleteAllFiles(path);
+                      _recordVideo();
+                    },
+                  ),
                 ),
-                onPressed: () {
-                  // String path = '/data/user/0/com.spsh.cardiofitai/cache/';
-                  // deleteAllFiles(path);
-                  _recordVideo();
-                },
               ),
-            ),
-          ),
-          _isVideoCaptured
-              ? Padding(
-                  padding: EdgeInsets.only(
-                      left: 150, bottom: recordBtnBottomPadding),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FloatingActionButton.extended(
-                      onPressed: () {
-                        _onTapViewECGBtn(context);
-                      },
-                      label: const Text('View ECG reading'),
-                      icon: const Icon(Icons.file_present_rounded),
+              _isVideoCaptured
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                          left: 150, bottom: recordBtnBottomPadding),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FloatingActionButton.extended(
+                          onPressed: () {
+                            _onTapViewECGBtn(context);
+                          },
+                          label: const Text('View ECG reading'),
+                          icon: const Icon(Icons.file_present_rounded),
+                        ),
+                      ),
+                    )
+                  : Container(),
+              Padding(
+                padding: const EdgeInsets.only(top: 70),
+                child: Align(
+                  alignment: AlignmentDirectional.topCenter,
+                  child: Text(
+                    message,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                )
-              : Container(),
-          Padding(
-            padding: const EdgeInsets.only(top: 70),
-            child: Align(
-              alignment: AlignmentDirectional.topCenter,
-              child: Text(
-                message,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
+            ]),
           ),
-        ]),
       );
     }
   }
