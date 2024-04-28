@@ -31,9 +31,22 @@ class _ProfilePageState extends State<ProfilePage> {
   String dropdownValue = 'Less Active';
   late Future <QuerySnapshot <Object?>> _userSignUpInfo;
 
+  get height => double.parse(_heightController.text);
+  get weight => double.parse(_weightController.text);
+
+
+   // in kilograms
+
+
   //Function to generate a Report number
   Future<void> _userInfo() async{
     _userSignUpInfo= UserLoginService.getUserByEmail('sanuthi@gmail.com');
+  }
+
+  //Function to calculate BMI
+  double calculateBMI(double weight,double height){
+
+    return BMI;
   }
 
   @override
@@ -151,7 +164,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget dateOfBirth() {
     return TextFormField(
-      readOnly: true,
       decoration: InputDecoration(
         labelText: 'DOB',
         border: OutlineInputBorder(),
@@ -182,7 +194,9 @@ class _ProfilePageState extends State<ProfilePage> {
           labelText: 'Height',
           border: OutlineInputBorder(),
         ),
-        onChanged: (text) {},
+        onChanged: (text) {
+          double height = double.parse(_heightController.text);
+        },
       );
 
   Widget Weight() => TextField(
@@ -193,10 +207,14 @@ class _ProfilePageState extends State<ProfilePage> {
           labelText: 'Weight',
           border: OutlineInputBorder(),
         ),
-        onChanged: (text) {},
+        onChanged: (text) {
+
+
+        },
       );
 
   Widget BMI() => TextField(
+        readOnly: true,
         controller: _caluclateBMIController,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
