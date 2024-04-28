@@ -104,6 +104,7 @@ class _DietHomePageState extends State<DietHomePage> {
                               )
                             ),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
                                     "YOUR CURRENT",
