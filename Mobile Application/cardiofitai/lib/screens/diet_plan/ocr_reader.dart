@@ -182,20 +182,24 @@ class _OcrReaderState extends State<OcrReader> {
     //     }
     //   }
     // }
+
     List<List<String>> tableData =[];
     for(TextBlock block in recognisedText.blocks){
       for(TextLine line in block.lines){
-        List<String> row = [];
+        List<String> row =[];
         for(TextElement element in line.elements){
           row.add(element.text);
         }
         tableData.add(row);
       }
     }
-    //Print table values horizontally
-    for(List<String> row in tableData){
-      print(row.join('\t'));
+
+    for(int i=0; i<4; i++){
+      tableData.add(['A$i','B$i','C$i','D$i']);
     }
+
+
+
     textScanning = false;
     if (scannedText != "") {
       print("Has a value");
