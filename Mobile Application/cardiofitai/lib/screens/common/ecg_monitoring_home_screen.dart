@@ -55,13 +55,13 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
               },
               style: ButtonStyle(
                 fixedSize: MaterialStateProperty.all<Size>(
-                  Size(_width / (_devWidth / 200.0),
-                      _height / (_devHeight / 50)), // Button width and height
+                  Size(_width / (_devWidth / 160.0),
+                      _height / (_devHeight / 40)), // Button width and height
                 ),
               ),
               child: Text(
                 "Facial Analysis",
-                style: TextStyle(fontSize: _width / (_devWidth / 15)),
+                style: TextStyle(fontSize: _width / (_devWidth / 10)),
               ),
             ),
             ElevatedButton(
@@ -70,13 +70,13 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
               },
               style: ButtonStyle(
                 fixedSize: MaterialStateProperty.all<Size>(
-                  Size(_width / (_devWidth / 200.0),
-                      _height / (_devHeight / 50)), // Button width and height
+                  Size(_width / (_devWidth / 160.0),
+                      _height / (_devHeight / 40)), // Button width and height
                 ),
               ),
               child: Text(
                 "Palm Analysis",
-                style: TextStyle(fontSize: _width / (_devWidth / 15)),
+                style: TextStyle(fontSize: _width / (_devWidth / 10)),
               ),
             )
           ],
