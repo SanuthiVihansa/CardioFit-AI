@@ -11,6 +11,11 @@ class ECGMonitoringHomeScreen extends StatefulWidget {
 }
 
 class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
+  late double _width;
+  late double _height;
+  final double _devWidth = 753.4545454545455;
+  final double _devHeight = 392.72727272727275;
+
   @override
   void initState() {
     super.initState();
@@ -29,6 +34,8 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
@@ -43,15 +50,35 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
-                onPressed: () {
-                  _onClickFacialAnalysisBtn();
-                },
-                child: const Text("Facial Analysis")),
+              onPressed: () {
+                _onClickFacialAnalysisBtn();
+              },
+              child: Text(
+                "Facial Analysis",
+                style: TextStyle(fontSize: _width / (_devWidth / 25)),
+              ),
+              style: ButtonStyle(
+                fixedSize: MaterialStateProperty.all<Size>(
+                  Size(_width / (_devWidth / 250.0),
+                      _height / (_devHeight / 62.5)), // Button width and height
+                ),
+              ),
+            ),
             ElevatedButton(
-                onPressed: () {
-                  _onClickPalmAnalysisBtn();
-                },
-                child: const Text("Palm Analysis"))
+              onPressed: () {
+                _onClickPalmAnalysisBtn();
+              },
+              child: Text(
+                "Palm Analysis",
+                style: TextStyle(fontSize: _width / (_devWidth / 25)),
+              ),
+              style: ButtonStyle(
+                fixedSize: MaterialStateProperty.all<Size>(
+                  Size(_width / (_devWidth / 250.0),
+                      _height / (_devHeight / 62.5)), // Button width and height
+                ),
+              ),
+            )
           ],
         ),
       ),
