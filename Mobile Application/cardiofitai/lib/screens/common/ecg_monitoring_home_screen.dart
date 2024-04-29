@@ -53,30 +53,30 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
               onPressed: () {
                 _onClickFacialAnalysisBtn();
               },
-              child: Text(
-                "Facial Analysis",
-                style: TextStyle(fontSize: _width / (_devWidth / 25)),
-              ),
               style: ButtonStyle(
                 fixedSize: MaterialStateProperty.all<Size>(
-                  Size(_width / (_devWidth / 250.0),
-                      _height / (_devHeight / 62.5)), // Button width and height
+                  Size(_width / (_devWidth / 200.0),
+                      _height / (_devHeight / 50)), // Button width and height
                 ),
+              ),
+              child: Text(
+                "Facial Analysis",
+                style: TextStyle(fontSize: _width / (_devWidth / 15)),
               ),
             ),
             ElevatedButton(
               onPressed: () {
                 _onClickPalmAnalysisBtn();
               },
-              child: Text(
-                "Palm Analysis",
-                style: TextStyle(fontSize: _width / (_devWidth / 25)),
-              ),
               style: ButtonStyle(
                 fixedSize: MaterialStateProperty.all<Size>(
-                  Size(_width / (_devWidth / 250.0),
-                      _height / (_devHeight / 62.5)), // Button width and height
+                  Size(_width / (_devWidth / 200.0),
+                      _height / (_devHeight / 50)), // Button width and height
                 ),
+              ),
+              child: Text(
+                "Palm Analysis",
+                style: TextStyle(fontSize: _width / (_devWidth / 15)),
               ),
             )
           ],
