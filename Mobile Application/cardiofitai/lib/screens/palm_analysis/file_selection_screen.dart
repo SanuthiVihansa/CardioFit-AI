@@ -33,6 +33,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
 
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
   final Connectivity _connectivity = Connectivity();
+
   // ignore: unused_field
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
@@ -53,7 +54,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
     late List<ConnectivityResult> result;
     try {
       result = await _connectivity.checkConnectivity();
-    // ignore: unused_catch_clause
+      // ignore: unused_catch_clause
     } on PlatformException catch (e) {
       // print('Could not check connectivity status $e');
       return;
@@ -235,12 +236,25 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
                             _pickFile();
                           }
                         : null,
-                    child: const Text("Select file"),
+                    style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.all<Size>(
+                        Size(
+                            _width / (_devWidth / 200.0),
+                            _height /
+                                (_devHeight / 50)), // Button width and height
+                      ),
+                    ),
+                    child: Text(
+                      "Select file",
+                      style: TextStyle(fontSize: _width / (_devWidth / 15)),
+                    ),
                   ),
                   !_hasConnection
-                      ? const Text(
+                      ? Text(
                           "No Network Connection!",
-                          style: TextStyle(color: Colors.red),
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: _width / (_devWidth / 15)),
                         )
                       : const SizedBox()
                 ],
@@ -268,9 +282,11 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
                         ? Padding(
                             padding: EdgeInsets.only(
                                 bottom: _height / (_devHeight / 10)),
-                            child: const Text(
+                            child: Text(
                               "No Network Connection!",
-                              style: TextStyle(color: Colors.red),
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: _width / (_devWidth / 15)),
                             ),
                           )
                         : const SizedBox(),
@@ -280,12 +296,25 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
                           right: _width / (_devWidth / 10),
                           left: _width / (_devWidth / 10)),
                       child: ElevatedButton(
-                          onPressed: _hasConnection
-                              ? () {
-                                  _onClickBtnProceed();
-                                }
-                              : null,
-                          child: const Text("Proceed")),
+                        onPressed: _hasConnection
+                            ? () {
+                                _onClickBtnProceed();
+                              }
+                            : null,
+                        style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all<Size>(
+                            Size(
+                                _width / (_devWidth / 200.0),
+                                _height /
+                                    (_devHeight /
+                                        50)), // Button width and height
+                          ),
+                        ),
+                        child: Text(
+                          "Proceed",
+                          style: TextStyle(fontSize: _width / (_devWidth / 15)),
+                        ),
+                      ),
                     ),
                   ],
                 )
