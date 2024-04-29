@@ -235,10 +235,24 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                               fontSize: _width / (_devWidth / 20)),
                         ),
                         ElevatedButton(
-                            onPressed: () {
-                              _onClickHomeBtn();
-                            },
-                            child: const Text("Home"))
+                          onPressed: () {
+                            _onClickHomeBtn();
+                          },
+                          style: ButtonStyle(
+                            fixedSize: MaterialStateProperty.all<Size>(
+                              Size(
+                                  _width / (_devWidth / 160.0),
+                                  _height /
+                                      (_devHeight /
+                                          40)), // Button width and height
+                            ),
+                          ),
+                          child: Text(
+                            "Home",
+                            style:
+                                TextStyle(fontSize: _width / (_devWidth / 15)),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -248,62 +262,110 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Text("Lead I"),
+                            Text(
+                              "Lead I",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_l1Data, _calcMin(_l1Data),
                                     _calcMax(_l1Data))),
-                            const Text("Lead II"),
+                            Text(
+                              "Lead II",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_l2Data, _calcMin(_l2Data),
                                     _calcMax(_l2Data))),
-                            const Text("Lead III"),
+                            Text(
+                              "Lead III",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_l3Data, _calcMin(_l3Data),
                                     _calcMax(_l3Data))),
-                            const Text("Lead aVR"),
+                            Text(
+                              "Lead aVR",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_avrData, _calcMin(_avrData),
                                     _calcMax(_avrData))),
-                            const Text("Lead aVL"),
+                            Text(
+                              "Lead aVL",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_avlData, _calcMin(_avlData),
                                     _calcMax(_avlData))),
-                            const Text("Lead aVF"),
+                            Text(
+                              "Lead aVF",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_avfData, _calcMin(_avfData),
                                     _calcMax(_avfData))),
-                            const Text("Lead V1"),
+                            Text(
+                              "Lead V1",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v1Data, _calcMin(_v1Data),
                                     _calcMax(_v1Data))),
-                            const Text("Lead V2"),
+                            Text(
+                              "Lead V2",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v2Data, _calcMin(_v2Data),
                                     _calcMax(_v2Data))),
-                            const Text("Lead V3"),
+                            Text(
+                              "Lead V3",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v3Data, _calcMin(_v3Data),
                                     _calcMax(_v3Data))),
-                            const Text("Lead V4"),
+                            Text(
+                              "Lead V4",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v4Data, _calcMin(_v4Data),
                                     _calcMax(_v4Data))),
-                            const Text("Lead V5"),
+                            Text(
+                              "Lead V5",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v5Data, _calcMin(_v5Data),
                                     _calcMax(_v5Data))),
-                            const Text("Lead V6"),
+                            Text(
+                              "Lead V6",
+                              style: TextStyle(
+                                  fontSize: _width / (_devWidth / 15)),
+                            ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
                                 child: _ecgPlot(_v6Data, _calcMin(_v6Data),
@@ -324,7 +386,11 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                         Padding(
                           padding:
                               EdgeInsets.only(top: _height / (_devHeight / 10)),
-                          child: const Text("Loading..."),
+                          child: Text(
+                            "Loading...",
+                            style:
+                                TextStyle(fontSize: _width / (_devWidth / 15)),
+                          ),
                         )
                       ],
                     ),
