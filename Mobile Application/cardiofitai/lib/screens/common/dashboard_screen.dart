@@ -11,10 +11,12 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   late double _width;
+
   // ignore: unused_field
   late double _height;
 
   final double _devWidth = 753.4545454545455;
+
   // ignore: unused_field
   final double _devHeight = 392.72727272727275;
 
@@ -64,20 +66,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
-                  onPressed: () {
-                    _onClickEcgMonitoringBtn();
-                  },
-                  child: const Text("ECG Monitoring")),
+                onPressed: () {
+                  _onClickEcgMonitoringBtn();
+                },
+                style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all<Size>(
+                    Size(_width / (_devWidth / 200.0),
+                        _height / (_devHeight / 50)), // Button width and height
+                  ),
+                ),
+                child: Text(
+                  "ECG Monitoring",
+                  style: TextStyle(fontSize: _width / (_devWidth / 15)),
+                ),
+              ),
               ElevatedButton(
-                  onPressed: () {
-                    _onClickDietPlanBtn();
-                  },
-                  child: const Text("Diet Plan")),
+                onPressed: () {
+                  _onClickDietPlanBtn();
+                },
+                style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all<Size>(
+                    Size(_width / (_devWidth / 200.0),
+                        _height / (_devHeight / 50)), // Button width and height
+                  ),
+                ),
+                child: Text(
+                  "Diet Plan",
+                  style: TextStyle(fontSize: _width / (_devWidth / 15)),
+                ),
+              ),
               ElevatedButton(
-                  onPressed: () {
-                    _onClickReportingAndAnalyticsBtn();
-                  },
-                  child: const Text("Reporting & Analytics"))
+                onPressed: () {
+                  _onClickReportingAndAnalyticsBtn();
+                },
+                style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all<Size>(
+                    Size(_width / (_devWidth / 200.0),
+                        _height / (_devHeight / 50)), // Button width and height
+                  ),
+                ),
+                child: Text(
+                  "Reporting & Analytics",
+                  style: TextStyle(fontSize: _width / (_devWidth / 15)),
+                ),
+              )
             ],
           )
         ],
