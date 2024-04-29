@@ -239,14 +239,14 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all<Size>(
                         Size(
-                            _width / (_devWidth / 200.0),
+                            _width / (_devWidth / 160.0),
                             _height /
-                                (_devHeight / 50)), // Button width and height
+                                (_devHeight / 40)), // Button width and height
                       ),
                     ),
                     child: Text(
                       "Select file",
-                      style: TextStyle(fontSize: _width / (_devWidth / 15)),
+                      style: TextStyle(fontSize: _width / (_devWidth / 10)),
                     ),
                   ),
                   !_hasConnection
@@ -254,7 +254,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
                           "No Network Connection!",
                           style: TextStyle(
                               color: Colors.red,
-                              fontSize: _width / (_devWidth / 15)),
+                              fontSize: _width / (_devWidth / 10)),
                         )
                       : const SizedBox()
                 ],
@@ -286,7 +286,7 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
                               "No Network Connection!",
                               style: TextStyle(
                                   color: Colors.red,
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                           )
                         : const SizedBox(),
@@ -304,15 +304,15 @@ class _FileSelectionScreenState extends State<FileSelectionScreen> {
                         style: ButtonStyle(
                           fixedSize: MaterialStateProperty.all<Size>(
                             Size(
-                                _width / (_devWidth / 200.0),
+                                _width / (_devWidth / 160.0),
                                 _height /
                                     (_devHeight /
-                                        50)), // Button width and height
+                                        40)), // Button width and height
                           ),
                         ),
                         child: Text(
                           "Proceed",
-                          style: TextStyle(fontSize: _width / (_devWidth / 15)),
+                          style: TextStyle(fontSize: _width / (_devWidth / 10)),
                         ),
                       ),
                     ),
