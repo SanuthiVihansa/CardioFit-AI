@@ -250,7 +250,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                           child: Text(
                             "Home",
                             style:
-                                TextStyle(fontSize: _width / (_devWidth / 15)),
+                                TextStyle(fontSize: _width / (_devWidth / 10)),
                           ),
                         )
                       ],
@@ -265,7 +265,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead I",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -274,7 +274,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead II",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -283,7 +283,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead III",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -292,7 +292,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead aVR",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -301,7 +301,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead aVL",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -310,7 +310,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead aVF",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -319,7 +319,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead V1",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -328,7 +328,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead V2",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -337,7 +337,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead V3",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -346,7 +346,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead V4",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -355,7 +355,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead V5",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -364,7 +364,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                             Text(
                               "Lead V6",
                               style: TextStyle(
-                                  fontSize: _width / (_devWidth / 15)),
+                                  fontSize: _width / (_devWidth / 10)),
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
@@ -389,7 +389,7 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
                           child: Text(
                             "Loading...",
                             style:
-                                TextStyle(fontSize: _width / (_devWidth / 15)),
+                                TextStyle(fontSize: _width / (_devWidth / 10)),
                           ),
                         )
                       ],
