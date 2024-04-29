@@ -193,10 +193,13 @@ class _OcrReaderState extends State<OcrReader> {
         tableData.add(row);
       }
     }
-
-    for(int i=0; i<4; i++){
-      tableData.add(['A$i','B$i','C$i','D$i']);
+    for(List<String> row in tableData){
+      print(row.join());
     }
+    // for(int i=0; i<4; i++){
+    //   tableData.add(['A$i','B$i','C$i','D$i']);
+    // }
+
 
 
 
