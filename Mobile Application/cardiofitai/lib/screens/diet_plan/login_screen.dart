@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _navigate(User user) {
     if (user.type == "user") {
       Navigator.pop(context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
+      Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => DietHomePage(user)));
     } else {
       // For Doctor login

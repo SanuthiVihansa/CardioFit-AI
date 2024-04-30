@@ -50,7 +50,7 @@ class _DietHomePageState extends State<DietHomePage> {
                     bottom: const Radius.circular(40),
                   ),
                   child: Container(
-                    color:Colors.white,
+                    color:Colors.blue,
                   ),
 
             ),
