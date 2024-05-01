@@ -48,6 +48,11 @@ class _AllLeadPredictionScreenState extends State<AllLeadPredictionScreen> {
 
   @override
   void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     super.dispose();
   }
 

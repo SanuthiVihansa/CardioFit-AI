@@ -7,7 +7,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-import 'all_lead_prediction_screen.dart';
+import 'facial_analysis_prediction_display_screen.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage(this._width, this._height, {Key? key})

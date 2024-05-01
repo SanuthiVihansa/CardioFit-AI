@@ -12,14 +12,18 @@ class FacialAnalysisHome extends StatelessWidget {
   final double _width, _height, _hDevWidth, _hDevHeight;
 
   //sizes and paddings
-  final double iconSize = 300;
+  final double iconSize = 100;
   final double iconPadding = 70;
   final double iconTextFontSize = 30;
+  final double buttonLength = 325;
+  final double buttonRoundness = 150;
 
   late double responsiveIconSize = _height / (_hDevHeight / iconSize);
   late double responsiveIconPadding = _height / (_hDevHeight / iconPadding);
   late double responsiveIconTextFontSize =
       _width / (_hDevWidth / iconTextFontSize);
+  late double responsiveButtonLength = _width / (_hDevWidth / buttonLength);
+  late double responsiveButtonRoundness = _width / (_hDevWidth / buttonRoundness);
 
   void _onTapTakeECGBtn(BuildContext context) {
     Navigator.of(context).push(
@@ -55,17 +59,19 @@ class FacialAnalysisHome extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    iconSize: responsiveIconSize,
-                    icon: const Icon(Icons.face_sharp),
-                    onPressed: () {
-                      _onTapTakeECGBtn(context);
-                    },
-                  ),
-                  Text(
-                    'Take ECG',
-                    style: TextStyle(fontSize: responsiveIconTextFontSize),
-                  )
+                  ElevatedButton.icon(
+                    style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(responsiveButtonLength, responsiveButtonRoundness))),
+                      onPressed: () {
+                        _onTapTakeECGBtn(context);
+                      },
+                      icon: Image.asset(
+                          'assets/facial_analysis/face-scan_2818147.png',
+                          width: responsiveIconSize,
+                          height: responsiveIconSize,
+                          fit: BoxFit.contain),
+                      label: Text('Take ECG',
+                          style:
+                              TextStyle(fontSize: responsiveIconTextFontSize, color: Colors.purple ))),
                 ],
               ),
             ),
@@ -74,15 +80,19 @@ class FacialAnalysisHome extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    iconSize: responsiveIconSize,
-                    icon: const Icon(Icons.file_copy_rounded),
-                    onPressed: () {},
-                  ),
-                  Text(
-                    'View past readings',
-                    style: TextStyle(fontSize: responsiveIconTextFontSize),
-                  )
+                  ElevatedButton.icon(
+                      style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(responsiveButtonLength, responsiveButtonRoundness))),
+                      onPressed: () {
+                        _onTapTakeECGBtn(context);
+                      },
+                      icon: Image.asset(
+                          'assets/facial_analysis/electrocardiogram.png',
+                          width: responsiveIconSize,
+                          height: responsiveIconSize,
+                          fit: BoxFit.contain),
+                      label: Text('View past readings',
+                          style:
+                          TextStyle(fontSize: responsiveIconTextFontSize, color: Colors.purple))),
                 ],
               ),
             )
