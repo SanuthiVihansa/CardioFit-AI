@@ -1,5 +1,6 @@
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:cardiofitai/screens/palm_analysis/file_selection_screen.dart';
+import 'package:cardiofitai/screens/palm_analysis/temp_file_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -38,7 +39,9 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) => const FileSelectionScreen()));
+            // builder: (BuildContext context) => const FileSelectionScreen()));
+            builder: (BuildContext context) =>
+                const TempFileSelectionScreen()));
   }
 
   @override
