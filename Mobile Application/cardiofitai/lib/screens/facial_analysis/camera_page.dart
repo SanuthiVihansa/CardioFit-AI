@@ -1,12 +1,8 @@
 import 'dart:io';
-
-import 'package:cardiofitai/screens/facial_analysis/video_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -86,8 +82,6 @@ class _CameraPageState extends State<CameraPage> {
   void dispose() {
     // orientation
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
@@ -226,7 +220,7 @@ class _CameraPageState extends State<CameraPage> {
     Fluttertoast.showToast(
         msg: msg,
         toastLength: duration,
-        gravity: ToastGravity.TOP,
+        gravity: ToastGravity.SNACKBAR,
         timeInSecForIosWeb: 3,
         backgroundColor: Colors.redAccent,
         textColor: Colors.white,
@@ -288,7 +282,7 @@ class _CameraPageState extends State<CameraPage> {
         backgroundColor: Colors.black,
         body:
           Center(
-            child: Stack(alignment: Alignment.bottomCenter, children: [
+            child: Stack(alignment: Alignment.center, children: [
               CameraPreview(_cameraController),
               Padding(
                 padding:
