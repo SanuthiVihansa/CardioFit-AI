@@ -10,19 +10,13 @@ import 'package:http/http.dart' as http;
 import 'all_lead_prediction_screen.dart';
 
 class CameraPage extends StatefulWidget {
-  CameraPage(this._width, this._height, {Key? key})
+  const CameraPage(this._width, this._height, {Key? key})
       : super(
             key:
                 key); // Key? key means that the constructor accepts an optional parameter named key of type Key
 
   // Height and width of current device
-  final double _width;
-  final double _height;
-
-  late double _vWidth;
-  late double _vHeight;
-  late double _hWidth;
-  late double _hHeight;
+  final double _width, _height;
 
   @override
   State<CameraPage> createState() => _CameraPageState();
@@ -31,14 +25,14 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   // VARIABLES
 
-  // current device width and height
+  // dev device width and height
   // vertical
-  final double _vWidth = 800.0;
-  final double _vHeight = 1220.0;
+  final double _vDevWidth = 800.0;
+  final double _vDevHeight = 1220.0;
 
   // horizontal
-  final double _hWidth = 1280.0;
-  final double _hHeight = 740.0;
+  final double _hDevWidth = 1280.0;
+  final double _hDevHeight = 740.0;
 
   bool _isLoading = true;
   bool _isRecording = false;
@@ -47,8 +41,19 @@ class _CameraPageState extends State<CameraPage> {
   late CameraController _cameraController;
 
   // paddings and sizes
-  double recordBtnBottomPadding = 50;
-  double recordingBtnIconSize = 25;
+  final double recordBtnBottomPadding = 200;
+  final double recordingBtnLeftRightPadding = 150;
+  final double recordingBtnIconSize = 30;
+  final double messageFontSize = 15;
+  final double toastFontSize = 10;
+  final double messageTopPadding = 200;
+
+  late double responsiveRecordBtnBottomPadding = widget._height / (_vDevHeight / recordBtnBottomPadding);
+  late double responsiveRecordingBtnIconSize = widget._height / (_vDevHeight / recordingBtnIconSize);
+  late double responsiveMessageFontSize = widget._width / (_vDevWidth / messageFontSize);
+  late double responsiveToastFontSize = widget._width / (_vDevWidth / toastFontSize);
+  late double responsiveRecordingBtnLeftRightPadding = widget._width / (_vDevWidth / recordingBtnLeftRightPadding);
+  late double responsiveMessageTopPadding = widget._height / (_vDevHeight / messageTopPadding);
 
   //
   String message = "Please make sure your face\n is visible in the camera";
@@ -70,8 +75,8 @@ class _CameraPageState extends State<CameraPage> {
     ]);
 
     // paddings and sizes
-    recordBtnBottomPadding =
-        _vHeight / (widget._height / recordBtnBottomPadding);
+    // recordBtnBottomPadding =
+    //     _vHeight / (widget._height / recordBtnBottomPadding);
 
     // initialize camera
     _initCamera();
@@ -220,11 +225,11 @@ class _CameraPageState extends State<CameraPage> {
     Fluttertoast.showToast(
         msg: msg,
         toastLength: duration,
-        gravity: ToastGravity.SNACKBAR,
+        gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 3,
         backgroundColor: Colors.redAccent,
         textColor: Colors.white,
-        fontSize: 16.0);
+        fontSize: responsiveToastFontSize);
   }
 
   void _onTapViewECGBtn(BuildContext context) {
@@ -286,7 +291,7 @@ class _CameraPageState extends State<CameraPage> {
               CameraPreview(_cameraController),
               Padding(
                 padding:
-                    EdgeInsets.only(right: _isVideoCaptured ? 150 : 0, bottom: recordBtnBottomPadding),
+                    EdgeInsets.only(right: _isVideoCaptured ? responsiveRecordingBtnLeftRightPadding : 0, bottom: responsiveRecordBtnBottomPadding),
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: FloatingActionButton(
@@ -295,7 +300,7 @@ class _CameraPageState extends State<CameraPage> {
                     child: Icon(
                       _isRecording ? Icons.stop : Icons.circle,
                       color: Colors.red,
-                      size: recordingBtnIconSize,
+                      size: responsiveRecordingBtnIconSize,
                     ),
                     onPressed: () {
                       // String path = '/data/user/0/com.spsh.cardiofitai/cache/';
@@ -308,7 +313,7 @@ class _CameraPageState extends State<CameraPage> {
               _isVideoCaptured
                   ? Padding(
                       padding: EdgeInsets.only(
-                          left: 150, bottom: recordBtnBottomPadding),
+                          left: responsiveRecordingBtnLeftRightPadding, bottom: responsiveRecordBtnBottomPadding),
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: FloatingActionButton.extended(
@@ -322,14 +327,14 @@ class _CameraPageState extends State<CameraPage> {
                     )
                   : Container(),
               Padding(
-                padding: const EdgeInsets.only(top: 70),
+                padding: EdgeInsets.only(top: responsiveMessageTopPadding),
                 child: Align(
                   alignment: AlignmentDirectional.topCenter,
                   child: Text(
                     message,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
-                      fontSize: 20,
+                      fontSize: responsiveMessageFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

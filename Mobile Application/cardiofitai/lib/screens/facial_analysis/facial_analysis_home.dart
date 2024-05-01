@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'camera_page.dart';
 import 'facial_analysis_reading.dart';
 
@@ -30,10 +29,10 @@ class FacialAnalysisHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // set screen orientation to landscape
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.landscapeLeft,
-    //   DeviceOrientation.landscapeRight,
-    // ]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
 
     return Scaffold(
       appBar: AppBar(
