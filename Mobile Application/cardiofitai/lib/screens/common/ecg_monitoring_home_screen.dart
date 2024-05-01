@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:cardiofitai/screens/palm_analysis/file_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +16,8 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
   late double _height;
   final double _devWidth = 753.4545454545455;
   final double _devHeight = 392.72727272727275;
+  final double _hDevWidth = 1280.0;
+  final double _hDevHeight = 740.0;
 
   @override
   void initState() {
@@ -23,7 +26,13 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
   }
 
-  void _onClickFacialAnalysisBtn() {}
+  void _onClickFacialAnalysisBtn() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                FacialAnalysisHome(_width, _height, _hDevHeight, _hDevWidth)));
+  }
 
   void _onClickPalmAnalysisBtn() {
     Navigator.push(

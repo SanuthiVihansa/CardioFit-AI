@@ -4,7 +4,9 @@ import 'camera_page.dart';
 import 'facial_analysis_reading.dart';
 
 class FacialAnalysisHome extends StatelessWidget {
-  FacialAnalysisHome(this._width, this._height, this._hDevHeight, this._hDevWidth, {super.key});
+  FacialAnalysisHome(
+      this._width, this._height, this._hDevHeight, this._hDevWidth,
+      {super.key});
 
   // Height and width of current device
   final double _width, _height, _hDevWidth, _hDevHeight;
@@ -16,7 +18,8 @@ class FacialAnalysisHome extends StatelessWidget {
 
   late double responsiveIconSize = _height / (_hDevHeight / iconSize);
   late double responsiveIconPadding = _height / (_hDevHeight / iconPadding);
-  late double responsiveIconTextFontSize = _width / (_hDevWidth / iconTextFontSize);
+  late double responsiveIconTextFontSize =
+      _width / (_hDevWidth / iconTextFontSize);
 
   void _onTapTakeECGBtn(BuildContext context) {
     Navigator.of(context).push(
@@ -36,7 +39,11 @@ class FacialAnalysisHome extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CardioFit AI'),
+        foregroundColor: Colors.white,
+        title: const Text(
+          "Cardiac Analysis Through Facial Recognition",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
         backgroundColor: Colors.red,
       ),
       body: Center(
@@ -51,12 +58,12 @@ class FacialAnalysisHome extends StatelessWidget {
                   IconButton(
                     iconSize: responsiveIconSize,
                     icon: const Icon(Icons.face_sharp),
-                    onPressed: (){
+                    onPressed: () {
                       _onTapTakeECGBtn(context);
                     },
                   ),
                   Text(
-                      'Take ECG',
+                    'Take ECG',
                     style: TextStyle(fontSize: responsiveIconTextFontSize),
                   )
                 ],
@@ -70,10 +77,10 @@ class FacialAnalysisHome extends StatelessWidget {
                   IconButton(
                     iconSize: responsiveIconSize,
                     icon: const Icon(Icons.file_copy_rounded),
-                    onPressed: (){},
+                    onPressed: () {},
                   ),
                   Text(
-                      'View past readings',
+                    'View past readings',
                     style: TextStyle(fontSize: responsiveIconTextFontSize),
                   )
                 ],
@@ -85,4 +92,3 @@ class FacialAnalysisHome extends StatelessWidget {
     );
   }
 }
-
