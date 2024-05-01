@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
-import 'package:cardiofitai/screens/diet_plan/signup_screen.dart';
+import 'package:cardiofitai/screens/common/signup_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
+import 'package:cardiofitai/screens/common/dashboard_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../models/user.dart';
 import '../../services/user_information_service.dart';
 import 'package:path_provider/path_provider.dart';
-import 'ocr_reader.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen(this._width, this._height, {super.key});
@@ -93,15 +92,24 @@ class _LoginScreenState extends State<LoginScreen> {
         '", "bmi" : "' +
         doc["bmi"] +
         '","dob" : "' +
-        doc["dob"]+
+        doc["dob"] +
         '","activeLevel" : "' +
-        doc["activeLevel"]+
+        doc["activeLevel"] +
         '", "type" : "' +
         doc["type"] +
         '"}';
 
-    User user = User(doc["name"], doc["email"], doc["password"], doc["age"],
-        doc["height"], doc["weight"], doc["bmi"],doc["dob"],doc["activeLevel"], doc["type"]);
+    User user = User(
+        doc["name"],
+        doc["email"],
+        doc["password"],
+        doc["age"],
+        doc["height"],
+        doc["weight"],
+        doc["bmi"],
+        doc["dob"],
+        doc["activeLevel"],
+        doc["type"]);
 
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
@@ -115,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (user.type == "user") {
       Navigator.pop(context);
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => DietHomePage(user)));
+          builder: (BuildContext context) => DashboardScreen(user)));
     } else {
       // For Doctor login
     }
@@ -135,14 +143,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     bottom: widget._height / 26.76363636363636,
                     left: widget._width / 6.545454545454545,
                     right: widget._width / 6.545454545454545),
-                child: Icon(
+                child: const Icon(
                   Icons.account_circle,
                   size: 50,
                 ),
               ),
-              Text("H E L L O   W E L C O M E   B A C K ! ",
+              const Text("H E L L O   W E L C O M E   B A C K ! ",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              Text("Enter credentials to login"),
+              const Text("Enter credentials to login"),
               Form(
                 key: _formKey,
                 child: Padding(
@@ -204,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
                                 side:
-                                    BorderSide(color: Colors.black, width: 2.0),
+                                    const BorderSide(color: Colors.black, width: 2.0),
                               ),
                             ),
                           ),

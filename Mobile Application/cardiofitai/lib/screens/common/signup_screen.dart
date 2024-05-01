@@ -1,5 +1,4 @@
-import 'package:cardiofitai/screens/diet_plan/login_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cardiofitai/screens/common/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -27,6 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
     if (text == "") {
       return "Name is required!";
     }
+    return null;
   }
 
   //Email Field Validation
@@ -39,7 +39,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
-//Validate new and exisiting passwords
+//Validate new and existing passwords
   String? _validatePassword(String value) {
     if (value == '') {
       return "This field is required!";
@@ -81,7 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
           fontSize: 16.0);
     } else {
       Fluttertoast.showToast(
-          msg: "Opps !! We have trouble in signin, Please try again.☹️",
+          msg: "Opps !! We have trouble in signing, Please try again.☹️",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -108,14 +108,14 @@ class _SignUpPageState extends State<SignUpPage> {
                     bottom: _height / 26.76363636363636,
                     left: _width / 6.545454545454545,
                     right: _width / 6.545454545454545),
-                child: Icon(
+                child: const Icon(
                   Icons.account_circle,
                   size: 50,
                 ),
               ),
-              Text("H E L L O   T H E R E ! ",
+              const Text("H E L L O   T H E R E ! ",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              Text("Register below with details"),
+              const Text("Register below with details"),
               Form(
                 key: _formKey,
                 child: Padding(
@@ -216,7 +216,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
                                 side:
-                                    BorderSide(color: Colors.black, width: 2.0),
+                                    const BorderSide(color: Colors.black, width: 2.0),
                               ),
                             ),
                           ),
@@ -227,7 +227,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SignUpPage()),
+                                    builder: (context) => const SignUpPage()),
                               );
                               Navigator.push(
                                   context,
@@ -251,7 +251,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     LoginScreen(_width, _height)),
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           "Already have an Account! Login",
                           textDirection: TextDirection.ltr,
                           style: TextStyle(

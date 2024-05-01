@@ -1,15 +1,22 @@
 import 'package:cardiofitai/screens/common/ecg_monitoring_home_screen.dart';
+import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../components/navbar_component.dart';
+import '../../models/user.dart';
+
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  const DashboardScreen(this.user, {super.key});
+
+  final User user;
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late double _width;
 
   // ignore: unused_field
@@ -36,7 +43,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const ECGMonitoringHomeScreen()));
   }
 
-  void _onClickDietPlanBtn() {}
+  void _onClickDietPlanBtn() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => DietHomePage(widget.user)));
+  }
 
   void _onClickReportingAndAnalyticsBtn() {}
 
@@ -45,13 +57,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _width = MediaQuery.of(context).size.width;
     _height = MediaQuery.of(context).size.height;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
+        leading: IconButton(
+          color: Colors.white,
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+        ),
         title: const Text(
           "CardioFit AI",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.red,
       ),
+      drawer: LeftNavBar(
+          user: widget.user,
+          name: widget.user.name,
+          email: widget.user.email,
+          width: 150,
+          height: 300),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
