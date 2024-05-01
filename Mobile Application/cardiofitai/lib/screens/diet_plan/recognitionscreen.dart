@@ -66,9 +66,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       scanning=false;
       scannedText = result["ParsedResults"][0]["ParsedText"];
       List<String> extractText = scannedText.split(" ");
-      Iterable<String> requiredDetails = extractText.where((extractedText) => extractedText.contains("WBC")||extractedText.contains("Neutrophils")||extractedText.contains("Lymphocytes")||extractedText.contains("Monocytes")||extractedText.contains("Eosinophils")||extractedText.contains("Basophills")||extractedText.contains("Neutrophils Absolute Count")||extractedText.contains("Lymphocytes Absolute Count") || extractedText.contains("Monocytes Absolute Count")|| extractedText.contains("Eosinophils Absolute Count")|| extractedText.contains("RBC")|| extractedText.contains("Haemoglobin")|| extractedText.contains("Packed Cell Volume")|| extractedText.contains("MCV")|| extractedText.contains("MCH")|| extractedText.contains("MCHC")|| extractedText.contains("RDW")|| extractedText.contains("Platelet Count"));
-      scannedText = requiredDetails.join(" ");
-      // print(requiredDetails);
+      RegExp regExp = RegExp(r'Platelet\s+Count', caseSensitive: false);
+      Iterable<String> requiredDetails = extractText.where((extractedText) => extractedText.contains("WBC")||extractedText.contains("Neutrophils")||extractedText.contains("Lymphocytes")||extractedText.contains("Monocytes")||extractedText.contains("Eosinophils")||extractedText.contains("Basophills")||extractedText.contains("RBC")|| extractedText.contains("Haemoglobin")|| extractedText.contains("Packed Cell Volume")|| extractedText.contains("MCV")|| extractedText.contains("MCH")|| extractedText.contains("MCHC")|| extractedText.contains("RDW")&& regExp.hasMatch(extractedText));
+      // scannedText = requiredDetails.join(" ");
+      print(requiredDetails);
     });
 
   }
