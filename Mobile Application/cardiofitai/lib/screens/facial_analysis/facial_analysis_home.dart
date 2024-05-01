@@ -11,13 +11,13 @@ class FacialAnalysisHome extends StatelessWidget {
   final double _width, _height, _hDevWidth, _hDevHeight;
 
   //sizes and paddings
-  final double iconSize = 100;
-  final double iconPadding = 50;
-  final double iconTextFontSize = 80;
+  final double iconSize = 300;
+  final double iconPadding = 70;
+  final double iconTextFontSize = 30;
 
-  late double responsiveIconSize = _hDevHeight / (_height / iconSize);
-  late double responsiveIconPadding = _hDevHeight / (_height / iconPadding);
-  late double responsiveIconTextFontSize = _hDevWidth / (_width / iconTextFontSize);
+  late double responsiveIconSize = _height / (_hDevHeight / iconSize);
+  late double responsiveIconPadding = _height / (_hDevHeight / iconPadding);
+  late double responsiveIconTextFontSize = _width / (_hDevWidth / iconTextFontSize);
 
   void _onTapTakeECGBtn(BuildContext context) {
     Navigator.of(context).push(
