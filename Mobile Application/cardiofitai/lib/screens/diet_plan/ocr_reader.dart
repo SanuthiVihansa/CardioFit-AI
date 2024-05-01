@@ -40,112 +40,112 @@ class _OcrReaderState extends State<OcrReader> {
       ),
       body: Center(
           child: SingleChildScrollView(
-        child: Container(
-            margin: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // scannedReports(),
-                if (textScanning) const CircularProgressIndicator(),
-                if (!textScanning && imageFile == null)
-                  Container(
-                    width: 300,
-                    height: 300,
-                    color: Colors.grey[300]!,
-                  ),
-                if (imageFile != null) Image.file(File(imageFile!.path)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            child: Container(
+                margin: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        padding: const EdgeInsets.only(top: 10),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.grey,
-                            backgroundColor: Colors.white,
-                            shadowColor: Colors.grey[400],
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
-                          ),
-                          onPressed: () {
-                            getImage(ImageSource.gallery);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 5),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.image,
-                                  size: 30,
+                    // scannedReports(),
+                    if (textScanning) const CircularProgressIndicator(),
+                    if (!textScanning && imageFile == null)
+                      Container(
+                        width: 300,
+                        height: 300,
+                        color: Colors.grey[300]!,
+                      ),
+                    if (imageFile != null) Image.file(File(imageFile!.path)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            padding: const EdgeInsets.only(top: 10),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.grey,
+                                backgroundColor: Colors.white,
+                                shadowColor: Colors.grey[400],
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0)),
+                              ),
+                              onPressed: () {
+                                getImage(ImageSource.gallery);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 5),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.image,
+                                      size: 30,
+                                    ),
+                                    Text(
+                                      "Gallery",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey[600]),
+                                    )
+                                  ],
                                 ),
-                                Text(
-                                  "Gallery",
-                                  style: TextStyle(
-                                      fontSize: 13, color: Colors.grey[600]),
-                                )
-                              ],
-                            ),
-                          ),
-                        )),
-                    Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        padding: const EdgeInsets.only(top: 10),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.grey,
-                            backgroundColor: Colors.white,
-                            shadowColor: Colors.grey[400],
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
-                          ),
-                          onPressed: () {
-                            getImage(ImageSource.camera);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 5),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.camera_alt,
-                                  size: 30,
+                              ),
+                            )),
+                        Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            padding: const EdgeInsets.only(top: 10),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.grey,
+                                backgroundColor: Colors.white,
+                                shadowColor: Colors.grey[400],
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0)),
+                              ),
+                              onPressed: () {
+                                getImage(ImageSource.camera);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 5),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.camera_alt,
+                                      size: 30,
+                                    ),
+                                    Text(
+                                      "Camera",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey[600]),
+                                    )
+                                  ],
                                 ),
-                                Text(
-                                  "Camera",
-                                  style: TextStyle(
-                                      fontSize: 13, color: Colors.grey[600]),
-                                )
-                              ],
-                            ),
-                          ),
-                        )),
+                              ),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: Text(
+                        scannedText,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    )
                   ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  child: Text(
-                    scannedText,
-                    style: TextStyle(fontSize: 20),
-                  ),
-                )
-              ],
-            )),
-      )),
+                )),
+          )),
     );
   }
 
   void getImage(ImageSource source) async {
     try {
       final pickedImage =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
+      await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
         textScanning = true;
         imageFile = pickedImage;
@@ -169,7 +169,7 @@ class _OcrReaderState extends State<OcrReader> {
     // final textDetector = GoogleMlKit.vision.textDetector();
 
     final RecognizedText recognisedText =
-        await textRecognizer.processImage(inputImage);
+    await textRecognizer.processImage(inputImage);
     String extractedText = recognisedText.text;
     print(extractedText);
 
@@ -226,22 +226,22 @@ class _OcrReaderState extends State<OcrReader> {
   }
 
   Widget scannedReports() => DropdownButton<String>(
-        // Ensure dropdownValue is initialized with a value from the items list
-        value: dropdownValue ?? 'Less Active', // Default to 'Less Active'
-        icon: const Icon(Icons.arrow_drop_down_circle_rounded),
-        onChanged: (String? newValue) {
-          setState(() {
-            dropdownValue = newValue!;
-          });
-        },
-        items: const [
-          DropdownMenuItem<String>(
-              value: 'Full Blood Count (FBC)',
-              child: Text('Full Blood Count (FBC)')),
-          // DropdownMenuItem<String>(
-          //     value: 'Intermediate', child: Text('Intermediate')),
-          // DropdownMenuItem<String>(
-          //     value: 'Very Active', child: Text('Very Active')),
-        ],
-      );
+    // Ensure dropdownValue is initialized with a value from the items list
+    value: dropdownValue ?? 'Less Active', // Default to 'Less Active'
+    icon: const Icon(Icons.arrow_drop_down_circle_rounded),
+    onChanged: (String? newValue) {
+      setState(() {
+        dropdownValue = newValue!;
+      });
+    },
+    items: const [
+      DropdownMenuItem<String>(
+          value: 'Full Blood Count (FBC)',
+          child: Text('Full Blood Count (FBC)')),
+      // DropdownMenuItem<String>(
+      //     value: 'Intermediate', child: Text('Intermediate')),
+      // DropdownMenuItem<String>(
+      //     value: 'Very Active', child: Text('Very Active')),
+    ],
+  );
 }
