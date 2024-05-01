@@ -1,4 +1,9 @@
 import 'package:cardiofitai/screens/common/dashboard_screen.dart';
+import 'package:cardiofitai/screens/common/login_exchange_screen.dart';
+import 'package:cardiofitai/screens/diet_plan/login_screen.dart';
+import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
+import 'package:cardiofitai/screens/diet_plan/signup_screen.dart';
+import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:cardiofitai/screens/palm_analysis/file_selection_screen.dart';
 
@@ -27,9 +32,8 @@ class CardioFitAi extends StatelessWidget {
     _width = MediaQuery.of(context).size.width;
     _height = MediaQuery.of(context).size.height;
 
-    return MaterialApp(
-      home: DashboardScreen(),
-      // home: FacialAnalysisHome(_width, _height)
-    );
+    return const MaterialApp(
+        color: Colors.red,
+        home: LoginExchangeScreen());
   }
 }
