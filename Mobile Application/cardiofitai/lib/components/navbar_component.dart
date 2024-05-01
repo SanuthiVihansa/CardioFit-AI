@@ -24,8 +24,6 @@ class LeftNavBar extends StatelessWidget {
     required this.height,
   });
 
-
-
   Future<void> _onTapLogOutBtn(BuildContext context) async {
     var dialogRes = await showDialog<bool>(
         context: context,
@@ -83,7 +81,8 @@ class LeftNavBar extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => ProfilePage(user)),
+                      MaterialPageRoute(
+                          builder: (context) => ProfilePage(user)),
                     );
                   },
                   child: CircleAvatar(
@@ -115,20 +114,20 @@ class LeftNavBar extends StatelessWidget {
               );
             },
           ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.monetization_on),
-            title: Text("Delivery Note History"),
-            onTap: () {
-              Navigator.of(context).pop(); // Close the drawer
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) =>
-              //         DeliveryNoteHistoryScreen(width, height),
-              //   ),
-              // );
-            },
-          ),
+          // Divider(),
+          // ListTile(
+          //   leading: Icon(Icons.monetization_on),
+          //   title: Text("Delivery Note History"),
+          //   onTap: () {
+          //     Navigator.of(context).pop(); // Close the drawer
+          //     Navigator.of(context).push(
+          //       MaterialPageRoute(
+          //         builder: (context) =>
+          //             DeliveryNoteHistoryScreen(width, height),
+          //       ),
+          //     );
+          //   },
+          // ),
           Divider(),
           ListTile(
             leading: Icon(Icons.logout),
