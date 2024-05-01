@@ -21,8 +21,8 @@ class CardioFitAi extends StatelessWidget {
   late double _height;
   late double _vWidth;
   late double _vHeight;
-  late double _hWidth;
-  late double _hHeight;
+  late double _hDevWidth;
+  late double _hDevHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +31,14 @@ class CardioFitAi extends StatelessWidget {
     _height = MediaQuery.of(context).size.height;
 
     // development device dimensions
-    // vertical
-    _vWidth = 800.0;
-    _vHeight = 1220.0;
     // horizontal
-    _hWidth = 1280.0;
-    _hHeight = 740.0;
+    _hDevWidth = 1280.0;
+    _hDevHeight = 740.0;
 
     return MaterialApp(
       color: Colors.red,
       // home: TestingFirebaseScreen(),
-      home: FacialAnalysisHome(_width, _height)
+      home: FacialAnalysisHome(_width, _height, _hDevWidth, _hDevHeight),
       // home: CameraPage(_width, _height),
     );
   }
