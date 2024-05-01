@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
 import 'package:cardiofitai/screens/common/signup_screen.dart';
+import 'package:cardiofitai/screens/diet_plan/recognitionscreen.dart';
 import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -114,20 +115,20 @@ class LeftNavBar extends StatelessWidget {
               );
             },
           ),
-          // Divider(),
-          // ListTile(
-          //   leading: Icon(Icons.monetization_on),
-          //   title: Text("Delivery Note History"),
-          //   onTap: () {
-          //     Navigator.of(context).pop(); // Close the drawer
-          //     Navigator.of(context).push(
-          //       MaterialPageRoute(
-          //         builder: (context) =>
-          //             DeliveryNoteHistoryScreen(width, height),
-          //       ),
-          //     );
-          //   },
-          // ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.monetization_on),
+            title: Text("Recognition Screen"),
+            onTap: () {
+              Navigator.of(context).pop(); // Close the drawer
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      RecognitionScreen(),
+                ),
+              );
+            },
+          ),
           Divider(),
           ListTile(
             leading: Icon(Icons.logout),
