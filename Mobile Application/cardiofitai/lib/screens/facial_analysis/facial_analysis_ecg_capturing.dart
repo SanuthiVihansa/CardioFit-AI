@@ -74,7 +74,7 @@ class _CameraPageState extends State<CameraPage> {
   // METHODS
   @override
   void initState() {
-    // starting server
+    // starting flask server
     _upServer();
 
     // setting device orientation for current screen

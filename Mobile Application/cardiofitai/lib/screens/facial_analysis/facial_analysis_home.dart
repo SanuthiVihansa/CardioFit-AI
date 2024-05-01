@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'camera_page.dart';
+import 'facial_analysis_ecg_capturing.dart';
 import 'facial_analysis_reading.dart';
 
 class FacialAnalysisHome extends StatelessWidget {
@@ -45,7 +45,7 @@ class FacialAnalysisHome extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: Colors.white,
         title: const Text(
-          "Cardiac Analysis Through Facial Recognition",
+          "Capturing ECG through Facial Analysis",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.red,
@@ -82,9 +82,7 @@ class FacialAnalysisHome extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                       style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(responsiveButtonLength, responsiveButtonRoundness))),
-                      onPressed: () {
-                        _onTapTakeECGBtn(context);
-                      },
+                      onPressed: () {},
                       icon: Image.asset(
                           'assets/facial_analysis/electrocardiogram.png',
                           width: responsiveIconSize,
