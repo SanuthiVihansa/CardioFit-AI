@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -31,8 +32,8 @@ class _CameraPageState extends State<CameraPage> {
   final double _vDevHeight = 1220.0;
 
   // horizontal
-  final double _hDevWidth = 1280.0;
-  final double _hDevHeight = 740.0;
+  // final double _hDevWidth = 1280.0;
+  // final double _hDevHeight = 740.0;
 
   bool _isLoading = true;
   bool _isRecording = false;
@@ -48,12 +49,18 @@ class _CameraPageState extends State<CameraPage> {
   final double toastFontSize = 10;
   final double messageTopPadding = 200;
 
-  late double responsiveRecordBtnBottomPadding = widget._height / (_vDevHeight / recordBtnBottomPadding);
-  late double responsiveRecordingBtnIconSize = widget._height / (_vDevHeight / recordingBtnIconSize);
-  late double responsiveMessageFontSize = widget._width / (_vDevWidth / messageFontSize);
-  late double responsiveToastFontSize = widget._width / (_vDevWidth / toastFontSize);
-  late double responsiveRecordingBtnLeftRightPadding = widget._width / (_vDevWidth / recordingBtnLeftRightPadding);
-  late double responsiveMessageTopPadding = widget._height / (_vDevHeight / messageTopPadding);
+  late double responsiveRecordBtnBottomPadding =
+      widget._height / (_vDevHeight / recordBtnBottomPadding);
+  late double responsiveRecordingBtnIconSize =
+      widget._height / (_vDevHeight / recordingBtnIconSize);
+  late double responsiveMessageFontSize =
+      widget._width / (_vDevWidth / messageFontSize);
+  late double responsiveToastFontSize =
+      widget._width / (_vDevWidth / toastFontSize);
+  late double responsiveRecordingBtnLeftRightPadding =
+      widget._width / (_vDevWidth / recordingBtnLeftRightPadding);
+  late double responsiveMessageTopPadding =
+      widget._height / (_vDevHeight / messageTopPadding);
 
   //
   String message = "Please make sure your face\n is visible in the camera";
@@ -67,25 +74,44 @@ class _CameraPageState extends State<CameraPage> {
   // METHODS
   @override
   void initState() {
+    // starting server
     _upServer();
-    // orientation
+
+    // setting device orientation for current screen
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
 
-    // paddings and sizes
-    // recordBtnBottomPadding =
-    //     _vHeight / (widget._height / recordBtnBottomPadding);
-
     // initialize camera
     _initCamera();
+
+    // showing dialog box with instructions
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: const Text("Instructions"),
+                content: const Text(
+                    "1. Make sure to be in a bright environment\n2. Make sure your face is clearly visible in the camera\n3. Try to stay as still as possible while recording\n4. Recording will stop automatically after 10 seconds"),
+                actions: [
+                  TextButton(
+                    child: const Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ]);
+          });
+    });
+
     super.initState();
   }
 
   @override
   void dispose() {
-    // orientation
+    // setting device orientation
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
@@ -132,7 +158,7 @@ class _CameraPageState extends State<CameraPage> {
     } else {
       await _cameraController.prepareForVideoRecording();
       await _cameraController.startVideoRecording();
-      message = "Try not to move too much...";
+      message = "Try not to move your face\n while recording...";
       callToast('Recording started...');
       setState(() {
         _isVideoCaptured = false;
@@ -157,15 +183,6 @@ class _CameraPageState extends State<CameraPage> {
                 _isVideoCaptured = true;
                 _isRecording = false;
               });
-
-              // previews the video
-              // final route = MaterialPageRoute(
-              //   fullscreenDialog: true,
-              //   builder: (_) => VideoPage(filePath: file.path),
-              // );
-              //
-              // Navigator.push(context, route);
-
               if (kDebugMode) {
                 print('Video saved to path: ${file.path}');
               }
@@ -233,7 +250,6 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _onTapViewECGBtn(BuildContext context) {
-
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -242,8 +258,8 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _pickFile() async {
-
-    final file = File('/data/user/0/com.spsh.cardiofitai/cache/file_picker/1714153553401/411_2024_03_11_12_54_2.txt');
+    final file = File(
+        '/data/user/0/com.spsh.cardiofitai/cache/file_picker/1714153553401/411_2024_03_11_12_54_2.txt');
     String contents = await file.readAsString();
     contents = contents.substring(1);
 
@@ -284,64 +300,92 @@ class _CameraPageState extends State<CameraPage> {
       );
     } else {
       return Scaffold(
-        backgroundColor: Colors.black,
-        body:
-          Center(
-            child: Stack(alignment: Alignment.center, children: [
-              CameraPreview(_cameraController),
-              Padding(
-                padding:
-                    EdgeInsets.only(right: _isVideoCaptured ? responsiveRecordingBtnLeftRightPadding : 0, bottom: responsiveRecordBtnBottomPadding),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    shape: const CircleBorder(),
-                    child: Icon(
-                      _isRecording ? Icons.stop : Icons.circle,
-                      color: Colors.red,
-                      size: responsiveRecordingBtnIconSize,
-                    ),
-                    onPressed: () {
-                      // String path = '/data/user/0/com.spsh.cardiofitai/cache/';
-                      // deleteAllFiles(path);
-                      _recordVideo();
-                    },
-                  ),
-                ),
-              ),
-              _isVideoCaptured
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                          left: responsiveRecordingBtnLeftRightPadding, bottom: responsiveRecordBtnBottomPadding),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: FloatingActionButton.extended(
-                          onPressed: () {
-                            _onTapViewECGBtn(context);
-                          },
-                          label: const Text('View ECG reading'),
-                          icon: const Icon(Icons.file_present_rounded),
-                        ),
-                      ),
-                    )
-                  : Container(),
-              Padding(
-                padding: EdgeInsets.only(top: responsiveMessageTopPadding),
-                child: Align(
-                  alignment: AlignmentDirectional.topCenter,
-                  child: Text(
-                    message,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: responsiveMessageFontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ]),
+        appBar: AppBar(
+          foregroundColor: Colors.white,
+          title: const Text(
+            "Capturing ECG through Facial Analysis",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
+          backgroundColor: Colors.red,
+        ),
+        backgroundColor: Colors.black,
+        body: Center(
+          child: Stack(alignment: Alignment.center, children: [
+            Positioned.fill(child: CameraPreview(_cameraController)),
+            Padding(
+              padding: EdgeInsets.only(
+                  right: _isVideoCaptured
+                      ? responsiveRecordingBtnLeftRightPadding
+                      : 0,
+                  bottom: responsiveRecordBtnBottomPadding),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: FloatingActionButton(
+                  backgroundColor: Colors.white,
+                  shape: const CircleBorder(),
+                  child: Icon(
+                    _isRecording ? Icons.stop : Icons.circle,
+                    color: Colors.red,
+                    size: _isRecording
+                        ? responsiveRecordingBtnIconSize
+                        : responsiveRecordingBtnIconSize + 10,
+                  ),
+                  onPressed: () {
+                    // String path = '/data/user/0/com.spsh.cardiofitai/cache/';
+                    // deleteAllFiles(path);
+                    _recordVideo();
+                  },
+                ),
+              ),
+            ),
+            _isVideoCaptured
+                ? Padding(
+                    padding: EdgeInsets.only(
+                        left: responsiveRecordingBtnLeftRightPadding,
+                        bottom: responsiveRecordBtnBottomPadding),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: FloatingActionButton.extended(
+                        onPressed: () {
+                          _onTapViewECGBtn(context);
+                        },
+                        label: const Text('View ECG reading'),
+                        icon: const Icon(Icons.file_present_rounded),
+                      ),
+                    ),
+                  )
+                : Container(),
+            // Padding(
+            //   padding: EdgeInsets.only(top: responsiveMessageTopPadding),
+            //   child: Align(
+            //     alignment: AlignmentDirectional.topCenter,
+            //     child: Stack(
+            //       children: [
+            //         Text(
+            //           message,
+            //           style: TextStyle(
+            //             // color: Colors.black,
+            //             fontSize: responsiveMessageFontSize,
+            //             fontStyle: FontStyle.italic,
+            //             foreground: Paint()
+            //               ..style = PaintingStyle.stroke
+            //               ..strokeWidth = 6
+            //               ..color = Colors.white,
+            //           ),
+            //         ),
+            //         Text(
+            //           message,
+            //           style: TextStyle(
+            //             fontSize: responsiveMessageFontSize,
+            //             color: Colors.black,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+          ]),
+        ),
       );
     }
   }
