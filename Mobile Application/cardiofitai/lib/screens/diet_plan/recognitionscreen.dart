@@ -19,8 +19,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   bool scanning =false;
   String scannedText='';
 
-  optionsdialog(BuildContext context){
-    return showDialog(context: context, builder: (context){
+
+  void optionsdialog(BuildContext context){
+     showDialog(context: context, builder: (context){
       return SimpleDialog(
         children: [
           SimpleDialogOption(
@@ -64,30 +65,17 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     setState(() {
       scanning=false;
       scannedText = result["ParsedResults"][0]["ParsedText"];
+      List<String> extractText = scannedText.split(" ");
+      Iterable<String> requiredDetails = extractText.where((extractedText) => extractedText.contains("WBC")||extractedText.contains("Neutrophils")||extractedText.contains("Lymphocytes")||extractedText.contains("Monocytes")||extractedText.contains("Eosinophils")||extractedText.contains("Basophills")||extractedText.contains("Neutrophils Absolute Count")||extractedText.contains("Lymphocytes Absolute Count") || extractedText.contains("Monocytes Absolute Count")|| extractedText.contains("Eosinophils Absolute Count")|| extractedText.contains("RBC")|| extractedText.contains("Haemoglobin")|| extractedText.contains("Packed Cell Volume")|| extractedText.contains("MCV")|| extractedText.contains("MCH")|| extractedText.contains("MCHC")|| extractedText.contains("RDW")|| extractedText.contains("Platelet Count"));
+      scannedText = requiredDetails.join(" ");
+      // print(requiredDetails);
     });
-
 
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: Row(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   children: [
-      //     FloatingActionButton(
-      //       onPressed: (){},
-      //       heroTag: "",
-      //       child: Text("Gallery"),
-      //     ),
-      //     SizedBox(width: 10,),
-      //     FloatingActionButton(
-      //       onPressed: (){},
-      //       heroTag: "",
-      //       child: Text("Camera"),
-      //     )
-      //   ],
-      // ),
       body: SingleChildScrollView(
         child: Container(
           alignment: Alignment.center,
