@@ -306,10 +306,12 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _pickFile() async {
+    //emulator path
     // final file = File(
-    //     '/data/user/0/com.spsh.cardiofitai/cache/file_picker/1714153553401/411_2024_03_11_12_54_2.txt');
+    //     '/data/user/0/com.spsh.cardiofitai/cache/file_picker/1714665116141/record1.txt');
+    // actual device path
     final file = File(
-        '/data/user/0/com.spsh.cardiofitai/cache/file_picker/1714665116141/record1.txt');
+        '/data/user/0/com.spsh.cardiofitai/cache/file_picker/1714673853720/record1.txt');
 
     String contents = await file.readAsString();
 
