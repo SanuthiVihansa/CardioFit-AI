@@ -67,6 +67,8 @@ class _TempFileSelectionScreenState extends State<TempFileSelectionScreen> {
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
+    _pickFile();
   }
 
   Future<void> initConnectivity() async {
@@ -274,7 +276,8 @@ class _TempFileSelectionScreenState extends State<TempFileSelectionScreen> {
       ),
       // ignore: prefer_is_empty
       body: _l2Data.length == 0
-          ? Center(
+      // ? Container()
+      ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
