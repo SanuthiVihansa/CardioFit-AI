@@ -32,7 +32,7 @@ class WordPair {
 }
 
 class _RecognitionScreenState extends State<RecognitionScreen> {
-  late File pickedimage;
+  late File pickedimage = File('');
   bool scanning =false;
   String scannedText='';
   //List<WordIndex> wordIndexes = [];
