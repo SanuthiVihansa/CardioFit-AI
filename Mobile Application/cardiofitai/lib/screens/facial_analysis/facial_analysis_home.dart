@@ -15,7 +15,7 @@ class FacialAnalysisHome extends StatelessWidget {
   final double iconSize = 100;
   final double iconPadding = 70;
   final double iconTextFontSize = 30;
-  final double buttonLength = 325;
+  final double buttonLength = 350;
   final double buttonRoundness = 150;
 
   late double responsiveIconSize = _height / (_hDevHeight / iconSize);
@@ -65,7 +65,7 @@ class FacialAnalysisHome extends StatelessWidget {
                         _onTapTakeECGBtn(context);
                       },
                       icon: Image.asset(
-                          'assets/facial_analysis/face-scan_2818147.png',
+                          'assets/facial_analysis/electrocardiogram.png',
                           width: responsiveIconSize,
                           height: responsiveIconSize,
                           fit: BoxFit.contain),
@@ -84,11 +84,11 @@ class FacialAnalysisHome extends StatelessWidget {
                       style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(responsiveButtonLength, responsiveButtonRoundness))),
                       onPressed: () {},
                       icon: Image.asset(
-                          'assets/facial_analysis/electrocardiogram.png',
+                          'assets/facial_analysis/file.png',
                           width: responsiveIconSize,
                           height: responsiveIconSize,
                           fit: BoxFit.contain),
-                      label: Text('View past readings',
+                      label: Text('View past\nreadings',
                           style:
                           TextStyle(fontSize: responsiveIconTextFontSize, color: Colors.purple))),
                 ],
