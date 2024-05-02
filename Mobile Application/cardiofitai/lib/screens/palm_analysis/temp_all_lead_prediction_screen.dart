@@ -370,7 +370,10 @@ class _TempAllLeadPredictionScreenState
                     Padding(
                       padding:
                           EdgeInsets.only(right: _width / (_devWidth / 15)),
-                      child: Text("Compare with Actual"),
+                      child: Text(
+                        "Compare with Actual",
+                        style: TextStyle(fontSize: _width / (_width / 14)),
+                      ),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -541,7 +544,10 @@ class _TempAllLeadPredictionScreenState
                     Padding(
                       padding:
                           EdgeInsets.only(right: _width / (_devWidth / 15)),
-                      child: Text("Compare with Actual"),
+                      child: Text(
+                        "Compare with Actual",
+                        style: TextStyle(fontSize: _width / (_width / 14)),
+                      ),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -572,6 +578,19 @@ class _TempAllLeadPredictionScreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(l1p * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead I",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -592,6 +611,20 @@ class _TempAllLeadPredictionScreenState
                     height: 1,
                     thickness: 13,
                     color: Colors.black,
+
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(l3p * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
                   ),
                   Text(
                     "Actual Lead II",
