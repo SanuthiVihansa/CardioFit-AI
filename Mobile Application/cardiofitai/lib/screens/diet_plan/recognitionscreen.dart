@@ -41,7 +41,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
 
   void optionsdialog(BuildContext context){
-     showDialog(context: context, builder: (context){
+    showDialog(context: context, builder: (context){
       return SimpleDialog(
         children: [
           SimpleDialogOption(
@@ -85,81 +85,16 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     setState(() {
       scanning=false;
       scannedText = result["ParsedResults"][0]["ParsedText"];
-      List<String> extractText = scannedText.split(" ");
-      // wordIndexes = findWordIndexes(scannedText);
       wordPairs = findWordPairs(scannedText);
-      // RegExp regExp = RegExp(r'Platelet\s+Count', caseSensitive: false);
-      // Iterable<String> requiredDetails = extractText.where((extractedText) => extractedText.contains("WBC")||extractedText.contains("Neutrophils")||extractedText.contains("Lymphocytes")||extractedText.contains("Monocytes")||extractedText.contains("Eosinophils")||extractedText.contains("Basophills")||extractedText.contains("RBC")|| extractedText.contains("Haemoglobin")|| extractedText.contains("Packed Cell Volume")|| extractedText.contains("MCV")|| extractedText.contains("MCH")|| extractedText.contains("MCHC")|| extractedText.contains("RDW")&& regExp.hasMatch(extractedText));
-      // // scannedText = requiredDetails.join(" ");
-      // print(requiredDetails);
+
     });
 
   }
 
-  // List<WordIndex> findWordIndexes(String text) {
-  //   List<WordIndex> indexes = [];
-  //   List<String> extractText = text.split(" ");
-  //   Iterable<String> requiredDetails = extractText;
-  //   // RegExp regExp = RegExp(r'Platelet\s+Count', caseSensitive: false);
-  //   // Iterable<String> requiredDetails = extractText.where((extractedText) =>
-  //   // extractedText.contains("WBC") ||
-  //   //     extractedText.contains("Neutrophils") ||
-  //   //     extractedText.contains("Lymphocytes") ||
-  //   //     extractedText.contains("Monocytes") ||
-  //   //     extractedText.contains("Eosinophils") ||
-  //   //     extractedText.contains("Basophills") ||
-  //   //     extractedText.contains("RBC") ||
-  //   //     extractedText.contains("Haemoglobin") ||
-  //   //     extractedText.contains("Packed Cell Volume") ||
-  //   //     extractedText.contains("MCV") ||
-  //   //     extractedText.contains("MCH") ||
-  //   //     extractedText.contains("MCHC") ||
-  //   //     extractedText.contains("RDW") && regExp.hasMatch(extractedText));
-  //
-  //   int currentIndex = 0;
-  //   for (String word in requiredDetails) {
-  //     int startIndex = text.indexOf(word, currentIndex);
-  //     int endIndex = startIndex + word.length - 1;
-  //     indexes.add(WordIndex(word, startIndex, endIndex));
-  //     currentIndex = endIndex + 1;
-  //   }
-  //
-  //   return indexes;
-  // }
-
-  // List<WordIndex> findWordIndexes(String text) {
-  //   List<WordIndex> indexes = [];
-  //   RegExp regExp = RegExp(r'Platelet\s+Count', caseSensitive: false);
-  //   Iterable<Match> matches = regExp.allMatches(text);
-  //
-  //   for (Match match in matches) {
-  //     int startIndex = match.start;
-  //     int endIndex = match.end - 1;
-  //     indexes.add(WordIndex(text.substring(startIndex, endIndex + 1), startIndex, endIndex));
-  //   }
-  //
-  //   return indexes;
-  // }
-
-  // List<WordIndex> findWordIndexes(String text) {
-  //   List<WordIndex> indexes = [];
-  //   RegExp regExp = RegExp(r'(WBC|Neutrophils|Lymphocytes|Monocytes|Eosinophils|Basophills|RBC|Haemoglobin|Packed Cell Volume|MCV|MCH|MCHC|RDW|Neutrophils\s+Absolute\s+Count|Lymphocytes\s+Absolute\s+Count|Monocytes\s+Absolute\s+Count|Esoniophils\s+Absolute\s+Count|Platelet\s+Count)\s+(\w+)', caseSensitive: false);
-  //   Iterable<Match> matches = regExp.allMatches(text);
-  //
-  //   for (Match match in matches) {
-  //     int startIndex = match.start;
-  //     int endIndex = match.end - 1;
-  //     String phrase = text.substring(startIndex, endIndex + 1);
-  //     String nextWord = match.group(2)!; // Capture the next word after the phrase
-  //     indexes.add(WordIndex(phrase, startIndex, endIndex, nextWord, match.end));
-  //   }
-  //
-  //   return indexes;
-  // }
   List<WordPair> findWordPairs(String text) {
     List<WordPair> pairs = [];
     RegExp regExp = RegExp(
-        r'(WBC|Neutrophils|Lymphocytes|Monocytes|Eosinophils|Basophills|RBC|Haemoglobin|Packed Cell Volume|MCV|MCH|MCHC|RDW|Neutrophils\s+Absolute\s+Count|Lymphocytes\s+Absolute\s+Count|Monocytes\s+Absolute\s+Count|Esoniophils\s+Absolute\s+Count|Platelet\s+Count)\s+(\w+)',
+        r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed Cell Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
         caseSensitive: false);
     Iterable<Match> matches = regExp.allMatches(text);
 
@@ -204,7 +139,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               scanning ? Text("Scanning....",style:TextStyle( fontSize: 25,
                   color: Colors.blueGrey,
                   fontWeight: FontWeight.w700)
-               ):
+              ):
               DataTable(
                 columns: [
                   DataColumn(label: Text('Word')),
@@ -228,35 +163,3 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     );
   }
 }
-                    // Text(
-                    //   "Phrase: ${index.phrase}, Start Index: ${index.startIndex}, End Index: ${index.endIndex}",
-                    //   style: TextStyle(
-                    //       fontSize: 25,
-                    //       color: Colors.blueGrey,
-                    //       fontWeight: FontWeight.w600),
-                    // ),
-                    // Text(
-                    //   "Next Word: ${index.nextWord}, Next Word Index: ${index.nextWordIndex}",
-                    //   style: TextStyle(
-                    //       fontSize: 20,
-                    //       color: Colors.blueGrey,
-                    //       fontWeight: FontWeight.w500),
-                    // ),
-                    // SizedBox(height: 10),
-
-              //   ))
-              //       .toList(),
-              // ),
-
-              //Text(scannedText,
-              // style:TextStyle( fontSize: 25,
-              //     color: Colors.blueGrey,
-              //     fontWeight: FontWeight.w600),textAlign: TextAlign.start,
-              // ),
-//               );
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//  }
