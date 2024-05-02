@@ -91,12 +91,14 @@ flutter:
     - assets/palm_analysis/tablet.png
     - assets/palm_analysis/usb.png
     - assets/palm_analysis/recording.gif
+    - assets/palm_analysis/praying.png
     - assets/icon.png
     - assets/coverimage.jpg
     - assets/facial_analysis/face-scan_8100114.png
     - assets/facial_analysis/face-scan_2818147.png
     - assets/facial_analysis/heart-rate_863616.png
     - assets/facial_analysis/electrocardiogram.png
+    - assets/facial_analysis/file.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
