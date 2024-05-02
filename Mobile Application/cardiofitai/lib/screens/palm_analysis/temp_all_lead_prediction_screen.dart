@@ -34,18 +34,63 @@ class _TempAllLeadPredictionScreenState
   final String _predictionApiUrl =
       'http://poornasenadheera100.pythonanywhere.com/temppredict';
 
-  List<double> _predl1Data = [];
-  List<double> _actl2Data = [];
-  List<double> _predl3Data = [];
-  List<double> _predavrData = [];
-  List<double> _predavlData = [];
-  List<double> _predavfData = [];
-  List<double> _predv1Data = [];
-  List<double> _predv2Data = [];
-  List<double> _predv3Data = [];
-  List<double> _predv4Data = [];
-  List<double> _predv5Data = [];
-  List<double> _predv6Data = [];
+  List<double> actl1Data = [];
+  List<double> predl1Data = [];
+  List<double> actl2Data = [];
+  List<double> actl3Data = [];
+  List<double> predl3Data = [];
+  List<double> actavrData = [];
+  List<double> predavrData = [];
+  List<double> actavlData = [];
+  List<double> predavlData = [];
+  List<double> actavfData = [];
+  List<double> predavfData = [];
+  List<double> actv1Data = [];
+  List<double> predv1Data = [];
+  List<double> actv2Data = [];
+  List<double> predv2Data = [];
+  List<double> actv3Data = [];
+  List<double> predv3Data = [];
+  List<double> actv4Data = [];
+  List<double> predv4Data = [];
+  List<double> actv5Data = [];
+  List<double> predv5Data = [];
+  List<double> actv6Data = [];
+  List<double> predv6Data = [];
+
+  double l1mse = 0;
+  double l1p = 0;
+  double l1r2 = 0;
+  double l3mse = 0;
+  double l3p = 0;
+  double l3r2 = 0;
+  double avrmse = 0;
+  double avrp = 0;
+  double avrr2 = 0;
+  double avlmse = 0;
+  double avlp = 0;
+  double avlr2 = 0;
+  double avfmse = 0;
+  double avfp = 0;
+  double avfr2 = 0;
+  double v1mse = 0;
+  double v1p = 0;
+  double v1r2 = 0;
+  double v2mse = 0;
+  double v2p = 0;
+  double v2r2 = 0;
+  double v3mse = 0;
+  double v3p = 0;
+  double v3r2 = 0;
+  double v4mse = 0;
+  double v4p = 0;
+  double v4r2 = 0;
+  double v5mse = 0;
+  double v5p = 0;
+  double v5r2 = 0;
+  double v6mse = 0;
+  double v6p = 0;
+  double v6r2 = 0;
 
   int _resCode = 0;
 
@@ -139,7 +184,7 @@ class _TempAllLeadPredictionScreenState
   Future<void> _getPredictions() async {
     try {
       Map<String, dynamic> data = {
-        'l1' : widget.l1Data,
+        'l1': widget.l1Data,
         'l2': widget.l2Data,
         'v1': widget.v1Data,
         'v2': widget.v2Data,
@@ -161,30 +206,96 @@ class _TempAllLeadPredictionScreenState
 
       if (_resCode == 200) {
         var decodedData = jsonDecode(response.body);
-        _predl1Data = List<double>.from(
+        actl1Data = List<double>.from(
+            decodedData["actl1"].map((element) => element.toDouble()));
+        predl1Data = List<double>.from(
             decodedData["predl1"].map((element) => element.toDouble()));
-        _actl2Data = List<double>.from(
+        l1mse = decodedData["l1mse"];
+        l1p = decodedData["l1p"];
+        l1r2 = decodedData["l1r2"];
+
+        actl2Data = List<double>.from(
             decodedData["actl2"].map((element) => element.toDouble()));
-        _predl3Data = List<double>.from(
+
+        actl3Data = List<double>.from(
+            decodedData["actl3"].map((element) => element.toDouble()));
+        predl3Data = List<double>.from(
             decodedData["predl3"].map((element) => element.toDouble()));
-        _predavrData = List<double>.from(
+        l3mse = decodedData["l3mse"];
+        l3p = decodedData["l3p"];
+        l3r2 = decodedData["l3r2"];
+
+        actavrData = List<double>.from(
+            decodedData["actavr"].map((element) => element.toDouble()));
+        predavrData = List<double>.from(
             decodedData["predavr"].map((element) => element.toDouble()));
-        _predavlData = List<double>.from(
+        avrmse = decodedData["avrmse"];
+        avrp = decodedData["avrp"];
+        avrr2 = decodedData["avrr2"];
+
+        actavlData = List<double>.from(
+            decodedData["actavl"].map((element) => element.toDouble()));
+        predavlData = List<double>.from(
             decodedData["predavl"].map((element) => element.toDouble()));
-        _predavfData = List<double>.from(
+        avlmse = decodedData["avlmse"];
+        avlp = decodedData["avlp"];
+        avlr2 = decodedData["avlr2"];
+
+        actavfData = List<double>.from(
+            decodedData["actavf"].map((element) => element.toDouble()));
+        predavfData = List<double>.from(
             decodedData["predavf"].map((element) => element.toDouble()));
-        _predv1Data = List<double>.from(
+        avfmse = decodedData["avfmse"];
+        avfp = decodedData["avfp"];
+        avfr2 = decodedData["avfr2"];
+
+        actv1Data = List<double>.from(
+            decodedData["actv1"].map((element) => element.toDouble()));
+        predv1Data = List<double>.from(
             decodedData["predv1"].map((element) => element.toDouble()));
-        _predv2Data = List<double>.from(
+        v1mse = decodedData["v1mse"];
+        v1p = decodedData["v1p"];
+        v1r2 = decodedData["v1r2"];
+
+        actv2Data = List<double>.from(
+            decodedData["actv2"].map((element) => element.toDouble()));
+        predv2Data = List<double>.from(
             decodedData["predv2"].map((element) => element.toDouble()));
-        _predv3Data = List<double>.from(
+        v2mse = decodedData["v2mse"];
+        v2p = decodedData["v2p"];
+        v2r2 = decodedData["v2r2"];
+
+        actv3Data = List<double>.from(
+            decodedData["actv3"].map((element) => element.toDouble()));
+        predv3Data = List<double>.from(
             decodedData["predv3"].map((element) => element.toDouble()));
-        _predv4Data = List<double>.from(
+        v3mse = decodedData["v3mse"];
+        v3p = decodedData["v3p"];
+        v3r2 = decodedData["v3r2"];
+
+        actv4Data = List<double>.from(
+            decodedData["actv4"].map((element) => element.toDouble()));
+        predv4Data = List<double>.from(
             decodedData["predv4"].map((element) => element.toDouble()));
-        _predv5Data = List<double>.from(
+        v4mse = decodedData["v4mse"];
+        v4p = decodedData["v4p"];
+        v4r2 = decodedData["v4r2"];
+
+        actv5Data = List<double>.from(
+            decodedData["actv5"].map((element) => element.toDouble()));
+        predv5Data = List<double>.from(
             decodedData["predv5"].map((element) => element.toDouble()));
-        _predv6Data = List<double>.from(
+        v5mse = decodedData["v5mse"];
+        v5p = decodedData["v5p"];
+        v5r2 = decodedData["v5r2"];
+
+        actv6Data = List<double>.from(
+            decodedData["actv6"].map((element) => element.toDouble()));
+        predv6Data = List<double>.from(
             decodedData["predv6"].map((element) => element.toDouble()));
+        v6mse = decodedData["v6mse"];
+        v6p = decodedData["v6p"];
+        v6r2 = decodedData["v6r2"];
       } else {
         // print('Failed to send data. Status code: ${_resCode}');
       }
@@ -286,8 +397,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predl1Data, _calcMin(_predl1Data),
-                                    _calcMax(_predl1Data))),
+                                child: _ecgPlot(
+                                    predl1Data,
+                                    _calcMin(predl1Data),
+                                    _calcMax(predl1Data))),
                             Text(
                               "Lead II",
                               style: TextStyle(
@@ -295,8 +408,8 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_actl2Data, _calcMin(_actl2Data),
-                                    _calcMax(_actl2Data))),
+                                child: _ecgPlot(actl2Data, _calcMin(actl2Data),
+                                    _calcMax(actl2Data))),
                             Text(
                               "Lead III",
                               style: TextStyle(
@@ -304,8 +417,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predl3Data, _calcMin(_predl3Data),
-                                    _calcMax(_predl3Data))),
+                                child: _ecgPlot(
+                                    predl3Data,
+                                    _calcMin(predl3Data),
+                                    _calcMax(predl3Data))),
                             Text(
                               "Lead aVR",
                               style: TextStyle(
@@ -313,8 +428,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predavrData, _calcMin(_predavrData),
-                                    _calcMax(_predavrData))),
+                                child: _ecgPlot(
+                                    predavrData,
+                                    _calcMin(predavrData),
+                                    _calcMax(predavrData))),
                             Text(
                               "Lead aVL",
                               style: TextStyle(
@@ -322,8 +439,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predavlData, _calcMin(_predavlData),
-                                    _calcMax(_predavlData))),
+                                child: _ecgPlot(
+                                    predavlData,
+                                    _calcMin(predavlData),
+                                    _calcMax(predavlData))),
                             Text(
                               "Lead aVF",
                               style: TextStyle(
@@ -331,8 +450,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predavfData, _calcMin(_predavfData),
-                                    _calcMax(_predavfData))),
+                                child: _ecgPlot(
+                                    predavfData,
+                                    _calcMin(predavfData),
+                                    _calcMax(predavfData))),
                             Text(
                               "Lead V1",
                               style: TextStyle(
@@ -340,8 +461,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predv1Data, _calcMin(_predv1Data),
-                                    _calcMax(_predv1Data))),
+                                child: _ecgPlot(
+                                    predv1Data,
+                                    _calcMin(predv1Data),
+                                    _calcMax(predv1Data))),
                             Text(
                               "Lead V2",
                               style: TextStyle(
@@ -349,8 +472,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predv2Data, _calcMin(_predv2Data),
-                                    _calcMax(_predv2Data))),
+                                child: _ecgPlot(
+                                    predv2Data,
+                                    _calcMin(predv2Data),
+                                    _calcMax(predv2Data))),
                             Text(
                               "Lead V3",
                               style: TextStyle(
@@ -358,8 +483,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predv3Data, _calcMin(_predv3Data),
-                                    _calcMax(_predv3Data))),
+                                child: _ecgPlot(
+                                    predv3Data,
+                                    _calcMin(predv3Data),
+                                    _calcMax(predv3Data))),
                             Text(
                               "Lead V4",
                               style: TextStyle(
@@ -367,8 +494,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predv4Data, _calcMin(_predv4Data),
-                                    _calcMax(_predv4Data))),
+                                child: _ecgPlot(
+                                    predv4Data,
+                                    _calcMin(predv4Data),
+                                    _calcMax(predv4Data))),
                             Text(
                               "Lead V5",
                               style: TextStyle(
@@ -376,8 +505,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predv5Data, _calcMin(_predv5Data),
-                                    _calcMax(_predv5Data))),
+                                child: _ecgPlot(
+                                    predv5Data,
+                                    _calcMin(predv5Data),
+                                    _calcMax(predv5Data))),
                             Text(
                               "Lead V6",
                               style: TextStyle(
@@ -385,8 +516,10 @@ class _TempAllLeadPredictionScreenState
                             ),
                             SizedBox(
                                 height: _height / (_devHeight / 200),
-                                child: _ecgPlot(_predv6Data, _calcMin(_predv6Data),
-                                    _calcMax(_predv6Data))),
+                                child: _ecgPlot(
+                                    predv6Data,
+                                    _calcMin(predv6Data),
+                                    _calcMax(predv6Data))),
                           ],
                         ),
                       ),
