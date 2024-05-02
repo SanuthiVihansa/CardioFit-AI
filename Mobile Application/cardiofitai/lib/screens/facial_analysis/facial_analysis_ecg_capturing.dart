@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:cardiofitai/screens/facial_analysis/temp_all_lead_prediction_screen.dart';
+import 'package:cardiofitai/screens/facial_analysis/temp_file_selection_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -68,11 +71,30 @@ class _CameraPageState extends State<CameraPage> {
   //
   String message = "Please make sure your face\n is visible in the camera";
 
+  // ECG plot variables and methods
   late List<double> _tenSecData = [];
   double _maxValue = 0;
   double _minValue = 0;
   final String _upServerUrl =
       'http://poornasenadheera100.pythonanywhere.com/upforunet';
+
+  late List<double> _l1Data = [];
+  late List<double> _l2Data = [];
+  late List<double> _v1Data = [];
+  late List<double> _v2Data = [];
+  late List<double> _v3Data = [];
+  late List<double> _v4Data = [];
+  late List<double> _v5Data = [];
+  late List<double> _v6Data = [];
+
+  late List<dynamic> _l1StringData = [];
+  late List<dynamic> _l2StringData = [];
+  late List<dynamic> _v1StringData = [];
+  late List<dynamic> _v2StringData = [];
+  late List<dynamic> _v3StringData = [];
+  late List<dynamic> _v4StringData = [];
+  late List<dynamic> _v5StringData = [];
+  late List<dynamic> _v6StringData = [];
 
   // METHODS
   @override
@@ -118,7 +140,10 @@ class _CameraPageState extends State<CameraPage> {
           return AlertDialog(
               title: const Text("Instructions"),
               content: const Text(
-                  "1. Make sure to be in a bright environment\n2. Make sure your face is clearly visible in the camera\n3. Try to stay as still as possible while recording\n4. Recording will stop automatically after 10 seconds"),
+                  "1. Make sure to be in a bright environment\n"
+                  "2. Make sure your face is clearly visible in the camera\n"
+                  "3. Try to stay as still as possible while recording\n"
+                  "4. Recording will stop automatically after 10 seconds"),
               actions: [
                 TextButton(
                   child: const Text("OK"),
@@ -259,25 +284,64 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _onTapViewECGBtn(BuildContext context) {
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (BuildContext context) =>
+    //             AllLeadPredictionScreen(_tenSecData)));
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) =>
-                AllLeadPredictionScreen(_tenSecData)));
+            builder: (BuildContext context) => TempAllLeadPredictionScreen(
+                _l1Data,
+                _l2Data,
+                _v1Data,
+                _v2Data,
+                _v3Data,
+                _v4Data,
+                _v5Data,
+                _v6Data)));
+
+    // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TempFileSelectionScreen()));
   }
 
   void _pickFile() async {
+    // final file = File(
+    //     '/data/user/0/com.spsh.cardiofitai/cache/file_picker/1714153553401/411_2024_03_11_12_54_2.txt');
     final file = File(
-        '/data/user/0/com.spsh.cardiofitai/cache/file_picker/1714153553401/411_2024_03_11_12_54_2.txt');
+        '/data/user/0/com.spsh.cardiofitai/cache/file_picker/1714665116141/record1.txt');
+
     String contents = await file.readAsString();
-    contents = contents.substring(1);
 
-    List<double> dataList = contents.split(',').map((String value) {
-      return double.tryParse(value) ?? 0.0;
-    }).toList();
+    Map<String, dynamic> jsonData = jsonDecode(contents);
 
-    _tenSecData = dataList.sublist(0, 2560);
-    _calcMinMax(_tenSecData);
+    _l1StringData = jsonData["l1"];
+    _l2StringData = jsonData["l2"];
+    _v1StringData = jsonData["v1"];
+    _v2StringData = jsonData["v2"];
+    _v3StringData = jsonData["v3"];
+    _v4StringData = jsonData["v4"];
+    _v5StringData = jsonData["v5"];
+    _v6StringData = jsonData["v6"];
+
+    _l1Data =
+        _l1StringData.map((item) => double.parse(item.toString())).toList();
+    _l2Data =
+        _l2StringData.map((item) => double.parse(item.toString())).toList();
+    _v1Data =
+        _v1StringData.map((item) => double.parse(item.toString())).toList();
+    _v2Data =
+        _v2StringData.map((item) => double.parse(item.toString())).toList();
+    _v3Data =
+        _v3StringData.map((item) => double.parse(item.toString())).toList();
+    _v4Data =
+        _v4StringData.map((item) => double.parse(item.toString())).toList();
+    _v5Data =
+        _v5StringData.map((item) => double.parse(item.toString())).toList();
+    _v6Data =
+        _v6StringData.map((item) => double.parse(item.toString())).toList();
+
+    _calcMinMax(_l2Data);
     setState(() {});
 
     await DefaultCacheManager().emptyCache();
@@ -292,10 +356,10 @@ class _CameraPageState extends State<CameraPage> {
   void _calcMinMax(List<double> data) {
     _minValue =
         data.reduce((value, element) => value < element ? value : element) -
-            0.5;
+            0.1;
     _maxValue =
         data.reduce((value, element) => value > element ? value : element) +
-            0.5;
+            0.1;
   }
 
   @override

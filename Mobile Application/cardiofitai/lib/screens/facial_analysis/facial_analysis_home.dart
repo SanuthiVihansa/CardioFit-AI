@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/facial_analysis/temp_file_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'facial_analysis_ecg_capturing.dart';
@@ -13,12 +14,14 @@ class FacialAnalysisHome extends StatelessWidget {
 
   //sizes and paddings
   final double iconSize = 100;
+  final double fileIconSize = 80;
   final double iconPadding = 70;
   final double iconTextFontSize = 30;
   final double buttonLength = 350;
   final double buttonRoundness = 150;
 
   late double responsiveIconSize = _height / (_hDevHeight / iconSize);
+  late double responsiveFileIconSize = _height / (_hDevHeight / fileIconSize);
   late double responsiveIconPadding = _height / (_hDevHeight / iconPadding);
   late double responsiveIconTextFontSize =
       _width / (_hDevWidth / iconTextFontSize);
@@ -82,13 +85,19 @@ class FacialAnalysisHome extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                       style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(responsiveButtonLength, responsiveButtonRoundness))),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => const TempFileSelectionScreen(),
+                          ),
+                        );
+                      },
                       icon: Image.asset(
                           'assets/facial_analysis/file.png',
-                          width: responsiveIconSize,
-                          height: responsiveIconSize,
+                          width: responsiveFileIconSize,
+                          height: responsiveFileIconSize,
                           fit: BoxFit.contain),
-                      label: Text('View past\nreadings',
+                      label: Text('Load sample\nECG readings',
                           style:
                           TextStyle(fontSize: responsiveIconTextFontSize, color: Colors.purple))),
                 ],
