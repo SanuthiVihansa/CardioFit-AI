@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -93,6 +94,8 @@ class _TempAllLeadPredictionScreenState
   double v6r2 = 0;
 
   int _resCode = 0;
+
+  bool _isComparisonOn = false;
 
   @override
   void initState() {
@@ -332,6 +335,441 @@ class _TempAllLeadPredictionScreenState
     Navigator.pop(context);
   }
 
+  Widget _plotsWithoutComparison() {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+              top: _height / (_devHeight / 10),
+              left: _width / (_devWidth / 20),
+              right: _width / (_devWidth / 20)),
+          child: Row(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "ECG Results",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: _width / (_devWidth / 20)),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Checkbox(
+                        value: _isComparisonOn,
+                        onChanged: (value) {
+                          setState(() {
+                            _isComparisonOn = value!;
+                          });
+                        }),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(right: _width / (_devWidth / 15)),
+                      child: Text("Compare with Actual"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _onClickHomeBtn();
+                      },
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all<Size>(
+                          Size(
+                              _width / (_devWidth / 160.0),
+                              _height /
+                                  (_devHeight / 40)), // Button width and height
+                        ),
+                      ),
+                      child: Text(
+                        "Home",
+                        style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: SizedBox(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Lead I",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predl1Data, _calcMin(predl1Data),
+                          _calcMax(predl1Data))),
+                  Text(
+                    "Lead II",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(
+                          actl2Data, _calcMin(actl2Data), _calcMax(actl2Data))),
+                  Text(
+                    "Lead III",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predl3Data, _calcMin(predl3Data),
+                          _calcMax(predl3Data))),
+                  Text(
+                    "Lead aVR",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predavrData, _calcMin(predavrData),
+                          _calcMax(predavrData))),
+                  Text(
+                    "Lead aVL",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predavlData, _calcMin(predavlData),
+                          _calcMax(predavlData))),
+                  Text(
+                    "Lead aVF",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predavfData, _calcMin(predavfData),
+                          _calcMax(predavfData))),
+                  Text(
+                    "Lead V1",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv1Data, _calcMin(predv1Data),
+                          _calcMax(predv1Data))),
+                  Text(
+                    "Lead V2",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv2Data, _calcMin(predv2Data),
+                          _calcMax(predv2Data))),
+                  Text(
+                    "Lead V3",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv3Data, _calcMin(predv3Data),
+                          _calcMax(predv3Data))),
+                  Text(
+                    "Lead V4",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv4Data, _calcMin(predv4Data),
+                          _calcMax(predv4Data))),
+                  Text(
+                    "Lead V5",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv5Data, _calcMin(predv5Data),
+                          _calcMax(predv5Data))),
+                  Text(
+                    "Lead V6",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv6Data, _calcMin(predv6Data),
+                          _calcMax(predv6Data))),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _plotsWithComparison() {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+              top: _height / (_devHeight / 10),
+              left: _width / (_devWidth / 20),
+              right: _width / (_devWidth / 20)),
+          child: Row(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "ECG Results",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: _width / (_devWidth / 20)),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Checkbox(
+                        value: _isComparisonOn,
+                        onChanged: (value) {
+                          setState(() {
+                            _isComparisonOn = value!;
+                          });
+                        }),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(right: _width / (_devWidth / 15)),
+                      child: Text("Compare with Actual"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _onClickHomeBtn();
+                      },
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all<Size>(
+                          Size(
+                              _width / (_devWidth / 160.0),
+                              _height /
+                                  (_devHeight / 40)), // Button width and height
+                        ),
+                      ),
+                      child: Text(
+                        "Home",
+                        style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: SizedBox(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Actual Lead I",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(
+                          actl1Data, _calcMin(actl1Data), _calcMax(actl1Data))),
+                  Text(
+                    "Predicted Lead I",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predl1Data, _calcMin(predl1Data),
+                          _calcMax(predl1Data))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Text(
+                    "Actual Lead II",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(
+                          actl2Data, _calcMin(actl2Data), _calcMax(actl2Data))),
+                  Text(
+                    "Actual Lead III",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(
+                          actl3Data, _calcMin(actl3Data), _calcMax(actl3Data))),
+                  Text(
+                    "Predicted Lead III",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predl3Data, _calcMin(predl3Data),
+                          _calcMax(predl3Data))),
+                  Text(
+                    "Actual Lead aVR",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(actavrData, _calcMin(actavrData),
+                          _calcMax(actavrData))),
+                  Text(
+                    "Predicted Lead aVR",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predavrData, _calcMin(predavrData),
+                          _calcMax(predavrData))),
+                  Text(
+                    "Actual Lead aVL",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(actavlData, _calcMin(actavlData),
+                          _calcMax(actavlData))),
+                  Text(
+                    "Predicted Lead aVL",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predavlData, _calcMin(predavlData),
+                          _calcMax(predavlData))),
+                  Text(
+                    "Actual Lead aVF",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(actavfData, _calcMin(actavfData),
+                          _calcMax(actavfData))),
+                  Text(
+                    "Predicted Lead aVF",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predavfData, _calcMin(predavfData),
+                          _calcMax(predavfData))),
+                  Text(
+                    "Actual Lead V1",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(
+                          actv1Data, _calcMin(actv1Data), _calcMax(actv1Data))),
+                  Text(
+                    "Predicted Lead V1",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv1Data, _calcMin(predv1Data),
+                          _calcMax(predv1Data))),
+                  Text(
+                    "Actual Lead V2",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(
+                          actv2Data, _calcMin(actv2Data), _calcMax(actv2Data))),
+                  Text(
+                    "Predicted Lead V2",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv2Data, _calcMin(predv2Data),
+                          _calcMax(predv2Data))),
+                  Text(
+                    "Actual Lead V3",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(
+                          actv3Data, _calcMin(actv3Data), _calcMax(actv3Data))),
+                  Text(
+                    "Predicted Lead V3",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv3Data, _calcMin(predv3Data),
+                          _calcMax(predv3Data))),
+                  Text(
+                    "Actual Lead V4",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(
+                          actv4Data, _calcMin(actv4Data), _calcMax(actv4Data))),
+                  Text(
+                    "Predicted Lead V4",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv4Data, _calcMin(predv4Data),
+                          _calcMax(predv4Data))),
+                  Text(
+                    "Actual Lead V5",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(
+                          actv5Data, _calcMin(actv5Data), _calcMax(actv5Data))),
+                  Text(
+                    "Predicted Lead V5",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv5Data, _calcMin(predv5Data),
+                          _calcMax(predv5Data))),
+                  Text(
+                    "Actual Lead V6",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(
+                          actv6Data, _calcMin(actv6Data), _calcMax(actv6Data))),
+                  Text(
+                    "Predicted Lead V6",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ),
+                  SizedBox(
+                      height: _height / (_devHeight / 200),
+                      child: _ecgPlot(predv6Data, _calcMin(predv6Data),
+                          _calcMax(predv6Data))),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _width = MediaQuery.of(context).size.width;
@@ -346,187 +784,9 @@ class _TempAllLeadPredictionScreenState
           backgroundColor: Colors.red,
         ),
         body: _resCode == 200
-            ? Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: _height / (_devHeight / 10),
-                        left: _width / (_devWidth / 20),
-                        right: _width / (_devWidth / 20)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "ECG Results",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: _width / (_devWidth / 20)),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            _onClickHomeBtn();
-                          },
-                          style: ButtonStyle(
-                            fixedSize: MaterialStateProperty.all<Size>(
-                              Size(
-                                  _width / (_devWidth / 160.0),
-                                  _height /
-                                      (_devHeight /
-                                          40)), // Button width and height
-                            ),
-                          ),
-                          child: Text(
-                            "Home",
-                            style:
-                                TextStyle(fontSize: _width / (_devWidth / 10)),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Lead I",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predl1Data,
-                                    _calcMin(predl1Data),
-                                    _calcMax(predl1Data))),
-                            Text(
-                              "Lead II",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(actl2Data, _calcMin(actl2Data),
-                                    _calcMax(actl2Data))),
-                            Text(
-                              "Lead III",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predl3Data,
-                                    _calcMin(predl3Data),
-                                    _calcMax(predl3Data))),
-                            Text(
-                              "Lead aVR",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predavrData,
-                                    _calcMin(predavrData),
-                                    _calcMax(predavrData))),
-                            Text(
-                              "Lead aVL",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predavlData,
-                                    _calcMin(predavlData),
-                                    _calcMax(predavlData))),
-                            Text(
-                              "Lead aVF",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predavfData,
-                                    _calcMin(predavfData),
-                                    _calcMax(predavfData))),
-                            Text(
-                              "Lead V1",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predv1Data,
-                                    _calcMin(predv1Data),
-                                    _calcMax(predv1Data))),
-                            Text(
-                              "Lead V2",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predv2Data,
-                                    _calcMin(predv2Data),
-                                    _calcMax(predv2Data))),
-                            Text(
-                              "Lead V3",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predv3Data,
-                                    _calcMin(predv3Data),
-                                    _calcMax(predv3Data))),
-                            Text(
-                              "Lead V4",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predv4Data,
-                                    _calcMin(predv4Data),
-                                    _calcMax(predv4Data))),
-                            Text(
-                              "Lead V5",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predv5Data,
-                                    _calcMin(predv5Data),
-                                    _calcMax(predv5Data))),
-                            Text(
-                              "Lead V6",
-                              style: TextStyle(
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                            SizedBox(
-                                height: _height / (_devHeight / 200),
-                                child: _ecgPlot(
-                                    predv6Data,
-                                    _calcMin(predv6Data),
-                                    _calcMax(predv6Data))),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
+            ? _isComparisonOn
+                ? _plotsWithComparison()
+                : _plotsWithoutComparison()
             : _resCode == 0
                 ? Center(
                     child: Column(
