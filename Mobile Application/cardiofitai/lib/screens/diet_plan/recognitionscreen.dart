@@ -16,7 +16,6 @@ class RecognitionScreen extends StatefulWidget {
 
 class WordIndex {
   final String phrase;
-  //final String word;
   final int startIndex;
   final int endIndex;
   final String nextWord;
@@ -62,7 +61,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   }
 
   pickimage(ImageSource source)async{
-    final image = await ImagePicker().getImage(source: source);
+    final image = await ImagePicker().pickImage(source: source);
     setState(() {
       scanning=true;
       pickedimage = File(image!.path);
@@ -118,18 +117,24 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           child: Column(
             children: [
               SizedBox(height: 55+ MediaQuery.of(context).viewInsets.top,),
-              Text("Text Recognition",style:TextStyle( fontSize: 30,
+              Text("Laboratory Report Diagnosis",style:TextStyle( fontSize: 30,
                   color: Colors.blueGrey,
                   fontWeight: FontWeight.w700)
               ),
               SizedBox(height: 30,),
               InkWell(
-                onTap:()=>optionsdialog(context)
-                ,
-                child: Image(
+                onTap:()=>optionsdialog(context),
+                child:pickedimage != null && pickedimage.path.isNotEmpty
+                    ? Image.file(
+                  pickedimage,
                   width: 256,
                   height: 256,
-                  image: AssetImage('assets/icon.png'),
+                  fit: BoxFit.fill,
+                )
+                    : Image.asset(
+                  'assets/icon.png',
+                  width: 256,
+                  height: 256,
                   fit: BoxFit.fill,
                 ),
               ),
