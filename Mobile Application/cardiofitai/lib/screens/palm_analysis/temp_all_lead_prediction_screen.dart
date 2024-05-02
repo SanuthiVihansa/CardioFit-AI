@@ -371,8 +371,8 @@ class _TempAllLeadPredictionScreenState
                       padding:
                           EdgeInsets.only(right: _width / (_devWidth / 15)),
                       child: Text(
-                        "Compare with Actual",
-                        style: TextStyle(fontSize: _width / (_width / 14)),
+                        "Compare with actual",
+                        style: TextStyle(fontSize: _width / (_devWidth / 14)),
                       ),
                     ),
                     ElevatedButton(
@@ -545,8 +545,8 @@ class _TempAllLeadPredictionScreenState
                       padding:
                           EdgeInsets.only(right: _width / (_devWidth / 15)),
                       child: Text(
-                        "Compare with Actual",
-                        style: TextStyle(fontSize: _width / (_width / 14)),
+                        "Compare with actual",
+                        style: TextStyle(fontSize: _width / (_devWidth / 14)),
                       ),
                     ),
                     ElevatedButton(
@@ -581,6 +581,7 @@ class _TempAllLeadPredictionScreenState
                   Padding(
                     padding: EdgeInsets.only(
                       left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
                     ),
                     child: Row(
                       children: [
@@ -607,23 +608,13 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(predl1Data, _calcMin(predl1Data),
                           _calcMax(predl1Data))),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-
-                  ),
                   Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(l3p * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
+                    padding:
+                        EdgeInsets.only(bottom: _height / (_devHeight / 8)),
+                    child: const Divider(
+                      height: 1,
+                      thickness: 13,
+                      color: Colors.black,
                     ),
                   ),
                   Text(
@@ -634,6 +625,25 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(
                           actl2Data, _calcMin(actl2Data), _calcMax(actl2Data))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(l3p * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead III",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -650,6 +660,25 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(predl3Data, _calcMin(predl3Data),
                           _calcMax(predl3Data))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(avrp * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead aVR",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -666,6 +695,25 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(predavrData, _calcMin(predavrData),
                           _calcMax(predavrData))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(avlp * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead aVL",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -682,6 +730,25 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(predavlData, _calcMin(predavlData),
                           _calcMax(predavlData))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(avfp * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead aVF",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -698,6 +765,25 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(predavfData, _calcMin(predavfData),
                           _calcMax(predavfData))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(v1p * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead V1",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -714,6 +800,25 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(predv1Data, _calcMin(predv1Data),
                           _calcMax(predv1Data))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(v2p * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead V2",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -730,6 +835,25 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(predv2Data, _calcMin(predv2Data),
                           _calcMax(predv2Data))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(v3p * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead V3",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -746,6 +870,25 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(predv3Data, _calcMin(predv3Data),
                           _calcMax(predv3Data))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(v4p * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead V4",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -762,6 +905,25 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(predv4Data, _calcMin(predv4Data),
                           _calcMax(predv4Data))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(v5p * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead V5",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -778,6 +940,25 @@ class _TempAllLeadPredictionScreenState
                       height: _height / (_devHeight / 200),
                       child: _ecgPlot(predv5Data, _calcMin(predv5Data),
                           _calcMax(predv5Data))),
+                  const Divider(
+                    height: 1,
+                    thickness: 13,
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _width / (_devWidth / 20),
+                      top: _height / (_devHeight / 8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Similarity : ${(v6p * 100).toStringAsFixed(2)} %",
+                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
                     "Actual Lead V6",
                     style: TextStyle(fontSize: _width / (_devWidth / 10)),
