@@ -48,6 +48,7 @@ class _CameraPageState extends State<CameraPage> {
   final double messageFontSize = 15;
   final double toastFontSize = 10;
   final double messageTopPadding = 200;
+  final double helpIconSize = 70;
 
   late double responsiveRecordBtnBottomPadding =
       widget._height / (_vDevHeight / recordBtnBottomPadding);
@@ -61,6 +62,8 @@ class _CameraPageState extends State<CameraPage> {
       widget._width / (_vDevWidth / recordingBtnLeftRightPadding);
   late double responsiveMessageTopPadding =
       widget._height / (_vDevHeight / messageTopPadding);
+  late double responsiveHelpIconSize =
+      widget._height / (_vDevHeight / helpIconSize);
 
   //
   String message = "Please make sure your face\n is visible in the camera";
@@ -88,22 +91,7 @@ class _CameraPageState extends State<CameraPage> {
 
     // showing dialog box with instructions
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-                title: const Text("Instructions"),
-                content: const Text(
-                    "1. Make sure to be in a bright environment\n2. Make sure your face is clearly visible in the camera\n3. Try to stay as still as possible while recording\n4. Recording will stop automatically after 10 seconds"),
-                actions: [
-                  TextButton(
-                    child: const Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ]);
-          });
+      showInfoDialog(context);
     });
 
     super.initState();
@@ -121,6 +109,27 @@ class _CameraPageState extends State<CameraPage> {
     _cameraController.dispose();
     super.dispose();
   }
+
+  // displayInformationDialog method
+  void showInfoDialog(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text("Instructions"),
+              content: const Text(
+                  "1. Make sure to be in a bright environment\n2. Make sure your face is clearly visible in the camera\n3. Try to stay as still as possible while recording\n4. Recording will stop automatically after 10 seconds"),
+              actions: [
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ]);
+        });
+  }
+
 
   // camera methods
   void _initCamera() async {
@@ -298,221 +307,126 @@ class _CameraPageState extends State<CameraPage> {
             DeviceOrientation.landscapeRight,
           ]);
         },
-        child: _isLoading ? Container(
-          color: Colors.white,
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
-        ) :  Scaffold(
-          appBar: AppBar(
-            foregroundColor: Colors.white,
-            title: const Text(
-              "Capturing ECG through Facial Analysis",
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                // Navigator.pop(context);
-                SystemChrome.setPreferredOrientations([
-                  DeviceOrientation.landscapeLeft,
-                  DeviceOrientation.landscapeRight,
-                ]);
-
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          backgroundColor: Colors.black,
-          body: Center(
-            child: Stack(alignment: Alignment.center, children: [
-              Positioned.fill(child: CameraPreview(_cameraController)),
-              Padding(
-                padding: EdgeInsets.only(
-                    right: _isVideoCaptured
-                        ? responsiveRecordingBtnLeftRightPadding
-                        : 0,
-                    bottom: responsiveRecordBtnBottomPadding),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    shape: const CircleBorder(),
-                    child: Icon(
-                      _isRecording ? Icons.stop : Icons.circle,
-                      color: Colors.red,
-                      size: _isRecording
-                          ? responsiveRecordingBtnIconSize
-                          : responsiveRecordingBtnIconSize + 10,
-                    ),
-                    onPressed: () {
-                      // String path = '/data/user/0/com.spsh.cardiofitai/cache/';
-                      // deleteAllFiles(path);
-                      _recordVideo();
-                    },
-                  ),
-                ),
-              ),
-              _isVideoCaptured
-                  ? Padding(
-                padding: EdgeInsets.only(
-                    left: responsiveRecordingBtnLeftRightPadding,
-                    bottom: responsiveRecordBtnBottomPadding),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: FloatingActionButton.extended(
-                    onPressed: () {
-                      _onTapViewECGBtn(context);
-                    },
-                    label: const Text('View ECG reading'),
-                    icon: const Icon(Icons.file_present_rounded),
-                  ),
+        child: _isLoading
+            ? Container(
+                color: Colors.white,
+                child: const Center(
+                  child: CircularProgressIndicator(),
                 ),
               )
-                  : Container(),
-              // Padding(
-              //   padding: EdgeInsets.only(top: responsiveMessageTopPadding),
-              //   child: Align(
-              //     alignment: AlignmentDirectional.topCenter,
-              //     child: Stack(
-              //       children: [
-              //         Text(
-              //           message,
-              //           style: TextStyle(
-              //             // color: Colors.black,
-              //             fontSize: responsiveMessageFontSize,
-              //             fontStyle: FontStyle.italic,
-              //             foreground: Paint()
-              //               ..style = PaintingStyle.stroke
-              //               ..strokeWidth = 6
-              //               ..color = Colors.white,
-              //           ),
-              //         ),
-              //         Text(
-              //           message,
-              //           style: TextStyle(
-              //             fontSize: responsiveMessageFontSize,
-              //             color: Colors.black,
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
-            ]),
-          ),
-        )
-    );
+            : Scaffold(
+                appBar: AppBar(
+                  foregroundColor: Colors.white,
+                  title: const Text(
+                    "Capturing ECG through Facial Analysis",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                  backgroundColor: Colors.red,
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      // Navigator.pop(context);
+                      SystemChrome.setPreferredOrientations([
+                        DeviceOrientation.landscapeLeft,
+                        DeviceOrientation.landscapeRight,
+                      ]);
 
-    // if (_isLoading) {
-    //   return Container(
-    //     color: Colors.white,
-    //     child: const Center(
-    //       child: CircularProgressIndicator(),
-    //     ),
-    //   );
-    // } else {
-    //   return Scaffold(
-    //     appBar: AppBar(
-    //       foregroundColor: Colors.white,
-    //       title: const Text(
-    //         "Capturing ECG through Facial Analysis",
-    //         style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-    //       ),
-    //       backgroundColor: Colors.red,
-    //       leading: IconButton(
-    //         icon: const Icon(Icons.arrow_back),
-    //           onPressed: () {
-    //             // Navigator.pop(context);
-    //             SystemChrome.setPreferredOrientations([
-    //               DeviceOrientation.landscapeLeft,
-    //               DeviceOrientation.landscapeRight,
-    //             ]);
-    //
-    //             Navigator.pop(context);
-    //           },
-    //       ),
-    //     ),
-    //     backgroundColor: Colors.black,
-    //     body: Center(
-    //       child: Stack(alignment: Alignment.center, children: [
-    //         Positioned.fill(child: CameraPreview(_cameraController)),
-    //         Padding(
-    //           padding: EdgeInsets.only(
-    //               right: _isVideoCaptured
-    //                   ? responsiveRecordingBtnLeftRightPadding
-    //                   : 0,
-    //               bottom: responsiveRecordBtnBottomPadding),
-    //           child: Align(
-    //             alignment: Alignment.bottomCenter,
-    //             child: FloatingActionButton(
-    //               backgroundColor: Colors.white,
-    //               shape: const CircleBorder(),
-    //               child: Icon(
-    //                 _isRecording ? Icons.stop : Icons.circle,
-    //                 color: Colors.red,
-    //                 size: _isRecording
-    //                     ? responsiveRecordingBtnIconSize
-    //                     : responsiveRecordingBtnIconSize + 10,
-    //               ),
-    //               onPressed: () {
-    //                 // String path = '/data/user/0/com.spsh.cardiofitai/cache/';
-    //                 // deleteAllFiles(path);
-    //                 _recordVideo();
-    //               },
-    //             ),
-    //           ),
-    //         ),
-    //         _isVideoCaptured
-    //             ? Padding(
-    //                 padding: EdgeInsets.only(
-    //                     left: responsiveRecordingBtnLeftRightPadding,
-    //                     bottom: responsiveRecordBtnBottomPadding),
-    //                 child: Align(
-    //                   alignment: Alignment.bottomCenter,
-    //                   child: FloatingActionButton.extended(
-    //                     onPressed: () {
-    //                       _onTapViewECGBtn(context);
-    //                     },
-    //                     label: const Text('View ECG reading'),
-    //                     icon: const Icon(Icons.file_present_rounded),
-    //                   ),
-    //                 ),
-    //               )
-    //             : Container(),
-    //         // Padding(
-    //         //   padding: EdgeInsets.only(top: responsiveMessageTopPadding),
-    //         //   child: Align(
-    //         //     alignment: AlignmentDirectional.topCenter,
-    //         //     child: Stack(
-    //         //       children: [
-    //         //         Text(
-    //         //           message,
-    //         //           style: TextStyle(
-    //         //             // color: Colors.black,
-    //         //             fontSize: responsiveMessageFontSize,
-    //         //             fontStyle: FontStyle.italic,
-    //         //             foreground: Paint()
-    //         //               ..style = PaintingStyle.stroke
-    //         //               ..strokeWidth = 6
-    //         //               ..color = Colors.white,
-    //         //           ),
-    //         //         ),
-    //         //         Text(
-    //         //           message,
-    //         //           style: TextStyle(
-    //         //             fontSize: responsiveMessageFontSize,
-    //         //             color: Colors.black,
-    //         //           ),
-    //         //         ),
-    //         //       ],
-    //         //     ),
-    //         //   ),
-    //         // ),
-    //       ]),
-    //     ),
-    //   );
-    // }
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                backgroundColor: Colors.black,
+                body: Center(
+                  child: Stack(alignment: Alignment.center, children: [
+                    Positioned.fill(child: CameraPreview(_cameraController)),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          right: _isVideoCaptured
+                              ? responsiveRecordingBtnLeftRightPadding
+                              : 0,
+                          bottom: responsiveRecordBtnBottomPadding),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          shape: const CircleBorder(),
+                          child: Icon(
+                            _isRecording ? Icons.stop : Icons.circle,
+                            color: Colors.red,
+                            size: _isRecording
+                                ? responsiveRecordingBtnIconSize
+                                : responsiveRecordingBtnIconSize + 10,
+                          ),
+                          onPressed: () {
+                            // String path = '/data/user/0/com.spsh.cardiofitai/cache/';
+                            // deleteAllFiles(path);
+                            _recordVideo();
+                          },
+                        ),
+                      ),
+                    ),
+                    _isVideoCaptured
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                                left: responsiveRecordingBtnLeftRightPadding,
+                                bottom: responsiveRecordBtnBottomPadding),
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: FloatingActionButton.extended(
+                                onPressed: () {
+                                  _onTapViewECGBtn(context);
+                                },
+                                label: const Text('View ECG reading'),
+                                icon: const Icon(Icons.file_present_rounded),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    Container(
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                          onPressed: () {
+                            showInfoDialog(context);
+                          },
+                          icon: Icon(Icons.help_outline_sharp,
+                              color: Colors.white,
+                              size: responsiveHelpIconSize),
+                        ),
+                      ),
+                    )
+                    // Padding(
+                    //   padding: EdgeInsets.only(top: responsiveMessageTopPadding),
+                    //   child: Align(
+                    //     alignment: AlignmentDirectional.topCenter,
+                    //     child: Stack(
+                    //       children: [
+                    //         Text(
+                    //           message,
+                    //           style: TextStyle(
+                    //             // color: Colors.black,
+                    //             fontSize: responsiveMessageFontSize,
+                    //             fontStyle: FontStyle.italic,
+                    //             foreground: Paint()
+                    //               ..style = PaintingStyle.stroke
+                    //               ..strokeWidth = 6
+                    //               ..color = Colors.white,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           message,
+                    //           style: TextStyle(
+                    //             fontSize: responsiveMessageFontSize,
+                    //             color: Colors.black,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                  ]),
+                ),
+              ));
   }
 }
