@@ -1,6 +1,7 @@
+import 'package:cardiofitai/screens/facial_analysis/temp_file_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'camera_page.dart';
+import 'facial_analysis_ecg_capturing.dart';
 import 'facial_analysis_reading.dart';
 
 class FacialAnalysisHome extends StatelessWidget {
@@ -12,14 +13,20 @@ class FacialAnalysisHome extends StatelessWidget {
   final double _width, _height, _hDevWidth, _hDevHeight;
 
   //sizes and paddings
-  final double iconSize = 300;
+  final double iconSize = 100;
+  final double fileIconSize = 80;
   final double iconPadding = 70;
   final double iconTextFontSize = 30;
+  final double buttonLength = 350;
+  final double buttonRoundness = 150;
 
   late double responsiveIconSize = _height / (_hDevHeight / iconSize);
+  late double responsiveFileIconSize = _height / (_hDevHeight / fileIconSize);
   late double responsiveIconPadding = _height / (_hDevHeight / iconPadding);
   late double responsiveIconTextFontSize =
       _width / (_hDevWidth / iconTextFontSize);
+  late double responsiveButtonLength = _width / (_hDevWidth / buttonLength);
+  late double responsiveButtonRoundness = _width / (_hDevWidth / buttonRoundness);
 
   void _onTapTakeECGBtn(BuildContext context) {
     Navigator.of(context).push(
@@ -41,7 +48,7 @@ class FacialAnalysisHome extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: Colors.white,
         title: const Text(
-          "Cardiac Analysis Through Facial Recognition",
+          "Capturing ECG through Facial Analysis",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.red,
@@ -55,17 +62,19 @@ class FacialAnalysisHome extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    iconSize: responsiveIconSize,
-                    icon: const Icon(Icons.face_sharp),
-                    onPressed: () {
-                      _onTapTakeECGBtn(context);
-                    },
-                  ),
-                  Text(
-                    'Take ECG',
-                    style: TextStyle(fontSize: responsiveIconTextFontSize),
-                  )
+                  ElevatedButton.icon(
+                    style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(responsiveButtonLength, responsiveButtonRoundness))),
+                      onPressed: () {
+                        _onTapTakeECGBtn(context);
+                      },
+                      icon: Image.asset(
+                          'assets/facial_analysis/electrocardiogram.png',
+                          width: responsiveIconSize,
+                          height: responsiveIconSize,
+                          fit: BoxFit.contain),
+                      label: Text('Take ECG',
+                          style:
+                              TextStyle(fontSize: responsiveIconTextFontSize, color: Colors.purple ))),
                 ],
               ),
             ),
@@ -74,15 +83,23 @@ class FacialAnalysisHome extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    iconSize: responsiveIconSize,
-                    icon: const Icon(Icons.file_copy_rounded),
-                    onPressed: () {},
-                  ),
-                  Text(
-                    'View past readings',
-                    style: TextStyle(fontSize: responsiveIconTextFontSize),
-                  )
+                  ElevatedButton.icon(
+                      style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(responsiveButtonLength, responsiveButtonRoundness))),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => const TempFileSelectionScreen(),
+                          ),
+                        );
+                      },
+                      icon: Image.asset(
+                          'assets/facial_analysis/file.png',
+                          width: responsiveFileIconSize,
+                          height: responsiveFileIconSize,
+                          fit: BoxFit.contain),
+                      label: Text('Load sample\nECG readings',
+                          style:
+                          TextStyle(fontSize: responsiveIconTextFontSize, color: Colors.purple))),
                 ],
               ),
             )
