@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'report_details_screen.dart';
+
 // class ReportHome extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
@@ -66,16 +66,22 @@ class ReportHome extends StatelessWidget {
         // Background GIF
         Positioned.fill(
           child: Image.asset(
-            'assets/defect_prediction/ECG Gif.gif', // Replace 'background.gif' with the path to your GIF file
+            'assets/defect_prediction/ECG Gif.gif',
+            // Replace 'background.gif' with the path to your GIF file
             fit: BoxFit.cover,
           ),
         ),
         Scaffold(
           appBar: AppBar(
-            title: Text('Your Report Status'),
+            foregroundColor: Colors.white,
+            title: Text(
+              'Your Report Status',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             backgroundColor: Colors.red,
           ),
-          backgroundColor: Colors.transparent, // Make the scaffold background transparent
+          backgroundColor: Colors.transparent,
+          // Make the scaffold background transparent
           body: Center(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -92,7 +98,8 @@ class ReportHome extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportDetailsScreen(), // Change to your desired screen
+                          builder: (context) =>
+                              ReportDetailsScreen(), // Change to your desired screen
                         ),
                       );
                     },
@@ -107,4 +114,3 @@ class ReportHome extends StatelessWidget {
     );
   }
 }
-

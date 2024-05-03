@@ -187,10 +187,8 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
   void initState() {
     super.initState();
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight
-    ]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
   }
 
   void _pickFile() async {
@@ -215,7 +213,8 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PredictionResultsScreen(predictedDisease: 'Normal'),
+        builder: (context) =>
+            PredictionResultsScreen(predictedDisease: 'Normal'),
       ),
     );
   }
@@ -224,7 +223,11 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("File Selector"),
+        foregroundColor: Colors.white,
+        title: Text(
+          "File Selector",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.red,
       ),
       body: Stack(
@@ -277,4 +280,3 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
     );
   }
 }
-

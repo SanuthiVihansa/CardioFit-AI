@@ -9,7 +9,11 @@ class PredictionResultsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Prediction Results"),
+        foregroundColor: Colors.white,
+        title: Text(
+          "Prediction Results",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.red,
       ),
       body: Center(
@@ -21,5 +25,5 @@ class PredictionResultsScreen extends StatelessWidget {
     );
   }
 
-  //Prediction results
+//Prediction results
 }

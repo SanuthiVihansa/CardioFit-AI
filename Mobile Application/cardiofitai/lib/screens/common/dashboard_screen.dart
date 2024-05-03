@@ -1,4 +1,5 @@
 import 'package:cardiofitai/screens/common/ecg_monitoring_home_screen.dart';
+import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,6 +49,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         context,
         MaterialPageRoute(
             builder: (BuildContext context) => DietHomePage(widget.user)));
+  }
+
+  void _onClickDiseasePredictionBtn() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) => ReportHome()));
   }
 
   void _onClickReportingAndAnalyticsBtn() {}
@@ -137,7 +143,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               )
             ],
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  _onClickDiseasePredictionBtn();
+                },
+                style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all<Size>(
+                    Size(_width / (_devWidth / 160.0),
+                        _height / (_devHeight / 40)), // Button width and height
+                  ),
+                ),
+                child: Text(
+                  "Disease Prediction",
+                  style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
