@@ -37,8 +37,33 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   String scannedText='';
   //List<WordIndex> wordIndexes = [];
   List<WordPair> wordPairs = [];
+  String? selectedReport = 'Select Report';
+  String diagnosis ="";
 
+  //Drop down control values
+  List<String> reports = [
+    'Select Report',
+    'Full Blood Count Report',
+    'Urine Full Report',
+    'Random blood Sugar',
+    'Fasting blood Sugar',
+    'Post prandial blood sugar ',
+    'Hba1c',
+    '75g ogtt',
+    'Thyroid function test',
+    'Liver function test (alt, ast, bilirubin)',
+    'Blood urea',
+    'Serum creatinine',
+    'Serum electrolytes',
+    'Lipid profile',
+    'Serum cholesterol',
+    'Esr',
+    'Urine hcg',
+    'HIV',
+    'Troponin i',
 
+  ];
+  //Pick Image from galley or Camera
   void optionsdialog(BuildContext context){
     showDialog(context: context, builder: (context){
       return SimpleDialog(
@@ -89,29 +114,106 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     });
 
   }
-
+  //Function to read values based on the report selected
   List<WordPair> findWordPairs(String text) {
     List<WordPair> pairs = [];
-    RegExp regExp = RegExp(
-        r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed Cell Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
-        caseSensitive: false);
+    RegExp regExp = RegExp(" ");
+    if (selectedReport=="Full Blood Count Report") {
+      regExp = RegExp(
+          r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
+          caseSensitive: false);
+    }else if(selectedReport=="Urine Full Report"){
+      regExp = RegExp(
+          r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epthelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(\w+)',
+          caseSensitive: false);
+    }
     Iterable<Match> matches = regExp.allMatches(text);
-
     for (Match match in matches) {
       String word = match.group(1)!;
       String nextWord = match.group(2)!; // Capture the next word after the phrase
       pairs.add(WordPair(word, nextWord));
-      print(wordPairs);
+      //print(wordPairs);
     }
-    print(pairs);
+    reportDiagnosis();
     return pairs;
+
   }
 
+  String reportDiagnosis(){
+    if (selectedReport == "Full Blood Count Report") {
+      if (wordPairs.any((pair) =>
+          pair.word == "WBC" &&
+              (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
+        diagnosis="You are facing an infection 🤧";
+      } else if (wordPairs.any((pair) =>
+          pair.word == "Neutrophils" &&
+              (int.tryParse(pair.nextWord) ?? 0) > 80)) {
+        diagnosis="You are facing an Bacterial infection 🤧";
+      } else if (wordPairs.any((pair) =>
+          pair.word == "Lymphocytes" &&
+              (int.tryParse(pair.nextWord) ?? 0) > 40)) {
+        diagnosis = "You are facing a Viral Fever 🤧";
+      } else if (wordPairs.any((pair) =>
+          pair.word == "Eosinophils" &&
+              (int.tryParse(pair.nextWord) ?? 0) > 6)) {
+        diagnosis= "You are facing an Allergic reaction 🤧";
+      } else if (wordPairs.any((pair) =>
+          pair.word == "Platelet Count" &&
+              (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
+        diagnosis= "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
+      }else{
+        diagnosis="No defect identified 😊🙌";
+      }
+    }else if(selectedReport == "Urine Full Report"){
+      if (wordPairs.any((pair) =>
+      pair.word == "Pus Cells" &&
+          (int.tryParse(pair.nextWord) ?? 0) < 10)) {
+        diagnosis="You are facing an Urine infection 🤧";
+      }
+      else if (wordPairs.any((pair) =>
+      pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")){
+        diagnosis = "You are facing a Renal disease 🤧";
+      }
+      // else if (wordPairs.any((pair) =>
+      // pair.word == "Albumin" &&
+      //     (int.tryParse(pair.nextWord) ?? 0) > 40)) {
+      //   diagnosis = "You are facing a Renal disease 🤧";
+      // }
+      else if (wordPairs.any((pair) =>
+      pair.word == "Glucose" &&
+          pair.nextWord.toLowerCase() != "nil")) {
+        diagnosis= "You have Diabetics 🤧";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Red Blood Cells" &&
+          pair.nextWord.toLowerCase() != "occasional")) {
+        diagnosis= "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
+      }else{
+        diagnosis="No defect identified 😊🙌";
+      }
 
+
+
+    }
+    return diagnosis;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+      return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            color: Colors.white,
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: const Text(
+            "CardioFit AI",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ),
       body: SingleChildScrollView(
         child: Container(
           alignment: Alignment.center,
@@ -121,6 +223,37 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               Text("Laboratory Report Diagnosis",style:TextStyle( fontSize: 30,
                   color: Colors.blueGrey,
                   fontWeight: FontWeight.w700)
+              ),
+              SizedBox(height: 30,),
+              Container(
+                width:500 ,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.deepOrangeAccent, width: 2.0),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: DropdownButton<String>(
+                  value: selectedReport,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.blueGrey),
+                  alignment: Alignment.center,
+                  underline: SizedBox(), // Remove the underline
+                  onChanged: (String? newValue) {
+                    if(newValue != null){
+                      setState(() {
+                        selectedReport = newValue!;
+                      });
+                    }
+                  },
+                  items: reports.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Center( // Center the text
+                        child: Text(value, textAlign: TextAlign.center), // Set text alignment
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
               SizedBox(height: 30,),
               InkWell(
@@ -148,8 +281,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               ):
               DataTable(
                 columns: [
-                  DataColumn(label: Text('Word')),
-                  DataColumn(label: Text('Next Word')),
+                  DataColumn(label: Text('Component')),
+                  DataColumn(label: Text('Result')),
                 ],
                 rows: wordPairs
                     .map(
@@ -162,6 +295,14 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 )
                     .toList(),
               ),
+              SizedBox(height: 30),
+              diagnosis !=null?Text(diagnosis,style: TextStyle(
+                  color: Colors.blueGrey,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700),
+              ):Text(""),
+              SizedBox(height: 30)
+
             ],
           ),
         ),
