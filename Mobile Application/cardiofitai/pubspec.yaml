@@ -61,6 +61,7 @@ dependencies:
 
 
 
+
   video_player: ^2.2.6
   fluttertoast: ^8.2.5
 
@@ -98,6 +99,10 @@ flutter:
     - assets/palm_analysis/recording.gif
     - assets/icon.png
     - assets/coverimage.jpg
+    - assets/breakfast.jpeg
+    - assets/fastfood.jpeg
+    - assets/dieteryimage.jpg
+    - assets/reportanalysis.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

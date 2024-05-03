@@ -101,8 +101,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       String word = match.group(1)!;
       String nextWord = match.group(2)!; // Capture the next word after the phrase
       pairs.add(WordPair(word, nextWord));
+      print(wordPairs);
     }
-
+    print(pairs);
     return pairs;
   }
 
