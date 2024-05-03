@@ -991,7 +991,7 @@ class _TempAllLeadPredictionScreenState
         appBar: AppBar(
           foregroundColor: Colors.white,
           title: const Text(
-            "Cardiac Analysis Through Palms",
+            "Capturing ECG through Facial Analysis",
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
           backgroundColor: Colors.red,
