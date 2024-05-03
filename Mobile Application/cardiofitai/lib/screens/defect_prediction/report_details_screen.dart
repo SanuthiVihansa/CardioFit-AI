@@ -1,108 +1,223 @@
-// import 'package:flutter/material.dart';
+// //
+// // import 'package:flutter/material.dart';
+// // import 'package:flutter/services.dart';
+// // import 'package:file_picker/file_picker.dart';
+// //
+// // class ReportDetailsScreen extends StatefulWidget {
+// //   const ReportDetailsScreen({Key? key}) : super(key: key);
+// //
+// //   @override
+// //   State<ReportDetailsScreen> createState() => _ReportDetailsScreenState();
+// // }
+// //
+// // class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
+// //   void initState() {
+// //     super.initState();
+// //
+// //     SystemChrome.setPreferredOrientations(
+// //         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+// //   }
+// //
+// //   void _pickFile() async {
+// //     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+// //     if (result == null) return;
+// //
+// //     print(result.files.first.name);
+// //     print(result.files.first.size);
+// //     print(result.files.first.path);
+// //   }
+// //
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Scaffold(
+// //       appBar: AppBar(
+// //         title: Text("File Selector"),
+// //         backgroundColor: Colors.red,
+// //       ),
+// //       body: Stack(
+// //         children: [
+// //           // Background GIF
+// //           Positioned.fill(
+// //             child: Image.asset(
+// //               'assets/defect_prediction/ECG Gif.gif', // Path to your GIF file
+// //               fit: BoxFit.cover,
+// //             ),
+// //           ),
+// //           // Content
+// //           Center(
+// //             child: ElevatedButton(
+// //               onPressed: _pickFile,
+// //               child: const Text("Select file"),
+// //             ),
+// //           ),
+// //         ],
+// //       ),
+// //     );
+// //   }
+// // }
 //
-// class ReportDetailsScreen extends StatelessWidget {
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:file_picker/file_picker.dart';
+// import 'prediction_results_screen.dart';
+//
+// void main() {
+//   runApp(MyApp());
+// }
+//
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Predict Disease',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: ReportDetailsScreen(),
+//     );
+//   }
+// }
+//
+// class ReportDetailsScreen extends StatefulWidget {
+//   const ReportDetailsScreen({Key? key}) : super(key: key);
+//
+//   @override
+//   State<ReportDetailsScreen> createState() => _ReportDetailsScreenState();
+// }
+//
+// class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
+//   void initState() {
+//     super.initState();
+//
+//     SystemChrome.setPreferredOrientations([
+//       DeviceOrientation.landscapeLeft,
+//       DeviceOrientation.landscapeRight
+//     ]);
+//   }
+//
+//   void _pickFile() async {
+//     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+//     if (result == null) return;
+//
+//     print(result.files.first.name);
+//     print(result.files.first.size);
+//     print(result.files.first.path);
+//   }
+//
+//   void _predictDisease(BuildContext context) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => PredictionResultsScreen(predictedDisease: 'PVC'),
+//       ),
+//     );
+//   }
+//
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       appBar: AppBar(
-//         title: const Text('Upload Report'),
+//         title: Text("File Selector"),
+//         backgroundColor: Colors.red,
 //       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(20.0),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           crossAxisAlignment: CrossAxisAlignment.stretch,
-//           children: [
-//             // First Field to upload text file
-//             const FileUploadField(label: 'Upload ECG Text File'),
-//
-//             // Second Field to upload text file
-//             const FileUploadField(label: 'Upload Additional Details Text File'),
-//
-//             const SizedBox(height: 20),
-//             ElevatedButton(
-//               onPressed: () {
-//                 // Handle submission here
-//                 // This is where you would plot the ECG
-//               },
-//               child: const Text('Submit'),
+//       body: Stack(
+//         children: [
+//           // Background GIF
+//           Positioned.fill(
+//             child: Image.asset(
+//               'assets/defect_prediction/ECG Gif.gif', // Path to your GIF file
+//               fit: BoxFit.cover,
 //             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// class FileUploadField extends StatelessWidget {
-//   final String label;
-//
-//   const FileUploadField({
-//     Key? key,
-//     required this.label,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         Expanded(
-//           child: TextFormField(
-//             decoration: InputDecoration(
-//               labelText: label,
-//               border: const OutlineInputBorder(),
-//             ),
-//             readOnly: true,
 //           ),
-//         ),
-//         const SizedBox(width: 10),
-//         ElevatedButton(
-//           onPressed: () {
-//             // Handle file upload here
-//           },
-//           child: const Text('Upload'),
-//         ),
-//       ],
+//           // Content
+//           Center(
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 ElevatedButton(
+//                   onPressed: _pickFile,
+//                   child: const Text("Select file"),
+//                 ),
+//                 SizedBox(height: 20),
+//                 ElevatedButton(
+//                   onPressed: () => _predictDisease(context),
+//                   child: const Text("Predict Diseases"),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
 //     );
 //   }
 // }
-
-
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
+//
+//
+//
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:file_picker/file_picker.dart';
+import 'prediction_results_screen.dart';
 
-class ReportDetailsScreen extends StatefulWidget {
-  const ReportDetailsScreen({super.key});
-
-  @override
-  State<ReportDetailsScreen> createState() => _FileSelectingScreenState();
+void main() {
+  runApp(MyApp());
 }
 
-class _FileSelectingScreenState extends State<ReportDetailsScreen> {
+class MyApp extends StatelessWidget {
   @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Predict Disease',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ReportDetailsScreen(),
+    );
+  }
+}
+
+class ReportDetailsScreen extends StatefulWidget {
+  const ReportDetailsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ReportDetailsScreen> createState() => _ReportDetailsScreenState();
+}
+
+class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
   void initState() {
     super.initState();
 
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight
+    ]);
   }
 
   void _pickFile() async {
-    // opens storage to pick files and the picked file or files
-    // are assigned into result and if no file is chosen result is null.
-    // you can also toggle "allowMultiple" true or false depending on your need
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-    // if no file is picked
     if (result == null) return;
 
-    // we will log the name, size and path of the
-    // first picked file (if multiple are selected)
     print(result.files.first.name);
     print(result.files.first.size);
     print(result.files.first.path);
+  }
+
+  void _predictPVC(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PredictionResultsScreen(predictedDisease: 'PVC'),
+      ),
+    );
+  }
+
+  void _predictNormal(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PredictionResultsScreen(predictedDisease: 'Normal'),
+      ),
+    );
   }
 
   @override
@@ -112,13 +227,54 @@ class _FileSelectingScreenState extends State<ReportDetailsScreen> {
         title: Text("File Selector"),
         backgroundColor: Colors.red,
       ),
-      body: Center(
-          child: ElevatedButton(
-            child: const Text("Select file"),
-            onPressed: () {
-              _pickFile();
-            },
-          )),
+      body: Stack(
+        children: [
+          // Background GIF
+          Positioned.fill(
+            child: Image.asset(
+              'assets/defect_prediction/ECG Gif.gif', // Path to your GIF file
+              fit: BoxFit.cover,
+            ),
+          ),
+          // Content
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // First Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _pickFile,
+                      child: const Text("Select file"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _predictPVC(context),
+                      child: const Text("Predict Diseases"),
+                    ),
+                  ],
+                ),
+                // Second Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _pickFile,
+                      child: const Text("Select file"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _predictNormal(context),
+                      child: const Text("Predict Diseases"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+
