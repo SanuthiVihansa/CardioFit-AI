@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart' as math;
 import 'package:intl/intl.dart';
 
-
 import '../../models/user.dart';
 
 class DietHomePage extends StatefulWidget {
@@ -21,8 +20,9 @@ class DietHomePage extends StatefulWidget {
 class _DietHomePageState extends State<DietHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late double _height;
+
   Widget DietAdvice() {
-    double halfScreenWidth = (MediaQuery.of(context).size.width / 2)-50;
+    double halfScreenWidth = (MediaQuery.of(context).size.width / 2) - 50;
 
     return Container(
       width: halfScreenWidth,
@@ -57,8 +57,9 @@ class _DietHomePageState extends State<DietHomePage> {
                             fontSize: 18,
                             fontWeight: FontWeight.w700)),
                   ),
-                  Center(child: Text("Know the right amount of nutrition you need")),
-
+                  Center(
+                      child:
+                          Text("Know the right amount of nutrition you need")),
                   SizedBox(height: 10)
                 ],
               ),
@@ -68,8 +69,9 @@ class _DietHomePageState extends State<DietHomePage> {
       ),
     );
   }
+
   Widget ReportAnalaysis() {
-    double halfScreenWidth = (MediaQuery.of(context).size.width / 2)-50;
+    double halfScreenWidth = (MediaQuery.of(context).size.width / 2) - 50;
 
     return Container(
       width: halfScreenWidth,
@@ -120,7 +122,7 @@ class _DietHomePageState extends State<DietHomePage> {
     final width = MediaQuery.of(context).size.width;
     final today = DateTime.now();
 
-    return Scaffold (
+    return Scaffold(
       backgroundColor: const Color(0xFFE9E9E9),
       key: _scaffoldKey,
       drawer: LeftNavBar(
@@ -143,14 +145,18 @@ class _DietHomePageState extends State<DietHomePage> {
                 ),
                 child: Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.only(top:40,left: 32,right: 32,bottom: 20 ),
+                  padding: const EdgeInsets.only(
+                      top: 40, left: 32, right: 32, bottom: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       ListTile(
                         leading: IconButton(
                           color: Colors.white,
-                          icon: const Icon(Icons.menu,color: CupertinoColors.secondaryLabel,),
+                          icon: const Icon(
+                            Icons.menu,
+                            color: CupertinoColors.secondaryLabel,
+                          ),
                           onPressed: () {
                             _scaffoldKey.currentState?.openDrawer();
                           },
@@ -158,15 +164,12 @@ class _DietHomePageState extends State<DietHomePage> {
                         title: Text(
                           "${DateFormat("EEEE").format(today)},${DateFormat("d MMMM").format(today)}",
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400
-                          ),
+                              fontSize: 14, fontWeight: FontWeight.w400),
                         ),
-                        subtitle: Text("Hello, "+widget.user.name,
+                        subtitle: Text(
+                          "Hello, " + widget.user.name,
                           style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800
-                          ),
+                              fontSize: 20, fontWeight: FontWeight.w800),
                         ),
                         trailing: ClipOval(
                           child: Image.network(
@@ -174,15 +177,18 @@ class _DietHomePageState extends State<DietHomePage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15,),
+                      SizedBox(
+                        height: 15,
+                      ),
                       Row(
-                        children:<Widget> [
+                        children: <Widget>[
                           _RadialProgress(
                             key: UniqueKey(),
-                            width: width * 0.15,
-                            height: _height * 0.15,
+                            width: width * 0.10,
+                            height: _height * 0.10,
                           ),
-                          Spacer(), // This will push _RadialProgress to the start
+                          Spacer(),
+                          // This will push _RadialProgress to the start
                           SizedBox(width: 200),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,7 +225,7 @@ class _DietHomePageState extends State<DietHomePage> {
               ),
             ),
             Positioned(
-              top: _height*0.90,
+              top: _height * 0.90,
               left: 0,
               right: 0,
               child: Container(
@@ -252,16 +258,22 @@ class _DietHomePageState extends State<DietHomePage> {
                             GestureDetector(
                               onTap: () {
                                 // Navigate to homepage
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                    builder: (BuildContext context) => DietHomePage(widget.user)));;
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            DietHomePage(widget.user)));
+                                ;
                               },
                               child: DietAdvice(),
                             ),
                             GestureDetector(
                               onTap: () {
                                 // Navigate to homepage
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                    builder: (BuildContext context) =>RecognitionScreen()));;
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            RecognitionScreen()));
+                                ;
                               },
                               child: ReportAnalaysis(),
                             ),
@@ -272,7 +284,9 @@ class _DietHomePageState extends State<DietHomePage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Expanded(
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -290,7 +304,9 @@ class _DietHomePageState extends State<DietHomePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            SizedBox(height: 20,),
+                            SizedBox(
+                              height: 20,
+                            ),
                             const Text(
                               "YOUR CURRENT",
                               style: TextStyle(
@@ -321,24 +337,31 @@ class _DietHomePageState extends State<DietHomePage> {
       ),
     );
   }
-
 }
-class _IngredientProgress extends StatelessWidget{
 
+class _IngredientProgress extends StatelessWidget {
   final String ingredients;
   final double leftAmount;
-  final double progress,width;
+  final double progress, width;
   final Color progressColor;
 
-  const _IngredientProgress({super.key, required this.ingredients, required this.leftAmount, required this.progress,required this.width, required this.progressColor});
-
+  const _IngredientProgress(
+      {super.key,
+      required this.ingredients,
+      required this.leftAmount,
+      required this.progress,
+      required this.width,
+      required this.progressColor});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget> [
-        Text(ingredients,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+      children: <Widget>[
+        Text(
+          ingredients,
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+        ),
         Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -349,63 +372,70 @@ class _IngredientProgress extends StatelessWidget{
                   height: 10,
                   width: 200,
                   decoration: BoxDecoration(
-                      borderRadius:BorderRadius.all(Radius.circular(5)),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: Colors.black12,
                   ),
                 ),
                 Container(
                   height: 10,
-                  width: width*progress,
+                  width: width * progress,
                   decoration: BoxDecoration(
-                    borderRadius:BorderRadius.all(Radius.circular(5)),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: progressColor,
                   ),
                 ),
               ],
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             Text("${leftAmount}g left")
-
           ],
         )
       ],
     );
   }
-
 }
 
-class _RadialProgress extends StatelessWidget{
+class _RadialProgress extends StatelessWidget {
+  final double height, width;
 
-  final double height,width;
-
-  const _RadialProgress({required Key key,required this.height,required this.width}):super(key:key);
+  const _RadialProgress(
+      {required Key key, required this.height, required this.width})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-   return CustomPaint(
-     painter: _RadialPainter(progress:0.75),
-     child: Container(
-       height: height,
-       width: width,
-       child: Center(
-         child: RichText(
-           text: TextSpan(
-             children: [
-               TextSpan(text: "1731",style: TextStyle(fontSize: 30,fontWeight: FontWeight.w700,color: const Color(
-                   0xFF8C001A))),
-               TextSpan(text: "\n"),
-               TextSpan(text: " kcal",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: const Color(0xFF8C001A))),
-
-             ]
-           ),
-         ),
-       ),
-     ),
-   );
+    return CustomPaint(
+      painter: _RadialPainter(progress: 0.75),
+      child: Container(
+        height: height,
+        width: width,
+        child: Center(
+          child: RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                  text: "1731",
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF8C001A))),
+              TextSpan(text: "\n"),
+              TextSpan(
+                  text: " kcal",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF8C001A))),
+            ]),
+          ),
+        ),
+      ),
+    );
   }
 }
 
-class _RadialPainter extends CustomPainter{
+class _RadialPainter extends CustomPainter {
   final double progress;
 
   _RadialPainter({required this.progress});
@@ -413,28 +443,25 @@ class _RadialPainter extends CustomPainter{
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..strokeWidth=10
-      ..color=Color(0xFF8C001A)
-      ..style=PaintingStyle.stroke
-      ..strokeCap=StrokeCap.round;
+      ..strokeWidth = 10
+      ..color = Color(0xFF8C001A)
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
 
-
-    Offset center = Offset(size.width/2, size.height/2);
-    double relativeProgress = 360*progress;
+    Offset center = Offset(size.width / 2, size.height / 2);
+    double relativeProgress = 360 * progress;
     canvas.drawArc(
-      Rect.fromCircle(center: center, radius: size.width/2), // using fromCircle instead of fromCenter
+      Rect.fromCircle(center: center, radius: size.width / 2),
+      // using fromCircle instead of fromCenter
       math.radians(-90),
       math.radians(-relativeProgress),
       false,
       paint,
     );
-
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
-
 }
-
