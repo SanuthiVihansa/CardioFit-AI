@@ -203,7 +203,7 @@ class _TempAllLeadPredictionScreenState
                 'Content-Type': 'application/json; charset=UTF-8',
               },
               body: jsonString)
-          .timeout(const Duration(seconds: 30));
+          .timeout(const Duration(seconds: 60));
 
       _resCode = response.statusCode;
 
