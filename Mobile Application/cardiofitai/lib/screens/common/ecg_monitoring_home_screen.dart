@@ -1,5 +1,6 @@
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:cardiofitai/screens/palm_analysis/file_selection_screen.dart';
+import 'package:cardiofitai/screens/palm_analysis/temp_file_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,6 +19,18 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
   final double _devHeight = 392.72727272727275;
   final double _hDevWidth = 1280.0;
   final double _hDevHeight = 740.0;
+
+  final double iconSize = 100;
+  final double iconTextFontSize = 30;
+  final double buttonLength = 400;
+  final double buttonRoundness = 150;
+
+  late double responsiveIconSize = _height / (_hDevHeight / iconSize);
+  late double responsiveIconTextFontSize =
+      _width / (_hDevWidth / iconTextFontSize);
+  late double responsiveButtonLength = _width / (_hDevWidth / buttonLength);
+  late double responsiveButtonRoundness =
+      _width / (_hDevWidth / buttonRoundness);
 
   @override
   void initState() {
@@ -38,7 +51,9 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) => const FileSelectionScreen()));
+            // builder: (BuildContext context) => const FileSelectionScreen()));
+            builder: (BuildContext context) =>
+                const TempFileSelectionScreen()));
   }
 
   @override
@@ -58,36 +73,41 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                _onClickFacialAnalysisBtn();
-              },
-              style: ButtonStyle(
-                fixedSize: MaterialStateProperty.all<Size>(
-                  Size(_width / (_devWidth / 160.0),
-                      _height / (_devHeight / 40)), // Button width and height
-                ),
-              ),
-              child: Text(
-                "Facial Analysis",
-                style: TextStyle(fontSize: _width / (_devWidth / 10)),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _onClickPalmAnalysisBtn();
-              },
-              style: ButtonStyle(
-                fixedSize: MaterialStateProperty.all<Size>(
-                  Size(_width / (_devWidth / 160.0),
-                      _height / (_devHeight / 40)), // Button width and height
-                ),
-              ),
-              child: Text(
-                "Palm Analysis",
-                style: TextStyle(fontSize: _width / (_devWidth / 10)),
-              ),
-            )
+            ElevatedButton.icon(
+                style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all<Size>(Size(
+                        responsiveButtonLength, responsiveButtonRoundness))),
+                onPressed: () {
+                  _onClickFacialAnalysisBtn();
+                },
+                icon: Image.asset(
+                    'assets/facial_analysis/face-scan_2818147.png',
+                    width: responsiveIconSize,
+                    height: responsiveIconSize,
+                    fit: BoxFit.contain),
+                label: Text(
+                  "Facial Analysis",
+                  style: TextStyle(
+                      fontSize: responsiveIconTextFontSize,
+                      color: Colors.purple),
+                )),
+            ElevatedButton.icon(
+                style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all<Size>(Size(
+                        responsiveButtonLength, responsiveButtonRoundness))),
+                onPressed: () {
+                  _onClickPalmAnalysisBtn();
+                },
+                icon: Image.asset('assets/palm_analysis/praying.png',
+                    width: responsiveIconSize,
+                    height: responsiveIconSize,
+                    fit: BoxFit.contain),
+                label: Text(
+                  "Palm Analysis",
+                  style: TextStyle(
+                      fontSize: responsiveIconTextFontSize,
+                      color: Colors.purple),
+                )),
           ],
         ),
       ),
