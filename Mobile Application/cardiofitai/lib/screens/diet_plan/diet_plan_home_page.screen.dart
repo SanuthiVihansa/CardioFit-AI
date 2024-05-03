@@ -1,4 +1,5 @@
 import 'package:cardiofitai/components/navbar_component.dart';
+import 'package:cardiofitai/screens/diet_plan/recognitionscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -20,7 +21,7 @@ class DietHomePage extends StatefulWidget {
 class _DietHomePageState extends State<DietHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late double _height;
-  Widget ReportAnalaysis() {
+  Widget DietAdvice() {
     double halfScreenWidth = (MediaQuery.of(context).size.width / 2)-50;
 
     return Container(
@@ -67,7 +68,7 @@ class _DietHomePageState extends State<DietHomePage> {
       ),
     );
   }
-  Widget DietAdvice() {
+  Widget ReportAnalaysis() {
     double halfScreenWidth = (MediaQuery.of(context).size.width / 2)-50;
 
     return Container(
@@ -248,8 +249,22 @@ class _DietHomePageState extends State<DietHomePage> {
                             SizedBox(
                               width: 25,
                             ),
-                            DietAdvice(),
-                            ReportAnalaysis(),
+                            GestureDetector(
+                              onTap: () {
+                                // Navigate to homepage
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                    builder: (BuildContext context) => DietHomePage(widget.user)));;
+                              },
+                              child: DietAdvice(),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // Navigate to homepage
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                    builder: (BuildContext context) =>RecognitionScreen()));;
+                              },
+                              child: ReportAnalaysis(),
+                            ),
                             const SizedBox(
                               width: 25,
                             ),
