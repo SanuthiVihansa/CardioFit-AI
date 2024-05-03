@@ -99,6 +99,7 @@ flutter:
     - assets/facial_analysis/heart-rate_863616.png
     - assets/facial_analysis/electrocardiogram.png
     - assets/facial_analysis/file.png
+    - assets/defect_prediction/ECG Gif.gif
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
