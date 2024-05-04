@@ -602,408 +602,362 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
         Expanded(
           child: SizedBox(
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(l1p * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead I",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actl1Data, _calcMin(actl1Data),
-                          _calcMax(actl1Data), Colors.green)),
-                  Text(
-                    "Predicted Lead I",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predl1Data, _calcMin(predl1Data),
-                          _calcMax(predl1Data), Colors.blue)),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(bottom: _height / (_devHeight / 8)),
-                    child: const Divider(
-                      height: 1,
-                      thickness: 13,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead II",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actl2Data, _calcMin(actl2Data),
-                          _calcMax(actl2Data), Colors.green)),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(l3p * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead III",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actl3Data, _calcMin(actl3Data),
-                          _calcMax(actl3Data), Colors.green)),
-                  Text(
-                    "Predicted Lead III",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predl3Data, _calcMin(predl3Data),
-                          _calcMax(predl3Data), Colors.blue)),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(avrp * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead aVR",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actavrData, _calcMin(actavrData),
-                          _calcMax(actavrData), Colors.green)),
-                  Text(
-                    "Predicted Lead aVR",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predavrData, _calcMin(predavrData),
-                          _calcMax(predavrData), Colors.blue)),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(avlp * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead aVL",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actavlData, _calcMin(actavlData),
-                          _calcMax(actavlData), Colors.green)),
-                  Text(
-                    "Predicted Lead aVL",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predavlData, _calcMin(predavlData),
-                          _calcMax(predavlData), Colors.blue)),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(avfp * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead aVF",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actavfData, _calcMin(actavfData),
-                          _calcMax(actavfData), Colors.green)),
-                  Text(
-                    "Predicted Lead aVF",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predavfData, _calcMin(predavfData),
-                          _calcMax(predavfData), Colors.blue)),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(v1p * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead V1",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actv1Data, _calcMin(actv1Data),
-                          _calcMax(actv1Data), Colors.green)),
-                  Text(
-                    "Predicted Lead V1",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv1Data, _calcMin(predv1Data),
-                          _calcMax(predv1Data), Colors.blue)),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(v2p * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead V2",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actv2Data, _calcMin(actv2Data),
-                          _calcMax(actv2Data), Colors.green)),
-                  Text(
-                    "Predicted Lead V2",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv2Data, _calcMin(predv2Data),
-                          _calcMax(predv2Data), Colors.blue)),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(v3p * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead V3",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actv3Data, _calcMin(actv3Data),
-                          _calcMax(actv3Data), Colors.green)),
-                  Text(
-                    "Predicted Lead V3",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv3Data, _calcMin(predv3Data),
-                          _calcMax(predv3Data), Colors.blue)),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(v4p * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead V4",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actv4Data, _calcMin(actv4Data),
-                          _calcMax(actv4Data), Colors.green)),
-                  Text(
-                    "Predicted Lead V4",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv4Data, _calcMin(predv4Data),
-                          _calcMax(predv4Data), Colors.blue)),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(v5p * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead V5",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actv5Data, _calcMin(actv5Data),
-                          _calcMax(actv5Data), Colors.green)),
-                  Text(
-                    "Predicted Lead V5",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv5Data, _calcMin(predv5Data),
-                          _calcMax(predv5Data), Colors.blue)),
-                  const Divider(
-                    height: 1,
-                    thickness: 13,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: _width / (_devWidth / 20),
-                      top: _height / (_devHeight / 8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Similarity : ${(v6p * 100).toStringAsFixed(2)} %",
-                          style: TextStyle(fontSize: _width / (_devWidth / 13)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "Actual Lead V6",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actv6Data, _calcMin(actv6Data),
-                          _calcMax(actv6Data), Colors.green)),
-                  Text(
-                    "Predicted Lead V6",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv6Data, _calcMin(predv6Data),
-                          _calcMax(predv6Data), Colors.blue)),
-                ],
-              ),
+              child: _selectedLead == "Lead I"
+                  ? _lead1Plot()
+                  : _selectedLead == "Lead II"
+                      ? _lead2Plot()
+                      : _selectedLead == "Lead III"
+                          ? _lead3Plot()
+                          : _selectedLead == "Lead aVR"
+                              ? _leadAvrPlot()
+                              : _selectedLead == "Lead aVL"
+                                  ? _leadAvlPlot()
+                                  : _selectedLead == "Lead aVF"
+                                      ? _leadAvfPlot()
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                left: _width / (_devWidth / 20),
+                                                top: _height / (_devHeight / 8),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Similarity : ${(avfp * 100).toStringAsFixed(2)} %",
+                                                    style: TextStyle(
+                                                        fontSize: _width /
+                                                            (_devWidth / 13)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Text(
+                                              "Actual Lead aVF",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    actavfData,
+                                                    _calcMin(actavfData),
+                                                    _calcMax(actavfData),
+                                                    Colors.green)),
+                                            Text(
+                                              "Predicted Lead aVF",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    predavfData,
+                                                    _calcMin(predavfData),
+                                                    _calcMax(predavfData),
+                                                    Colors.blue)),
+                                            const Divider(
+                                              height: 1,
+                                              thickness: 13,
+                                              color: Colors.black,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                left: _width / (_devWidth / 20),
+                                                top: _height / (_devHeight / 8),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Similarity : ${(v1p * 100).toStringAsFixed(2)} %",
+                                                    style: TextStyle(
+                                                        fontSize: _width /
+                                                            (_devWidth / 13)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Text(
+                                              "Actual Lead V1",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    actv1Data,
+                                                    _calcMin(actv1Data),
+                                                    _calcMax(actv1Data),
+                                                    Colors.green)),
+                                            Text(
+                                              "Predicted Lead V1",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    predv1Data,
+                                                    _calcMin(predv1Data),
+                                                    _calcMax(predv1Data),
+                                                    Colors.blue)),
+                                            const Divider(
+                                              height: 1,
+                                              thickness: 13,
+                                              color: Colors.black,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                left: _width / (_devWidth / 20),
+                                                top: _height / (_devHeight / 8),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Similarity : ${(v2p * 100).toStringAsFixed(2)} %",
+                                                    style: TextStyle(
+                                                        fontSize: _width /
+                                                            (_devWidth / 13)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Text(
+                                              "Actual Lead V2",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    actv2Data,
+                                                    _calcMin(actv2Data),
+                                                    _calcMax(actv2Data),
+                                                    Colors.green)),
+                                            Text(
+                                              "Predicted Lead V2",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    predv2Data,
+                                                    _calcMin(predv2Data),
+                                                    _calcMax(predv2Data),
+                                                    Colors.blue)),
+                                            const Divider(
+                                              height: 1,
+                                              thickness: 13,
+                                              color: Colors.black,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                left: _width / (_devWidth / 20),
+                                                top: _height / (_devHeight / 8),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Similarity : ${(v3p * 100).toStringAsFixed(2)} %",
+                                                    style: TextStyle(
+                                                        fontSize: _width /
+                                                            (_devWidth / 13)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Text(
+                                              "Actual Lead V3",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    actv3Data,
+                                                    _calcMin(actv3Data),
+                                                    _calcMax(actv3Data),
+                                                    Colors.green)),
+                                            Text(
+                                              "Predicted Lead V3",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    predv3Data,
+                                                    _calcMin(predv3Data),
+                                                    _calcMax(predv3Data),
+                                                    Colors.blue)),
+                                            const Divider(
+                                              height: 1,
+                                              thickness: 13,
+                                              color: Colors.black,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                left: _width / (_devWidth / 20),
+                                                top: _height / (_devHeight / 8),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Similarity : ${(v4p * 100).toStringAsFixed(2)} %",
+                                                    style: TextStyle(
+                                                        fontSize: _width /
+                                                            (_devWidth / 13)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Text(
+                                              "Actual Lead V4",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    actv4Data,
+                                                    _calcMin(actv4Data),
+                                                    _calcMax(actv4Data),
+                                                    Colors.green)),
+                                            Text(
+                                              "Predicted Lead V4",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    predv4Data,
+                                                    _calcMin(predv4Data),
+                                                    _calcMax(predv4Data),
+                                                    Colors.blue)),
+                                            const Divider(
+                                              height: 1,
+                                              thickness: 13,
+                                              color: Colors.black,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                left: _width / (_devWidth / 20),
+                                                top: _height / (_devHeight / 8),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Similarity : ${(v5p * 100).toStringAsFixed(2)} %",
+                                                    style: TextStyle(
+                                                        fontSize: _width /
+                                                            (_devWidth / 13)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Text(
+                                              "Actual Lead V5",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    actv5Data,
+                                                    _calcMin(actv5Data),
+                                                    _calcMax(actv5Data),
+                                                    Colors.green)),
+                                            Text(
+                                              "Predicted Lead V5",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    predv5Data,
+                                                    _calcMin(predv5Data),
+                                                    _calcMax(predv5Data),
+                                                    Colors.blue)),
+                                            const Divider(
+                                              height: 1,
+                                              thickness: 13,
+                                              color: Colors.black,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                left: _width / (_devWidth / 20),
+                                                top: _height / (_devHeight / 8),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Similarity : ${(v6p * 100).toStringAsFixed(2)} %",
+                                                    style: TextStyle(
+                                                        fontSize: _width /
+                                                            (_devWidth / 13)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Text(
+                                              "Actual Lead V6",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    actv6Data,
+                                                    _calcMin(actv6Data),
+                                                    _calcMax(actv6Data),
+                                                    Colors.green)),
+                                            Text(
+                                              "Predicted Lead V6",
+                                              style: TextStyle(
+                                                  fontSize: _width /
+                                                      (_devWidth / 10)),
+                                            ),
+                                            SizedBox(
+                                                height: _height /
+                                                    (_devHeight / 200),
+                                                child: _ecgPlot(
+                                                    predv6Data,
+                                                    _calcMin(predv6Data),
+                                                    _calcMax(predv6Data),
+                                                    Colors.blue)),
+                                          ],
+                                        ),
             ),
           ),
         ),
@@ -1028,8 +982,218 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
             ),
           );
         }).toList(),
-        onChanged: (String? value) {},
+        onChanged: (String? value) {
+          setState(() {
+            _selectedLead = value!;
+          });
+        },
       )),
+    );
+  }
+
+  Widget _lead1Plot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: _width / (_devWidth / 20),
+            top: _height / (_devHeight / 8),
+          ),
+          child: Row(
+            children: [
+              Text(
+                "Similarity : ${(l1p * 100).toStringAsFixed(2)} %",
+                style: TextStyle(fontSize: _width / (_devWidth / 13)),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          "Actual Lead I",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actl1Data, _calcMin(actl1Data), _calcMax(actl1Data),
+                Colors.green)),
+        Text(
+          "Predicted Lead I",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predl1Data, _calcMin(predl1Data),
+                _calcMax(predl1Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _lead2Plot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          "Actual Lead II",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+      ],
+    );
+  }
+
+  Widget _lead3Plot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: _width / (_devWidth / 20),
+            top: _height / (_devHeight / 8),
+          ),
+          child: Row(
+            children: [
+              Text(
+                "Similarity : ${(l3p * 100).toStringAsFixed(2)} %",
+                style: TextStyle(fontSize: _width / (_devWidth / 13)),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          "Actual Lead III",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actl3Data, _calcMin(actl3Data), _calcMax(actl3Data),
+                Colors.green)),
+        Text(
+          "Predicted Lead III",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predl3Data, _calcMin(predl3Data),
+                _calcMax(predl3Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadAvrPlot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: _width / (_devWidth / 20),
+            top: _height / (_devHeight / 8),
+          ),
+          child: Row(
+            children: [
+              Text(
+                "Similarity : ${(avrp * 100).toStringAsFixed(2)} %",
+                style: TextStyle(fontSize: _width / (_devWidth / 13)),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          "Actual Lead aVR",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actavrData, _calcMin(actavrData),
+                _calcMax(actavrData), Colors.green)),
+        Text(
+          "Predicted Lead aVR",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predavrData, _calcMin(predavrData),
+                _calcMax(predavrData), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadAvlPlot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: _width / (_devWidth / 20),
+            top: _height / (_devHeight / 8),
+          ),
+          child: Row(
+            children: [
+              Text(
+                "Similarity : ${(avlp * 100).toStringAsFixed(2)} %",
+                style: TextStyle(fontSize: _width / (_devWidth / 13)),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          "Actual Lead aVL",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actavlData, _calcMin(actavlData),
+                _calcMax(actavlData), Colors.green)),
+        Text(
+          "Predicted Lead aVL",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predavlData, _calcMin(predavlData),
+                _calcMax(predavlData), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadAvfPlot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: _width / (_devWidth / 20),
+            top: _height / (_devHeight / 8),
+          ),
+          child: Row(
+            children: [
+              Text(
+                "Similarity : ${(avfp * 100).toStringAsFixed(2)} %",
+                style: TextStyle(fontSize: _width / (_devWidth / 13)),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          "Actual Lead aVF",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actavfData, _calcMin(actavfData),
+                _calcMax(actavfData), Colors.green)),
+        Text(
+          "Predicted Lead aVF",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predavfData, _calcMin(predavfData),
+                _calcMax(predavfData), Colors.blue)),
+      ],
     );
   }
 
