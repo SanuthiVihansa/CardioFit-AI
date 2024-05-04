@@ -6,8 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class TempAllLeadPredictionWithRadioBtnsScreen extends StatefulWidget {
-  const TempAllLeadPredictionWithRadioBtnsScreen(this.l1Data, this.l2Data, this.v1Data,
-      this.v2Data, this.v3Data, this.v4Data, this.v5Data, this.v6Data,
+  const TempAllLeadPredictionWithRadioBtnsScreen(
+      this.l1Data,
+      this.l2Data,
+      this.v1Data,
+      this.v2Data,
+      this.v3Data,
+      this.v4Data,
+      this.v5Data,
+      this.v6Data,
       {super.key});
 
   final List<double> l1Data;
@@ -93,8 +100,22 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
   double v6r2 = 0;
 
   int _resCode = 0;
-
   bool _isComparisonOn = false;
+  final List<String> _dropDownMenuItems = [
+    "Lead I",
+    "Lead II",
+    "Lead III",
+    "Lead aVR",
+    "Lead aVL",
+    "Lead aVF",
+    "Lead V1",
+    "Lead V2",
+    "Lead V3",
+    "Lead V4",
+    "Lead V5",
+    "Lead V6"
+  ];
+  late String _selectedLead;
 
   @override
   void initState() {
@@ -102,6 +123,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
 
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    _selectedLead = _dropDownMenuItems.first;
     _getPredictions();
   }
 
@@ -382,7 +404,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all<Size>(
                           Size(
-                              _width / (_devWidth / 160.0),
+                              _width / (_devWidth / 120.0),
                               _height /
                                   (_devHeight / 40)), // Button width and height
                         ),
@@ -534,6 +556,11 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    Text(
+                      "Selected Lead: ",
+                      style: TextStyle(fontSize: _width / (_devWidth / 14)),
+                    ),
+                    _leadSelectionDropDown(),
                     Checkbox(
                         value: _isComparisonOn,
                         onChanged: (value) {
@@ -981,6 +1008,28 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           ),
         ),
       ],
+    );
+  }
+
+  Widget _leadSelectionDropDown() {
+    return Container(
+      width: 200,
+      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+      child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+        alignment: AlignmentDirectional.centerEnd,
+        value: _selectedLead,
+        items: _dropDownMenuItems.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem(
+            value: value,
+            child: Text(
+              value,
+              style: TextStyle(fontSize: _width / (_devWidth / 14)),
+            ),
+          );
+        }).toList(),
+        onChanged: (String? value) {},
+      )),
     );
   }
 
