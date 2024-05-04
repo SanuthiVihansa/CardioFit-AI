@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cardiofitai/screens/palm_analysis/all_lead_prediction_screen.dart';
+import 'package:cardiofitai/screens/palm_analysis/for_future_use/all_lead_prediction_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fl_chart/fl_chart.dart';
