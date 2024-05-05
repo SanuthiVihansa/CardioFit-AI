@@ -3,6 +3,9 @@ import 'dart:io';
 import 'dart:io' as Io;
 import 'dart:typed_data';
 
+import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
+import 'package:cardiofitai/screens/diet_plan/reportAnalysisScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -69,6 +72,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     'Troponin i',
   ];
 
+  User? get user => null;
+
   //Pick Image from galley or Camera
   // void optionsdialog(BuildContext context) {
   //   showDialog(
@@ -92,162 +97,11 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   //         );
   //       });
   // }
-
-  pickimage(ImageSource source) async {
-    final image = await ImagePicker().pickImage(source: source);
-    setState(() {
-      scanning = true;
-      pickedimage = File(image!.path);
-    });
-
-    if (pickedimage.path.isNotEmpty && selectedReport != 'Select Report') {
-      addMultipleReports.add(
-          {"UploadedReport": selectedReport, "UploadedImage": pickedimage});
-    }
-
-    //Prepare the image
-    Uint8List bytes = Io.File(pickedimage.path).readAsBytesSync();
-    String img64 = base64Encode(bytes);
-
-    //Send to API
-    String url = "https://api.ocr.space/parse/image";
-    var data = {
-      "base64Image": "data:image/jpg;base64,$img64",
-      "isTable": "true",
-    };
-    var header = {"apikey": "K81742525988957"};
-    http.Response response = await http.post(
-        Uri.parse("https://api.ocr.space/parse/image"),
-        body: data,
-        headers: header);
-
-    // Get data back
-    Map<String, dynamic> result = jsonDecode(response.body);
-    // print(result);
-    setState(() {
-      scanning = false;
-      scannedText = result["ParsedResults"][0]["ParsedText"];
-      wordPairs = findWordPairs(scannedText);
-    });
-  }
-
-  //Function to read values based on the report selected
-  List<WordPair> findWordPairs(String text) {
-    List<WordPair> pairs = [];
-    RegExp regExp = RegExp(" ");
-    if (selectedReport == "Full Blood Count Report") {
-      regExp = RegExp(
-          r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
-          caseSensitive: false);
-    } else if (selectedReport == "Urine Full Report") {
-      regExp = RegExp(
-          r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epthelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(\w+)',
-          caseSensitive: false);
-    }
-    Iterable<Match> matches = regExp.allMatches(text);
-    for (Match match in matches) {
-      String word = match.group(1)!;
-      String nextWord =
-          match.group(2)!; // Capture the next word after the phrase
-      pairs.add(WordPair(word, nextWord));
-      //print(wordPairs);
-    }
-    reportDiagnosis();
-    return pairs;
-  }
-
-  String reportDiagnosis() {
-    if (selectedReport == "Full Blood Count Report") {
-      if (wordPairs.any((pair) =>
-          pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
-        diagnosis = "You are facing an infection";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Neutrophils" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 80)) {
-        diagnosis = "You are facing an Bacterial infection";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Lymphocytes" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 40)) {
-        diagnosis = "You are facing a Viral Fever";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Eosinophils" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 6)) {
-        diagnosis = "You are facing an Allergic reaction";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Platelet Count" &&
-          (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
-        diagnosis =
-            "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
-      } else {
-        diagnosis = "No defect identified";
-      }
-    } else if (selectedReport == "Urine Full Report") {
-      if (wordPairs.any((pair) =>
-          pair.word == "Pus Cells" &&
-          (int.tryParse(pair.nextWord) ?? 0) < 10)) {
-        diagnosis = "You are facing an Urine infection";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
-        diagnosis = "You are facing a Renal disease";
-      }
-      // else if (wordPairs.any((pair) =>
-      // pair.word == "Albumin" &&
-      //     (int.tryParse(pair.nextWord) ?? 0) > 40)) {
-      //   diagnosis = "You are facing a Renal disease";
-      // }
-      else if (wordPairs.any((pair) =>
-          pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
-        diagnosis = "You have Diabetics";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Red Blood Cells" &&
-          pair.nextWord.toLowerCase() != "occasional")) {
-        diagnosis =
-            "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
-      } else {
-        diagnosis = "No defect identified";
-      }
-    }
-    return diagnosis;
-  }
-
-  //Remove confirmation widget
-  void _removeItem(Map<String, dynamic> item) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirm'),
-          content: Text('Are you sure you want to remove this item?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  addMultipleReports.remove(item);
-                });
-                Navigator.of(context).pop();
-              },
-              child: Text('Remove'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
   //Multiple Attachment control Screen
   Widget _multipleAttachmentControl() {
     return Container(
-      // height: height / (600 / 300)
       height: 300,
       width: 500,
-      //width: halfScreenWidth,
       margin: const EdgeInsets.only(right: 20, bottom: 10),
       child: Material(
         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -261,12 +115,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             ),
             Center(
                 child: Icon(
-              Icons.attach_file,
-              size: 50,
-              color: Colors.grey,
-            )),
+                  Icons.attach_file,
+                  size: 50,
+                  color: Colors.grey,
+                )),
             Center(
-                child: Text("\nPlease attach the medical reports\n",
+                child: Text("\nPlease upload the medical reports\n",
                     style: TextStyle(color: Colors.grey, fontSize: 20))),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -277,8 +131,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 Container(
                   width: 250,
                   decoration: BoxDecoration(
-                    border:
-                        Border.all(color: Colors.deepOrangeAccent, width: 2.0),
+                    border: Border.all(color: Colors.deepOrangeAccent, width: 2.0),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: DropdownButton<String>(
@@ -295,14 +148,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                         });
                       }
                     },
-                    items:
-                        reports.map<DropdownMenuItem<String>>((String value) {
+                    items: reports.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Center(
-                          // Center the text
                           child: Text(value,
-                              textAlign: TextAlign.start), // Set text alignment
+                              textAlign: TextAlign.start),
                         ),
                       );
                     }).toList(),
@@ -313,8 +164,22 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 ),
                 Flexible(
                   child: ElevatedButton(
-                    onPressed: () {
-                      pickimage(ImageSource.gallery);
+                    onPressed: () async {
+                      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      if (image != null) {
+                        pickedimage = File(image.path);
+                        if (pickedimage.path.isNotEmpty && selectedReport != 'Select Report') {
+                          addMultipleReports.add(
+                            {
+                              "UploadedReport": selectedReport,
+                              "UploadedImage": pickedimage,
+                              "ScannedItems": ""
+                            },
+                          );
+                          _showAttachedItems();
+                          print(addMultipleReports);
+                        }
+                      }
                     },
                     child: Text("Attach Report"),
                   ),
@@ -326,6 +191,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       ),
     );
   }
+
 
   Widget _showAttachedItems() {
     return Padding(
@@ -361,7 +227,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 ),
                 DataCell(
                   GestureDetector(
-                      child: Icon(Icons.restore_from_trash_outlined),
+                    child: Icon(Icons.restore_from_trash_outlined),
                     onTap: (){
                       _removeItem(e);
                     },
@@ -374,6 +240,264 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       ),
     );
   }
+
+  //Remove confirmation widget
+  void _removeItem(Map<String, dynamic> item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm'),
+          content: Text('Are you sure you want to remove this item?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  addMultipleReports.remove(item);
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text('Remove'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // pickimage(ImageSource source) async {
+  //   final image = await ImagePicker().pickImage(source: source);
+  //   setState(() {
+  //     scanning = true;
+  //     pickedimage = File(image!.path);
+  //   });
+  //
+  //   //Prepare the image
+  //   Uint8List bytes = Io.File(pickedimage.path).readAsBytesSync();
+  //   String img64 = base64Encode(bytes);
+  //
+  //   //Send to API
+  //   String url = "https://api.ocr.space/parse/image";
+  //   var data = {
+  //     "base64Image": "data:image/jpg;base64,$img64",
+  //     "isTable": "true",
+  //   };
+  //   var header = {"apikey": "K81742525988957"};
+  //   http.Response response = await http.post(
+  //       Uri.parse("https://api.ocr.space/parse/image"),
+  //       body: data,
+  //       headers: header);
+  //
+  //   // Get data back
+  //   Map<String, dynamic> result = jsonDecode(response.body);
+  //   // print(result);
+  //   setState(() {
+  //     scanning = false;
+  //     scannedText = result["ParsedResults"][0]["ParsedText"];
+  //     wordPairs = findWordPairs(scannedText);
+  //   });
+  //
+  // }
+
+  //Function to read values based on the report selected
+  void _pickImage() async {
+    for (var item in addMultipleReports) {
+      if (item["UploadedImage"] == null) {
+        final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+        if (image != null) {
+          final pickedImage = File(image.path);
+          final bytes = await pickedImage.readAsBytes();
+          final img64 = base64Encode(bytes);
+
+          final url = "https://api.ocr.space/parse/image";
+          final data = {
+            "base64Image": "data:image/jpg;base64,$img64",
+            "isTable": "true",
+          };
+          final header = {"apikey": "K81742525988957"};
+          final response = await http.post(Uri.parse(url), body: data, headers: header);
+
+          final result = jsonDecode(response.body);
+          final scannedText = result["ParsedResults"][0]["ParsedText"];
+
+          setState(() {
+            item["ScannedText"] = scannedText; // Add or update the ScannedText field
+          });
+        }
+      }
+    }
+  }
+
+  // List<WordPair> findWordPairs(String text) {
+  //   List<WordPair> pairs = [];
+  //   RegExp regExp = RegExp(" ");
+  //   if (selectedReport == "Full Blood Count Report") {
+  //     regExp = RegExp(
+  //         r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
+  //         caseSensitive: false);
+  //   } else if (selectedReport == "Urine Full Report") {
+  //     regExp = RegExp(
+  //         r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epthelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(\w+)',
+  //         caseSensitive: false);
+  //   }
+  //   Iterable<Match> matches = regExp.allMatches(text);
+  //   for (Match match in matches) {
+  //     String word = match.group(1)!;
+  //     String nextWord =
+  //         match.group(2)!; // Capture the next word after the phrase
+  //     pairs.add(WordPair(word, nextWord));
+  //     //print(wordPairs);
+  //   }
+  //   reportDiagnosis();
+  //   if (pickedimage.path.isNotEmpty && selectedReport != 'Select Report') {
+  //     addMultipleReports.add(
+  //         {"UploadedReport": selectedReport, "UploadedImage": pickedimage,"ScannedItems":pairs});
+  //   }
+  //   return pairs;
+  // }
+  //
+  // String reportDiagnosis() {
+  //   if (selectedReport == "Full Blood Count Report") {
+  //     if (wordPairs.any((pair) =>
+  //         pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
+  //       diagnosis = "You are facing an infection";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Neutrophils" &&
+  //         (int.tryParse(pair.nextWord) ?? 0) > 80)) {
+  //       diagnosis = "You are facing an Bacterial infection";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Lymphocytes" &&
+  //         (int.tryParse(pair.nextWord) ?? 0) > 40)) {
+  //       diagnosis = "You are facing a Viral Fever";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Eosinophils" &&
+  //         (int.tryParse(pair.nextWord) ?? 0) > 6)) {
+  //       diagnosis = "You are facing an Allergic reaction";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Platelet Count" &&
+  //         (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
+  //       diagnosis =
+  //           "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
+  //     } else {
+  //       diagnosis = "No defect identified";
+  //     }
+  //   } else if (selectedReport == "Urine Full Report") {
+  //     if (wordPairs.any((pair) =>
+  //         pair.word == "Pus Cells" &&
+  //         (int.tryParse(pair.nextWord) ?? 0) < 10)) {
+  //       diagnosis = "You are facing an Urine infection";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
+  //       diagnosis = "You are facing a Renal disease";
+  //     }
+  //     // else if (wordPairs.any((pair) =>
+  //     // pair.word == "Albumin" &&
+  //     //     (int.tryParse(pair.nextWord) ?? 0) > 40)) {
+  //     //   diagnosis = "You are facing a Renal disease";
+  //     // }
+  //     else if (wordPairs.any((pair) =>
+  //         pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
+  //       diagnosis = "You have Diabetics";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Red Blood Cells" &&
+  //         pair.nextWord.toLowerCase() != "occasional")) {
+  //       diagnosis =
+  //           "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
+  //     } else {
+  //       diagnosis = "No defect identified";
+  //     }
+  //   }
+  //   return diagnosis;
+  // }
+
+
+  List<WordPair> findWordPairs(Map<String, dynamic> item) {
+    List<WordPair> pairs = [];
+    RegExp regExp = RegExp(" ");
+    String selectedReport = item["UploadedReport"];
+
+    if (selectedReport == "Full Blood Count Report") {
+      regExp = RegExp(
+          r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
+          caseSensitive: false);
+    } else if (selectedReport == "Urine Full Report") {
+      regExp = RegExp(
+          r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epthelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(\w+)',
+          caseSensitive: false);
+    }
+
+    Iterable<Match> matches = regExp.allMatches(item["ScannedText"]);
+    for (Match match in matches) {
+      String word = match.group(1)!;
+      String nextWord = match.group(2)!; // Capture the next word after the phrase
+      pairs.add(WordPair(word, nextWord));
+    }
+
+    return pairs;
+  }
+
+  String reportDiagnosis(Map<String, dynamic> item) {
+    List<WordPair> wordPairs = findWordPairs(item);
+    String selectedReport = item["UploadedReport"];
+    String diagnosis = "";
+
+    if (selectedReport == "Full Blood Count Report") {
+      if (wordPairs.any((pair) =>
+      pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
+        diagnosis = "You are facing an infection";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Neutrophils" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 80)) {
+        diagnosis = "You are facing an Bacterial infection";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Lymphocytes" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 40)) {
+        diagnosis = "You are facing a Viral Fever";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Eosinophils" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 6)) {
+        diagnosis = "You are facing an Allergic reaction";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Platelet Count" &&
+          (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
+        diagnosis =
+        "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
+      } else {
+        diagnosis = "No defect identified";
+      }
+    } else if (selectedReport == "Urine Full Report") {
+      if (wordPairs.any((pair) =>
+      pair.word == "Pus Cells" &&
+          (int.tryParse(pair.nextWord) ?? 0) < 10)) {
+        diagnosis = "You are facing an Urine infection";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
+        diagnosis = "You are facing a Renal disease";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
+        diagnosis = "You have Diabetics";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Red Blood Cells" &&
+          pair.nextWord.toLowerCase() != "occasional")) {
+        diagnosis =
+        "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
+      } else {
+        diagnosis = "No defect identified";
+      }
+    }
+
+    return diagnosis;
+  }
+
+
+
+
 
 
   @override
@@ -415,7 +539,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               SizedBox(
                 height: 30,
               ),
-              _showAttachedItems(),
+
               // InkWell(
               //   onTap: () {},
               //   child: pickedimage != null && pickedimage.path.isNotEmpty
@@ -435,31 +559,51 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               SizedBox(
                 height: 30,
               ),
-              // scanning
-              //     ? Text("Scanning....",
-              //         style: TextStyle(
-              //             fontSize: 25,
-              //             color: Colors.blueGrey,
-              //             fontWeight: FontWeight.w700))
-              //     : DataTable(
-              //         columns: [
-              //           DataColumn(label: Text('Component')),
-              //           DataColumn(label: Text('Result')),
-              //         ],
-              //         rows: wordPairs
-              //             .map(
-              //               (pair) => DataRow(
-              //                 cells: [
-              //                   DataCell(Text(pair.word)),
-              //                   DataCell(Text(pair.nextWord)),
-              //                 ],
-              //               ),
-              //             )
-              //             .toList(),
-              //       ),
-              SizedBox(height: 30),
-              ElevatedButton(onPressed: (){}, child: Text("Back")),
-              ElevatedButton(onPressed: (){}, child: Text("Analyse")),
+              // SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:<Widget> [
+                  ElevatedButton(onPressed: (){
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                DietHomePage(user!)));
+                  }, child: Text("Back")),
+                  SizedBox(width: 30),
+                  ElevatedButton(onPressed: (){
+                    _pickImage();
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        scanning
+                            ? Text("Scanning....",
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.blueGrey,
+                                fontWeight: FontWeight.w700))
+                            : DataTable(
+                          columns: [
+                            DataColumn(label: Text('Component')),
+                            DataColumn(label: Text('Result')),
+                          ],
+                          rows: wordPairs
+                              .map(
+                                (pair) => DataRow(
+                              cells: [
+                                DataCell(Text(pair.word)),
+                                DataCell(Text(pair.nextWord)),
+                              ],
+                            ),
+                          )
+                              .toList(),
+                        ),
+
+                            //ReportAnalysisScreen()
+
+                    );
+                  }, child: Text("Analyse")),
+                ],
+              ),
+
               // diagnosis != null
               //     ? Text(
               //         diagnosis,
