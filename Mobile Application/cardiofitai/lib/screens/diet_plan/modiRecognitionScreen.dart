@@ -338,15 +338,17 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 scannedText; // Add or update the ScannedText field
                     wordPairs = findWordPairs(item);
                     extractedText.add(wordPairs);
-
           }
           );
+          print(extractedText);
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (BuildContext context) =>
                   ReportAnalysisScreen(extractedText)));
+
         }
       }
     }
+
   }
 
 
