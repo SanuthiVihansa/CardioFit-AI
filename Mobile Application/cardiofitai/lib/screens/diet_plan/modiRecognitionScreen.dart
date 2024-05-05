@@ -316,6 +316,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         // final image =
         //     await ImagePicker().pickImage(source: ImageSource.gallery);
         if (image != null) {
+          Text("we are here");
           final pickedImage = File(image.path);
           final bytes = await pickedImage.readAsBytes();
           final img64 = base64Encode(bytes);
@@ -331,10 +332,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
           final result = jsonDecode(response.body);
           final scannedText = result["ParsedResults"][0]["ParsedText"];
-
+          Text("added scanned text");
           setState(() {
             item["ScannedText"] =
-                scannedText; // Add or update the ScannedText field
+                scannedText;// Add or update the ScannedText field
+            wordPairs = findWordPairs(item);
+
           });
         }
       }
@@ -429,6 +432,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     String selectedReport = item["UploadedReport"];
 
     if (selectedReport == "Full Blood Count Report") {
+      Text("added blood text");
       regExp = RegExp(
           r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
           caseSensitive: false);
@@ -449,57 +453,77 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     return pairs;
   }
 
-  String reportDiagnosis(Map<String, dynamic> item) {
-    List<WordPair> wordPairs = findWordPairs(item);
-    String selectedReport = item["UploadedReport"];
-    String diagnosis = "";
+  // String reportDiagnosis(Map<String, dynamic> item) {
+  //   List<WordPair> wordPairs = findWordPairs(item);
+  //   String selectedReport = item["UploadedReport"];
+  //   String diagnosis = "";
+  //
+  //   if (selectedReport == "Full Blood Count Report") {
+  //     if (wordPairs.any((pair) =>
+  //         pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
+  //       diagnosis = "You are facing an infection";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Neutrophils" &&
+  //         (int.tryParse(pair.nextWord) ?? 0) > 80)) {
+  //       diagnosis = "You are facing an Bacterial infection";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Lymphocytes" &&
+  //         (int.tryParse(pair.nextWord) ?? 0) > 40)) {
+  //       diagnosis = "You are facing a Viral Fever";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Eosinophils" &&
+  //         (int.tryParse(pair.nextWord) ?? 0) > 6)) {
+  //       diagnosis = "You are facing an Allergic reaction";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Platelet Count" &&
+  //         (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
+  //       diagnosis =
+  //           "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
+  //     } else {
+  //       diagnosis = "No defect identified";
+  //     }
+  //   } else if (selectedReport == "Urine Full Report") {
+  //     if (wordPairs.any((pair) =>
+  //         pair.word == "Pus Cells" &&
+  //         (int.tryParse(pair.nextWord) ?? 0) < 10)) {
+  //       diagnosis = "You are facing an Urine infection";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
+  //       diagnosis = "You are facing a Renal disease";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
+  //       diagnosis = "You have Diabetics";
+  //     } else if (wordPairs.any((pair) =>
+  //         pair.word == "Red Blood Cells" &&
+  //         pair.nextWord.toLowerCase() != "occasional")) {
+  //       diagnosis =
+  //           "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
+  //     } else {
+  //       diagnosis = "No defect identified";
+  //     }
+  //   }
+  //
+  //   return diagnosis;
+  // }
 
-    if (selectedReport == "Full Blood Count Report") {
-      if (wordPairs.any((pair) =>
-          pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
-        diagnosis = "You are facing an infection";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Neutrophils" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 80)) {
-        diagnosis = "You are facing an Bacterial infection";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Lymphocytes" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 40)) {
-        diagnosis = "You are facing a Viral Fever";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Eosinophils" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 6)) {
-        diagnosis = "You are facing an Allergic reaction";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Platelet Count" &&
-          (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
-        diagnosis =
-            "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
-      } else {
-        diagnosis = "No defect identified";
-      }
-    } else if (selectedReport == "Urine Full Report") {
-      if (wordPairs.any((pair) =>
-          pair.word == "Pus Cells" &&
-          (int.tryParse(pair.nextWord) ?? 0) < 10)) {
-        diagnosis = "You are facing an Urine infection";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
-        diagnosis = "You are facing a Renal disease";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
-        diagnosis = "You have Diabetics";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Red Blood Cells" &&
-          pair.nextWord.toLowerCase() != "occasional")) {
-        diagnosis =
-            "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
-      } else {
-        diagnosis = "No defect identified";
-      }
-    }
-
-    return diagnosis;
+  //Display Extracted in a table
+  Widget _displayOutputTable(){
+    return DataTable(
+              columns: [
+              DataColumn(label: Text('Component')),
+              DataColumn(label: Text('Result')),
+              ],
+              rows: wordPairs
+                  .map(
+              (pair) => DataRow(
+              cells: [
+              DataCell(Text(pair.word)),
+              DataCell(Text(pair.nextWord)),
+              ],
+              ),
+              )
+                  .toList(),
+              );
   }
 
   @override
@@ -579,32 +603,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                   ElevatedButton(
                       onPressed: () {
                         _pickImage();
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => scanning
-                              ? Text("Scanning....",
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.blueGrey,
-                                      fontWeight: FontWeight.w700))
-                              : DataTable(
-                                  columns: [
-                                    DataColumn(label: Text('Component')),
-                                    DataColumn(label: Text('Result')),
-                                  ],
-                                  rows: wordPairs
-                                      .map(
-                                        (pair) => DataRow(
-                                          cells: [
-                                            DataCell(Text(pair.word)),
-                                            DataCell(Text(pair.nextWord)),
-                                          ],
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
-
-                          //ReportAnalysisScreen()
-                        );
+                        wordPairs.length!=0?_displayOutputTable():Text("Loading");
                       },
                       child: Text("Analyse")),
                 ],
