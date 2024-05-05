@@ -18,25 +18,39 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
         DataColumn(label: Text('Component')),
         DataColumn(label: Text('Result')),
       ],
-      rows: widget.extractedResult[0]
-          .map(
-            (pair) => DataRow(
-              cells: [
-                DataCell(Text(pair.word)), // Accessing word directly
-                DataCell(Text(pair.nextWord)), // Accessing nextWord directly
-              ],
-            ),
-          )
-          .toList(),
+      rows: widget.extractedResult.expand((item) {
+        return item.map((pair) {
+          return DataRow(
+            cells: [
+              DataCell(Text(pair.word)), // Accessing word directly
+              DataCell(Text(pair.nextWord)), // Accessing nextWord directly
+            ],
+          );
+        });
+      }).toList(),
     );
   }
+      // rows: widget.extractedResult[0]
+      //     .map(
+      //       (pair) => DataRow(
+      //         cells: [
+      //           DataCell(Text(pair.word)), // Accessing word directly
+      //           DataCell(Text(pair.nextWord)), // Accessing nextWord directly
+      //         ],
+      //       ),
+      //     )
+      //     .toList(),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.extractedResult.isNotEmpty
-          ? _displayOutputTable()
-          : Text("Hi"),
+      body: SingleChildScrollView(
+        child: widget.extractedResult.isNotEmpty
+            ? _displayOutputTable()
+            : Text("Hi"),
+      ),
     );
   }
 }
