@@ -1,7 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'ecg_plot.dart';
-// Import the ECGPlotScreen
+import 'package:file_picker/file_picker.dart'; // Import FilePicker package
+import 'dart:io'; // Import dart:io to use File class
+import 'ecg_plot.dart'; // Import the ECGPlotScreen
 
 class ReportHome extends StatelessWidget {
   @override
@@ -46,27 +47,33 @@ class ReportHome extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
             ),
           ),
-          // Button for diagnosis on the right bottom
+          // Upload ECG File picker on the right bottom
           Positioned(
             right: MediaQuery.of(context).size.width * 0.05, // Position it on the right 5% of the screen width
             bottom: 16,
             child: ElevatedButton.icon(
-              onPressed: () {
-                // Navigate to ECGPlotScreen when button is clicked
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ECGDiagnosisScreen()),
+              onPressed: () async {
+                // Open file picker to upload ECG file
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowedExtensions: ['txt'],
                 );
+                if (result != null) {
+                  // Navigate to ECGPlotScreen when file is uploaded
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ECGDiagnosisScreen(file: File(result.files.single.path!))),
+                  );
+                }
               },
-              icon: Image.asset(
-                'assets/defect_prediction/icons8-play-button-circled.gif', // Replace with your PNG icon path
-                width: 24, // Adjust icon size as needed
-                height: 24,
+              icon: Icon(
+                Icons.upload_file, // Use the upload file icon
+                size: 24, // Adjust icon size as needed
               ),
               label: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12), // Adjust button padding
                 child: Text(
-                  'Start Diagnosis',
+                  'Upload ECG File',
                   style: TextStyle(color: Colors.white), // Set text color to white
                 ),
               ),
@@ -103,14 +110,4 @@ class MyCustomClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
-
-
-
-
-
-
-
-
-
-
 

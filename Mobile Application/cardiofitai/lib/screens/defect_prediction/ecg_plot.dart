@@ -1,65 +1,49 @@
 
-
-//INTEGRATED FUNCTIONALITY
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:fl_chart/fl_chart.dart';
-
+import 'package:http/http.dart' as http;
 
 class ECGDiagnosisScreen extends StatefulWidget {
+  final File file; // Define the file parameter
+
+  const ECGDiagnosisScreen({Key? key, required this.file}) : super(key: key);
+
   @override
   _ECGDiagnosisScreenState createState() => _ECGDiagnosisScreenState();
 }
 
 class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-  }
   File? _selectedFile;
   String _predictedLabel = '';
   List<double> _ecgData = [];
 
-  Future<void> _pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['txt'],
-    );
+  @override
+  void initState() {
+    super.initState();
+    _selectedFile = widget.file; // Assign the file from widget parameter
+    _processFile();
+  }
 
-    if (result != null) {
+  Future<void> _processFile() async {
+    try {
+      // Read the file and plot ECG
+      List<double> ecgData = await _readFile(_selectedFile!);
+
       setState(() {
-        _selectedFile = File(result.files.single.path!);
-        _ecgData.clear(); // Clear previous ECG data when selecting a new file
-        _predictedLabel = ''; // Clear predicted label when selecting a new file
+        _ecgData = ecgData;
       });
 
-      try {
-        // Read the file and plot ECG
-        List<double> ecgData = await _readFile(_selectedFile!);
-
-        setState(() {
-          _ecgData = ecgData;
-        });
-
-        // Predict label from web service
-        String predictedLabel = await _predictLabel(_selectedFile!);
-        setState(() {
-          _predictedLabel = predictedLabel;
-        });
-      } catch (e) {
-        print('Error: $e');
-        // Handle error
-      }
+      // Predict label from web service
+      String predictedLabel = await _predictLabel(_selectedFile!);
+      setState(() {
+        _predictedLabel = predictedLabel;
+      });
+    } catch (e) {
+      print('Error: $e');
+      // Handle error
     }
   }
 
@@ -95,63 +79,59 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
         title: Text('ECG Diagnosis'),
       ),
       body: Center(
-        child: Column(
+        child: _ecgData.isNotEmpty
+            ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
-              onPressed: _pickFile,
-              child: Text('Select ECG File'),
-            ),
-            if (_selectedFile != null)
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Text(
-                  'Predicted Label: $_predictedLabel',
-                  style: TextStyle(fontSize: 20),
-                ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                'Predicted Label: $_predictedLabel',
+                style: TextStyle(fontSize: 20),
               ),
-            if (_ecgData.isNotEmpty)
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 200,
-                  child: LineChart(
-                    LineChartData(
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: List.generate(
-                            _ecgData.length,
-                                (index) => FlSpot(index.toDouble(), _ecgData[index]),
-                          ),
-                          isCurved: false,
-                          colors: [Colors.blue],
-                          barWidth: 2,
-                          isStrokeCapRound: true,
-                          dotData: FlDotData(show: false),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 200,
+                child: LineChart(
+                  LineChartData(
+                    lineBarsData: [
+                      LineChartBarData(
+                        spots: List.generate(
+                          _ecgData.length,
+                              (index) => FlSpot(index.toDouble(), _ecgData[index]),
                         ),
-                      ],
-                      minY: _ecgData.reduce((min, current) => min < current ? min : current),
-                      maxY: _ecgData.reduce((max, current) => max > current ? max : current),
-                      titlesData: FlTitlesData(
-                        bottomTitles: SideTitles(showTitles: true),
-                        leftTitles: SideTitles(showTitles: true),
+                        isCurved: false,
+                        colors: [Colors.blue],
+                        barWidth: 2,
+                        isStrokeCapRound: true,
+                        dotData: FlDotData(show: false),
                       ),
-                      borderData: FlBorderData(
-                        show: true,
-                        border: Border.all(color: Colors.black),
-                      ),
-                      gridData: FlGridData(
-                        show: true,
-                        drawHorizontalLine: true,
-                        drawVerticalLine: true,
-                      ),
+                    ],
+                    minY: _ecgData.reduce((min, current) => min < current ? min : current),
+                    maxY: _ecgData.reduce((max, current) => max > current ? max : current),
+                    titlesData: FlTitlesData(
+                      bottomTitles: SideTitles(showTitles: true),
+                      leftTitles: SideTitles(showTitles: true),
+                    ),
+                    borderData: FlBorderData(
+                      show: true,
+                      border: Border.all(color: Colors.black),
+                    ),
+                    gridData: FlGridData(
+                      show: true,
+                      drawHorizontalLine: true,
+                      drawVerticalLine: true,
                     ),
                   ),
                 ),
               ),
+            ),
           ],
-        ),
+        )
+            : CircularProgressIndicator(), // Show loading indicator while processing
       ),
     );
   }
