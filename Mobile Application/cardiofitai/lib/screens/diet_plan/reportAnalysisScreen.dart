@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'modiRecognitionScreen.dart';
@@ -74,7 +75,6 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
 
   Widget _displayOutputTable() {
     List<Widget> tableWidgets = [];
-
     // Loop through widget.extractedResult
     for (var item in widget.extractedResult) {
       List<DataRow> rows = item.map((pair) {
@@ -87,6 +87,8 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       }).toList();
 
       // Add DataTable and Divider to tableWidgets list
+      tableWidgets.add(Text(widget.addMultipleReports[findIndex]["UploadedReport"])); // Add a Divider after each DataTable
+      findIndex+1;
       tableWidgets.add(
         DataTable(
           columns: [
@@ -96,6 +98,7 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
           rows: rows,
         ),
       );
+
       tableWidgets.add(Divider()); // Add a Divider after each DataTable
     }
 
@@ -165,6 +168,8 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
   //
   //   return diagnosis;
   // }
+
+
 
   // Widget _displayOutputTable() {
   //   List<Widget> tables = [];
