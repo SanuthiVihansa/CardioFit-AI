@@ -177,7 +177,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                             {
                               "UploadedReport": selectedReport,
                               "UploadedImage": pickedimage,
-                              "ScannedItems": ""
+                              "ScannedItems": "",
+                              "ExtractedText":""
                             },
                           );
                           // _showAttachedItems();
@@ -317,6 +318,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         // final image =
         //     await ImagePicker().pickImage(source: ImageSource.gallery);
         if (image != null) {
+          Text("we are here");
           final pickedImage = File(image.path);
           final bytes = await pickedImage.readAsBytes();
           final img64 = base64Encode(bytes);
@@ -333,16 +335,16 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           final result = jsonDecode(response.body);
           final scannedText = result["ParsedResults"][0]["ParsedText"];
 
-          item["ScannedText"] =
-              scannedText; // Add or update the ScannedText field
+          item["ScannedText"] = scannedText; // Add or update the ScannedText field
           wordPairs = findWordPairs(item);
           extractedText.add(wordPairs);
+          item["ExtractedText"] = extractedText;
         }
       }
     }
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (BuildContext context) =>
-            ReportAnalysisScreen(extractedText)));
+            ReportAnalysisScreen(extractedText,addMultipleReports)));
   }
 
   // List<WordPair> findWordPairs(String text) {
@@ -508,6 +510,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   // }
 
   //Display Extracted in a table
+
 
   @override
   Widget build(BuildContext context) {
