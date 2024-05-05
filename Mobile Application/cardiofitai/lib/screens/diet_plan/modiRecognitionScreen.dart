@@ -115,10 +115,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             ),
             Center(
                 child: Icon(
-                  Icons.attach_file,
-                  size: 50,
-                  color: Colors.grey,
-                )),
+              Icons.attach_file,
+              size: 50,
+              color: Colors.grey,
+            )),
             Center(
                 child: Text("\nPlease upload the medical reports\n",
                     style: TextStyle(color: Colors.grey, fontSize: 20))),
@@ -131,7 +131,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 Container(
                   width: 250,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.deepOrangeAccent, width: 2.0),
+                    border:
+                        Border.all(color: Colors.deepOrangeAccent, width: 2.0),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: DropdownButton<String>(
@@ -148,12 +149,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                         });
                       }
                     },
-                    items: reports.map<DropdownMenuItem<String>>((String value) {
+                    items:
+                        reports.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Center(
-                          child: Text(value,
-                              textAlign: TextAlign.start),
+                          child: Text(value, textAlign: TextAlign.start),
                         ),
                       );
                     }).toList(),
@@ -165,10 +166,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 Flexible(
                   child: ElevatedButton(
                     onPressed: () async {
-                      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      final image = await ImagePicker()
+                          .pickImage(source: ImageSource.gallery);
                       if (image != null) {
                         pickedimage = File(image.path);
-                        if (pickedimage.path.isNotEmpty && selectedReport != 'Select Report') {
+                        if (pickedimage.path.isNotEmpty &&
+                            selectedReport != 'Select Report') {
                           addMultipleReports.add(
                             {
                               "UploadedReport": selectedReport,
@@ -176,7 +179,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                               "ScannedItems": ""
                             },
                           );
-                          _showAttachedItems();
+                          // _showAttachedItems();
+                          setState(() {});
                           print(addMultipleReports);
                         }
                       }
@@ -191,7 +195,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       ),
     );
   }
-
 
   Widget _showAttachedItems() {
     return Padding(
@@ -228,7 +231,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 DataCell(
                   GestureDetector(
                     child: Icon(Icons.restore_from_trash_outlined),
-                    onTap: (){
+                    onTap: () {
                       _removeItem(e);
                     },
                   ),
@@ -308,8 +311,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   //Function to read values based on the report selected
   void _pickImage() async {
     for (var item in addMultipleReports) {
-      if (item["UploadedImage"] == null) {
-        final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (item["UploadedImage"] != null) {
+        final image = item["UploadedImage"];
+        // final image =
+        //     await ImagePicker().pickImage(source: ImageSource.gallery);
         if (image != null) {
           final pickedImage = File(image.path);
           final bytes = await pickedImage.readAsBytes();
@@ -321,13 +326,15 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             "isTable": "true",
           };
           final header = {"apikey": "K81742525988957"};
-          final response = await http.post(Uri.parse(url), body: data, headers: header);
+          final response =
+              await http.post(Uri.parse(url), body: data, headers: header);
 
           final result = jsonDecode(response.body);
           final scannedText = result["ParsedResults"][0]["ParsedText"];
 
           setState(() {
-            item["ScannedText"] = scannedText; // Add or update the ScannedText field
+            item["ScannedText"] =
+                scannedText; // Add or update the ScannedText field
           });
         }
       }
@@ -416,7 +423,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   //   return diagnosis;
   // }
 
-
   List<WordPair> findWordPairs(Map<String, dynamic> item) {
     List<WordPair> pairs = [];
     RegExp regExp = RegExp(" ");
@@ -435,7 +441,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     Iterable<Match> matches = regExp.allMatches(item["ScannedText"]);
     for (Match match in matches) {
       String word = match.group(1)!;
-      String nextWord = match.group(2)!; // Capture the next word after the phrase
+      String nextWord =
+          match.group(2)!; // Capture the next word after the phrase
       pairs.add(WordPair(word, nextWord));
     }
 
@@ -449,44 +456,44 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
     if (selectedReport == "Full Blood Count Report") {
       if (wordPairs.any((pair) =>
-      pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
+          pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
         diagnosis = "You are facing an infection";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Neutrophils" &&
+          pair.word == "Neutrophils" &&
           (int.tryParse(pair.nextWord) ?? 0) > 80)) {
         diagnosis = "You are facing an Bacterial infection";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Lymphocytes" &&
+          pair.word == "Lymphocytes" &&
           (int.tryParse(pair.nextWord) ?? 0) > 40)) {
         diagnosis = "You are facing a Viral Fever";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Eosinophils" &&
+          pair.word == "Eosinophils" &&
           (int.tryParse(pair.nextWord) ?? 0) > 6)) {
         diagnosis = "You are facing an Allergic reaction";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Platelet Count" &&
+          pair.word == "Platelet Count" &&
           (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
         diagnosis =
-        "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
+            "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
       } else {
         diagnosis = "No defect identified";
       }
     } else if (selectedReport == "Urine Full Report") {
       if (wordPairs.any((pair) =>
-      pair.word == "Pus Cells" &&
+          pair.word == "Pus Cells" &&
           (int.tryParse(pair.nextWord) ?? 0) < 10)) {
         diagnosis = "You are facing an Urine infection";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
+          pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
         diagnosis = "You are facing a Renal disease";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
+          pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
         diagnosis = "You have Diabetics";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Red Blood Cells" &&
+          pair.word == "Red Blood Cells" &&
           pair.nextWord.toLowerCase() != "occasional")) {
         diagnosis =
-        "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
+            "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
       } else {
         diagnosis = "No defect identified";
       }
@@ -494,11 +501,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
     return diagnosis;
   }
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -539,6 +541,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               SizedBox(
                 height: 30,
               ),
+              addMultipleReports.length != 0
+                  ? _showAttachedItems()
+                  : SizedBox(),
 
               // InkWell(
               //   onTap: () {},
@@ -562,45 +567,46 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               // SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children:<Widget> [
-                  ElevatedButton(onPressed: (){
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
+                children: <Widget>[
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 DietHomePage(user!)));
-                  }, child: Text("Back")),
+                      },
+                      child: Text("Back")),
                   SizedBox(width: 30),
-                  ElevatedButton(onPressed: (){
-                    _pickImage();
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                        scanning
-                            ? Text("Scanning....",
-                            style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.blueGrey,
-                                fontWeight: FontWeight.w700))
-                            : DataTable(
-                          columns: [
-                            DataColumn(label: Text('Component')),
-                            DataColumn(label: Text('Result')),
-                          ],
-                          rows: wordPairs
-                              .map(
-                                (pair) => DataRow(
-                              cells: [
-                                DataCell(Text(pair.word)),
-                                DataCell(Text(pair.nextWord)),
-                              ],
-                            ),
-                          )
-                              .toList(),
-                        ),
+                  ElevatedButton(
+                      onPressed: () {
+                        _pickImage();
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => scanning
+                              ? Text("Scanning....",
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      color: Colors.blueGrey,
+                                      fontWeight: FontWeight.w700))
+                              : DataTable(
+                                  columns: [
+                                    DataColumn(label: Text('Component')),
+                                    DataColumn(label: Text('Result')),
+                                  ],
+                                  rows: wordPairs
+                                      .map(
+                                        (pair) => DataRow(
+                                          cells: [
+                                            DataCell(Text(pair.word)),
+                                            DataCell(Text(pair.nextWord)),
+                                          ],
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
 
-                            //ReportAnalysisScreen()
-
-                    );
-                  }, child: Text("Analyse")),
+                          //ReportAnalysisScreen()
+                        );
+                      },
+                      child: Text("Analyse")),
                 ],
               ),
 
