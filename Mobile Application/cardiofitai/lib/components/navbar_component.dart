@@ -81,7 +81,7 @@ class LeftNavBar extends StatelessWidget {
                   padding: EdgeInsets.all(16.0),
                   borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => ProfilePage(user)),
@@ -124,8 +124,7 @@ class LeftNavBar extends StatelessWidget {
               Navigator.of(context).pop(); // Close the drawer
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      RecognitionScreen(),
+                  builder: (context) => RecognitionScreen(),
                 ),
               );
             },

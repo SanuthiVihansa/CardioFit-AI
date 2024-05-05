@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _caluclateBMIController = TextEditingController();
   final DateTime _dateOfBirth = DateTime.now();
   String dropdownValue = 'Less Active';
-  late Future<QuerySnapshot<Object?>> _userSignUpInfo;
+  late QuerySnapshot<Object?> _userSignUpInfo;
 
   get height => _heightController.text;
 
@@ -38,13 +38,20 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _userNameController.text = widget.user.name;
+    _userInfo();
   }
 
   // in kilograms
 
   //Function to generate a Report number
   Future<void> _userInfo() async {
-    _userSignUpInfo = UserLoginService.getUserByEmail('sanuthi@gmail.com');
+    _userSignUpInfo =
+        await UserLoginService.getUserByEmail('sanuthi@gmail.com');
+    _ageController.text = _userSignUpInfo.docs[0]["age"];
+    _heightController.text = _userSignUpInfo.docs[0]["height"];
+    _weightController.text = _userSignUpInfo.docs[0]["weight"];
+    _caluclateBMIController.text = _userSignUpInfo.docs[0]["bmi"];
+    dropdownValue = _userSignUpInfo.docs[0]["activeLevel"];
   }
 
   //Function to calculate BMI
