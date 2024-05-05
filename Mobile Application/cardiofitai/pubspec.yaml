@@ -110,6 +110,10 @@ flutter:
     - assets/fastfood.jpeg
     - assets/dieteryimage.jpg
     - assets/reportanalysis.jpg
+    - assets/defect_prediction/ECGHome.png
+    - assets/defect_prediction/Logo CarioFit Ai.jpg
+    - assets/defect_prediction/icons8-play-button-circled.gif
+    - assets/defect_prediction/icons8-play-button-50.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
