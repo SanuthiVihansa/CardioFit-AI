@@ -72,7 +72,6 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
   //     child: dataTable,
   //   );
   // }
-
   Widget _displayOutputTable() {
     List<Widget> tableWidgets = [];
     // Loop through widget.extractedResult
@@ -98,7 +97,7 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
           rows: rows,
         ),
       );
-
+      tableWidgets.add(Text(reportDiagnosis(widget.addMultipleReports[findIndex],findIndex)));
       tableWidgets.add(Divider()); // Add a Divider after each DataTable
     }
 
@@ -116,58 +115,58 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
   }
 
 
-  // String reportDiagnosis(Map<String, dynamic> item) {
-  //   List<WordPair> wordPairs = findWordPairs(item);
-  //   String selectedReport = item["UploadedReport"];
-  //   String diagnosis = "";
-  //
-  //   if (selectedReport == "Full Blood Count Report") {
-  //     if (wordPairs.any((pair) =>
-  //     pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
-  //       diagnosis = "You are facing an infection";
-  //     } else if (wordPairs.any((pair) =>
-  //     pair.word == "Neutrophils" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) > 80)) {
-  //       diagnosis = "You are facing an Bacterial infection";
-  //     } else if (wordPairs.any((pair) =>
-  //     pair.word == "Lymphocytes" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) > 40)) {
-  //       diagnosis = "You are facing a Viral Fever";
-  //     } else if (wordPairs.any((pair) =>
-  //     pair.word == "Eosinophils" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) > 6)) {
-  //       diagnosis = "You are facing an Allergic reaction";
-  //     } else if (wordPairs.any((pair) =>
-  //     pair.word == "Platelet Count" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
-  //       diagnosis =
-  //       "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
-  //     } else {
-  //       diagnosis = "No defect identified";
-  //     }
-  //   } else if (selectedReport == "Urine Full Report") {
-  //     if (wordPairs.any((pair) =>
-  //     pair.word == "Pus Cells" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) < 10)) {
-  //       diagnosis = "You are facing an Urine infection";
-  //     } else if (wordPairs.any((pair) =>
-  //     pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
-  //       diagnosis = "You are facing a Renal disease";
-  //     } else if (wordPairs.any((pair) =>
-  //     pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
-  //       diagnosis = "You have Diabetics";
-  //     } else if (wordPairs.any((pair) =>
-  //     pair.word == "Red Blood Cells" &&
-  //         pair.nextWord.toLowerCase() != "occasional")) {
-  //       diagnosis =
-  //       "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
-  //     } else {
-  //       diagnosis = "No defect identified";
-  //     }
-  //   }
-  //
-  //   return diagnosis;
-  // }
+  String reportDiagnosis(Map<String, dynamic> item,int index) {
+    List<WordPair> wordPairs = widget.extractedResult[index];
+    String selectedReport = item["UploadedReport"];
+    String diagnosis = "";
+
+    if (selectedReport == "Full Blood Count Report") {
+      if (wordPairs.any((pair) =>
+      pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
+        diagnosis = "You are facing an infection";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Neutrophils" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 80)) {
+        diagnosis = "You are facing an Bacterial infection";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Lymphocytes" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 40)) {
+        diagnosis = "You are facing a Viral Fever";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Eosinophils" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 6)) {
+        diagnosis = "You are facing an Allergic reaction";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Platelet Count" &&
+          (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
+        diagnosis =
+        "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
+      } else {
+        diagnosis = "No defect identified";
+      }
+    } else if (selectedReport == "Urine Full Report") {
+      if (wordPairs.any((pair) =>
+      pair.word == "Pus Cells" &&
+          (int.tryParse(pair.nextWord) ?? 0) < 10)) {
+        diagnosis = "You are facing an Urine infection";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
+        diagnosis = "You are facing a Renal disease";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
+        diagnosis = "You have Diabetics";
+      } else if (wordPairs.any((pair) =>
+      pair.word == "Red Blood Cells" &&
+          pair.nextWord.toLowerCase() != "occasional")) {
+        diagnosis =
+        "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
+      } else {
+        diagnosis = "No defect identified";
+      }
+    }
+
+    return diagnosis;
+  }
 
 
 
