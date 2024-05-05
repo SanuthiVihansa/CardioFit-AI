@@ -618,223 +618,17 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
                                           ? _leadV1Plot()
                                           : _selectedLead == "Lead V2"
                                               ? _leadV2Plot()
-                                              : Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                        left: _width /
-                                                            (_devWidth / 20),
-                                                        top: _height /
-                                                            (_devHeight / 8),
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            "Similarity : ${(v3p * 100).toStringAsFixed(2)} %",
-                                                            style: TextStyle(
-                                                                fontSize: _width /
-                                                                    (_devWidth /
-                                                                        13)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Actual Lead V3",
-                                                      style: TextStyle(
-                                                          fontSize: _width /
-                                                              (_devWidth / 10)),
-                                                    ),
-                                                    SizedBox(
-                                                        height: _height /
-                                                            (_devHeight / 200),
-                                                        child: _ecgPlot(
-                                                            actv3Data,
-                                                            _calcMin(actv3Data),
-                                                            _calcMax(actv3Data),
-                                                            Colors.green)),
-                                                    Text(
-                                                      "Predicted Lead V3",
-                                                      style: TextStyle(
-                                                          fontSize: _width /
-                                                              (_devWidth / 10)),
-                                                    ),
-                                                    SizedBox(
-                                                        height: _height /
-                                                            (_devHeight / 200),
-                                                        child: _ecgPlot(
-                                                            predv3Data,
-                                                            _calcMin(
-                                                                predv3Data),
-                                                            _calcMax(
-                                                                predv3Data),
-                                                            Colors.blue)),
-                                                    const Divider(
-                                                      height: 1,
-                                                      thickness: 13,
-                                                      color: Colors.black,
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                        left: _width /
-                                                            (_devWidth / 20),
-                                                        top: _height /
-                                                            (_devHeight / 8),
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            "Similarity : ${(v4p * 100).toStringAsFixed(2)} %",
-                                                            style: TextStyle(
-                                                                fontSize: _width /
-                                                                    (_devWidth /
-                                                                        13)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Actual Lead V4",
-                                                      style: TextStyle(
-                                                          fontSize: _width /
-                                                              (_devWidth / 10)),
-                                                    ),
-                                                    SizedBox(
-                                                        height: _height /
-                                                            (_devHeight / 200),
-                                                        child: _ecgPlot(
-                                                            actv4Data,
-                                                            _calcMin(actv4Data),
-                                                            _calcMax(actv4Data),
-                                                            Colors.green)),
-                                                    Text(
-                                                      "Predicted Lead V4",
-                                                      style: TextStyle(
-                                                          fontSize: _width /
-                                                              (_devWidth / 10)),
-                                                    ),
-                                                    SizedBox(
-                                                        height: _height /
-                                                            (_devHeight / 200),
-                                                        child: _ecgPlot(
-                                                            predv4Data,
-                                                            _calcMin(
-                                                                predv4Data),
-                                                            _calcMax(
-                                                                predv4Data),
-                                                            Colors.blue)),
-                                                    const Divider(
-                                                      height: 1,
-                                                      thickness: 13,
-                                                      color: Colors.black,
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                        left: _width /
-                                                            (_devWidth / 20),
-                                                        top: _height /
-                                                            (_devHeight / 8),
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            "Similarity : ${(v5p * 100).toStringAsFixed(2)} %",
-                                                            style: TextStyle(
-                                                                fontSize: _width /
-                                                                    (_devWidth /
-                                                                        13)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Actual Lead V5",
-                                                      style: TextStyle(
-                                                          fontSize: _width /
-                                                              (_devWidth / 10)),
-                                                    ),
-                                                    SizedBox(
-                                                        height: _height /
-                                                            (_devHeight / 200),
-                                                        child: _ecgPlot(
-                                                            actv5Data,
-                                                            _calcMin(actv5Data),
-                                                            _calcMax(actv5Data),
-                                                            Colors.green)),
-                                                    Text(
-                                                      "Predicted Lead V5",
-                                                      style: TextStyle(
-                                                          fontSize: _width /
-                                                              (_devWidth / 10)),
-                                                    ),
-                                                    SizedBox(
-                                                        height: _height /
-                                                            (_devHeight / 200),
-                                                        child: _ecgPlot(
-                                                            predv5Data,
-                                                            _calcMin(
-                                                                predv5Data),
-                                                            _calcMax(
-                                                                predv5Data),
-                                                            Colors.blue)),
-                                                    const Divider(
-                                                      height: 1,
-                                                      thickness: 13,
-                                                      color: Colors.black,
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                        left: _width /
-                                                            (_devWidth / 20),
-                                                        top: _height /
-                                                            (_devHeight / 8),
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            "Similarity : ${(v6p * 100).toStringAsFixed(2)} %",
-                                                            style: TextStyle(
-                                                                fontSize: _width /
-                                                                    (_devWidth /
-                                                                        13)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Actual Lead V6",
-                                                      style: TextStyle(
-                                                          fontSize: _width /
-                                                              (_devWidth / 10)),
-                                                    ),
-                                                    SizedBox(
-                                                        height: _height /
-                                                            (_devHeight / 200),
-                                                        child: _ecgPlot(
-                                                            actv6Data,
-                                                            _calcMin(actv6Data),
-                                                            _calcMax(actv6Data),
-                                                            Colors.green)),
-                                                    Text(
-                                                      "Predicted Lead V6",
-                                                      style: TextStyle(
-                                                          fontSize: _width /
-                                                              (_devWidth / 10)),
-                                                    ),
-                                                    SizedBox(
-                                                        height: _height /
-                                                            (_devHeight / 200),
-                                                        child: _ecgPlot(
-                                                            predv6Data,
-                                                            _calcMin(
-                                                                predv6Data),
-                                                            _calcMax(
-                                                                predv6Data),
-                                                            Colors.blue)),
-                                                  ],
-                                                ),
+                                              : _selectedLead == "Lead V3"
+                                                  ? _leadV3Plot()
+                                                  : _selectedLead == "Lead V4"
+                                                      ? _leadV4Plot()
+                                                      : _selectedLead ==
+                                                              "Lead V5"
+                                                          ? _leadV5Plot()
+                                                          : _selectedLead ==
+                                                                  "Lead V6"
+                                                              ? _leadV6Plot()
+                                                              : const SizedBox(),
             ),
           ),
         ),
@@ -1146,6 +940,158 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(predv2Data, _calcMin(predv2Data),
                 _calcMax(predv2Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadV3Plot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: _width / (_devWidth / 20),
+            top: _height / (_devHeight / 8),
+          ),
+          child: Row(
+            children: [
+              Text(
+                "Similarity : ${(v3p * 100).toStringAsFixed(2)} %",
+                style: TextStyle(fontSize: _width / (_devWidth / 13)),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          "Actual Lead V3",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actv3Data, _calcMin(actv3Data), _calcMax(actv3Data),
+                Colors.green)),
+        Text(
+          "Predicted Lead V3",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predv3Data, _calcMin(predv3Data),
+                _calcMax(predv3Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadV4Plot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: _width / (_devWidth / 20),
+            top: _height / (_devHeight / 8),
+          ),
+          child: Row(
+            children: [
+              Text(
+                "Similarity : ${(v4p * 100).toStringAsFixed(2)} %",
+                style: TextStyle(fontSize: _width / (_devWidth / 13)),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          "Actual Lead V4",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actv4Data, _calcMin(actv4Data), _calcMax(actv4Data),
+                Colors.green)),
+        Text(
+          "Predicted Lead V4",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predv4Data, _calcMin(predv4Data),
+                _calcMax(predv4Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadV5Plot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: _width / (_devWidth / 20),
+            top: _height / (_devHeight / 8),
+          ),
+          child: Row(
+            children: [
+              Text(
+                "Similarity : ${(v5p * 100).toStringAsFixed(2)} %",
+                style: TextStyle(fontSize: _width / (_devWidth / 13)),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          "Actual Lead V5",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actv5Data, _calcMin(actv5Data), _calcMax(actv5Data),
+                Colors.green)),
+        Text(
+          "Predicted Lead V5",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predv5Data, _calcMin(predv5Data),
+                _calcMax(predv5Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadV6Plot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: _width / (_devWidth / 20),
+            top: _height / (_devHeight / 8),
+          ),
+          child: Row(
+            children: [
+              Text(
+                "Similarity : ${(v6p * 100).toStringAsFixed(2)} %",
+                style: TextStyle(fontSize: _width / (_devWidth / 13)),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          "Actual Lead V6",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actv6Data, _calcMin(actv6Data), _calcMax(actv6Data),
+                Colors.green)),
+        Text(
+          "Predicted Lead V6",
+          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predv6Data, _calcMin(predv6Data),
+                _calcMax(predv6Data), Colors.blue)),
       ],
     );
   }
