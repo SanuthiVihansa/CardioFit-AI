@@ -382,6 +382,11 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    Text(
+                      "Selected Lead: ",
+                      style: TextStyle(fontSize: _width / (_devWidth / 14)),
+                    ),
+                    _leadSelectionDropDown(),
                     Checkbox(
                         value: _isComparisonOn,
                         onChanged: (value) {
@@ -423,107 +428,33 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
         Expanded(
           child: SizedBox(
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Lead I",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predl1Data, _calcMin(predl1Data),
-                          _calcMax(predl1Data), Colors.blue)),
-                  Text(
-                    "Lead II",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(actl2Data, _calcMin(actl2Data),
-                          _calcMax(actl2Data), Colors.blue)),
-                  Text(
-                    "Lead III",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predl3Data, _calcMin(predl3Data),
-                          _calcMax(predl3Data), Colors.blue)),
-                  Text(
-                    "Lead aVR",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predavrData, _calcMin(predavrData),
-                          _calcMax(predavrData), Colors.blue)),
-                  Text(
-                    "Lead aVL",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predavlData, _calcMin(predavlData),
-                          _calcMax(predavlData), Colors.blue)),
-                  Text(
-                    "Lead aVF",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predavfData, _calcMin(predavfData),
-                          _calcMax(predavfData), Colors.blue)),
-                  Text(
-                    "Lead V1",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv1Data, _calcMin(predv1Data),
-                          _calcMax(predv1Data), Colors.blue)),
-                  Text(
-                    "Lead V2",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv2Data, _calcMin(predv2Data),
-                          _calcMax(predv2Data), Colors.blue)),
-                  Text(
-                    "Lead V3",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv3Data, _calcMin(predv3Data),
-                          _calcMax(predv3Data), Colors.blue)),
-                  Text(
-                    "Lead V4",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv4Data, _calcMin(predv4Data),
-                          _calcMax(predv4Data), Colors.blue)),
-                  Text(
-                    "Lead V5",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv5Data, _calcMin(predv5Data),
-                          _calcMax(predv5Data), Colors.blue)),
-                  Text(
-                    "Lead V6",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                  ),
-                  SizedBox(
-                      height: _height / (_devHeight / 200),
-                      child: _ecgPlot(predv6Data, _calcMin(predv6Data),
-                          _calcMax(predv6Data), Colors.blue)),
-                ],
-              ),
+              child: _selectedLead == "Lead I"
+                  ? _lead1PlotWithoutComparison()
+                  : _selectedLead == "Lead II"
+                      ? _lead2PlotWithoutComparison()
+                      : _selectedLead == "Lead III"
+                          ? _lead3PlotWithoutComparison()
+                          : _selectedLead == "Lead aVR"
+                              ? _leadAvrPlotWithoutComparison()
+                              : _selectedLead == "Lead aVL"
+                                  ? _leadAvlPlotWithoutComparison()
+                                  : _selectedLead == "Lead aVF"
+                                      ? _leadAvfPlotWithoutComparison()
+                                      : _selectedLead == "Lead V1"
+                                          ? _leadV1PlotWithoutComparison()
+                                          : _selectedLead == "Lead V2"
+                                              ? _leadV2PlotWithoutComparison()
+                                              : _selectedLead == "Lead V3"
+                                                  ? _leadV3PlotWithoutComparison()
+                                                  : _selectedLead == "Lead V4"
+                                                      ? _leadV4PlotWithoutComparison()
+                                                      : _selectedLead ==
+                                                              "Lead V5"
+                                                          ? _leadV5PlotWithoutComparison()
+                                                          : _selectedLead ==
+                                                                  "Lead V6"
+                                                              ? _leadV6PlotWithoutComparison()
+                                                              : const SizedBox(),
             ),
           ),
         ),
@@ -583,7 +514,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all<Size>(
                           Size(
-                              _width / (_devWidth / 160.0),
+                              _width / (_devWidth / 120.0),
                               _height /
                                   (_devHeight / 40)), // Button width and height
                         ),
@@ -603,31 +534,31 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           child: SizedBox(
             child: SingleChildScrollView(
               child: _selectedLead == "Lead I"
-                  ? _lead1Plot()
+                  ? _lead1PlotWithComparison()
                   : _selectedLead == "Lead II"
-                      ? _lead2Plot()
+                      ? _lead2PlotWithComparison()
                       : _selectedLead == "Lead III"
-                          ? _lead3Plot()
+                          ? _lead3PlotWithComparison()
                           : _selectedLead == "Lead aVR"
-                              ? _leadAvrPlot()
+                              ? _leadAvrPlotWithComparison()
                               : _selectedLead == "Lead aVL"
-                                  ? _leadAvlPlot()
+                                  ? _leadAvlPlotWithComparison()
                                   : _selectedLead == "Lead aVF"
-                                      ? _leadAvfPlot()
+                                      ? _leadAvfPlotWithComparison()
                                       : _selectedLead == "Lead V1"
-                                          ? _leadV1Plot()
+                                          ? _leadV1PlotWithComparison()
                                           : _selectedLead == "Lead V2"
-                                              ? _leadV2Plot()
+                                              ? _leadV2PlotWithComparison()
                                               : _selectedLead == "Lead V3"
-                                                  ? _leadV3Plot()
+                                                  ? _leadV3PlotWithComparison()
                                                   : _selectedLead == "Lead V4"
-                                                      ? _leadV4Plot()
+                                                      ? _leadV4PlotWithComparison()
                                                       : _selectedLead ==
                                                               "Lead V5"
-                                                          ? _leadV5Plot()
+                                                          ? _leadV5PlotWithComparison()
                                                           : _selectedLead ==
                                                                   "Lead V6"
-                                                              ? _leadV6Plot()
+                                                              ? _leadV6PlotWithComparison()
                                                               : const SizedBox(),
             ),
           ),
@@ -662,7 +593,235 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _lead1Plot() {
+  Widget _lead1PlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead I",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predl1Data, _calcMin(predl1Data),
+                _calcMax(predl1Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _lead2PlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+      ],
+    );
+  }
+
+  Widget _lead3PlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead III",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predl3Data, _calcMin(predl3Data),
+                _calcMax(predl3Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadAvrPlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead aVR",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predavrData, _calcMin(predavrData),
+                _calcMax(predavrData), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadAvlPlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead aVL",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predavlData, _calcMin(predavlData),
+                _calcMax(predavlData), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadAvfPlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead aVF",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predavfData, _calcMin(predavfData),
+                _calcMax(predavfData), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadV1PlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead V1",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predv1Data, _calcMin(predv1Data),
+                _calcMax(predv1Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadV2PlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead V2",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predv2Data, _calcMin(predv2Data),
+                _calcMax(predv2Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadV3PlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead V3",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predv3Data, _calcMin(predv3Data),
+                _calcMax(predv3Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadV4PlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead V4",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predv4Data, _calcMin(predv4Data),
+                _calcMax(predv4Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadV5PlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead V5",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predv5Data, _calcMin(predv5Data),
+                _calcMax(predv5Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _leadV6PlotWithoutComparison() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Lead V6",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 200),
+            child: _ecgPlot(predv6Data, _calcMin(predv6Data),
+                _calcMax(predv6Data), Colors.blue)),
+      ],
+    );
+  }
+
+  Widget _lead1PlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -700,13 +859,16 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _lead2Plot() {
+  Widget _lead2PlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          "Actual Lead II",
-          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          child: Text(
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
         ),
         SizedBox(
             height: _height / (_devHeight / 200),
@@ -716,7 +878,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _lead3Plot() {
+  Widget _lead3PlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -754,7 +916,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _leadAvrPlot() {
+  Widget _leadAvrPlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -792,7 +954,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _leadAvlPlot() {
+  Widget _leadAvlPlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -830,7 +992,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _leadAvfPlot() {
+  Widget _leadAvfPlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -868,7 +1030,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _leadV1Plot() {
+  Widget _leadV1PlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -906,7 +1068,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _leadV2Plot() {
+  Widget _leadV2PlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -944,7 +1106,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _leadV3Plot() {
+  Widget _leadV3PlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -982,7 +1144,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _leadV4Plot() {
+  Widget _leadV4PlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -1020,7 +1182,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _leadV5Plot() {
+  Widget _leadV5PlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -1058,7 +1220,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     );
   }
 
-  Widget _leadV6Plot() {
+  Widget _leadV6PlotWithComparison() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
