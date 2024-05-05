@@ -16,27 +16,102 @@ class ReportAnalysisScreen extends StatefulWidget {
 class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
   int findIndex =0;
   // Widget _displayOutputTable() {
-  //   return Center(
-  //     child: DataTable(
-  //       columns: [
-  //         DataColumn(label: Text('Component')),
-  //         DataColumn(label: Text('Result')),
-  //       ],
-  //       rows: widget.extractedResult.expand((item) {
-  //         findIndex=findIndex+1;
-  //         return item.map((pair) {
-  //           return DataRow(
-  //             cells: [
-  //               DataCell(Text(pair.word)), // Accessing word directly
-  //               DataCell(Text(pair.nextWord)), // Accessing nextWord directly
-  //             ],
+  //   for(int i=0; i <= widget.extractedResult.length; i++ ){
+  //     return Center(
+  //       child: DataTable(
+  //         columns: [
+  //           DataColumn(label: Text('Component')),
+  //           DataColumn(label: Text('Result')),
+  //         ],
+  //         rows: widget.extractedResult.expand((item) {
+  //           findIndex=findIndex+1;
+  //           return item.map((pair) {
+  //             return DataRow(
+  //               cells: [
+  //                 DataCell(Text(pair.word)), // Accessing word directly
+  //                 DataCell(Text(pair.nextWord)), // Accessing nextWord directly
+  //               ],
+  //             );
+  //           }
   //           );
-  //         }
-  //         );
-  //       }).toList(),
-  //     ),
+  //         }).toList(),
+  //       ),
+  //     );
+  //   }
+  // }
+
+  //working
+  // Widget _displayOutputTable() {
+  //   List<DataRow> rows = [];
+  //
+  //   // Loop through widget.extractedResult
+  //   for (var item in widget.extractedResult) {
+  //     rows.addAll(item.map((pair) {
+  //       return DataRow(
+  //         cells: [
+  //           DataCell(Text(pair.word)), // Accessing word directly
+  //           DataCell(Text(pair.nextWord)), // Accessing nextWord directly
+  //         ],
+  //       );
+  //     }));
+  //   }
+  //
+  //   // Building DataTable outside the loop
+  //   DataTable dataTable = DataTable(
+  //     columns: [
+  //       DataColumn(label: Text('Component')),
+  //       DataColumn(label: Text('Result')),
+  //     ],
+  //     rows: rows,
+  //   );
+  //
+  //
+  //   // Returning the DataTable
+  //   return Center(
+  //     child: dataTable,
   //   );
   // }
+
+  Widget _displayOutputTable() {
+    List<Widget> tableWidgets = [];
+
+    // Loop through widget.extractedResult
+    for (var item in widget.extractedResult) {
+      List<DataRow> rows = item.map((pair) {
+        return DataRow(
+          cells: [
+            DataCell(Text(pair.word)), // Accessing word directly
+            DataCell(Text(pair.nextWord)), // Accessing nextWord directly
+          ],
+        );
+      }).toList();
+
+      // Add DataTable and Divider to tableWidgets list
+      tableWidgets.add(
+        DataTable(
+          columns: [
+            DataColumn(label: Text('Component')),
+            DataColumn(label: Text('Result')),
+          ],
+          rows: rows,
+        ),
+      );
+      tableWidgets.add(Divider()); // Add a Divider after each DataTable
+    }
+
+    // Remove the last Divider
+    if (tableWidgets.isNotEmpty) {
+      tableWidgets.removeLast();
+    }
+
+    // Return the list of DataTables and Dividers
+    return Center(
+      child: Column(
+        children: tableWidgets,
+      ),
+    );
+  }
+
 
   // String reportDiagnosis(Map<String, dynamic> item) {
   //   List<WordPair> wordPairs = findWordPairs(item);
@@ -90,37 +165,38 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
   //
   //   return diagnosis;
   // }
-  Widget _displayOutputTable() {
-    List<Widget> tables = [];
 
-    for (int i = 0; i < widget.extractedResult.length; i++) {
-      List<DataRow> rows = [];
-      widget.extractedResult[i].forEach((pair) {
-        rows.add(
-          DataRow(
-            cells: [
-              DataCell(Text(pair.word)), // Accessing word directly
-              DataCell(Text(pair.nextWord)), // Accessing nextWord directly
-            ],
-          ),
-        );
-      });
-
-      tables.add(
-        Center(
-          child: DataTable(
-            columns: [
-              DataColumn(label: Text('Component')),
-              DataColumn(label: Text('Result')),
-            ],
-            rows: rows,
-          ),
-        ),
-      );
-    }
-
-    return tables[findIndex % tables.length];
-  }
+  // Widget _displayOutputTable() {
+  //   List<Widget> tables = [];
+  //
+  //   for (int i = 0; i < widget.extractedResult.length; i++) {
+  //     List<DataRow> rows = [];
+  //     widget.extractedResult[i].forEach((pair) {
+  //       rows.add(
+  //         DataRow(
+  //           cells: [
+  //             DataCell(Text(pair.word)), // Accessing word directly
+  //             DataCell(Text(pair.nextWord)), // Accessing nextWord directly
+  //           ],
+  //         ),
+  //       );
+  //     });
+  //
+  //     tables.add(
+  //       Center(
+  //         child: DataTable(
+  //           columns: [
+  //             DataColumn(label: Text('Component')),
+  //             DataColumn(label: Text('Result')),
+  //           ],
+  //           rows: rows,
+  //         ),
+  //       ),
+  //     );
+  //   }
+  //   print("Tables length: ${tables.length}");
+  //   return tables[findIndex % tables.length];
+  // }
 
 
   @override
