@@ -335,9 +335,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           Text("added scanned text");
           setState(() {
             item["ScannedText"] =
-                scannedText;// Add or update the ScannedText field
+                scannedText; // Add or update the ScannedText field
             wordPairs = findWordPairs(item);
-
           });
         }
       }
@@ -507,23 +506,23 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   // }
 
   //Display Extracted in a table
-  Widget _displayOutputTable(){
+  Widget _displayOutputTable() {
     return DataTable(
-              columns: [
-              DataColumn(label: Text('Component')),
-              DataColumn(label: Text('Result')),
-              ],
-              rows: wordPairs
-                  .map(
-              (pair) => DataRow(
+      columns: [
+        DataColumn(label: Text('Component')),
+        DataColumn(label: Text('Result')),
+      ],
+      rows: wordPairs
+          .map(
+            (pair) => DataRow(
               cells: [
-              DataCell(Text(pair.word)),
-              DataCell(Text(pair.nextWord)),
+                DataCell(Text(pair.word)),
+                DataCell(Text(pair.nextWord)),
               ],
-              ),
-              )
-                  .toList(),
-              );
+            ),
+          )
+          .toList(),
+    );
   }
 
   @override
@@ -603,7 +602,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                   ElevatedButton(
                       onPressed: () {
                         _pickImage();
-                        wordPairs.length!=0?_displayOutputTable():Text("Loading");
+                        // wordPairs.length != 0
+                        //     ? _displayOutputTable()
+                        //     : Text("Loading");
                       },
                       child: Text("Analyse")),
                 ],
@@ -618,7 +619,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               //             fontWeight: FontWeight.w700),
               //       )
               //     : Text(""),
-              SizedBox(height: 30)
+              SizedBox(height: 30),
+              wordPairs.length != 0 ? _displayOutputTable() : SizedBox()
             ],
           ),
         ),
