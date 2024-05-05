@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class ECGDiagnosisScreen extends StatefulWidget {
@@ -16,6 +17,8 @@ class ECGDiagnosisScreen extends StatefulWidget {
 }
 
 class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
+
+
   File? _selectedFile;
   String _predictedLabel = '';
   List<double> _ecgData = [];
@@ -23,6 +26,8 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     _selectedFile = widget.file; // Assign the file from widget parameter
     _processFile();
   }
@@ -51,8 +56,8 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
     String fileContent = await file.readAsString();
     Map<String, dynamic> jsonData = json.decode(fileContent);
 
-    if (jsonData.containsKey('l2')) {
-      return (jsonData['l2'] as List).map<double>((value) {
+    if (jsonData.containsKey('l1')) {
+      return (jsonData['l1'] as List).map<double>((value) {
         return value.toDouble();
       }).toList();
     } else {

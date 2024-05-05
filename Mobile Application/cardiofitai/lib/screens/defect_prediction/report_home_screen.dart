@@ -1,11 +1,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart'; // Import FilePicker package
+import 'package:flutter/services.dart';
 import 'dart:io'; // Import dart:io to use File class
 import 'ecg_plot.dart'; // Import the ECGPlotScreen
 
 class ReportHome extends StatelessWidget {
+
+
   @override
+  void init(){
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
