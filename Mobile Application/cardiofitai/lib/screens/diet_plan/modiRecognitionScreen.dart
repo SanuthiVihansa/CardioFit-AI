@@ -45,6 +45,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
   //List<WordIndex> wordIndexes = [];
   List<WordPair> wordPairs = [];
+  List <List<WordPair>> extractedText = [];
   String? selectedReport = 'Select Report';
   String diagnosis = "";
   late List<Map<String, dynamic>> addMultipleReports = [];
@@ -332,16 +333,21 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
           final result = jsonDecode(response.body);
           final scannedText = result["ParsedResults"][0]["ParsedText"];
-          Text("added scanned text");
           setState(() {
             item["ScannedText"] =
                 scannedText; // Add or update the ScannedText field
-            wordPairs = findWordPairs(item);
-          });
+                    wordPairs = findWordPairs(item);
+                    extractedText.add(wordPairs);
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            ReportAnalysisScreen(extractedText)));
+          }
+          );
         }
       }
     }
   }
+
 
   // List<WordPair> findWordPairs(String text) {
   //   List<WordPair> pairs = [];
@@ -506,28 +512,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   // }
 
   //Display Extracted in a table
-  Widget _displayOutputTable() {
-    return DataTable(
-      columns: [
-        DataColumn(label: Text('Component')),
-        DataColumn(label: Text('Result')),
-      ],
-      rows: wordPairs
-          .map(
-            (pair) => DataRow(
-              cells: [
-                DataCell(Text(pair.word)),
-                DataCell(Text(pair.nextWord)),
-              ],
-            ),
-          )
-          .toList(),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    // height = MediaQuery.of(context).size.height;
     halfScreenWidth = (MediaQuery.of(context).size.width - 10) - 50;
     return Scaffold(
       appBar: AppBar(
@@ -587,7 +575,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               SizedBox(
                 height: 30,
               ),
-              // SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -602,25 +589,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                   ElevatedButton(
                       onPressed: () {
                         _pickImage();
-                        // wordPairs.length != 0
-                        //     ? _displayOutputTable()
-                        //     : Text("Loading");
                       },
                       child: Text("Analyse")),
                 ],
               ),
-
-              // diagnosis != null
-              //     ? Text(
-              //         diagnosis,
-              //         style: TextStyle(
-              //             color: Colors.blueGrey,
-              //             fontSize: 20,
-              //             fontWeight: FontWeight.w700),
-              //       )
-              //     : Text(""),
               SizedBox(height: 30),
-              wordPairs.length != 0 ? _displayOutputTable() : SizedBox()
+              // wordPairs.length != 0 ? _displayOutputTable() : SizedBox()
             ],
           ),
         ),
