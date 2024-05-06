@@ -566,7 +566,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     // 'Blood urea',
     // 'Serum creatinine',
     // 'Serum electrolytes',
-    // 'Lipid profile',
+     'Lipid profile',
     // 'Serum cholesterol',
     // 'Esr',
     // 'Urine hcg',
@@ -860,7 +860,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     } else if (selectedReport == "Fasting blood Sugar") {
       // Define regular expression for Fasting blood Sugar
       regExp = RegExp(
-          r'(Fasting\s+Blood\s+Sugar|Fasting\s+Plasma\s+Glucose)\s+(.*?)(?=\s+(?:Fasting\s+Blood\s+Sugar|Fasting\s+Plasma\s+Glucose|$))',
+          r'(Fasting(?:\s+Blood\s+Sugar)?|Fasting(?:\s+Plasma\s+Glucose)?)\s+(.*?)(?=\s+(?:Fasting(?:\s+Blood\s+Sugar)?|Fasting(?:\s+Plasma\s+Glucose)?|$))',
+          caseSensitive: false);
+    }else if (selectedReport == "Lipid profile") {
+      // Define regular expression for Urine Full Report
+      regExp = RegExp(
+          r'(HDL-C|VLDL-C|CHO/HDL-C(?:\s+Ratio)?|Triglycerides|Cholestrol\s+-Total|Total\s+Cholestrol)\s+(.*?)(?=\s+(?:HDL-C|VLDL-C|CHO/HDL-C(?:\s+Ratio)?|Triglycerides|Cholestrol\s+-Total|Total\s+Cholestrol))',
           caseSensitive: false);
     }
 
@@ -879,19 +884,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
     return pairs;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {

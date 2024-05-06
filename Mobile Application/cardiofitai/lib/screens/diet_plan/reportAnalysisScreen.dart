@@ -137,6 +137,30 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
 
 
     }
+    else {
+      if (wordPairs.any((pair) =>
+      pair.word == "Cholestrol-Total" &&
+          (int.tryParse(pair.nextWord) ?? 0) >180)) {
+        diagnosis = "High : Cholestrol";
+      }
+      else if (wordPairs.any((pair) =>
+      pair.word == "LDL-C" &&
+          (int.tryParse(pair.nextWord) ?? 0) >150)) {
+        diagnosis = "LDL : High";
+      }
+      else if (wordPairs.any((pair) =>
+      pair.word == "HDL-C" &&
+          (int.tryParse(pair.nextWord) ?? 0) <40)) {
+        diagnosis = "HDL : Low";
+      }
+      else if (wordPairs.any((pair) =>
+      pair.word == "HDL-C" &&
+          (int.tryParse(pair.nextWord) ?? 0)>=60)) {
+        diagnosis = "HDL : High";
+      }
+
+
+    }
 
     return diagnosis;
   }
