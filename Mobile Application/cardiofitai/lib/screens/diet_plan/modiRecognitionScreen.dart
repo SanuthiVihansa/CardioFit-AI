@@ -863,10 +863,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           r'(Fasting(?:\s+Blood\s+Sugar)?|Fasting(?:\s+Plasma\s+Glucose)?)\s+(.*?)(?=\s+(?:Fasting(?:\s+Blood\s+Sugar)?|Fasting(?:\s+Plasma\s+Glucose)?|$))',
           caseSensitive: false);
     }else if (selectedReport == "Lipid profile") {
-      // Define regular expression for Urine Full Report
       regExp = RegExp(
-          r'(HDL-C|VLDL-C|CHO/HDL-C(?:\s+Ratio)?|Triglycerides|Cholestrol\s+-Total|Total\s+Cholestrol)\s+(.*?)(?=\s+(?:HDL-C|VLDL-C|CHO/HDL-C(?:\s+Ratio)?|Triglycerides|Cholestrol\s+-Total|Total\s+Cholestrol))',
+          r'(Cholesterol - Total|Triglycerides|HDL-C|LDL-C|VLDL-C|CHO/HDL-c Ratio)\s+(\d+(\.\d+)?)\s*(mg/dL|\u20AC\d+)?',
           caseSensitive: false);
+
     }
 
 
