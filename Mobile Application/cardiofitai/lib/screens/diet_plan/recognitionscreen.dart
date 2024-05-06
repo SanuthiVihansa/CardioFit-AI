@@ -266,7 +266,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                   fit: BoxFit.fill,
                 )
                     : Image.asset(
-                  'assets/icon.png',
+                  'assets/icon.jpg',
                   width: 256,
                   height: 256,
                   fit: BoxFit.fill,
