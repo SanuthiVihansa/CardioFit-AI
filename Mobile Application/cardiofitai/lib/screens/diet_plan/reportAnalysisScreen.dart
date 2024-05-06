@@ -3,18 +3,19 @@ import 'package:flutter/material.dart';
 import 'modiRecognitionScreen.dart';
 
 class ReportAnalysisScreen extends StatefulWidget {
-  const ReportAnalysisScreen(this.extractedResult,this.addMultipleReports, {super.key});
+  const ReportAnalysisScreen(this.extractedResult, this.addMultipleReports,
+      {super.key});
 
   final List<List<WordPair>> extractedResult;
   final List<Map<String, dynamic>> addMultipleReports;
-
 
   @override
   State<ReportAnalysisScreen> createState() => _ReportAnalysisScreenState();
 }
 
 class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
-  int findIndex =0;
+  int findIndex = 0;
+
   Widget _displayOutputTable() {
     List<Widget> tableWidgets = [];
     // Loop through widget.extractedResult
@@ -29,8 +30,9 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       }).toList();
 
       // Add DataTable and Divider to tableWidgets list
-      tableWidgets.add(Text(widget.addMultipleReports[findIndex]["UploadedReport"])); // Add a Divider after each DataTable
-      findIndex+1;
+      tableWidgets.add(Text(widget.addMultipleReports[findIndex]
+          ["UploadedReport"])); // Add a Divider after each DataTable
+
       tableWidgets.add(
         DataTable(
           columns: [
@@ -40,8 +42,10 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
           rows: rows,
         ),
       );
-      tableWidgets.add(Text(reportDiagnosis(widget.addMultipleReports[findIndex],findIndex)));
+      tableWidgets.add(Text(
+          reportDiagnosis(widget.addMultipleReports[findIndex], findIndex)));
       tableWidgets.add(Divider()); // Add a Divider after each DataTable
+      findIndex = findIndex + 1;
     }
 
     // Remove the last Divider
@@ -57,109 +61,97 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     );
   }
 
-
-  String reportDiagnosis(Map<String, dynamic> item,int index) {
+  String reportDiagnosis(Map<String, dynamic> item, int index) {
     List<WordPair> wordPairs = widget.extractedResult[index];
     String selectedReport = item["UploadedReport"];
     String diagnosis = "";
 
     if (selectedReport == "Full Blood Count Report") {
       if (wordPairs.any((pair) =>
-      pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
+          pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
         diagnosis = "You are facing an infection";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Neutrophils" &&
+          pair.word == "Neutrophils" &&
           (int.tryParse(pair.nextWord) ?? 0) > 80)) {
         diagnosis = "You are facing an Bacterial infection";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Lymphocytes" &&
+          pair.word == "Lymphocytes" &&
           (int.tryParse(pair.nextWord) ?? 0) > 40)) {
         diagnosis = "You are facing a Viral Fever";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Eosinophils" &&
+          pair.word == "Eosinophils" &&
           (int.tryParse(pair.nextWord) ?? 0) > 6)) {
         diagnosis = "You are facing an Allergic reaction";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Platelet Count" &&
+          pair.word == "Platelet Count" &&
           (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
         diagnosis =
-        "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
+            "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
       } else {
         diagnosis = "No defect identified";
       }
-    }
-    else if (selectedReport == "Urine Full Report") {
+    } else if (selectedReport == "Urine Full Report") {
       if (wordPairs.any((pair) =>
-      pair.word == "Pus Cells" &&
+          pair.word == "Pus Cells" &&
           (int.tryParse(pair.nextWord) ?? 0) < 10)) {
         diagnosis = "You are facing an Urine infection";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
+          pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
         diagnosis = "You are facing a Renal disease";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
+          pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
         diagnosis = "You have Diabetics";
       } else if (wordPairs.any((pair) =>
-      pair.word == "Red Blood Cells" &&
+          pair.word == "Red Blood Cells" &&
           pair.nextWord.toLowerCase() != "occasional")) {
         diagnosis =
-        "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
+            "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
       } else {
         diagnosis = "No defect identified";
       }
-    }
-    else if(selectedReport=="Fasting blood Sugar"){
+    } else if (selectedReport == "Fasting blood Sugar") {
       if (wordPairs.any((pair) =>
-      pair.word == "Fasting Plasma Glucose" &&
+          pair.word == "Fasting Plasma Glucose" &&
           (int.tryParse(pair.nextWord) ?? 0) < 100)) {
         diagnosis = "Normal : No defects identified";
-      }
-      else if (wordPairs.any((pair) =>
-      pair.word == "Fasting Plasma Glucose" && (int.tryParse(pair.nextWord) ?? 0) > 126)) {
+      } else if (wordPairs.any((pair) =>
+          pair.word == "Fasting Plasma Glucose" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 126)) {
         diagnosis = "Diabetes Mellitus";
-      }
-      else if (wordPairs.any((pair) =>
-      pair.word == "Fasting Plasma Glucose" && (int.tryParse(pair.nextWord) ?? 0) > 100 && (int.tryParse(pair.nextWord) ?? 0)<125)) {
+      } else if (wordPairs.any((pair) =>
+          pair.word == "Fasting Plasma Glucose" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 100 &&
+          (int.tryParse(pair.nextWord) ?? 0) < 125)) {
         diagnosis = "Pre Diabetes";
-      }
-      else if (wordPairs.any((pair) =>
-      pair.word == "Fasting Blood Sugar" && (int.tryParse(pair.nextWord) ?? 0) < 100)) {
+      } else if (wordPairs.any((pair) =>
+          pair.word == "Fasting Blood Sugar" &&
+          (int.tryParse(pair.nextWord) ?? 0) < 100)) {
         diagnosis = "Normal : No defects identified";
-      }
-      else if (wordPairs.any((pair) =>
-      pair.word == "Fasting Blood Sugar" && (int.tryParse(pair.nextWord) ?? 0) >126)) {
+      } else if (wordPairs.any((pair) =>
+          pair.word == "Fasting Blood Sugar" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 126)) {
         diagnosis = "Diabetes Mellitus";
-      }
-      else if (wordPairs.any((pair) =>
-      pair.word == "Fasting Blood Sugar" && (int.tryParse(pair.nextWord) ?? 0) > 100 && (int.tryParse(pair.nextWord) ?? 0)<125)) {
+      } else if (wordPairs.any((pair) =>
+          pair.word == "Fasting Blood Sugar" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 100 &&
+          (int.tryParse(pair.nextWord) ?? 0) < 125)) {
         diagnosis = "Pre Diabetes";
       }
-
-
-    }
-    else {
+    } else {
       if (wordPairs.any((pair) =>
-      pair.word == "Cholestrol-Total" &&
-          (int.tryParse(pair.nextWord) ?? 0) >180)) {
+          pair.word == "Cholestrol-Total" &&
+          (int.tryParse(pair.nextWord) ?? 0) > 180)) {
         diagnosis = "High : Cholestrol";
-      }
-      else if (wordPairs.any((pair) =>
-      pair.word == "LDL-C" &&
-          (int.tryParse(pair.nextWord) ?? 0) >150)) {
+      } else if (wordPairs.any((pair) =>
+          pair.word == "LDL-C" && (int.tryParse(pair.nextWord) ?? 0) > 150)) {
         diagnosis = "LDL : High";
-      }
-      else if (wordPairs.any((pair) =>
-      pair.word == "HDL-C" &&
-          (int.tryParse(pair.nextWord) ?? 0) <40)) {
+      } else if (wordPairs.any((pair) =>
+          pair.word == "HDL-C" && (int.tryParse(pair.nextWord) ?? 0) < 40)) {
         diagnosis = "HDL : Low";
-      }
-      else if (wordPairs.any((pair) =>
-      pair.word == "HDL-C" &&
-          (int.tryParse(pair.nextWord) ?? 0)>=60)) {
+      } else if (wordPairs.any((pair) =>
+          pair.word == "HDL-C" && (int.tryParse(pair.nextWord) ?? 0) >= 60)) {
         diagnosis = "HDL : High";
       }
-
-
     }
 
     return diagnosis;
