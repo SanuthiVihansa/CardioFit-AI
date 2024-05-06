@@ -17,6 +17,6 @@ class CardioFitAi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(home: ReportHome());
+    return const MaterialApp(home: LoginExchangeScreen());
   }
 }
