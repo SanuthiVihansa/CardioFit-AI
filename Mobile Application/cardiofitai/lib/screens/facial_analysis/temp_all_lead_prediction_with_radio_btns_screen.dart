@@ -162,7 +162,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
               LineChartBarData(
                 spots: List.generate(
                   data.length,
-                  (index) => FlSpot(index.toDouble(), data[index]),
+                      (index) => FlSpot(index.toDouble(), data[index]),
                 ),
                 isCurved: false,
                 colors: [color],
@@ -221,10 +221,10 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
       String jsonString = jsonEncode(data);
       var response = await http
           .post(Uri.parse(_predictionApiUrl),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-              },
-              body: jsonString)
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonString)
           .timeout(const Duration(seconds: 60));
 
       _resCode = response.statusCode;
@@ -336,19 +336,19 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
     await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-              title: const Text("Request Timed Out!"),
-              actionsAlignment: MainAxisAlignment.center,
-              content: const Text(
-                  'The request timed out. Please check your network connection.'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () async {
-                    return Navigator.pop(context, true);
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            ));
+          title: const Text("Request Timed Out!"),
+          actionsAlignment: MainAxisAlignment.center,
+          content: const Text(
+              'The request timed out. Please check your network connection.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                return Navigator.pop(context, true);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ));
     Navigator.pop(context);
   }
 
@@ -396,7 +396,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
                         }),
                     Padding(
                       padding:
-                          EdgeInsets.only(right: _width / (_devWidth / 15)),
+                      EdgeInsets.only(right: _width / (_devWidth / 15)),
                       child: Text(
                         "Compare with actual",
                         style: TextStyle(fontSize: _width / (_devWidth / 14)),
@@ -431,30 +431,30 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
               child: _selectedLead == "Lead I"
                   ? _lead1PlotWithoutComparison()
                   : _selectedLead == "Lead II"
-                      ? _lead2PlotWithoutComparison()
-                      : _selectedLead == "Lead III"
-                          ? _lead3PlotWithoutComparison()
-                          : _selectedLead == "Lead aVR"
-                              ? _leadAvrPlotWithoutComparison()
-                              : _selectedLead == "Lead aVL"
-                                  ? _leadAvlPlotWithoutComparison()
-                                  : _selectedLead == "Lead aVF"
-                                      ? _leadAvfPlotWithoutComparison()
-                                      : _selectedLead == "Lead V1"
-                                          ? _leadV1PlotWithoutComparison()
-                                          : _selectedLead == "Lead V2"
-                                              ? _leadV2PlotWithoutComparison()
-                                              : _selectedLead == "Lead V3"
-                                                  ? _leadV3PlotWithoutComparison()
-                                                  : _selectedLead == "Lead V4"
-                                                      ? _leadV4PlotWithoutComparison()
-                                                      : _selectedLead ==
-                                                              "Lead V5"
-                                                          ? _leadV5PlotWithoutComparison()
-                                                          : _selectedLead ==
-                                                                  "Lead V6"
-                                                              ? _leadV6PlotWithoutComparison()
-                                                              : const SizedBox(),
+                  ? _lead2PlotWithoutComparison()
+                  : _selectedLead == "Lead III"
+                  ? _lead3PlotWithoutComparison()
+                  : _selectedLead == "Lead aVR"
+                  ? _leadAvrPlotWithoutComparison()
+                  : _selectedLead == "Lead aVL"
+                  ? _leadAvlPlotWithoutComparison()
+                  : _selectedLead == "Lead aVF"
+                  ? _leadAvfPlotWithoutComparison()
+                  : _selectedLead == "Lead V1"
+                  ? _leadV1PlotWithoutComparison()
+                  : _selectedLead == "Lead V2"
+                  ? _leadV2PlotWithoutComparison()
+                  : _selectedLead == "Lead V3"
+                  ? _leadV3PlotWithoutComparison()
+                  : _selectedLead == "Lead V4"
+                  ? _leadV4PlotWithoutComparison()
+                  : _selectedLead ==
+                  "Lead V5"
+                  ? _leadV5PlotWithoutComparison()
+                  : _selectedLead ==
+                  "Lead V6"
+                  ? _leadV6PlotWithoutComparison()
+                  : const SizedBox(),
             ),
           ),
         ),
@@ -501,7 +501,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
                         }),
                     Padding(
                       padding:
-                          EdgeInsets.only(right: _width / (_devWidth / 15)),
+                      EdgeInsets.only(right: _width / (_devWidth / 15)),
                       child: Text(
                         "Compare with actual",
                         style: TextStyle(fontSize: _width / (_devWidth / 14)),
@@ -536,30 +536,30 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
               child: _selectedLead == "Lead I"
                   ? _lead1PlotWithComparison()
                   : _selectedLead == "Lead II"
-                      ? _lead2PlotWithComparison()
-                      : _selectedLead == "Lead III"
-                          ? _lead3PlotWithComparison()
-                          : _selectedLead == "Lead aVR"
-                              ? _leadAvrPlotWithComparison()
-                              : _selectedLead == "Lead aVL"
-                                  ? _leadAvlPlotWithComparison()
-                                  : _selectedLead == "Lead aVF"
-                                      ? _leadAvfPlotWithComparison()
-                                      : _selectedLead == "Lead V1"
-                                          ? _leadV1PlotWithComparison()
-                                          : _selectedLead == "Lead V2"
-                                              ? _leadV2PlotWithComparison()
-                                              : _selectedLead == "Lead V3"
-                                                  ? _leadV3PlotWithComparison()
-                                                  : _selectedLead == "Lead V4"
-                                                      ? _leadV4PlotWithComparison()
-                                                      : _selectedLead ==
-                                                              "Lead V5"
-                                                          ? _leadV5PlotWithComparison()
-                                                          : _selectedLead ==
-                                                                  "Lead V6"
-                                                              ? _leadV6PlotWithComparison()
-                                                              : const SizedBox(),
+                  ? _lead2PlotWithComparison()
+                  : _selectedLead == "Lead III"
+                  ? _lead3PlotWithComparison()
+                  : _selectedLead == "Lead aVR"
+                  ? _leadAvrPlotWithComparison()
+                  : _selectedLead == "Lead aVL"
+                  ? _leadAvlPlotWithComparison()
+                  : _selectedLead == "Lead aVF"
+                  ? _leadAvfPlotWithComparison()
+                  : _selectedLead == "Lead V1"
+                  ? _leadV1PlotWithComparison()
+                  : _selectedLead == "Lead V2"
+                  ? _leadV2PlotWithComparison()
+                  : _selectedLead == "Lead V3"
+                  ? _leadV3PlotWithComparison()
+                  : _selectedLead == "Lead V4"
+                  ? _leadV4PlotWithComparison()
+                  : _selectedLead ==
+                  "Lead V5"
+                  ? _leadV5PlotWithComparison()
+                  : _selectedLead ==
+                  "Lead V6"
+                  ? _leadV6PlotWithComparison()
+                  : const SizedBox(),
             ),
           ),
         ),
@@ -573,23 +573,23 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
       decoration: BoxDecoration(border: Border.all(color: Colors.black)),
       child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
-        alignment: AlignmentDirectional.centerEnd,
-        value: _selectedLead,
-        items: _dropDownMenuItems.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem(
-            value: value,
-            child: Text(
-              value,
-              style: TextStyle(fontSize: _width / (_devWidth / 14)),
-            ),
-          );
-        }).toList(),
-        onChanged: (String? value) {
-          setState(() {
-            _selectedLead = value!;
-          });
-        },
-      )),
+            alignment: AlignmentDirectional.centerEnd,
+            value: _selectedLead,
+            items: _dropDownMenuItems.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem(
+                value: value,
+                child: Text(
+                  value,
+                  style: TextStyle(fontSize: _width / (_devWidth / 14)),
+                ),
+              );
+            }).toList(),
+            onChanged: (String? value) {
+              setState(() {
+                _selectedLead = value!;
+              });
+            },
+          )),
     );
   }
 
@@ -844,7 +844,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actl1Data, _calcMin(actl1Data), _calcMax(actl1Data),
                 Colors.green)),
         Text(
@@ -852,7 +852,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predl1Data, _calcMin(predl1Data),
                 _calcMax(predl1Data), Colors.blue)),
       ],
@@ -871,7 +871,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
                 Colors.green)),
       ],
@@ -901,7 +901,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actl3Data, _calcMin(actl3Data), _calcMax(actl3Data),
                 Colors.green)),
         Text(
@@ -909,7 +909,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predl3Data, _calcMin(predl3Data),
                 _calcMax(predl3Data), Colors.blue)),
       ],
@@ -939,7 +939,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actavrData, _calcMin(actavrData),
                 _calcMax(actavrData), Colors.green)),
         Text(
@@ -947,7 +947,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predavrData, _calcMin(predavrData),
                 _calcMax(predavrData), Colors.blue)),
       ],
@@ -977,7 +977,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actavlData, _calcMin(actavlData),
                 _calcMax(actavlData), Colors.green)),
         Text(
@@ -985,7 +985,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predavlData, _calcMin(predavlData),
                 _calcMax(predavlData), Colors.blue)),
       ],
@@ -1015,7 +1015,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actavfData, _calcMin(actavfData),
                 _calcMax(actavfData), Colors.green)),
         Text(
@@ -1023,7 +1023,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predavfData, _calcMin(predavfData),
                 _calcMax(predavfData), Colors.blue)),
       ],
@@ -1053,7 +1053,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actv1Data, _calcMin(actv1Data), _calcMax(actv1Data),
                 Colors.green)),
         Text(
@@ -1061,7 +1061,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv1Data, _calcMin(predv1Data),
                 _calcMax(predv1Data), Colors.blue)),
       ],
@@ -1091,7 +1091,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actv2Data, _calcMin(actv2Data), _calcMax(actv2Data),
                 Colors.green)),
         Text(
@@ -1099,7 +1099,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv2Data, _calcMin(predv2Data),
                 _calcMax(predv2Data), Colors.blue)),
       ],
@@ -1129,7 +1129,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actv3Data, _calcMin(actv3Data), _calcMax(actv3Data),
                 Colors.green)),
         Text(
@@ -1137,7 +1137,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv3Data, _calcMin(predv3Data),
                 _calcMax(predv3Data), Colors.blue)),
       ],
@@ -1167,7 +1167,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actv4Data, _calcMin(actv4Data), _calcMax(actv4Data),
                 Colors.green)),
         Text(
@@ -1175,7 +1175,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv4Data, _calcMin(predv4Data),
                 _calcMax(predv4Data), Colors.blue)),
       ],
@@ -1205,7 +1205,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actv5Data, _calcMin(actv5Data), _calcMax(actv5Data),
                 Colors.green)),
         Text(
@@ -1213,7 +1213,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv5Data, _calcMin(predv5Data),
                 _calcMax(predv5Data), Colors.blue)),
       ],
@@ -1243,7 +1243,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actv6Data, _calcMin(actv6Data), _calcMax(actv6Data),
                 Colors.green)),
         Text(
@@ -1251,7 +1251,7 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv6Data, _calcMin(predv6Data),
                 _calcMax(predv6Data), Colors.blue)),
       ],
@@ -1266,39 +1266,39 @@ class _TempAllLeadPredictionWithRadioBtnsScreenState
         appBar: AppBar(
           foregroundColor: Colors.white,
           title: const Text(
-            "Cardiac Analysis Through Facial Analysis",
+            "Cardiac Analysis Through Palms",
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
           backgroundColor: Colors.red,
         ),
         body: _resCode == 200
             ? _isComparisonOn
-                ? _plotsWithComparison()
-                : _plotsWithoutComparison()
+            ? _plotsWithComparison()
+            : _plotsWithoutComparison()
             : _resCode == 0
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const CircularProgressIndicator(),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(top: _height / (_devHeight / 10)),
-                          child: Text(
-                            "Loading...",
-                            style:
-                                TextStyle(fontSize: _width / (_devWidth / 10)),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                : _resCode == 408
-                    ? const Center(
-                        child: Text("The request timed out!"),
-                      )
-                    : const Center(
-                        child: Text("Error"),
-                      ));
+            ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(),
+              Padding(
+                padding:
+                EdgeInsets.only(top: _height / (_devHeight / 10)),
+                child: Text(
+                  "Loading...",
+                  style:
+                  TextStyle(fontSize: _width / (_devWidth / 10)),
+                ),
+              )
+            ],
+          ),
+        )
+            : _resCode == 408
+            ? const Center(
+          child: Text("The request timed out!"),
+        )
+            : const Center(
+          child: Text("Error"),
+        ));
   }
 }
