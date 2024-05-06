@@ -1,6 +1,8 @@
 import 'package:cardiofitai/screens/common/ecg_monitoring_home_screen.dart';
 import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
+import 'package:cardiofitai/screens/ecg_comparison_and_analysis/analysis_file_selection_screen.dart';
+import 'package:cardiofitai/screens/ecg_comparison_and_analysis/comparison_file_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -36,12 +38,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
   }
 
-  void _onClickEcgMonitoringBtn() {
+  void _onClickEcgAnalysisBtn() {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (BuildContext context) =>
-                const ECGMonitoringHomeScreen()));
+                const AnalysisFileSelectionScreen()));
+  }
+
+  void _onClickEcgComparisonBtn() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                const ComparisonFileSelectionScreen()));
   }
 
   void _onClickDietPlanBtn() {
@@ -99,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  _onClickEcgMonitoringBtn();
+                  _onClickEcgAnalysisBtn();
                 },
                 style: ButtonStyle(
                   fixedSize: MaterialStateProperty.all<Size>(
@@ -108,10 +118,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
                 child: Text(
-                  "ECG Monitoring",
+                  "ECG Analysis",
                   style: TextStyle(fontSize: _width / (_devWidth / 10)),
                 ),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  _onClickEcgComparisonBtn();
+                },
+                style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all<Size>(
+                    Size(_width / (_devWidth / 160.0),
+                        _height / (_devHeight / 40)), // Button width and height
+                  ),
+                ),
+                child: Text(
+                  "ECG Comparison",
+                  style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
               ElevatedButton(
                 onPressed: () {
                   _onClickDietPlanBtn();
@@ -127,26 +157,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   style: TextStyle(fontSize: _width / (_devWidth / 10)),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  _onClickReportingAndAnalyticsBtn();
-                },
-                style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all<Size>(
-                    Size(_width / (_devWidth / 160.0),
-                        _height / (_devHeight / 40)), // Button width and height
-                  ),
-                ),
-                child: Text(
-                  "Reporting & Analytics",
-                  style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                ),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
               ElevatedButton(
                 onPressed: () {
                   _onClickDiseasePredictionBtn();
