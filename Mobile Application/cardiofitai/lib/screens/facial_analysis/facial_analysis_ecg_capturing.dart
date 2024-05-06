@@ -289,18 +289,23 @@ class _CameraPageState extends State<CameraPage> {
     //     MaterialPageRoute(
     //         builder: (BuildContext context) =>
     //             AllLeadPredictionScreen(_tenSecData)));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (BuildContext context) => TempAllLeadPredictionScreen(
+    //             _l1Data,
+    //             _l2Data,
+    //             _v1Data,
+    //             _v2Data,
+    //             _v3Data,
+    //             _v4Data,
+    //             _v5Data,
+    //             _v6Data)));
+
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) => TempAllLeadPredictionScreen(
-                _l1Data,
-                _l2Data,
-                _v1Data,
-                _v2Data,
-                _v3Data,
-                _v4Data,
-                _v5Data,
-                _v6Data)));
+            builder: (BuildContext context) => TempFileSelectionScreen()));
 
     // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TempFileSelectionScreen()));
   }
@@ -443,7 +448,7 @@ class _CameraPageState extends State<CameraPage> {
                                 onPressed: () {
                                   _onTapViewECGBtn(context);
                                 },
-                                label: const Text('View ECG reading'),
+                                label: const Text('Pick Sample ECG reading'),
                                 icon: const Icon(Icons.file_present_rounded),
                               ),
                             ),
