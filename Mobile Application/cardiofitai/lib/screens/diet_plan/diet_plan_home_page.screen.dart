@@ -7,6 +7,7 @@ import 'package:vector_math/vector_math_64.dart' as math;
 import 'package:intl/intl.dart';
 
 import '../../models/user.dart';
+import 'modiRecognitionScreen.dart';
 
 class DietHomePage extends StatefulWidget {
   const DietHomePage(this.user, {super.key});

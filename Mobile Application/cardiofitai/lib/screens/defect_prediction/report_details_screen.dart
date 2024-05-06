@@ -1,282 +1,106 @@
-// //
-// // import 'package:flutter/material.dart';
-// // import 'package:flutter/services.dart';
-// // import 'package:file_picker/file_picker.dart';
-// //
-// // class ReportDetailsScreen extends StatefulWidget {
-// //   const ReportDetailsScreen({Key? key}) : super(key: key);
-// //
-// //   @override
-// //   State<ReportDetailsScreen> createState() => _ReportDetailsScreenState();
-// // }
-// //
-// // class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
-// //   void initState() {
-// //     super.initState();
-// //
-// //     SystemChrome.setPreferredOrientations(
-// //         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-// //   }
-// //
-// //   void _pickFile() async {
-// //     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-// //     if (result == null) return;
-// //
-// //     print(result.files.first.name);
-// //     print(result.files.first.size);
-// //     print(result.files.first.path);
-// //   }
-// //
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //       appBar: AppBar(
-// //         title: Text("File Selector"),
-// //         backgroundColor: Colors.red,
-// //       ),
-// //       body: Stack(
-// //         children: [
-// //           // Background GIF
-// //           Positioned.fill(
-// //             child: Image.asset(
-// //               'assets/defect_prediction/ECG Gif.gif', // Path to your GIF file
-// //               fit: BoxFit.cover,
-// //             ),
-// //           ),
-// //           // Content
-// //           Center(
-// //             child: ElevatedButton(
-// //               onPressed: _pickFile,
-// //               child: const Text("Select file"),
-// //             ),
-// //           ),
-// //         ],
-// //       ),
-// //     );
-// //   }
-// // }
-//
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:file_picker/file_picker.dart';
-// import 'prediction_results_screen.dart';
-//
-// void main() {
-//   runApp(MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Predict Disease',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: ReportDetailsScreen(),
-//     );
-//   }
-// }
-//
-// class ReportDetailsScreen extends StatefulWidget {
-//   const ReportDetailsScreen({Key? key}) : super(key: key);
-//
-//   @override
-//   State<ReportDetailsScreen> createState() => _ReportDetailsScreenState();
-// }
-//
-// class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
-//   void initState() {
-//     super.initState();
-//
-//     SystemChrome.setPreferredOrientations([
-//       DeviceOrientation.landscapeLeft,
-//       DeviceOrientation.landscapeRight
-//     ]);
-//   }
-//
-//   void _pickFile() async {
-//     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-//     if (result == null) return;
-//
-//     print(result.files.first.name);
-//     print(result.files.first.size);
-//     print(result.files.first.path);
-//   }
-//
-//   void _predictDisease(BuildContext context) {
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//         builder: (context) => PredictionResultsScreen(predictedDisease: 'PVC'),
-//       ),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("File Selector"),
-//         backgroundColor: Colors.red,
-//       ),
-//       body: Stack(
-//         children: [
-//           // Background GIF
-//           Positioned.fill(
-//             child: Image.asset(
-//               'assets/defect_prediction/ECG Gif.gif', // Path to your GIF file
-//               fit: BoxFit.cover,
-//             ),
-//           ),
-//           // Content
-//           Center(
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 ElevatedButton(
-//                   onPressed: _pickFile,
-//                   child: const Text("Select file"),
-//                 ),
-//                 SizedBox(height: 20),
-//                 ElevatedButton(
-//                   onPressed: () => _predictDisease(context),
-//                   child: const Text("Predict Diseases"),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-//
-//
-//
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
-import 'prediction_results_screen.dart';
+import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Predict Disease',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ReportDetailsScreen(),
-    );
-  }
-}
 
 class ReportDetailsScreen extends StatefulWidget {
-  const ReportDetailsScreen({Key? key}) : super(key: key);
-
   @override
-  State<ReportDetailsScreen> createState() => _ReportDetailsScreenState();
+  _FilePickerScreenState createState() => _FilePickerScreenState();
 }
 
-class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
-  void initState() {
-    super.initState();
+class _FilePickerScreenState extends State<ReportDetailsScreen> {
+  File? _selectedFile;
 
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-  }
-
-  void _pickFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-    if (result == null) return;
-
-    print(result.files.first.name);
-    print(result.files.first.size);
-    print(result.files.first.path);
-  }
-
-  void _predictPVC(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PredictionResultsScreen(predictedDisease: 'PVC'),
-      ),
+  void _selectFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['txt'], // Adjust as needed
     );
-  }
 
-  void _predictNormal(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            PredictionResultsScreen(predictedDisease: 'Normal'),
-      ),
-    );
+    if (result != null) {
+      setState(() {
+        _selectedFile = File(result.files.single.path!);
+      });
+
+      // Make POST request to Flask API
+      String apiUrl = 'http://hilarinac.pythonanywhere.com/predict';
+      var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+      request.files.add(
+        http.MultipartFile(
+          'file',
+          _selectedFile!.readAsBytes().asStream(),
+          _selectedFile!.lengthSync(),
+          filename: _selectedFile!.path.split('/').last,
+        ),
+      );
+
+      try {
+        var response = await request.send();
+        var responseBody = await response.stream.bytesToString();
+        var jsonResponse = json.decode(responseBody);
+
+        // Navigate to another screen and pass the response
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResultScreen(response: jsonResponse),
+          ),
+        );
+      } catch (e) {
+        print('Error: $e');
+        // Handle error
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.white,
-        title: Text(
-          "File Selector",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.red,
+        title: Text('File Picker'),
       ),
-      body: Stack(
-        children: [
-          // Background GIF
-          Positioned.fill(
-            child: Image.asset(
-              'assets/defect_prediction/ECG Gif.gif', // Path to your GIF file
-              fit: BoxFit.cover,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: _selectFile,
+              child: Text('Select File'),
             ),
-          ),
-          // Content
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // First Row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: _pickFile,
-                      child: const Text("Select file"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => _predictPVC(context),
-                      child: const Text("Predict Diseases"),
-                    ),
-                  ],
-                ),
-                // Second Row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: _pickFile,
-                      child: const Text("Select file"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => _predictNormal(context),
-                      child: const Text("Predict Diseases"),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
+            if (_selectedFile != null)
+              Text('Selected File: ${_selectedFile!.path}'),
+          ],
+        ),
       ),
     );
   }
 }
+
+class ResultScreen extends StatelessWidget {
+  final Map<String, dynamic> response;
+
+  const ResultScreen({required this.response});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Prediction Result'),
+      ),
+      body: Center(
+        child: Text(
+          'Predicted Class: ${response["Predicted class"]}',
+          style: TextStyle(fontSize: 24),
+        ),
+      ),
+    );
+  }
+}
+
+
+

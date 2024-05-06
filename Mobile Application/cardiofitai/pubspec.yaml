@@ -52,6 +52,7 @@ dependencies:
   connectivity_plus: ^6.0.3
   http: ^1.2.1
   flutter_launcher_icons: ^0.13.1
+#  flutter pub run flutter_launcher_icons:main
   path_provider: ^2.1.3
   percent_indicator: ^4.2.3
 #  flutter_scalable_ocr: ^2.0.0
@@ -82,7 +83,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icon.png"
+  image_path: "assets/icon.jpg"
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -98,7 +99,8 @@ flutter:
     - assets/palm_analysis/usb.png
     - assets/palm_analysis/recording.gif
     - assets/palm_analysis/praying.png
-    - assets/icon.png
+    - assets/icon_old.png
+    - assets/icon.jpg
     - assets/coverimage.jpg
     - assets/facial_analysis/face-scan_8100114.png
     - assets/facial_analysis/face-scan_2818147.png
@@ -110,6 +112,10 @@ flutter:
     - assets/fastfood.jpeg
     - assets/dieteryimage.jpg
     - assets/reportanalysis.jpg
+    - assets/defect_prediction/ECGHome.png
+    - assets/defect_prediction/Logo CarioFit Ai.jpg
+    - assets/defect_prediction/icons8-play-button-circled.gif
+    - assets/defect_prediction/icons8-play-button-50.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

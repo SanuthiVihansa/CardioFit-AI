@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:cardiofitai/screens/facial_analysis/temp_all_lead_prediction_screen.dart';
+import 'package:cardiofitai/screens/facial_analysis/temp_all_lead_prediction_with_radio_btns_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -113,18 +113,18 @@ class _TempFileSelectionScreenState extends State<TempFileSelectionScreen> {
     await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-              title: const Text("No Internet"),
-              actionsAlignment: MainAxisAlignment.center,
-              content: const Text('Please connect to the network!'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () async {
-                    return Navigator.pop(context, true);
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            ));
+          title: const Text("No Internet"),
+          actionsAlignment: MainAxisAlignment.center,
+          content: const Text('Please connect to the network!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                return Navigator.pop(context, true);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ));
   }
 
   void _pickFile() async {
@@ -196,7 +196,7 @@ class _TempFileSelectionScreenState extends State<TempFileSelectionScreen> {
               LineChartBarData(
                 spots: List.generate(
                   _l2Data.length,
-                  (index) => FlSpot(index.toDouble(), _l2Data[index]),
+                      (index) => FlSpot(index.toDouble(), _l2Data[index]),
                 ),
                 isCurved: false,
                 colors: [Colors.blue],
@@ -244,15 +244,9 @@ class _TempFileSelectionScreenState extends State<TempFileSelectionScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) => TempAllLeadPredictionScreen(
-                _l1Data,
-                _l2Data,
-                _v1Data,
-                _v2Data,
-                _v3Data,
-                _v4Data,
-                _v5Data,
-                _v6Data)));
+            builder: (BuildContext context) =>
+                TempAllLeadPredictionWithRadioBtnsScreen(_l1Data, _l2Data,
+                    _v1Data, _v2Data, _v3Data, _v4Data, _v5Data, _v6Data)));
   }
 
   Future<void> _upServer() async {
@@ -269,108 +263,107 @@ class _TempFileSelectionScreenState extends State<TempFileSelectionScreen> {
       appBar: AppBar(
         foregroundColor: Colors.white,
         title: const Text(
-          "Capturing ECG through Facial Analysis",
+          "Cardiac Analysis Through Facial Analysis",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.red,
       ),
       // ignore: prefer_is_empty
       body: _l2Data.length == 0
-      // ? Container()
-      ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: _hasConnection
-                        ? () {
-                            _pickFile();
-                          }
-                        : null,
-                    style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.all<Size>(
-                        Size(
-                            _width / (_devWidth / 160.0),
-                            _height /
-                                (_devHeight / 40)), // Button width and height
-                      ),
-                    ),
-                    child: Text(
-                      "Select file",
-                      style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ? Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: _hasConnection
+                  ? () {
+                _pickFile();
+              }
+                  : null,
+              style: ButtonStyle(
+                fixedSize: MaterialStateProperty.all<Size>(
+                  Size(
+                      _width / (_devWidth / 160.0),
+                      _height /
+                          (_devHeight / 40)), // Button width and height
+                ),
+              ),
+              child: Text(
+                "Select file",
+                style: TextStyle(fontSize: _width / (_devWidth / 10)),
+              ),
+            ),
+            !_hasConnection
+                ? Text(
+              "No Network Connection!",
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: _width / (_devWidth / 10)),
+            )
+                : const SizedBox()
+          ],
+        ),
+      )
+          : Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+                top: _height / (_devHeight / 10),
+                left: _width / (_devWidth / 20)),
+            child: Text(
+              "Lead II ECG Signal",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: _width / (_devWidth / 20)),
+            ),
+          ),
+          Expanded(child: SizedBox(child: _ecgPlot())),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              !_hasConnection
+                  ? Padding(
+                padding: EdgeInsets.only(
+                    bottom: _height / (_devHeight / 10)),
+                child: Text(
+                  "No Network Connection!",
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: _width / (_devWidth / 10)),
+                ),
+              )
+                  : const SizedBox(),
+              Padding(
+                padding: EdgeInsets.only(
+                    bottom: _height / (_devHeight / 10),
+                    right: _width / (_devWidth / 10),
+                    left: _width / (_devWidth / 10)),
+                child: ElevatedButton(
+                  onPressed: _hasConnection
+                      ? () {
+                    _onClickBtnProceed();
+                  }
+                      : null,
+                  style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all<Size>(
+                      Size(
+                          _width / (_devWidth / 160.0),
+                          _height /
+                              (_devHeight /
+                                  40)), // Button width and height
                     ),
                   ),
-                  !_hasConnection
-                      ? Text(
-                          "No Network Connection!",
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: _width / (_devWidth / 10)),
-                        )
-                      : const SizedBox()
-                ],
-              ),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: _height / (_devHeight / 10),
-                      left: _width / (_devWidth / 20)),
                   child: Text(
-                    "Lead II ECG Signal",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: _width / (_devWidth / 20)),
+                    "Proceed",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
                   ),
                 ),
-                Expanded(child: SizedBox(child: _ecgPlot())),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    !_hasConnection
-                        ? Padding(
-                            padding: EdgeInsets.only(
-                                bottom: _height / (_devHeight / 10)),
-                            child: Text(
-                              "No Network Connection!",
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: _width / (_devWidth / 10)),
-                            ),
-                          )
-                        : const SizedBox(),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: _height / (_devHeight / 10),
-                          right: _width / (_devWidth / 10),
-                          left: _width / (_devWidth / 10)),
-                      child: ElevatedButton(
-                        onPressed: _hasConnection
-                            ? () {
-                                _onClickBtnProceed();
-                              }
-                            : null,
-                        style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all<Size>(
-                            Size(
-                                _width / (_devWidth / 160.0),
-                                _height /
-                                    (_devHeight /
-                                        40)), // Button width and height
-                          ),
-                        ),
-                        child: Text(
-                          "Proceed",
-                          style: TextStyle(fontSize: _width / (_devWidth / 10)),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

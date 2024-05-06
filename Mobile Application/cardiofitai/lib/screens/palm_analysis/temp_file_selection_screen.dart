@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:cardiofitai/screens/palm_analysis/all_lead_prediction_screen.dart';
-import 'package:cardiofitai/screens/palm_analysis/temp_all_lead_prediction_screen.dart';
+import 'package:cardiofitai/screens/palm_analysis/temp_all_lead_prediction_with_radio_btns_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -243,15 +242,9 @@ class _TempFileSelectionScreenState extends State<TempFileSelectionScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) => TempAllLeadPredictionScreen(
-                _l1Data,
-                _l2Data,
-                _v1Data,
-                _v2Data,
-                _v3Data,
-                _v4Data,
-                _v5Data,
-                _v6Data)));
+            builder: (BuildContext context) =>
+                TempAllLeadPredictionWithRadioBtnsScreen(_l1Data, _l2Data,
+                    _v1Data, _v2Data, _v3Data, _v4Data, _v5Data, _v6Data)));
   }
 
   Future<void> _upServer() async {
