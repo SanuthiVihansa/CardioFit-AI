@@ -533,6 +533,7 @@ class WordPair {
   final String word;
   final String nextWord;
 
+
   WordPair(this.word, this.nextWord);
 }
 
@@ -555,22 +556,22 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     'Select Report',
     'Full Blood Count Report',
     'Urine Full Report',
-    'Random blood Sugar',
+    // 'Random blood Sugar',
     'Fasting blood Sugar',
-    'Post prandial blood sugar ',
-    'Hba1c',
-    '75g ogtt',
-    'Thyroid function test',
-    'Liver function test (alt, ast, bilirubin)',
-    'Blood urea',
-    'Serum creatinine',
-    'Serum electrolytes',
-    'Lipid profile',
-    'Serum cholesterol',
-    'Esr',
-    'Urine hcg',
-    'HIV',
-    'Troponin i',
+    // 'Post prandial blood sugar ',
+    // 'Hba1c',
+    // '75g ogtt',
+    // 'Thyroid function test',
+    // 'Liver function test (alt, ast, bilirubin)',
+    // 'Blood urea',
+    // 'Serum creatinine',
+    // 'Serum electrolytes',
+    // 'Lipid profile',
+    // 'Serum cholesterol',
+    // 'Esr',
+    // 'Urine hcg',
+    // 'HIV',
+    // 'Troponin i',
   ];
 
   User? get user => null;
@@ -776,41 +777,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     );
   }
 
-  // pickimage(ImageSource source) async {
-  //   final image = await ImagePicker().pickImage(source: source);
-  //   setState(() {
-  //     scanning = true;
-  //     pickedimage = File(image!.path);
-  //   });
-  //
-  //   //Prepare the image
-  //   Uint8List bytes = Io.File(pickedimage.path).readAsBytesSync();
-  //   String img64 = base64Encode(bytes);
-  //
-  //   //Send to API
-  //   String url = "https://api.ocr.space/parse/image";
-  //   var data = {
-  //     "base64Image": "data:image/jpg;base64,$img64",
-  //     "isTable": "true",
-  //   };
-  //   var header = {"apikey": "K81742525988957"};
-  //   http.Response response = await http.post(
-  //       Uri.parse("https://api.ocr.space/parse/image"),
-  //       body: data,
-  //       headers: header);
-  //
-  //   // Get data back
-  //   Map<String, dynamic> result = jsonDecode(response.body);
-  //   // print(result);
-  //   setState(() {
-  //     scanning = false;
-  //     scannedText = result["ParsedResults"][0]["ParsedText"];
-  //     wordPairs = findWordPairs(scannedText);
-  //   });
-  //
-  // }
-
-  //Function to read values based on the report selected
   void _pickImage() async {
     for (var item in addMultipleReports) {
       if (item["UploadedImage"] != null) {
@@ -847,10 +813,13 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             ReportAnalysisScreen(extractedText,addMultipleReports)));
   }
 
-  // List<WordPair> findWordPairs(String text) {
+  // List<WordPair> findWordPairs(Map<String, dynamic> item) {
   //   List<WordPair> pairs = [];
   //   RegExp regExp = RegExp(" ");
+  //   String selectedReport = item["UploadedReport"];
+  //
   //   if (selectedReport == "Full Blood Count Report") {
+  //     Text("added blood text");
   //     regExp = RegExp(
   //         r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
   //         caseSensitive: false);
@@ -859,157 +828,69 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   //         r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epthelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(\w+)',
   //         caseSensitive: false);
   //   }
-  //   Iterable<Match> matches = regExp.allMatches(text);
+  //
+  //   Iterable<Match> matches = regExp.allMatches(item["ScannedText"]);
   //   for (Match match in matches) {
   //     String word = match.group(1)!;
   //     String nextWord =
-  //         match.group(2)!; // Capture the next word after the phrase
+  //     match.group(2)!; // Capture the next word after the phrase
   //     pairs.add(WordPair(word, nextWord));
-  //     //print(wordPairs);
   //   }
-  //   reportDiagnosis();
-  //   if (pickedimage.path.isNotEmpty && selectedReport != 'Select Report') {
-  //     addMultipleReports.add(
-  //         {"UploadedReport": selectedReport, "UploadedImage": pickedimage,"ScannedItems":pairs});
-  //   }
+  //
   //   return pairs;
   // }
-  //
-  // String reportDiagnosis() {
-  //   if (selectedReport == "Full Blood Count Report") {
-  //     if (wordPairs.any((pair) =>
-  //         pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
-  //       diagnosis = "You are facing an infection";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Neutrophils" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) > 80)) {
-  //       diagnosis = "You are facing an Bacterial infection";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Lymphocytes" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) > 40)) {
-  //       diagnosis = "You are facing a Viral Fever";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Eosinophils" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) > 6)) {
-  //       diagnosis = "You are facing an Allergic reaction";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Platelet Count" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
-  //       diagnosis =
-  //           "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
-  //     } else {
-  //       diagnosis = "No defect identified";
-  //     }
-  //   } else if (selectedReport == "Urine Full Report") {
-  //     if (wordPairs.any((pair) =>
-  //         pair.word == "Pus Cells" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) < 10)) {
-  //       diagnosis = "You are facing an Urine infection";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
-  //       diagnosis = "You are facing a Renal disease";
-  //     }
-  //     // else if (wordPairs.any((pair) =>
-  //     // pair.word == "Albumin" &&
-  //     //     (int.tryParse(pair.nextWord) ?? 0) > 40)) {
-  //     //   diagnosis = "You are facing a Renal disease";
-  //     // }
-  //     else if (wordPairs.any((pair) =>
-  //         pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
-  //       diagnosis = "You have Diabetics";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Red Blood Cells" &&
-  //         pair.nextWord.toLowerCase() != "occasional")) {
-  //       diagnosis =
-  //           "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
-  //     } else {
-  //       diagnosis = "No defect identified";
-  //     }
-  //   }
-  //   return diagnosis;
-  // }
-
+  // Extracted All values
   List<WordPair> findWordPairs(Map<String, dynamic> item) {
     List<WordPair> pairs = [];
-    RegExp regExp = RegExp(" ");
+    late RegExp regExp = RegExp(" ");
+
     String selectedReport = item["UploadedReport"];
 
+    // Define regular expressions based on the type of report
     if (selectedReport == "Full Blood Count Report") {
-      Text("added blood text");
+      // Define regular expression for Full Blood Count Report
       regExp = RegExp(
-          r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
+          r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophils|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(.*?)(?=\s+(?:WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophils|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count|$))',
           caseSensitive: false);
     } else if (selectedReport == "Urine Full Report") {
+      // Define regular expression for Urine Full Report
       regExp = RegExp(
-          r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epthelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(\w+)',
+          r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epithelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(.*?)(?=\s+(?:Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epithelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity|$))',
+          caseSensitive: false);
+    } else if (selectedReport == "Fasting blood Sugar") {
+      // Define regular expression for Fasting blood Sugar
+      regExp = RegExp(
+          r'(Fasting\s+Blood\s+Sugar|Fasting\s+Plasma\s+Glucose)\s+(.*?)(?=\s+(?:Fasting\s+Blood\s+Sugar|Fasting\s+Plasma\s+Glucose|$))',
           caseSensitive: false);
     }
 
+
+    // Extract matches from the scanned text using the regular expression
     Iterable<Match> matches = regExp.allMatches(item["ScannedText"]);
+
+    // Iterate through the matches
     for (Match match in matches) {
       String word = match.group(1)!;
-      String nextWord =
-      match.group(2)!; // Capture the next word after the phrase
+      String nextWord = match.group(2)!;
+
+      // Add word pair to the list
       pairs.add(WordPair(word, nextWord));
     }
 
     return pairs;
   }
 
-  // String reportDiagnosis(Map<String, dynamic> item) {
-  //   List<WordPair> wordPairs = findWordPairs(item);
-  //   String selectedReport = item["UploadedReport"];
-  //   String diagnosis = "";
-  //
-  //   if (selectedReport == "Full Blood Count Report") {
-  //     if (wordPairs.any((pair) =>
-  //         pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
-  //       diagnosis = "You are facing an infection";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Neutrophils" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) > 80)) {
-  //       diagnosis = "You are facing an Bacterial infection";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Lymphocytes" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) > 40)) {
-  //       diagnosis = "You are facing a Viral Fever";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Eosinophils" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) > 6)) {
-  //       diagnosis = "You are facing an Allergic reaction";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Platelet Count" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
-  //       diagnosis =
-  //           "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
-  //     } else {
-  //       diagnosis = "No defect identified";
-  //     }
-  //   } else if (selectedReport == "Urine Full Report") {
-  //     if (wordPairs.any((pair) =>
-  //         pair.word == "Pus Cells" &&
-  //         (int.tryParse(pair.nextWord) ?? 0) < 10)) {
-  //       diagnosis = "You are facing an Urine infection";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
-  //       diagnosis = "You are facing a Renal disease";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
-  //       diagnosis = "You have Diabetics";
-  //     } else if (wordPairs.any((pair) =>
-  //         pair.word == "Red Blood Cells" &&
-  //         pair.nextWord.toLowerCase() != "occasional")) {
-  //       diagnosis =
-  //           "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
-  //     } else {
-  //       diagnosis = "No defect identified";
-  //     }
-  //   }
-  //
-  //   return diagnosis;
-  // }
 
-  //Display Extracted in a table
+
+
+
+
+
+
+
+
+
+
 
 
   @override

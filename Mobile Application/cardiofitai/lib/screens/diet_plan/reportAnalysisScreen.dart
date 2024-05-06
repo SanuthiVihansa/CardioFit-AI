@@ -15,62 +15,6 @@ class ReportAnalysisScreen extends StatefulWidget {
 
 class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
   int findIndex =0;
-  // Widget _displayOutputTable() {
-  //   for(int i=0; i <= widget.extractedResult.length; i++ ){
-  //     return Center(
-  //       child: DataTable(
-  //         columns: [
-  //           DataColumn(label: Text('Component')),
-  //           DataColumn(label: Text('Result')),
-  //         ],
-  //         rows: widget.extractedResult.expand((item) {
-  //           findIndex=findIndex+1;
-  //           return item.map((pair) {
-  //             return DataRow(
-  //               cells: [
-  //                 DataCell(Text(pair.word)), // Accessing word directly
-  //                 DataCell(Text(pair.nextWord)), // Accessing nextWord directly
-  //               ],
-  //             );
-  //           }
-  //           );
-  //         }).toList(),
-  //       ),
-  //     );
-  //   }
-  // }
-
-  //working
-  // Widget _displayOutputTable() {
-  //   List<DataRow> rows = [];
-  //
-  //   // Loop through widget.extractedResult
-  //   for (var item in widget.extractedResult) {
-  //     rows.addAll(item.map((pair) {
-  //       return DataRow(
-  //         cells: [
-  //           DataCell(Text(pair.word)), // Accessing word directly
-  //           DataCell(Text(pair.nextWord)), // Accessing nextWord directly
-  //         ],
-  //       );
-  //     }));
-  //   }
-  //
-  //   // Building DataTable outside the loop
-  //   DataTable dataTable = DataTable(
-  //     columns: [
-  //       DataColumn(label: Text('Component')),
-  //       DataColumn(label: Text('Result')),
-  //     ],
-  //     rows: rows,
-  //   );
-  //
-  //
-  //   // Returning the DataTable
-  //   return Center(
-  //     child: dataTable,
-  //   );
-  // }
   Widget _displayOutputTable() {
     List<Widget> tableWidgets = [];
     // Loop through widget.extractedResult
@@ -79,7 +23,7 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
         return DataRow(
           cells: [
             DataCell(Text(pair.word)), // Accessing word directly
-            DataCell(Text(pair.nextWord)), // Accessing nextWord directly
+            DataCell(Text(pair.nextWord ?? '')), // Accessing nextWord directly
           ],
         );
       }).toList();
@@ -143,7 +87,8 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       } else {
         diagnosis = "No defect identified";
       }
-    } else if (selectedReport == "Urine Full Report") {
+    }
+    else if (selectedReport == "Urine Full Report") {
       if (wordPairs.any((pair) =>
       pair.word == "Pus Cells" &&
           (int.tryParse(pair.nextWord) ?? 0) < 10)) {
@@ -163,44 +108,38 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
         diagnosis = "No defect identified";
       }
     }
+    else if(selectedReport=="Fasting blood Sugar"){
+      if (wordPairs.any((pair) =>
+      pair.word == "Fasting Plasma Glucose" &&
+          (int.tryParse(pair.nextWord) ?? 0) < 100)) {
+        diagnosis = "Normal : No defects identified";
+      }
+      else if (wordPairs.any((pair) =>
+      pair.word == "Fasting Plasma Glucose" && (int.tryParse(pair.nextWord) ?? 0) > 126)) {
+        diagnosis = "Diabetes Mellitus";
+      }
+      else if (wordPairs.any((pair) =>
+      pair.word == "Fasting Plasma Glucose" && (int.tryParse(pair.nextWord) ?? 0) > 100 && (int.tryParse(pair.nextWord) ?? 0)<125)) {
+        diagnosis = "Pre Diabetes";
+      }
+      else if (wordPairs.any((pair) =>
+      pair.word == "Fasting Blood Sugar" && (int.tryParse(pair.nextWord) ?? 0) < 100)) {
+        diagnosis = "Normal : No defects identified";
+      }
+      else if (wordPairs.any((pair) =>
+      pair.word == "Fasting Blood Sugar" && (int.tryParse(pair.nextWord) ?? 0) >126)) {
+        diagnosis = "Diabetes Mellitus";
+      }
+      else if (wordPairs.any((pair) =>
+      pair.word == "Fasting Blood Sugar" && (int.tryParse(pair.nextWord) ?? 0) > 100 && (int.tryParse(pair.nextWord) ?? 0)<125)) {
+        diagnosis = "Pre Diabetes";
+      }
+
+
+    }
 
     return diagnosis;
   }
-
-
-
-  // Widget _displayOutputTable() {
-  //   List<Widget> tables = [];
-  //
-  //   for (int i = 0; i < widget.extractedResult.length; i++) {
-  //     List<DataRow> rows = [];
-  //     widget.extractedResult[i].forEach((pair) {
-  //       rows.add(
-  //         DataRow(
-  //           cells: [
-  //             DataCell(Text(pair.word)), // Accessing word directly
-  //             DataCell(Text(pair.nextWord)), // Accessing nextWord directly
-  //           ],
-  //         ),
-  //       );
-  //     });
-  //
-  //     tables.add(
-  //       Center(
-  //         child: DataTable(
-  //           columns: [
-  //             DataColumn(label: Text('Component')),
-  //             DataColumn(label: Text('Result')),
-  //           ],
-  //           rows: rows,
-  //         ),
-  //       ),
-  //     );
-  //   }
-  //   print("Tables length: ${tables.length}");
-  //   return tables[findIndex % tables.length];
-  // }
-
 
   @override
   Widget build(BuildContext context) {
