@@ -15,6 +15,14 @@ class ReportHome extends StatelessWidget {
   }
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        title: const Text(
+          "ECG Diagnosis",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ),
       body: Stack(
         children: [
           // Background image on the left
@@ -31,7 +39,7 @@ class ReportHome extends StatelessWidget {
           // Logo on the right with padding
           Positioned(
             right: MediaQuery.of(context).size.width * 0.02, // Position it with 5% space from the right edge
-            top: MediaQuery.of(context).size.height * 0.2, // Adjust vertical position as needed
+            top: MediaQuery.of(context).size.height * 0.1, // Adjust vertical position as needed
             child: ClipOval(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.30, // Cover 30% of the screen width
