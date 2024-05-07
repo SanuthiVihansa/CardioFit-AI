@@ -17,8 +17,6 @@ class ECGDiagnosisScreen extends StatefulWidget {
 }
 
 class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
-
-
   File? _selectedFile;
   String _predictedLabel = '';
   List<double> _ecgData = [];
@@ -81,17 +79,22 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ECG Diagnosis'),
+        foregroundColor: Colors.white,
+        title: const Text(
+          "ECG Diagnosis",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
       ),
       body: Center(
-        child: _ecgData.isNotEmpty
+        child: _predictedLabel.isNotEmpty
             ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(20.0),
               child: Text(
-                'Predicted Label: $_predictedLabel',
+                'Diagnosis: $_predictedLabel',
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -136,8 +139,21 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
             ),
           ],
         )
-            : CircularProgressIndicator(), // Show loading indicator while processing
+            : Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                'Diagnosis of Arrhythmias In Progress',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            CircularProgressIndicator(), // Show loading indicator while processing
+          ],
+        ),
       ),
     );
   }
 }
+
