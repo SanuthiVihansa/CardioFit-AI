@@ -91,7 +91,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
             Padding(
               padding: EdgeInsets.all(20.0),
               child: Text(
-                'Predicted Label: $_predictedLabel',
+                'Diagnosis: $_predictedLabel',
                 style: TextStyle(fontSize: 20),
               ),
             ),
