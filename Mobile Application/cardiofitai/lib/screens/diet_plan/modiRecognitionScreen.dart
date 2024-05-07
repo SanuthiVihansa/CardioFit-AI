@@ -58,10 +58,11 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   //Drop down control values
   List<String> reports = [
     'Select Report',
-    'Full Blood Count Report',
-    'Urine Full Report',
-    // 'Random blood Sugar',
     'Fasting blood Sugar',
+    'Lipid profile',
+    //'Urine Full Report',
+    //'Full Blood Count Report',
+    // 'Random blood Sugar',
     // 'Post prandial blood sugar ',
     // 'Hba1c',
     // '75g ogtt',
@@ -70,7 +71,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     // 'Blood urea',
     // 'Serum creatinine',
     // 'Serum electrolytes',
-    'Lipid profile',
+
     // 'Serum cholesterol',
     // 'Esr',
     // 'Urine hcg',
@@ -371,6 +372,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               rows = _buildRows(bloodComponents, unitsComponents, lines);
               setState(() {});
             }
+            else if(selectedReport=="Urine Full Report"){
+              List<String> bloodComponents = ['Colour', 'Appearance','SpecificGravity','pH','Glucose','Protein','KetoneBodies','Bilirubin','Urobilinogen','PusCells','RedBloodCells','EpithelialCells','Organisms','Crystals','Casts'];
+              List<String> unitsComponents = [];
+              rows = _buildRows(bloodComponents, unitsComponents, lines);
+              setState(() {});
+            }
           }
           item["ExtractedText"] = extractedText;
 
@@ -479,7 +486,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     Map<String, String> componentMap = {
       'FastingPlasmaGlucose': 'Fasting Plasma Glucose',
       'FastingBloodSugar': 'Fasting Blood Sugar',
-      'FaøngmasmaGlucose': 'Fasting Plasma Glucose', // Map 'FaøngmasmaGlucose' to 'Fasting Plasma Glucose'
+      //'FaøngmasmaGlucose': 'Fasting Plasma Glucose', // Map 'FaøngmasmaGlucose' to 'Fasting Plasma Glucose'
     };
 
     // Filter out lines that contain any of the blood components
@@ -499,16 +506,19 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         startIndex = line.indexOf("LipidProfile");
         endIndex = line.indexOf("LipidProfileReferenceRangesforAdults");
       }
-      //int startIndex = line.indexOf("FullBloodcount(FBC)");
-      //int startIndex = line.indexOf("LipidProfile");
+      else if(selectedReport=="Urine Full Report"){
+        startIndex = line.indexOf("UrineFullReport");
+        //endIndex = line.indexOf("MedicalLaboratoryTechnologist");
+      }
+
 
       if (startIndex == -1) {
-        continue; // Skip lines that don't contain "FullBloodcount(FBC)"
+        continue; // Skip lines that don't contain "startIndex"
       }
 
       //int endIndex = line.indexOf("LipidProfileReference:");
       if (endIndex == -1) {
-        continue; // Skip lines that don't contain "References:"
+        continue; // Skip lines that don't contain "endIndex"
       }
 
       String dataSection = line.substring(startIndex, endIndex);
@@ -564,8 +574,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
     return rows;
   }
-
-
 
 
 
