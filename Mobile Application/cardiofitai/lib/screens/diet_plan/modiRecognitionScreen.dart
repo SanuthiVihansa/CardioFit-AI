@@ -1,503 +1,3 @@
-// import 'dart:convert';
-// import 'dart:io';
-// import 'dart:io' as Io;
-// import 'dart:typed_data';
-//
-// import 'package:cardiofitai/models/user.dart';
-// import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
-// import 'package:cardiofitai/screens/diet_plan/reportAnalysisScreen.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:http/http.dart' as http;
-//
-// class RecognitionScreen extends StatefulWidget {
-//   const RecognitionScreen({super.key});
-//
-//   @override
-//   State<RecognitionScreen> createState() => _RecognitionScreenState();
-// }
-//
-// class WordIndex {
-//   final String phrase;
-//   final int startIndex;
-//   final int endIndex;
-//   final String nextWord;
-//   final int nextWordIndex;
-//
-//   WordIndex(this.phrase, this.startIndex, this.endIndex, this.nextWord,
-//       this.nextWordIndex);
-// }
-//
-// class WordPair {
-//   final String word;
-//   final String nextWord;
-//
-//
-//   WordPair(this.word, this.nextWord);
-// }
-//
-// class _RecognitionScreenState extends State<RecognitionScreen> {
-//   late File pickedimage = File('');
-//   late double halfScreenWidth;
-//   late double height;
-//   bool scanning = false;
-//   String scannedText = '';
-//
-//   //List<WordIndex> wordIndexes = [];
-//   List<WordPair> wordPairs = [];
-//   List<List<WordPair>> extractedText = [];
-//   String? selectedReport = 'Select Report';
-//   String diagnosis = "";
-//   late List<Map<String, dynamic>> addMultipleReports = [];
-//
-//   //Drop down control values
-//   List<String> reports = [
-//     'Select Report',
-//     'Full Blood Count Report',
-//     'Urine Full Report',
-//     'Random blood Sugar',
-//     'Fasting blood Sugar',
-//     'Post prandial blood sugar ',
-//     'Hba1c',
-//     '75g ogtt',
-//     'Thyroid function test',
-//     'Liver function test (alt, ast, bilirubin)',
-//     'Blood urea',
-//     'Serum creatinine',
-//     'Serum electrolytes',
-//     'Lipid profile',
-//     'Serum cholesterol',
-//     'Esr',
-//     'Urine hcg',
-//     'HIV',
-//     'Troponin i',
-//   ];
-//
-//   User? get user => null;
-//
-//   //Pick Image from galley or Camera
-//   // void optionsdialog(BuildContext context) {
-//   //   showDialog(
-//   //       context: context,
-//   //       builder: (context) {
-//   //         return SimpleDialog(
-//   //           children: [
-//   //             SimpleDialogOption(
-//   //               onPressed: () => pickimage(ImageSource.gallery),
-//   //               child: Text("Gallery"),
-//   //             ),
-//   //             SimpleDialogOption(
-//   //               onPressed: () => pickimage(ImageSource.camera),
-//   //               child: Text("Camera"),
-//   //             ),
-//   //             SimpleDialogOption(
-//   //               onPressed: () => Navigator.pop(context),
-//   //               child: Text("Back"),
-//   //             ),
-//   //           ],
-//   //         );
-//   //       });
-//   // }
-//   //Multiple Attachment control Screen
-//   Widget _multipleAttachmentControl() {
-//     return Container(
-//       height: 300,
-//       width: 500,
-//       margin: const EdgeInsets.only(right: 20, bottom: 10),
-//       child: Material(
-//         borderRadius: BorderRadius.all(Radius.circular(20)),
-//         color: Colors.white54,
-//         elevation: 4,
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           children: <Widget>[
-//             SizedBox(
-//               height: 80,
-//             ),
-//             Center(
-//                 child: Icon(
-//               Icons.attach_file,
-//               size: 50,
-//               color: Colors.grey,
-//             )),
-//             Center(
-//                 child: Text("\nPlease upload the medical reports\n",
-//                     style: TextStyle(color: Colors.grey, fontSize: 20))),
-//             Row(
-//               mainAxisSize: MainAxisSize.min,
-//               children: <Widget>[
-//                 SizedBox(
-//                   width: 30,
-//                 ),
-//                 Container(
-//                   width: 250,
-//                   decoration: BoxDecoration(
-//                     border:
-//                         Border.all(color: Colors.deepOrangeAccent, width: 2.0),
-//                     borderRadius: BorderRadius.circular(8.0),
-//                   ),
-//                   child: DropdownButton<String>(
-//                     value: selectedReport,
-//                     elevation: 16,
-//                     style: const TextStyle(color: Colors.blueGrey),
-//                     alignment: Alignment.topLeft,
-//                     underline: SizedBox(),
-//                     // Remove the underline
-//                     onChanged: (String? newValue) {
-//                       if (newValue != null) {
-//                         setState(() {
-//                           selectedReport = newValue!;
-//                         });
-//                       }
-//                     },
-//                     items:
-//                         reports.map<DropdownMenuItem<String>>((String value) {
-//                       return DropdownMenuItem<String>(
-//                         value: value,
-//                         child: Center(
-//                           child: Text(value, textAlign: TextAlign.start),
-//                         ),
-//                       );
-//                     }).toList(),
-//                   ),
-//                 ),
-//                 SizedBox(
-//                   width: 30,
-//                 ),
-//                 Flexible(
-//                   child: ElevatedButton(
-//                     onPressed: () async {
-//                       final image = await ImagePicker()
-//                           .pickImage(source: ImageSource.gallery);
-//                       if (image != null) {
-//                         pickedimage = File(image.path);
-//                         if (pickedimage.path.isNotEmpty &&
-//                             selectedReport != 'Select Report') {
-//                           addMultipleReports.add(
-//                             {
-//                               "UploadedReport": selectedReport,
-//                               "UploadedImage": pickedimage,
-//                               "ScannedItems": "",
-//                               "ExtractedText":""
-//                             },
-//                           );
-//                           // _showAttachedItems();
-//                           setState(() {});
-//                           print(addMultipleReports);
-//                         }
-//                       }
-//                     },
-//                     child: Text("Attach Report"),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _showAttachedItems() {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 108.0),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Center(
-//             child: Text(
-//               'Uploaded Report Files', // Your header text here
-//               style: TextStyle(
-//                 fontWeight: FontWeight.bold,
-//                 fontSize: 20,
-//               ),
-//             ),
-//           ),
-//           SizedBox(height: 10), // Add space between header and table
-//           DataTable(
-//             columnSpacing: 50,
-//             dataRowHeight: 70,
-//             columns: [
-//               DataColumn(label: Text('Report')),
-//               DataColumn(label: Text('Report Type')),
-//               DataColumn(label: Text('Action')),
-//             ],
-//             rows: addMultipleReports.map((e) {
-//               return DataRow(cells: [
-//                 DataCell(
-//                   Image.file(e["UploadedImage"], width: 50, height: 50),
-//                 ),
-//                 DataCell(
-//                   Text(e["UploadedReport"]),
-//                 ),
-//                 DataCell(
-//                   GestureDetector(
-//                     child: Icon(Icons.restore_from_trash_outlined),
-//                     onTap: () {
-//                       _removeItem(e);
-//                     },
-//                   ),
-//                 ),
-//               ]);
-//             }).toList(),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   //Remove confirmation widget
-//   void _removeItem(Map<String, dynamic> item) {
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           title: Text('Confirm'),
-//           content: Text('Are you sure you want to remove this item?'),
-//           actions: <Widget>[
-//             TextButton(
-//               onPressed: () {
-//                 Navigator.of(context).pop();
-//               },
-//               child: Text('Cancel'),
-//             ),
-//             TextButton(
-//               onPressed: () {
-//                 setState(() {
-//                   addMultipleReports.remove(item);
-//                 });
-//                 Navigator.of(context).pop();
-//               },
-//               child: Text('Remove'),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-//
-//   // pickimage(ImageSource source) async {
-//   //   final image = await ImagePicker().pickImage(source: source);
-//   //   setState(() {
-//   //     scanning = true;
-//   //     pickedimage = File(image!.path);
-//   //   });
-//   //
-//   //   //Prepare the image
-//   //   Uint8List bytes = Io.File(pickedimage.path).readAsBytesSync();
-//   //   String img64 = base64Encode(bytes);
-//   //
-//   //   //Send to API
-//   //   String url = "https://api.ocr.space/parse/image";
-//   //   var data = {
-//   //     "base64Image": "data:image/jpg;base64,$img64",
-//   //     "isTable": "true",
-//   //   };
-//   //   var header = {"apikey": "K81742525988957"};
-//   //   http.Response response = await http.post(
-//   //       Uri.parse("https://api.ocr.space/parse/image"),
-//   //       body: data,
-//   //       headers: header);
-//   //
-//   //   // Get data back
-//   //   Map<String, dynamic> result = jsonDecode(response.body);
-//   //   // print(result);
-//   //   setState(() {
-//   //     scanning = false;
-//   //     scannedText = result["ParsedResults"][0]["ParsedText"];
-//   //     wordPairs = findWordPairs(scannedText);
-//   //   });
-//   //
-//   // }
-//
-//   //Function to read values based on the report selected
-//   void _pickImage() async {
-//     for (var item in addMultipleReports) {
-//       if (item["UploadedImage"] != null) {
-//         final image = item["UploadedImage"];
-//         // final image =
-//         //     await ImagePicker().pickImage(source: ImageSource.gallery);
-//         if (image != null) {
-//           Text("we are here");
-//           final pickedImage = File(image.path);
-//           final bytes = await pickedImage.readAsBytes();
-//           final img64 = base64Encode(bytes);
-//
-//           final url = "https://api.ocr.space/parse/image";
-//           final data = {
-//             "base64Image": "data:image/jpg;base64,$img64",
-//             "isTable": "true",
-//           };
-//           final header = {"apikey": "K81742525988957"};
-//           final response =
-//               await http.post(Uri.parse(url), body: data, headers: header);
-//
-//           final result = jsonDecode(response.body);
-//           final scannedText = result["ParsedResults"][0]["ParsedText"];
-//
-//           item["ScannedText"] = scannedText; // Add or update the ScannedText field
-//           wordPairs = findWordPairs(item);
-//           extractedText.add(wordPairs);
-//           item["ExtractedText"] = extractedText;
-//         }
-//       }
-//     }
-//     Navigator.of(context).pushReplacement(MaterialPageRoute(
-//         builder: (BuildContext context) =>
-//             ReportAnalysisScreen(extractedText,addMultipleReports)));
-//   }
-//
-//
-//
-//   // List<WordPair> findWordPairs(Map<String, dynamic> item) {
-//   //   List<WordPair> pairs = [];
-//   //   RegExp regExp = RegExp(" ");
-//   //   String selectedReport = item["UploadedReport"];
-//   //
-//   //   if (selectedReport == "Full Blood Count Report") {
-//   //     Text("added blood text");
-//   //     regExp = RegExp(
-//   //         r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
-//   //         caseSensitive: false);
-//   //   } else if (selectedReport == "Urine Full Report") {
-//   //     regExp = RegExp(
-//   //         r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epthelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(\w+)',
-//   //         caseSensitive: false);
-//   //   }
-//   //
-//   //   Iterable<Match> matches = regExp.allMatches(item["ScannedText"]);
-//   //   for (Match match in matches) {
-//   //     String word = match.group(1)!;
-//   //     String nextWord = match.group(2)!; // Capture the next word after the phrase
-//   //     String thirdWord = match.group(3)!; // Capture the next word after the phrase
-//   //     String fourthWord = match.group(4)!; // Capture the next word after the phrase
-//   //     String fifthWord = match.group(5)!; // Capture the next word after the phrase
-//   //     String sixthWord = match.group(6)!; // Capture the next word after the phrase
-//   //     String seventhWord = match.group(7)!; // Capture the next word after the phrase
-//   //     String eightWord = match.group(8)!; // Capture the next word after the phrase
-//   //     String nineWord = match.group(9)!; // Capture the next word after the phrase
-//   //
-//   //     pairs.add(WordPair(word, nextWord,thirdWord,fourthWord,fifthWord,sixthWord,seventhWord,eightWord,nineWord));
-//   //   }
-//   //
-//   //   return pairs;
-//   // }
-//   List<WordPair> findWordPairs(Map<String, dynamic> item) {
-//     List<WordPair> pairs = [];
-//     RegExp regExp = RegExp(" ");
-//     String selectedReport = item["UploadedReport"];
-//
-//     if (selectedReport == "Full Blood Count Report") {
-//       regExp = RegExp(
-//           r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)',
-//           caseSensitive: false);
-//     } else if (selectedReport == "Urine Full Report") {
-//       regExp = RegExp(
-//           r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epthelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)',
-//           caseSensitive: false);
-//     }
-//
-//     Iterable<Match> matches = regExp.allMatches(item["ScannedText"]);
-//     for (Match match in matches) {
-//       String word = match.group(1)!;
-//       String nextWord = match.group(2)!;
-//       pairs.add(WordPair(word, nextWord));
-//     }
-//
-//     return pairs;
-//   }
-//
-//
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     halfScreenWidth = (MediaQuery.of(context).size.width - 10) - 50;
-//     return Scaffold(
-//       appBar: AppBar(
-//         leading: IconButton(
-//           color: Colors.white,
-//           icon: const Icon(Icons.arrow_back),
-//           onPressed: () {
-//             Navigator.pop(context);
-//           },
-//         ),
-//         title: const Text(
-//           "CardioFit AI",
-//           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-//         ),
-//         backgroundColor: Colors.red,
-//       ),
-//       body: SingleChildScrollView(
-//         child: Container(
-//           alignment: Alignment.center,
-//           child: Column(
-//             children: [
-//               SizedBox(
-//                 height: 55 + MediaQuery.of(context).viewInsets.top,
-//               ),
-//               Text("Laboratory Report Diagnosis",
-//                   style: TextStyle(
-//                       fontSize: 30,
-//                       color: Colors.blueGrey,
-//                       fontWeight: FontWeight.w700)),
-//               SizedBox(
-//                 height: 30,
-//               ),
-//               _multipleAttachmentControl(),
-//               SizedBox(
-//                 height: 30,
-//               ),
-//               addMultipleReports.length != 0
-//                   ? _showAttachedItems()
-//                   : SizedBox(),
-//
-//               // InkWell(
-//               //   onTap: () {},
-//               //   child: pickedimage != null && pickedimage.path.isNotEmpty
-//               //       ? Image.file(
-//               //           pickedimage,
-//               //           width: 256,
-//               //           height: 256,
-//               //           fit: BoxFit.fill,
-//               //         )
-//               //       : Image.asset(
-//               //           'assets/icon.png',
-//               //           width: 256,
-//               //           height: 256,
-//               //           fit: BoxFit.fill,
-//               //         ),
-//               // ),
-//               SizedBox(
-//                 height: 30,
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: <Widget>[
-//                   ElevatedButton(
-//                       onPressed: () {
-//                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-//                             builder: (BuildContext context) =>
-//                                 DietHomePage(user!)));
-//                       },
-//                       child: Text("Back")),
-//                   SizedBox(width: 30),
-//                   ElevatedButton(
-//                       onPressed: () {
-//                         _pickImage();
-//                       },
-//                       child: Text("Analyse")),
-//                 ],
-//               ),
-//               SizedBox(height: 30),
-//               // wordPairs.length != 0 ? _displayOutputTable() : SizedBox()
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
 import 'dart:convert';
 import 'dart:io';
 import 'dart:io' as Io;
@@ -550,6 +50,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   String? selectedReport = 'Select Report';
   String diagnosis = "";
   late List<Map<String, dynamic>> addMultipleReports = [];
+  String noSpace="";
+  List<DataRow> rows = [];
 
   //Drop down control values
   List<String> reports = [
@@ -777,14 +279,54 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     );
   }
 
+  // void _pickImage() async {
+  //   for (var item in addMultipleReports) {
+  //     if (item["UploadedImage"] != null) {
+  //       final image = item["UploadedImage"];
+  //       // final image =
+  //       //     await ImagePicker().pickImage(source: ImageSource.gallery);
+  //       if (image != null) {
+  //         Text("we are here");
+  //         final pickedImage = File(image.path);
+  //         final bytes = await pickedImage.readAsBytes();
+  //         final img64 = base64Encode(bytes);
+  //
+  //         final url = "https://api.ocr.space/parse/image";
+  //         final data = {
+  //           "base64Image": "data:image/jpg;base64,$img64",
+  //           "isTable": "true",
+  //         };
+  //         final header = {"apikey": "K81742525988957"};
+  //         final response =
+  //         await http.post(Uri.parse(url), body: data, headers: header);
+  //
+  //         final result = jsonDecode(response.body);
+  //         final scannedText = result["ParsedResults"][0]["ParsedText"];
+  //
+  //         item["ScannedText"] = scannedText; // Add or update the ScannedText field
+  //         // wordPairs = findWordPairs(item);
+  //         //extractedText.add(wordPairs);
+  //         _removeSpaces(scannedText);
+  //         print("we are here");
+  //         List<String> lines = noSpace.split('\n');
+  //         List<String> bloodComponents = ['WBC', 'Neutrophils', 'Lymphocytes', 'Monocytes', 'Eosinophils', 'Basophills','NeutrophilsAbsoluteCount','LymphocytesAbsoluteCount','MonocytesAbsoluteCount','EosinophilsAbsoluteCount','Haemoglobin','PackedCellVolume(PCV)','MCV','MCH','MCHC','RDW','PlateletCount'];
+  //         List<String> unitsComponents = ['/cumm', '%', '%', '%', '%', '%','/cumm','/cumm','/cumm','/cumm','g/dl','%','fL','pg','g/dL','%','/Cumm'];
+  //         print("we entered rows");
+  //         rows = _buildRows(bloodComponents, unitsComponents, lines);
+  //         item["ExtractedText"] = extractedText;
+  //       }
+  //     }
+  //   }
+  //   // Navigator.of(context).pushReplacement(MaterialPageRoute(
+  //   //     builder: (BuildContext context) =>
+  //   //         ReportAnalysisScreen(extractedText,addMultipleReports)));
+  // }
+
   void _pickImage() async {
     for (var item in addMultipleReports) {
       if (item["UploadedImage"] != null) {
         final image = item["UploadedImage"];
-        // final image =
-        //     await ImagePicker().pickImage(source: ImageSource.gallery);
         if (image != null) {
-          Text("we are here");
           final pickedImage = File(image.path);
           final bytes = await pickedImage.readAsBytes();
           final img64 = base64Encode(bytes);
@@ -802,21 +344,53 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           final scannedText = result["ParsedResults"][0]["ParsedText"];
 
           item["ScannedText"] = scannedText; // Add or update the ScannedText field
-          // wordPairs = findWordPairs(item);
-          //extractedText.add(wordPairs);
-          // Split the scannedText into lines
-          List<String> lines = scannedText.split('\n');
+          _removeSpaces(scannedText);
+          List<String> lines = noSpace.split('\n');
+          List<String> bloodComponents = ['WBC', 'Neutrophils', 'Lymphocytes', 'Monocytes', 'Eosinophils', 'Basophills','NeutrophilsAbsoluteCount','LymphocytesAbsoluteCount','MonocytesAbsoluteCount','EosinophilsAbsoluteCount','RBC','Haemoglobin','PackedCellVolume(PCV)','MCV','MCH','MCHC','RDW','PlateletCount'];
+          List<String> unitsComponents = ['/Cumm', '0/0', '0/0', '0/0', '0/0', '0/0','/Cumm','/Cumm','/Cumm','/Cumm','Million/pL','g/dl','0/0','fL','pg','g/dL','0/0','/Cumm'];
 
-          // Split each line into words and add to extractedText
-          List<List<String>> extractedText = lines.map((line) => line.split(' ')).toList();
+          // Update rows here
+          rows = _buildRows(bloodComponents, unitsComponents, lines);
+
           item["ExtractedText"] = extractedText;
+          setState(() {});
         }
       }
     }
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>
-            ReportAnalysisScreen(extractedText,addMultipleReports)));
   }
+
+
+
+  String _removeSpaces(String text) {
+
+    noSpace = text.replaceAll(RegExp(r'\s+'), '');
+
+    return noSpace;
+  }
+
+  // List<DataRow> _buildRows(List<String> bloodComponents, List<String> unitsComponents, List<String> lines) {
+  //   List<DataRow> rows = [];
+  //
+  //   for (int i = 0; i < bloodComponents.length && i < lines.length;  i++) {
+  //     String fruit = bloodComponents[i];
+  //     String rangeValue = unitsComponents[i];
+  //     String line = lines[i];
+  //     int fruitIndex = line.indexOf(fruit);
+  //     String mValue = line.substring(fruitIndex + fruit.length, line.indexOf(rangeValue, fruitIndex));
+  //     rows.add(DataRow(cells: [
+  //       DataCell(Text(fruit)),
+  //       DataCell(Text(mValue.trim())),
+  //       DataCell(Text(rangeValue)),
+  //     ]));
+  //   }
+  //
+  //   return rows;
+  // }
+
+
+
+
+
 
   // List<WordPair> findWordPairs(Map<String, dynamic> item) {
   //   List<WordPair> pairs = [];
@@ -889,6 +463,154 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   //
   // }
 
+
+
+  // List<DataRow> _buildRows(List<String> bloodComponents, List<String> unitsComponents, List<String> lines) {
+  //   List<DataRow> rows = [];
+  //
+  //   // Filter out lines that contain any of the blood components
+  //   List<String> filteredLines = lines.where((line) => bloodComponents.any((component) => line.contains(component))).toList();
+  //
+  //   for (String line in filteredLines) {
+  //     // Iterate through each line of text
+  //     int startIndex = line.indexOf("FullBloodcount(FBC)");
+  //     if (startIndex == -1) {
+  //       continue; // Skip lines that don't contain "FullBloodcount(FBC)"
+  //     }
+  //
+  //     int endIndex = line.indexOf("References:");
+  //     if (endIndex == -1) {
+  //       continue; // Skip lines that don't contain "References:"
+  //     }
+  //
+  //     String dataSection = line.substring(startIndex, endIndex);
+  //
+  //     // Keep track of which components have been found in this line
+  //     Set<String> foundComponents = {};
+  //
+  //     // Iterate through each blood component and unit component
+  //     for (int i = 0; i < bloodComponents.length; i++) {
+  //       String bloodComponent = bloodComponents[i];
+  //       String unitComponent = unitsComponents[i];
+  //
+  //       int bloodIndex = dataSection.indexOf(bloodComponent);
+  //       int unitIndex = dataSection.indexOf(unitComponent, bloodIndex + bloodComponent.length);
+  //
+  //       while (bloodIndex != -1 && unitIndex != -1) {
+  //         // Extract the value between the blood component and unit component
+  //         String value = dataSection.substring(bloodIndex + bloodComponent.length, unitIndex).trim();
+  //
+  //         rows.add(DataRow(cells: [
+  //           DataCell(Text(bloodComponent)),
+  //           DataCell(Text(value.trim())),
+  //           DataCell(Text(unitComponent)),
+  //         ]));
+  //
+  //         // Add the found component to the set
+  //         foundComponents.add(bloodComponent);
+  //         foundComponents.add(unitComponent);
+  //
+  //         // If all components have been found, break the loop
+  //         if (foundComponents.length == bloodComponents.length * 2) {
+  //           break;
+  //         }
+  //
+  //         // Update indices for the next occurrence
+  //         bloodIndex = dataSection.indexOf(bloodComponent, unitIndex);
+  //         unitIndex = dataSection.indexOf(unitComponent, bloodIndex + bloodComponent.length);
+  //       }
+  //
+  //       // If all components have been found, break the loop
+  //       if (foundComponents.length == bloodComponents.length * 2) {
+  //         break;
+  //       }
+  //     }
+  //
+  //     // If all components have been found, break the outer loop
+  //     if (foundComponents.length == bloodComponents.length * 2) {
+  //       break;
+  //     }
+  //   }
+  //
+  //   return rows;
+  // }
+
+
+  List<DataRow> _buildRows(List<String> bloodComponents, List<String> unitsComponents, List<String> lines) {
+    List<DataRow> rows = [];
+
+    // Filter out lines that contain any of the blood components
+    List<String> filteredLines = lines.where((line) => bloodComponents.any((component) => line.contains(component))).toList();
+
+    for (String line in filteredLines) {
+      // Iterate through each line of text
+      int startIndex = line.indexOf("FullBloodcount(FBC)");
+      if (startIndex == -1) {
+        continue; // Skip lines that don't contain "FullBloodcount(FBC)"
+      }
+
+      int endIndex = line.indexOf("References:");
+      if (endIndex == -1) {
+        continue; // Skip lines that don't contain "References:"
+      }
+
+      String dataSection = line.substring(startIndex, endIndex);
+
+      // Keep track of which components have been found in this line
+      Set<String> foundComponents = {};
+
+      // Iterate through each blood component and unit component
+      for (int i = 0; i < bloodComponents.length; i++) {
+        String bloodComponent = bloodComponents[i];
+        String unitComponent = unitsComponents[i];
+
+        int bloodIndex = dataSection.indexOf(bloodComponent);
+        int unitIndex = dataSection.indexOf(unitComponent, bloodIndex + bloodComponent.length);
+
+        while (bloodIndex != -1 && unitIndex != -1) {
+          // Extract the value between the blood component and unit component
+          String value = dataSection.substring(bloodIndex + bloodComponent.length, unitIndex).trim();
+
+          rows.add(DataRow(cells: [
+            DataCell(Text(bloodComponent)),
+            DataCell(Text(value.trim())),
+            DataCell(Text(unitComponent)),
+          ]));
+
+          // Add the found component to the set
+          foundComponents.add(bloodComponent);
+          foundComponents.add(unitComponent);
+
+          // If all components have been found, break the loop
+          if (foundComponents.length == bloodComponents.length * 2) {
+            break;
+          }
+
+          // Update indices for the next occurrence
+          bloodIndex = dataSection.indexOf(bloodComponent, unitIndex);
+          unitIndex = dataSection.indexOf(unitComponent, bloodIndex + bloodComponent.length);
+        }
+
+        // If all components have been found, break the loop
+        if (foundComponents.length == bloodComponents.length * 2) {
+          break;
+        }
+      }
+
+      // If all components have been found, break the outer loop
+      if (foundComponents.length == bloodComponents.length * 2) {
+        break;
+      }
+    }
+
+    return rows;
+  }
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     halfScreenWidth = (MediaQuery.of(context).size.width - 10) - 50;
@@ -957,17 +679,32 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                DietHomePage(user!)));
+                                ReportAnalysisScreen(extractedText,addMultipleReports)));
                       },
                       child: Text("Back")),
                   SizedBox(width: 30),
                   ElevatedButton(
-                      onPressed: () {
-                        _pickImage();
-                      },
-                      child: Text("Analyse")),
+                       onPressed: () {
+                         _pickImage();
+                       },
+                       child: Text("Analyse")),
                 ],
               ),
+
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columns: const [
+                    DataColumn(label: Text('Fruit')),
+                    DataColumn(label: Text('m')),
+                    DataColumn(label: Text('Value')),
+                  ],
+                  rows: rows,
+                ),
+              ),
+
+
+
               SizedBox(height: 30),
               // wordPairs.length != 0 ? _displayOutputTable() : SizedBox()
             ],
