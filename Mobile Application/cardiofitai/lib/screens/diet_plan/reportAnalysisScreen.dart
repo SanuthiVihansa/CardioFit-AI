@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'modiRecognitionScreen.dart';
 
 class ReportAnalysisScreen extends StatefulWidget {
-  const ReportAnalysisScreen(this.extractedResult, this.addMultipleReports,
+  ReportAnalysisScreen(this.extractedResult, this.addMultipleReports,this.rows,
       {super.key});
 
   final List<List<WordPair>> extractedResult;
   final List<Map<String, dynamic>> addMultipleReports;
+  final List<DataRow> rows;
+
 
   @override
   State<ReportAnalysisScreen> createState() => _ReportAnalysisScreenState();
@@ -174,11 +176,23 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
         ),
         backgroundColor: Colors.red,
       ),
-      body: SingleChildScrollView(
-        child: widget.extractedResult.isNotEmpty
-            ? _displayOutputTable()
-            : Text("Hi"),
+      body:  SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columns: const [
+            DataColumn(label: Text('Component')),
+            DataColumn(label: Text('Result')),
+            DataColumn(label: Text('Unit')),
+          ],
+          rows: widget.rows,
+        ),
       ),
+
+      //SingleChildScrollView(
+      //   child: widget.extractedResult.isNotEmpty
+      //       ? Text("")
+      //       : Text("Hi"),
+      // ),
     );
   }
 }

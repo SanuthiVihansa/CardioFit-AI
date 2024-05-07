@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
+import '../../models/user.dart';
+
 class RecognitionScreen extends StatefulWidget {
   const RecognitionScreen({super.key});
 
@@ -68,7 +70,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     // 'Blood urea',
     // 'Serum creatinine',
     // 'Serum electrolytes',
-     'Lipid profile',
+    'Lipid profile',
     // 'Serum cholesterol',
     // 'Esr',
     // 'Urine hcg',
@@ -344,19 +346,40 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           final scannedText = result["ParsedResults"][0]["ParsedText"];
 
           item["ScannedText"] = scannedText; // Add or update the ScannedText field
+          print(scannedText);
           _removeSpaces(scannedText);
           List<String> lines = noSpace.split('\n');
-          List<String> bloodComponents = ['WBC', 'Neutrophils', 'Lymphocytes', 'Monocytes', 'Eosinophils', 'Basophills','NeutrophilsAbsoluteCount','LymphocytesAbsoluteCount','MonocytesAbsoluteCount','EosinophilsAbsoluteCount','RBC','Haemoglobin','PackedCellVolume(PCV)','MCV','MCH','MCHC','RDW','PlateletCount'];
-          List<String> unitsComponents = ['/Cumm', '0/0', '0/0', '0/0', '0/0', '0/0','/Cumm','/Cumm','/Cumm','/Cumm','Million/pL','g/dl','0/0','fL','pg','g/dL','0/0','/Cumm'];
-
-          // Update rows here
-          rows = _buildRows(bloodComponents, unitsComponents, lines);
-
+          if(selectedReport!='Select Report'){
+            if(selectedReport=='Full Blood Count Report'){
+              List<String> bloodComponents = ['WBC', 'Neutrophils', 'Lymphocytes', 'Monocytes', 'Eosinophils', 'Basophills','NeutrophilsAbsoluteCount','LymphocytesAbsoluteCount','MonocytesAbsoluteCount','EosinophilsAbsoluteCount','RBC','Haemoglobin','PackedCellVolume(PCV)','MCV','MCH','MCHC','RDW','PlateletCount'];
+              List<String> unitsComponents = ['/Cumm', '0/0', '0/0', '0/0', '0/0', '0/0','/Cumm','/Cumm','/Cumm','/Cumm','Million/pL','g/dl','0/0','fL','pg','g/dL','0/0','/Cumm'];
+              // Update rows here
+              rows = _buildRows(bloodComponents, unitsComponents, lines);
+              setState(() {});
+            }
+            else if(selectedReport == 'Lipid profile'){
+              List<String> bloodComponents = ['Cholesterol-Total', 'Triglycerides', 'HDL-C', 'LDL-C', 'VLDL-C', 'CHO/HDL-CRatio'];
+              List<String> unitsComponents = ['mg/dL', 'mg/dL', 'mg/dL', 'mg/dL', 'mg/dL', ' '];
+              // Update rows here
+              rows = _buildRows(bloodComponents, unitsComponents, lines);
+              setState(() {});
+            }
+            else if(selectedReport == 'Fasting blood Sugar'){
+              List<String> bloodComponents = ['FastingPlasmaGlucose', 'FastingBloodSugar','FaøngmasmaGlucose'];
+              List<String> unitsComponents = ['mg/dL', 'mg/dL','mg/dL'];
+              // Update rows here
+              rows = _buildRows(bloodComponents, unitsComponents, lines);
+              setState(() {});
+            }
+          }
           item["ExtractedText"] = extractedText;
-          setState(() {});
+
         }
       }
     }
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) =>
+            ReportAnalysisScreen(extractedText,addMultipleReports,rows)));
   }
 
 
@@ -367,123 +390,35 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
     return noSpace;
   }
-
+  //
   // List<DataRow> _buildRows(List<String> bloodComponents, List<String> unitsComponents, List<String> lines) {
   //   List<DataRow> rows = [];
-  //
-  //   for (int i = 0; i < bloodComponents.length && i < lines.length;  i++) {
-  //     String fruit = bloodComponents[i];
-  //     String rangeValue = unitsComponents[i];
-  //     String line = lines[i];
-  //     int fruitIndex = line.indexOf(fruit);
-  //     String mValue = line.substring(fruitIndex + fruit.length, line.indexOf(rangeValue, fruitIndex));
-  //     rows.add(DataRow(cells: [
-  //       DataCell(Text(fruit)),
-  //       DataCell(Text(mValue.trim())),
-  //       DataCell(Text(rangeValue)),
-  //     ]));
-  //   }
-  //
-  //   return rows;
-  // }
-
-
-
-
-
-
-  // List<WordPair> findWordPairs(Map<String, dynamic> item) {
-  //   List<WordPair> pairs = [];
-  //   RegExp regExp = RegExp(" ");
-  //   String selectedReport = item["UploadedReport"];
-  //
-  //   if (selectedReport == "Full Blood Count Report") {
-  //     Text("added blood text");
-  //     regExp = RegExp(
-  //         r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophills|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(\w+)',
-  //         caseSensitive: false);
-  //   } else if (selectedReport == "Urine Full Report") {
-  //     regExp = RegExp(
-  //         r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epthelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(\w+)',
-  //         caseSensitive: false);
-  //   }
-  //
-  //   Iterable<Match> matches = regExp.allMatches(item["ScannedText"]);
-  //   for (Match match in matches) {
-  //     String word = match.group(1)!;
-  //     String nextWord =
-  //     match.group(2)!; // Capture the next word after the phrase
-  //     pairs.add(WordPair(word, nextWord));
-  //   }
-  //
-  //   return pairs;
-  // }
-
-
-  // Extracted All values
-  // List<WordPair> findWordPairs(Map<String, dynamic> item) {
-  //   List<WordPair> pairs = [];
-  //   late RegExp regExp = RegExp(" ");
-  //
-  //   String selectedReport = item["UploadedReport"];
-  //
-  //   // Define regular expressions based on the type of report
-  //   if (selectedReport == "Full Blood Count Report") {
-  //     // Define regular expression for Full Blood Count Report
-  //     regExp = RegExp(
-  //         r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophils|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(.*?)(?=\s+(?:WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophils|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count|$))',
-  //         caseSensitive: false);
-  //   } else if (selectedReport == "Urine Full Report") {
-  //     // Define regular expression for Urine Full Report
-  //     regExp = RegExp(
-  //         r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epithelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(.*?)(?=\s+(?:Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epithelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity|$))',
-  //         caseSensitive: false);
-  //   } else if (selectedReport == "Fasting blood Sugar") {
-  //     // Define regular expression for Fasting blood Sugar
-  //     regExp = RegExp(
-  //         r'(Fasting(?:\s+Blood\s+Sugar)?|Fasting(?:\s+Plasma\s+Glucose)?)\s+(.*?)(?=\s+(?:Fasting(?:\s+Blood\s+Sugar)?|Fasting(?:\s+Plasma\s+Glucose)?|$))',
-  //         caseSensitive: false);
-  //   }else if (selectedReport == "Lipid profile") {
-  //     regExp = RegExp(
-  //         r'(Cholesterol - Total|Triglycerides|HDL-C|LDL-C|VLDL-C|CHO/HDL-c Ratio)\s+(\d+(\.\d+)?)\s*(mg/dL|\u20AC\d+)?',
-  //         caseSensitive: false);
-  //   }
-  //   // Extract matches from the scanned text using the regular expression
-  //   Iterable<Match> matches = regExp.allMatches(item["ScannedText"]);
-  //   // Iterate through the matches
-  //   for (Match match in matches) {
-  //     String word = match.group(1)!;
-  //     String nextWord = match.group(2)!;
-  //
-  //     // Add word pair to the list
-  //     pairs.add(WordPair(word, nextWord));
-  //   }
-  //   return pairs;
-  //
-  //
-  // }
-
-
-
-  // List<DataRow> _buildRows(List<String> bloodComponents, List<String> unitsComponents, List<String> lines) {
-  //   List<DataRow> rows = [];
+  //   int startIndex=0;
+  //   int endIndex=0;
   //
   //   // Filter out lines that contain any of the blood components
   //   List<String> filteredLines = lines.where((line) => bloodComponents.any((component) => line.contains(component))).toList();
   //
   //   for (String line in filteredLines) {
   //     // Iterate through each line of text
-  //     int startIndex = line.indexOf("FullBloodcount(FBC)");
+  //     if(selectedReport=="Fasting blood Sugar"){
+  //       startIndex = line.indexOf("2022");
+  //       endIndex = line.indexOf("Referencerange:");
+  //     }
+  //     //int startIndex = line.indexOf("FullBloodcount(FBC)");
+  //     //int startIndex = line.indexOf("LipidProfile");
+  //
   //     if (startIndex == -1) {
   //       continue; // Skip lines that don't contain "FullBloodcount(FBC)"
   //     }
   //
-  //     int endIndex = line.indexOf("References:");
+  //     //int endIndex = line.indexOf("LipidProfileReference:");
   //     if (endIndex == -1) {
   //       continue; // Skip lines that don't contain "References:"
   //     }
   //
   //     String dataSection = line.substring(startIndex, endIndex);
+  //     print(dataSection);
   //
   //     // Keep track of which components have been found in this line
   //     Set<String> foundComponents = {};
@@ -535,26 +470,49 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   //   return rows;
   // }
 
-
   List<DataRow> _buildRows(List<String> bloodComponents, List<String> unitsComponents, List<String> lines) {
     List<DataRow> rows = [];
+    int startIndex = 0;
+    int endIndex = 0;
+
+    // Mapping of blood component names to display names
+    Map<String, String> componentMap = {
+      'FastingPlasmaGlucose': 'Fasting Plasma Glucose',
+      'FastingBloodSugar': 'Fasting Blood Sugar',
+      'FaøngmasmaGlucose': 'Fasting Plasma Glucose', // Map 'FaøngmasmaGlucose' to 'Fasting Plasma Glucose'
+    };
 
     // Filter out lines that contain any of the blood components
     List<String> filteredLines = lines.where((line) => bloodComponents.any((component) => line.contains(component))).toList();
 
     for (String line in filteredLines) {
       // Iterate through each line of text
-      int startIndex = line.indexOf("FullBloodcount(FBC)");
+      if (selectedReport == "Fasting blood Sugar") {
+        startIndex = line.indexOf("2022");
+        endIndex = line.indexOf("Referencerange:");
+      }
+      else if(selectedReport=="Full Blood Count Report"){
+        startIndex = line.indexOf("FullBloodcount(FBC)");
+        endIndex = line.indexOf("Referencerange:");
+      }
+      else if(selectedReport=="Lipid profile"){
+        startIndex = line.indexOf("LipidProfile");
+        endIndex = line.indexOf("LipidProfileReferenceRangesforAdults");
+      }
+      //int startIndex = line.indexOf("FullBloodcount(FBC)");
+      //int startIndex = line.indexOf("LipidProfile");
+
       if (startIndex == -1) {
         continue; // Skip lines that don't contain "FullBloodcount(FBC)"
       }
 
-      int endIndex = line.indexOf("References:");
+      //int endIndex = line.indexOf("LipidProfileReference:");
       if (endIndex == -1) {
         continue; // Skip lines that don't contain "References:"
       }
 
       String dataSection = line.substring(startIndex, endIndex);
+      print(dataSection);
 
       // Keep track of which components have been found in this line
       Set<String> foundComponents = {};
@@ -572,10 +530,11 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           String value = dataSection.substring(bloodIndex + bloodComponent.length, unitIndex).trim();
 
           rows.add(DataRow(cells: [
-            DataCell(Text(bloodComponent)),
+            DataCell(Text(componentMap.containsKey(bloodComponent) ? componentMap[bloodComponent]! : bloodComponent)),
             DataCell(Text(value.trim())),
             DataCell(Text(unitComponent)),
           ]));
+
 
           // Add the found component to the set
           foundComponents.add(bloodComponent);
@@ -605,7 +564,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
     return rows;
   }
-
 
 
 
@@ -677,34 +635,17 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 children: <Widget>[
                   ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                ReportAnalysisScreen(extractedText,addMultipleReports)));
+                        Navigator.pop(context);
                       },
                       child: Text("Back")),
                   SizedBox(width: 30),
                   ElevatedButton(
-                       onPressed: () {
-                         _pickImage();
-                       },
-                       child: Text("Analyse")),
+                      onPressed: () {
+                        _pickImage();
+                      },
+                      child: Text("Analyse")),
                 ],
               ),
-
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(label: Text('Fruit')),
-                    DataColumn(label: Text('m')),
-                    DataColumn(label: Text('Value')),
-                  ],
-                  rows: rows,
-                ),
-              ),
-
-
-
               SizedBox(height: 30),
               // wordPairs.length != 0 ? _displayOutputTable() : SizedBox()
             ],
