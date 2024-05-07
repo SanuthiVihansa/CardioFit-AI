@@ -952,7 +952,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actl1Data, _calcMin(actl1Data), _calcMax(actl1Data),
                 Colors.green)),
         Text(
-          "Predicted Lead I",
+          "CardioFit AI Generated ECG Lead I",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
@@ -1009,7 +1009,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actl3Data, _calcMin(actl3Data), _calcMax(actl3Data),
                 Colors.green)),
         Text(
-          "Predicted Lead III",
+          "CardioFit AI Generated ECG Lead III",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
@@ -1047,7 +1047,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actavrData, _calcMin(actavrData),
                 _calcMax(actavrData), Colors.green)),
         Text(
-          "Predicted Lead aVR",
+          "CardioFit AI Generated ECG Lead aVR",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
@@ -1085,7 +1085,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actavlData, _calcMin(actavlData),
                 _calcMax(actavlData), Colors.green)),
         Text(
-          "Predicted Lead aVL",
+          "CardioFit AI Generated ECG Lead aVL",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
@@ -1123,7 +1123,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actavfData, _calcMin(actavfData),
                 _calcMax(actavfData), Colors.green)),
         Text(
-          "Predicted Lead aVF",
+          "CardioFit AI Generated ECG Lead aVF",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
@@ -1161,7 +1161,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actv1Data, _calcMin(actv1Data), _calcMax(actv1Data),
                 Colors.green)),
         Text(
-          "Predicted Lead V1",
+          "CardioFit AI Generated ECG Lead V1",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
@@ -1199,7 +1199,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actv2Data, _calcMin(actv2Data), _calcMax(actv2Data),
                 Colors.green)),
         Text(
-          "Predicted Lead V2",
+          "CardioFit AI Generated ECG Lead V2",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
@@ -1237,7 +1237,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actv3Data, _calcMin(actv3Data), _calcMax(actv3Data),
                 Colors.green)),
         Text(
-          "Predicted Lead V3",
+          "CardioFit AI Generated ECG Lead V3",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
@@ -1275,7 +1275,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actv4Data, _calcMin(actv4Data), _calcMax(actv4Data),
                 Colors.green)),
         Text(
-          "Predicted Lead V4",
+          "CardioFit AI Generated ECG Lead V4",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
@@ -1313,7 +1313,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actv5Data, _calcMin(actv5Data), _calcMax(actv5Data),
                 Colors.green)),
         Text(
-          "Predicted Lead V5",
+          "CardioFit AI Generated ECG Lead V5",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
@@ -1351,7 +1351,7 @@ class _ComparisonAllLeadPredictionWithRadioBtnsScreenState
             child: _ecgPlot(actv6Data, _calcMin(actv6Data), _calcMax(actv6Data),
                 Colors.green)),
         Text(
-          "Predicted Lead V6",
+          "CardioFit AI Generated ECG Lead V6",
           style: TextStyle(fontSize: _width / (_devWidth / 10)),
         ),
         SizedBox(
