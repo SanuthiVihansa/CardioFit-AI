@@ -367,7 +367,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             }
             else if(item["UploadedReport"] == 'Fasting blood Sugar'){
               List<String> bloodComponents = ['FastingPlasmaGlucose', 'FastingBloodSugar','FaøngmasmaGlucose'];
-              List<String> unitsComponents = ['mg/dL', 'mg/dL','mg/dL'];
+              List<String> unitsComponents = ['mg/dL', 'me/dl','mg/dL'];
               String selectedText=item["UploadedReport"];
               // Update rows here
               rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
@@ -505,8 +505,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         endIndex = line.indexOf("Referencerange:");
       }
       else if(selectedText=="Full Blood Count Report"){
-        startIndex = line.indexOf("FullBloodcount(FBC)");
-        endIndex = line.indexOf("Referencerange:");
+        startIndex = line.indexOf("Fasting");
+        //endIndex = line.indexOf("Referencerange:");
       }
       else if(selectedText=="Lipid profile"){
         startIndex = line.indexOf("LipidProfile");
