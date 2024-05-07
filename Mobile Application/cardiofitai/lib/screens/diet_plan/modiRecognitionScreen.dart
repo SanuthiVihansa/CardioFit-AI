@@ -8,6 +8,7 @@ import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
 import 'package:cardiofitai/screens/diet_plan/reportAnalysisScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
@@ -122,20 +123,11 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               height: 80,
             ),
             Center(
-                child: Icon(
-                  Icons.attach_file,
-                  size: 50,
-                  color: Colors.grey,
-                )),
-            Center(
                 child: Text("\nPlease upload the medical reports\n",
                     style: TextStyle(color: Colors.grey, fontSize: 20))),
-            Row(
+            Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                SizedBox(
-                  width: 30,
-                ),
                 Container(
                   width: 250,
                   decoration: BoxDecoration(
@@ -169,7 +161,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                   ),
                 ),
                 SizedBox(
-                  width: 30,
+                  height: 10,
                 ),
                 Flexible(
                   child: ElevatedButton(
