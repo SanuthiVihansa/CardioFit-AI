@@ -644,12 +644,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead I",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead I from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predl1Data, _calcMin(predl1Data),
                 _calcMax(predl1Data), Colors.blue)),
       ],
@@ -663,12 +671,12 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead II",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
                 Colors.green)),
       ],
@@ -682,12 +690,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead III",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead III from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predl3Data, _calcMin(predl3Data),
                 _calcMax(predl3Data), Colors.blue)),
       ],
@@ -701,12 +717,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead aVR",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead aVR from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predavrData, _calcMin(predavrData),
                 _calcMax(predavrData), Colors.blue)),
       ],
@@ -720,12 +744,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead aVL",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead aVL from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predavlData, _calcMin(predavlData),
                 _calcMax(predavlData), Colors.blue)),
       ],
@@ -739,12 +771,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead aVF",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead aVF from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predavfData, _calcMin(predavfData),
                 _calcMax(predavfData), Colors.blue)),
       ],
@@ -758,12 +798,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead V1",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead V1 from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv1Data, _calcMin(predv1Data),
                 _calcMax(predv1Data), Colors.blue)),
       ],
@@ -777,12 +825,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead V2",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead V2 from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv2Data, _calcMin(predv2Data),
                 _calcMax(predv2Data), Colors.blue)),
       ],
@@ -796,12 +852,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead V3",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead V3 from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv3Data, _calcMin(predv3Data),
                 _calcMax(predv3Data), Colors.blue)),
       ],
@@ -815,12 +879,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead V4",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead V4 from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv4Data, _calcMin(predv4Data),
                 _calcMax(predv4Data), Colors.blue)),
       ],
@@ -834,12 +906,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead V5",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead V5 from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv5Data, _calcMin(predv5Data),
                 _calcMax(predv5Data), Colors.blue)),
       ],
@@ -853,12 +933,20 @@ class _AnalysisAllLeadPredictionWithRadioBtnsScreenState
         Padding(
           padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
           child: Text(
-            "Lead V6",
-            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+            "Actual Lead II",
+            style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-            height: _height / (_devHeight / 200),
+            height: _height / (_devHeight / 125),
+            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
+                Colors.green)),
+        Text(
+          "Reconstructed Lead V6 from CardioFit AI",
+          style: TextStyle(fontSize: _width / (_devWidth / 11), fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 125),
             child: _ecgPlot(predv6Data, _calcMin(predv6Data),
                 _calcMax(predv6Data), Colors.blue)),
       ],
