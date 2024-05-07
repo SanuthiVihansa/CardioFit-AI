@@ -54,6 +54,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   late List<Map<String, dynamic>> addMultipleReports = [];
   String noSpace="";
   List<DataRow> rows = [];
+  List<List<DataRow>> setRows = [];
+
 
   //Drop down control values
   List<String> reports = [
@@ -71,7 +73,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     // 'Blood urea',
     // 'Serum creatinine',
     // 'Serum electrolytes',
-
     // 'Serum cholesterol',
     // 'Esr',
     // 'Urine hcg',
@@ -184,7 +185,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                               "UploadedReport": selectedReport,
                               "UploadedImage": pickedimage,
                               "ScannedItems": "",
-                              "ExtractedText":""
+                              "ExtractedText":"",
+                              "obtainedRows":rows,
                             },
                           );
                           // _showAttachedItems();
@@ -357,6 +359,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               String selectedText=item["UploadedReport"];
               // Update rows here
               rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
+              setRows.add(rows);
+              item["obtainedRows"]=rows;
               setState(() {});
             }
             else if(item["UploadedReport"] == 'Lipid profile'){
@@ -365,6 +369,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               String selectedText=item["UploadedReport"];
               // Update rows here
               rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
+              setRows.add(rows);
+              item["obtainedRows"]=rows;
               setState(() {});
             }
             else if(item["UploadedReport"] == 'Fasting blood Sugar'){
@@ -373,6 +379,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               String selectedText=item["UploadedReport"];
               // Update rows here
               rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
+              setRows.add(rows);
+              item["obtainedRows"]=rows;
               setState(() {});
             }
             else if(item["UploadedReport"]=="Urine Full Report"){
@@ -380,6 +388,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               List<String> unitsComponents = [];
               String selectedText=item["UploadedReport"];
               rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
+              setRows.add(rows);
+              item["obtainedRows"]=rows;
               setState(() {});
             }
           }
@@ -390,7 +400,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     }
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (BuildContext context) =>
-            ReportAnalysisScreen(extractedText,addMultipleReports,rows)));
+            ReportAnalysisScreen(extractedText,addMultipleReports,setRows)));
   }
 
 
