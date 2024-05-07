@@ -802,8 +802,13 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           final scannedText = result["ParsedResults"][0]["ParsedText"];
 
           item["ScannedText"] = scannedText; // Add or update the ScannedText field
-          wordPairs = findWordPairs(item);
-          extractedText.add(wordPairs);
+          // wordPairs = findWordPairs(item);
+          //extractedText.add(wordPairs);
+          // Split the scannedText into lines
+          List<String> lines = scannedText.split('\n');
+
+          // Split each line into words and add to extractedText
+          List<List<String>> extractedText = lines.map((line) => line.split(' ')).toList();
           item["ExtractedText"] = extractedText;
         }
       }
@@ -839,51 +844,50 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   //
   //   return pairs;
   // }
+
+
   // Extracted All values
-  List<WordPair> findWordPairs(Map<String, dynamic> item) {
-    List<WordPair> pairs = [];
-    late RegExp regExp = RegExp(" ");
-
-    String selectedReport = item["UploadedReport"];
-
-    // Define regular expressions based on the type of report
-    if (selectedReport == "Full Blood Count Report") {
-      // Define regular expression for Full Blood Count Report
-      regExp = RegExp(
-          r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophils|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(.*?)(?=\s+(?:WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophils|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count|$))',
-          caseSensitive: false);
-    } else if (selectedReport == "Urine Full Report") {
-      // Define regular expression for Urine Full Report
-      regExp = RegExp(
-          r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epithelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(.*?)(?=\s+(?:Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epithelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity|$))',
-          caseSensitive: false);
-    } else if (selectedReport == "Fasting blood Sugar") {
-      // Define regular expression for Fasting blood Sugar
-      regExp = RegExp(
-          r'(Fasting(?:\s+Blood\s+Sugar)?|Fasting(?:\s+Plasma\s+Glucose)?)\s+(.*?)(?=\s+(?:Fasting(?:\s+Blood\s+Sugar)?|Fasting(?:\s+Plasma\s+Glucose)?|$))',
-          caseSensitive: false);
-    }else if (selectedReport == "Lipid profile") {
-      regExp = RegExp(
-          r'(Cholesterol - Total|Triglycerides|HDL-C|LDL-C|VLDL-C|CHO/HDL-c Ratio)\s+(\d+(\.\d+)?)\s*(mg/dL|\u20AC\d+)?',
-          caseSensitive: false);
-
-    }
-
-
-    // Extract matches from the scanned text using the regular expression
-    Iterable<Match> matches = regExp.allMatches(item["ScannedText"]);
-
-    // Iterate through the matches
-    for (Match match in matches) {
-      String word = match.group(1)!;
-      String nextWord = match.group(2)!;
-
-      // Add word pair to the list
-      pairs.add(WordPair(word, nextWord));
-    }
-
-    return pairs;
-  }
+  // List<WordPair> findWordPairs(Map<String, dynamic> item) {
+  //   List<WordPair> pairs = [];
+  //   late RegExp regExp = RegExp(" ");
+  //
+  //   String selectedReport = item["UploadedReport"];
+  //
+  //   // Define regular expressions based on the type of report
+  //   if (selectedReport == "Full Blood Count Report") {
+  //     // Define regular expression for Full Blood Count Report
+  //     regExp = RegExp(
+  //         r'(WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophils|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count)\s+(.*?)(?=\s+(?:WBC|Neutrophils(?:\s+Absolute\s+Count)?|Lymphocytes(?:\s+Absolute\s+Count)?|Monocytes(?:\s+Absolute\s+Count)?|Eosinophils(?:\s+Absolute\s+Count)?|Basophils|RBC|Haemoglobin|Packed\s+Cell\s+Volume|MCV|MCH|MCHC|RDW|Platelet\s+Count|$))',
+  //         caseSensitive: false);
+  //   } else if (selectedReport == "Urine Full Report") {
+  //     // Define regular expression for Urine Full Report
+  //     regExp = RegExp(
+  //         r'(Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epithelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity)\s+(.*?)(?=\s+(?:Colour|Crystals|Casts|Organisms|Red(?:\s+Blood\s+Cells)?|Epithelial\s+Cells|Pus\s+Cells|Appearance|Urobilinogen|Bilirubin|Ketone\s+Bodies|Protein|Glucose|pH|Specific\s+Gravity|$))',
+  //         caseSensitive: false);
+  //   } else if (selectedReport == "Fasting blood Sugar") {
+  //     // Define regular expression for Fasting blood Sugar
+  //     regExp = RegExp(
+  //         r'(Fasting(?:\s+Blood\s+Sugar)?|Fasting(?:\s+Plasma\s+Glucose)?)\s+(.*?)(?=\s+(?:Fasting(?:\s+Blood\s+Sugar)?|Fasting(?:\s+Plasma\s+Glucose)?|$))',
+  //         caseSensitive: false);
+  //   }else if (selectedReport == "Lipid profile") {
+  //     regExp = RegExp(
+  //         r'(Cholesterol - Total|Triglycerides|HDL-C|LDL-C|VLDL-C|CHO/HDL-c Ratio)\s+(\d+(\.\d+)?)\s*(mg/dL|\u20AC\d+)?',
+  //         caseSensitive: false);
+  //   }
+  //   // Extract matches from the scanned text using the regular expression
+  //   Iterable<Match> matches = regExp.allMatches(item["ScannedText"]);
+  //   // Iterate through the matches
+  //   for (Match match in matches) {
+  //     String word = match.group(1)!;
+  //     String nextWord = match.group(2)!;
+  //
+  //     // Add word pair to the list
+  //     pairs.add(WordPair(word, nextWord));
+  //   }
+  //   return pairs;
+  //
+  //
+  // }
 
   @override
   Widget build(BuildContext context) {
