@@ -133,17 +133,19 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   // displayInformationDialog method
-  void showInfoDialog(BuildContext context){
+  void showInfoDialog(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
               title: const Text("Instructions"),
               content: const Text(
-                  "1. Make sure to be in a bright environment\n"
-                  "2. Make sure your face is clearly visible in the camera\n"
-                  "3. Try to stay as still as possible while recording\n"
-                  "4. Recording will stop automatically after 10 seconds"),
+                "1. Make sure to be in a bright environment\n"
+                "2. Make sure your face is clearly visible in the camera\n"
+                "3. Try to stay as still as possible while recording\n"
+                "4. Recording will stop automatically after 10 seconds",
+                style: TextStyle(fontSize: 18),
+              ),
               actions: [
                 TextButton(
                   child: const Text("OK"),
@@ -154,7 +156,6 @@ class _CameraPageState extends State<CameraPage> {
               ]);
         });
   }
-
 
   // camera methods
   void _initCamera() async {

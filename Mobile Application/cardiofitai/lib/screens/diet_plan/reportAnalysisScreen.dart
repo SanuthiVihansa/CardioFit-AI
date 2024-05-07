@@ -3,162 +3,76 @@ import 'package:flutter/material.dart';
 import 'modiRecognitionScreen.dart';
 
 class ReportAnalysisScreen extends StatefulWidget {
-  const ReportAnalysisScreen(this.extractedResult, this.addMultipleReports,
+  ReportAnalysisScreen(this.extractedResult, this.addMultipleReports, this.rows,
       {super.key});
 
   final List<List<WordPair>> extractedResult;
   final List<Map<String, dynamic>> addMultipleReports;
+  final List<List<DataRow>> rows;
 
   @override
   State<ReportAnalysisScreen> createState() => _ReportAnalysisScreenState();
 }
 
 class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
-  int findIndex = 0;
+  int findIndex = -1;
+  String compareValues(List<List<DataRow>> rows) {
+    for (List<DataRow> dataRows in rows) {
+      for (DataRow row in dataRows) {
+        String Component = row.cells[0].child.toString();
+        String Result = row.cells[1].child.toString();
+        //String Unit = row.cells[2].child.toString();
 
-  Widget _displayOutputTable() {
-    List<Widget> tableWidgets = [];
-    // Loop through widget.extractedResult
-    for (var item in widget.extractedResult) {
-      List<DataRow> rows = item.map((pair) {
-        return DataRow(
-          cells: [
-            DataCell(Text(pair.word)), // Accessing word directly
-            DataCell(Text(pair.nextWord ?? '')), // Accessing nextWord directly
-          ],
-        );
-      }).toList();
-
-      // Add DataTable and Divider to tableWidgets list
-      tableWidgets.add(Text(widget.addMultipleReports[findIndex]
-          ["UploadedReport"])); // Add a Divider after each DataTable
-
-      tableWidgets.add(
-        DataTable(
-          columns: [
-            DataColumn(label: Text('Component')),
-            DataColumn(label: Text('Result')),
-          ],
-          rows: rows,
-        ),
-      );
-      tableWidgets.add(Text(
-          reportDiagnosis(widget.addMultipleReports[findIndex], findIndex)));
-      tableWidgets.add(Divider()); // Add a Divider after each DataTable
-      findIndex = findIndex + 1;
-    }
-
-    // Remove the last Divider
-    if (tableWidgets.isNotEmpty) {
-      tableWidgets.removeLast();
-    }
-
-    // Return the list of DataTables and Dividers
-    return Center(
-      child: Column(
-        children: tableWidgets,
-      ),
-    );
-  }
-
-  String reportDiagnosis(Map<String, dynamic> item, int index) {
-    List<WordPair> wordPairs = widget.extractedResult[index];
-    String selectedReport = item["UploadedReport"];
-    String diagnosis = "";
-
-    if (selectedReport == "Full Blood Count Report") {
-      if (wordPairs.any((pair) =>
-          pair.word == "WBC" && (int.tryParse(pair.nextWord) ?? 0) > 10000)) {
-        diagnosis = "You are facing an infection";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Neutrophils" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 80)) {
-        diagnosis = "You are facing an Bacterial infection";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Lymphocytes" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 40)) {
-        diagnosis = "You are facing a Viral Fever";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Eosinophils" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 6)) {
-        diagnosis = "You are facing an Allergic reaction";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Platelet Count" &&
-          (int.tryParse(pair.nextWord) ?? 0) < 150000)) {
-        diagnosis =
-            "Your platelet Count is very low, you could be suffering from\n▪️Viral Fever\n▪️Dengue\n▪️ITP\nIf the fever last for >3 days immediately go for doctor";
-      } else {
-        diagnosis = "No defect identified";
-      }
-    } else if (selectedReport == "Urine Full Report") {
-      if (wordPairs.any((pair) =>
-          pair.word == "Pus Cells" &&
-          (int.tryParse(pair.nextWord) ?? 0) < 10)) {
-        diagnosis = "You are facing an Urine infection";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Protein" && pair.nextWord.toLowerCase() != "nil")) {
-        diagnosis = "You are facing a Renal disease";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Glucose" && pair.nextWord.toLowerCase() != "nil")) {
-        diagnosis = "You have Diabetics";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Red Blood Cells" &&
-          pair.nextWord.toLowerCase() != "occasional")) {
-        diagnosis =
-            "Your Red Blood Count is very high, you could be suffering from\n▪️Renal disease\n▪️Urine infection\n▪️Renal Culculy\n▪️Cancer\nIf the fever last for >3 days immediately go for doctor";
-      } else {
-        diagnosis = "No defect identified";
-      }
-    } else if (selectedReport == "Fasting blood Sugar") {
-      if (wordPairs.any((pair) =>
-          pair.word == "Fasting Plasma Glucose" &&
-          (int.tryParse(pair.nextWord) ?? 0) < 100)) {
-        diagnosis = "Normal : No defects identified";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Fasting Plasma Glucose" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 126)) {
-        diagnosis = "Diabetes Mellitus";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Fasting Plasma Glucose" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 100 &&
-          (int.tryParse(pair.nextWord) ?? 0) < 125)) {
-        diagnosis = "Pre Diabetes";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Fasting Blood Sugar" &&
-          (int.tryParse(pair.nextWord) ?? 0) < 100)) {
-        diagnosis = "Normal : No defects identified";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Fasting Blood Sugar" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 126)) {
-        diagnosis = "Diabetes Mellitus";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "Fasting Blood Sugar" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 100 &&
-          (int.tryParse(pair.nextWord) ?? 0) < 125)) {
-        diagnosis = "Pre Diabetes";
-      }
-    } else {
-      if (wordPairs.any((pair) =>
-          pair.word == "Cholestrol-Total" &&
-          (int.tryParse(pair.nextWord) ?? 0) > 180)) {
-        diagnosis = "High : Cholestrol";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "LDL-C" && (int.tryParse(pair.nextWord) ?? 0) > 150)) {
-        diagnosis = "LDL : High";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "HDL-C" && (int.tryParse(pair.nextWord) ?? 0) < 40)) {
-        diagnosis = "HDL : Low";
-      } else if (wordPairs.any((pair) =>
-          pair.word == "HDL-C" && (int.tryParse(pair.nextWord) ?? 0) >= 60)) {
-        diagnosis = "HDL : High";
+        if (Component.toLowerCase() == "fasting plasma glucose") {
+          if (int.tryParse(Result) != null) {
+            int numericResult = int.parse(Result);
+            if (numericResult >= 126) {
+              return "Diabetes Mellitus";
+            } else if (numericResult > 100 && numericResult < 125) {
+              return "Pre Diabetes";
+            }
+          }
+        } else if (Component.toLowerCase() == "fasting blood sugar") {
+          if (int.tryParse(Result) != null) {
+            int numericResult = int.parse(Result);
+            if (numericResult > 126) {
+              return "Diabetes Mellitus";
+            } else if (numericResult > 100 && numericResult < 125) {
+              return "Pre Diabetes";
+            }
+          }
+        } else if (Component.toLowerCase() == "Cholestrol-Total") {
+          if (int.tryParse(Result) != null) {
+            int numericResult = int.parse(Result);
+            if (numericResult > 180) {
+              return "High Cholestrol";
+            }
+          }
+        } else if (Component.toLowerCase() == "LDL-C") {
+          if (int.tryParse(Result) != null) {
+            int numericResult = int.parse(Result);
+            if (numericResult > 150) {
+              return "LDL : High - Heart Disease Risk";
+            }
+          }
+        } else if (Component.toLowerCase() == "HDL-C") {
+          if (int.tryParse(Result) != null) {
+            int numericResult = int.parse(Result);
+            if (numericResult < 40) {
+              return "HDL : Low - Heart Disease Risk";
+            } else if (numericResult >= 60) {
+              return "HDL : High";
+            }
+          }
+        }
       }
     }
-
-    return diagnosis;
+    return "Normal : No defects identified";
   }
 
   @override
   Widget build(BuildContext context) {
+    String overallDiagnosis = compareValues(widget.rows);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -175,10 +89,69 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
         backgroundColor: Colors.red,
       ),
       body: SingleChildScrollView(
-        child: widget.extractedResult.isNotEmpty
-            ? _displayOutputTable()
-            : Text("Hi"),
+        scrollDirection: Axis.horizontal,
+        child: SingleChildScrollView(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                ...widget.rows.map((e) {
+                  findIndex=findIndex+1;
+                  return Column(
+                    children: [
+                      Image.file(widget.addMultipleReports[findIndex]["UploadedImage"], width: 200, height: 200),
+                      Text(widget.addMultipleReports[findIndex]['UploadedReport']),
+                      //Text(widget.addMultipleReports[findIndex]['UploadedReport']),
+                      DataTable(
+                        columns: const [
+                          DataColumn(label: Text('Component')),
+                          DataColumn(label: Text('Result')),
+                          DataColumn(label: Text('Unit')),
+                        ],
+                        rows: e,
+                      ),
+                    ],
+                  );
+                }).toList(),
+                SizedBox(height: 20),
+                Text(
+                  "Overall Diagnosis: $overallDiagnosis",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 }
+
+// body:SingleChildScrollView(
+//   scrollDirection: Axis.horizontal,
+//   child: SingleChildScrollView(
+//     child: SizedBox(
+//       width: MediaQuery.of(context).size.width,
+//       child: Column(
+//         children:
+//         widget.rows.map((e) => DataTable(
+//           columns: const [
+//             DataColumn(label: Text('Component')),
+//             DataColumn(label: Text('Result')),
+//             DataColumn(label: Text('Unit')),
+//           ],
+//           rows:e,
+//         )).toList(),
+//       ),
+//     ),
+//   ),
+// ),
+
+//SingleChildScrollView(
+//   child: widget.extractedResult.isNotEmpty
+//       ? Text("")
+//       : Text("Hi"),
+// ),
+//     );
+//   }
+// }
