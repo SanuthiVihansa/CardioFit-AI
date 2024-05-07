@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -89,71 +88,79 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
       body: Center(
         child: _predictedLabel.isNotEmpty
             ? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Text(
-                'Diagnosis: $_predictedLabel',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(20.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 200,
-                child: LineChart(
-                  LineChartData(
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: List.generate(
-                          _ecgData.length,
-                              (index) => FlSpot(index.toDouble(), _ecgData[index]),
-                        ),
-                        isCurved: false,
-                        colors: [Colors.blue],
-                        barWidth: 2,
-                        isStrokeCapRound: true,
-                        dotData: FlDotData(show: false),
-                      ),
-                    ],
-                    minY: _ecgData.reduce((min, current) => min < current ? min : current),
-                    maxY: _ecgData.reduce((max, current) => max > current ? max : current),
-                    titlesData: FlTitlesData(
-                      bottomTitles: SideTitles(showTitles: true),
-                      leftTitles: SideTitles(showTitles: true),
-                    ),
-                    borderData: FlBorderData(
-                      show: true,
-                      border: Border.all(color: Colors.black),
-                    ),
-                    gridData: FlGridData(
-                      show: true,
-                      drawHorizontalLine: true,
-                      drawVerticalLine: true,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Text(
+                      'Diagnosis: $_predictedLabel',
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
-                ),
-              ),
-            ),
-          ],
-        )
+                  Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 200,
+                      child: LineChart(
+                        LineChartData(
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: List.generate(
+                                _ecgData.length,
+                                (index) =>
+                                    FlSpot(index.toDouble(), _ecgData[index]),
+                              ),
+                              isCurved: false,
+                              colors: [Colors.blue],
+                              barWidth: 2,
+                              isStrokeCapRound: true,
+                              dotData: FlDotData(show: false),
+                            ),
+                          ],
+                          minY: _ecgData.reduce(
+                              (min, current) => min < current ? min : current),
+                          maxY: _ecgData.reduce(
+                              (max, current) => max > current ? max : current),
+                          titlesData: FlTitlesData(
+                            bottomTitles: SideTitles(
+                              showTitles: true,
+                              getTitles: (value) {
+                                return "";
+                              },
+                            ),
+                            leftTitles: SideTitles(showTitles: true),
+                          ),
+                          borderData: FlBorderData(
+                            show: true,
+                            border: Border.all(color: Colors.black),
+                          ),
+                          gridData: FlGridData(
+                            show: true,
+                            drawHorizontalLine: true,
+                            drawVerticalLine: true,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
             : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Text(
-                'Diagnosis of Arrhythmias In Progress',
-                style: TextStyle(fontSize: 20),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Text(
+                      'Diagnosis of Arrhythmias In Progress',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  CircularProgressIndicator(),
+                  // Show loading indicator while processing
+                ],
               ),
-            ),
-            CircularProgressIndicator(), // Show loading indicator while processing
-          ],
-        ),
       ),
     );
   }
 }
-
