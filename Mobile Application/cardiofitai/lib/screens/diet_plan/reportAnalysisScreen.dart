@@ -28,7 +28,7 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
             int numericResult = int.parse(Result);
             if (numericResult >= 126) {
               return "Diabetes Mellitus";
-            } else if (numericResult < 100) {
+            } else if (numericResult > 100 && numericResult < 125) {
               return "Pre Diabetes";
             }
           }
@@ -59,7 +59,7 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
           if (int.tryParse(Result) != null) {
             int numericResult = int.parse(Result);
             if (numericResult < 40) {
-              return "LDL : Low - Heart Disease Risk";
+              return "HDL : Low - Heart Disease Risk";
             } else if (numericResult >= 60) {
               return "HDL : High";
             }

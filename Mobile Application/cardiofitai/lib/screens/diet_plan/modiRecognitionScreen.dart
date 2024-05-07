@@ -527,7 +527,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         continue; // Skip lines that don't contain "endIndex"
       }
 
-      String dataSection = line.substring(startIndex, endIndex);
+      String dataSection = line;//line.substring(startIndex, endIndex);
       print(dataSection);
 
       // Keep track of which components have been found in this line
