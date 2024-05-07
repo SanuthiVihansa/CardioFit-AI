@@ -350,32 +350,36 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           print(scannedText);
           _removeSpaces(scannedText);
           List<String> lines = noSpace.split('\n');
-          if(selectedReport!='Select Report'){
-            if(selectedReport=='Full Blood Count Report'){
+          if(item["UploadedReport"]!='Select Report'){
+            if(item["UploadedReport"]=='Full Blood Count Report'){
               List<String> bloodComponents = ['WBC', 'Neutrophils', 'Lymphocytes', 'Monocytes', 'Eosinophils', 'Basophills','NeutrophilsAbsoluteCount','LymphocytesAbsoluteCount','MonocytesAbsoluteCount','EosinophilsAbsoluteCount','RBC','Haemoglobin','PackedCellVolume(PCV)','MCV','MCH','MCHC','RDW','PlateletCount'];
               List<String> unitsComponents = ['/Cumm', '0/0', '0/0', '0/0', '0/0', '0/0','/Cumm','/Cumm','/Cumm','/Cumm','Million/pL','g/dl','0/0','fL','pg','g/dL','0/0','/Cumm'];
+              String selectedText=item["UploadedReport"];
               // Update rows here
-              rows = _buildRows(bloodComponents, unitsComponents, lines);
+              rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
               setState(() {});
             }
-            else if(selectedReport == 'Lipid profile'){
+            else if(item["UploadedReport"] == 'Lipid profile'){
               List<String> bloodComponents = ['Cholesterol-Total', 'Triglycerides', 'HDL-C', 'LDL-C', 'VLDL-C', 'CHO/HDL-CRatio'];
               List<String> unitsComponents = ['mg/dL', 'mg/dL', 'mg/dL', 'mg/dL', 'mg/dL', ' '];
+              String selectedText=item["UploadedReport"];
               // Update rows here
-              rows = _buildRows(bloodComponents, unitsComponents, lines);
+              rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
               setState(() {});
             }
-            else if(selectedReport == 'Fasting blood Sugar'){
+            else if(item["UploadedReport"] == 'Fasting blood Sugar'){
               List<String> bloodComponents = ['FastingPlasmaGlucose', 'FastingBloodSugar','FaøngmasmaGlucose'];
               List<String> unitsComponents = ['mg/dL', 'mg/dL','mg/dL'];
+              String selectedText=item["UploadedReport"];
               // Update rows here
-              rows = _buildRows(bloodComponents, unitsComponents, lines);
+              rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
               setState(() {});
             }
-            else if(selectedReport=="Urine Full Report"){
+            else if(item["UploadedReport"]=="Urine Full Report"){
               List<String> bloodComponents = ['Colour', 'Appearance','SpecificGravity','pH','Glucose','Protein','KetoneBodies','Bilirubin','Urobilinogen','PusCells','RedBloodCells','EpithelialCells','Organisms','Crystals','Casts'];
               List<String> unitsComponents = [];
-              rows = _buildRows(bloodComponents, unitsComponents, lines);
+              String selectedText=item["UploadedReport"];
+              rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
               setState(() {});
             }
           }
@@ -477,7 +481,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   //   return rows;
   // }
 
-  List<DataRow> _buildRows(List<String> bloodComponents, List<String> unitsComponents, List<String> lines) {
+  List<DataRow> _buildRows(List<String> bloodComponents, List<String> unitsComponents, List<String> lines,String selectedText) {
     List<DataRow> rows = [];
     int startIndex = 0;
     int endIndex = 0;
@@ -494,19 +498,19 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
     for (String line in filteredLines) {
       // Iterate through each line of text
-      if (selectedReport == "Fasting blood Sugar") {
+      if (selectedText == "Fasting blood Sugar") {
         startIndex = line.indexOf("2022");
         endIndex = line.indexOf("Referencerange:");
       }
-      else if(selectedReport=="Full Blood Count Report"){
+      else if(selectedText=="Full Blood Count Report"){
         startIndex = line.indexOf("FullBloodcount(FBC)");
         endIndex = line.indexOf("Referencerange:");
       }
-      else if(selectedReport=="Lipid profile"){
+      else if(selectedText=="Lipid profile"){
         startIndex = line.indexOf("LipidProfile");
         endIndex = line.indexOf("LipidProfileReferenceRangesforAdults");
       }
-      else if(selectedReport=="Urine Full Report"){
+      else if(selectedText=="Urine Full Report"){
         startIndex = line.indexOf("UrineFullReport");
         //endIndex = line.indexOf("MedicalLaboratoryTechnologist");
       }
