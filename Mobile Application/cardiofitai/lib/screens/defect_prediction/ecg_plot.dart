@@ -79,7 +79,12 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ECG Diagnosis'),
+        foregroundColor: Colors.white,
+        title: const Text(
+          "ECG Diagnosis",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
       ),
       body: Center(
         child: _predictedLabel.isNotEmpty
