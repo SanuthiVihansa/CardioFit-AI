@@ -21,9 +21,15 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       for (DataRow row in dataRows) {
         String Component = row.cells[0].child.toString();
         String Result = row.cells[1].child.toString();
+        RegExp regex = RegExp(r'\d+');
+        RegExpMatch? match = regex.firstMatch(Result);
+        if (match != null) {
+          String numericValue = match.group(0)!;
+          Result = numericValue;
+        }
         //String Unit = row.cells[2].child.toString();
 
-        if (Component.toLowerCase() == "fasting plasma glucose") {
+        if (Component.toLowerCase() == "text(\"fasting plasma glucose\")") {
           if (int.tryParse(Result) != null) {
             int numericResult = int.parse(Result);
             if (numericResult >= 126) {
@@ -41,21 +47,21 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
               return "Pre Diabetes";
             }
           }
-        } else if (Component.toLowerCase() == "Cholestrol-Total") {
+        } else if (Component.toLowerCase() == "text(\"cholesterol-total\")") {
           if (int.tryParse(Result) != null) {
             int numericResult = int.parse(Result);
             if (numericResult > 180) {
               return "High Cholestrol";
             }
           }
-        } else if (Component.toLowerCase() == "LDL-C") {
+        } else if (Component.toLowerCase() == "text(\"ldl-c\")") {
           if (int.tryParse(Result) != null) {
             int numericResult = int.parse(Result);
             if (numericResult > 150) {
               return "LDL : High - Heart Disease Risk";
             }
           }
-        } else if (Component.toLowerCase() == "HDL-C") {
+        } else if (Component.toLowerCase() == "text(\"hdl-c\")") {
           if (int.tryParse(Result) != null) {
             int numericResult = int.parse(Result);
             if (numericResult < 40) {
