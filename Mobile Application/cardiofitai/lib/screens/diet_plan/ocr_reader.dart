@@ -160,65 +160,90 @@ class _OcrReaderState extends State<OcrReader> {
     }
   }
 
+  // void getRecognisedText(XFile image) async {
+  //   final inputImage = InputImage.fromFilePath(image.path);
+  //   // final rotatedImage = inputImage
+  //
+  //   final textRecognizer = TextRecognizer();
+  //
+  //   // final textDetector = GoogleMlKit.vision.textDetector();
+  //
+  //   final RecognizedText recognisedText =
+  //   await textRecognizer.processImage(inputImage);
+  //   String extractedText = recognisedText.text;
+  //   print(extractedText);
+  //
+  //   await textRecognizer.close();
+  //   scannedText = "";
+  //   // for (TextBlock block in recognisedText.blocks) {
+  //   //   for (TextLine line in block.lines) {
+  //   //     for (TextElement element in line.elements) {
+  //   //       scannedText = scannedText + element.text + "\n";
+  //   //     }
+  //   //   }
+  //   // }
+  //
+  //   List<List<String>> tableData =[];
+  //   for(TextBlock block in recognisedText.blocks){
+  //     for(TextLine line in block.lines){
+  //       List<String> row =[];
+  //       for(TextElement element in line.elements){
+  //         row.add(element.text);
+  //       }
+  //       tableData.add(row);
+  //     }
+  //   }
+  //   for(List<String> row in tableData){
+  //     print(row.join());
+  //   }
+  //   // for(int i=0; i<4; i++){
+  //   //   tableData.add(['A$i','B$i','C$i','D$i']);
+  //   // }
+  //
+  //
+  //
+  //
+  //   textScanning = false;
+  //   if (scannedText != "") {
+  //     print("Has a value");
+  //     //check if username and number duplicate
+  //     String combinationKey = '';
+  //     // if (!processedCombinations.contains(combinationKey)) {
+  //     //   processedCombinations.add(combinationKey);
+  //     //   Response response = await OCRServiceTemp.addReportContent(
+  //     //       "username", _generateReportNumber() as int, scannedText);
+  //     //   print(response.message);
+  //     // } else {
+  //     //   print("Duplicate combination detected");
+  //     // }
+  //   }
+  //   setState(() {});
+  // }
   void getRecognisedText(XFile image) async {
     final inputImage = InputImage.fromFilePath(image.path);
-    // final rotatedImage = inputImage
-
     final textRecognizer = TextRecognizer();
 
-    // final textDetector = GoogleMlKit.vision.textDetector();
+    final RecognizedText recognisedText = await textRecognizer.processImage(inputImage);
 
-    final RecognizedText recognisedText =
-    await textRecognizer.processImage(inputImage);
-    String extractedText = recognisedText.text;
-    print(extractedText);
-
-    await textRecognizer.close();
-    scannedText = "";
-    // for (TextBlock block in recognisedText.blocks) {
-    //   for (TextLine line in block.lines) {
-    //     for (TextElement element in line.elements) {
-    //       scannedText = scannedText + element.text + "\n";
-    //     }
-    //   }
-    // }
-
-    List<List<String>> tableData =[];
-    for(TextBlock block in recognisedText.blocks){
-      for(TextLine line in block.lines){
-        List<String> row =[];
-        for(TextElement element in line.elements){
+    List<List<String>> tableData = [];
+    for (TextBlock block in recognisedText.blocks) {
+      List<String> row = [];
+      for (TextLine line in block.lines) {
+        for (TextElement element in line.elements) {
           row.add(element.text);
         }
-        tableData.add(row);
       }
+      tableData.add(row);
     }
-    for(List<String> row in tableData){
+
+    // Print the extracted table
+    for (List<String> row in tableData) {
       print(row.join());
     }
-    // for(int i=0; i<4; i++){
-    //   tableData.add(['A$i','B$i','C$i','D$i']);
-    // }
 
-
-
-
-    textScanning = false;
-    if (scannedText != "") {
-      print("Has a value");
-      //check if username and number duplicate
-      String combinationKey = '';
-      // if (!processedCombinations.contains(combinationKey)) {
-      //   processedCombinations.add(combinationKey);
-      //   Response response = await OCRServiceTemp.addReportContent(
-      //       "username", _generateReportNumber() as int, scannedText);
-      //   print(response.message);
-      // } else {
-      //   print("Duplicate combination detected");
-      // }
-    }
-    setState(() {});
+    await textRecognizer.close();
   }
+
 
   @override
   void initState() {
