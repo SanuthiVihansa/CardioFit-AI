@@ -348,16 +348,46 @@ class _DietHomePageState extends State<DietHomePage> {
                                     color: Colors.white54,
                                     fontSize: 25,
                                     fontWeight: FontWeight.w700)),
-                            Text(roundedBmiString,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w700)),
+                            Text.rich(
+                              TextSpan(
+                                text: roundedBmiString, // The BMI value
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                children: <InlineSpan>[
+                                  TextSpan(
+                                    text: ' Kg/m', // The normal suffix text
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  WidgetSpan(
+                                    child: Transform.translate(
+                                      offset: const Offset(0, -10), // Adjust the offset to move it up
+                                      child: Text(
+                                        '2',
+                                        textScaleFactor: 0.7, // Adjust the scale to make it smaller
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
-                  ]),
+                  ]
+                  ),
                 ),
               ),
             ),
