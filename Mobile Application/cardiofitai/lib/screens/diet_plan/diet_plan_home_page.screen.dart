@@ -29,7 +29,7 @@ class _DietHomePageState extends State<DietHomePage> {
 
   Future <void> _getUserBMI() async{
     _userBMI =
-        await UserLoginService.getUserByEmail('sanuthi@gmail.com');
+        await UserLoginService.getUserByEmail(widget.user.email);
     String bmiString = _userBMI.docs[0]["bmi"];
     double bmiValue = double.parse(bmiString);
     double roundedBmiValue = double.parse((bmiValue).toStringAsFixed(2));

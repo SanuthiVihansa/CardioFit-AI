@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
   //Function to generate a Report number
   Future<void> _userInfo() async {
     _userSignUpInfo =
-        await UserLoginService.getUserByEmail('sanuthi@gmail.com');
+        await UserLoginService.getUserByEmail(widget.user.email);
     _ageController.text = _userSignUpInfo.docs[0]["age"];
     _heightController.text = _userSignUpInfo.docs[0]["height"];
     _weightController.text = _userSignUpInfo.docs[0]["weight"];
