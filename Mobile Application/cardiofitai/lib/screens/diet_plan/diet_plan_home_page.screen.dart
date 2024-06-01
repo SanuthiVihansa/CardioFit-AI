@@ -1,5 +1,6 @@
 import 'package:cardiofitai/components/navbar_component.dart';
 import 'package:cardiofitai/screens/diet_plan/recognitionscreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,6 +8,7 @@ import 'package:vector_math/vector_math_64.dart' as math;
 import 'package:intl/intl.dart';
 
 import '../../models/user.dart';
+import '../../services/user_information_service.dart';
 import 'modiRecognitionScreen.dart';
 
 class DietHomePage extends StatefulWidget {
@@ -14,13 +16,37 @@ class DietHomePage extends StatefulWidget {
 
   final User user;
 
+
+
   @override
   State<DietHomePage> createState() => _DietHomePageState();
 }
 
 class _DietHomePageState extends State<DietHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late double _height;
+  late QuerySnapshot<Object?> _userBMI;
+  String roundedBmiString="";
+
+  Future <void> _getUserBMI() async{
+    _userBMI =
+        await UserLoginService.getUserByEmail('sanuthi@gmail.com');
+    String bmiString = _userBMI.docs[0]["bmi"];
+    double bmiValue = double.parse(bmiString);
+    double roundedBmiValue = double.parse((bmiValue).toStringAsFixed(2));
+    roundedBmiString = roundedBmiValue.toString();
+    setState(() {
+
+    });
+  }
+
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getUserBMI();
+  }
+
 
   Widget DietAdvice() {
     double halfScreenWidth = (MediaQuery.of(context).size.width / 2) - 50;
@@ -123,6 +149,7 @@ class _DietHomePageState extends State<DietHomePage> {
     final width = MediaQuery.of(context).size.width;
     final today = DateTime.now();
 
+
     return Scaffold(
       backgroundColor: const Color(0xFFE9E9E9),
       key: _scaffoldKey,
@@ -183,41 +210,41 @@ class _DietHomePageState extends State<DietHomePage> {
                       ),
                       Row(
                         children: <Widget>[
-                          // _RadialProgress(
-                          //   key: UniqueKey(),
-                          //   width: width * 0.10,
-                          //   height: _height * 0.10,
-                          // ),
+                          _RadialProgress(
+                            key: UniqueKey(),
+                            width: width * 0.10,
+                            height: _height * 0.10,
+                          ),
                           Spacer(),
                           // This will push _RadialProgress to the start
                           SizedBox(width: 200),
-                          // Column(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   mainAxisSize: MainAxisSize.max,
-                          //   children: <Widget>[
-                          //     _IngredientProgress(
-                          //       width: width * 0.28,
-                          //       ingredients: "PROTEIN",
-                          //       progress: 0.3,
-                          //       progressColor: Colors.green,
-                          //       leftAmount: 72,
-                          //     ),
-                          //     _IngredientProgress(
-                          //       width: width * 0.28,
-                          //       ingredients: "CARBS",
-                          //       progress: 0.3,
-                          //       progressColor: Colors.redAccent,
-                          //       leftAmount: 252,
-                          //     ),
-                          //     _IngredientProgress(
-                          //       width: width * 0.28,
-                          //       ingredients: "FAT",
-                          //       progress: 0.1,
-                          //       progressColor: Colors.yellowAccent,
-                          //       leftAmount: 61,
-                          //     ),
-                          //   ],
-                          // )
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              _IngredientProgress(
+                                width: width * 0.28,
+                                ingredients: "PROTEIN",
+                                progress: 0.3,
+                                progressColor: Colors.green,
+                                leftAmount: 72,
+                              ),
+                              _IngredientProgress(
+                                width: width * 0.28,
+                                ingredients: "CARBS",
+                                progress: 0.3,
+                                progressColor: Colors.redAccent,
+                                leftAmount: 252,
+                              ),
+                              _IngredientProgress(
+                                width: width * 0.28,
+                                ingredients: "FAT",
+                                progress: 0.1,
+                                progressColor: Colors.yellowAccent,
+                                leftAmount: 61,
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ],
@@ -234,21 +261,21 @@ class _DietHomePageState extends State<DietHomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: (<Widget>[
-                    // const Padding(
-                    //   padding: EdgeInsets.only(
-                    //     bottom: 8,
-                    //     left: 32,
-                    //     right: 16,
-                    //   ),
-                    //   child:
-                    //   // Text(
-                    //   //   "Health Insights",
-                    //   //   style: TextStyle(
-                    //   //       color: Colors.blueGrey,
-                    //   //       fontSize: 20,
-                    //   //       fontWeight: FontWeight.w700),
-                    //   // ),
-                    // ),
+                    const Padding(
+                      padding: EdgeInsets.only(
+                        bottom: 8,
+                        left: 32,
+                        right: 16,
+                      ),
+                      child:
+                      Text(
+                        "Health Insights",
+                        style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -257,17 +284,17 @@ class _DietHomePageState extends State<DietHomePage> {
                             SizedBox(
                               width: 25,
                             ),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     // Navigate to homepage
-                            //     Navigator.of(context).pushReplacement(
-                            //         MaterialPageRoute(
-                            //             builder: (BuildContext context) =>
-                            //                 DietHomePage(widget.user)));
-                            //     ;
-                            //   },
-                            //   child: DietAdvice(),
-                            // ),
+                            GestureDetector(
+                              onTap: () {
+                                // Navigate to homepage
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            DietHomePage(widget.user)));
+                                ;
+                              },
+                              child: DietAdvice(),
+                            ),
                             GestureDetector(
                               onTap: () {
                                 // Navigate to homepage
@@ -289,47 +316,47 @@ class _DietHomePageState extends State<DietHomePage> {
                     SizedBox(
                       height: 20,
                     ),
-                    // Expanded(
-                    //   child: Container(
-                    //     width: MediaQuery.of(context).size.width,
-                    //     margin: const EdgeInsets.only(
-                    //         bottom: 10, left: 32, right: 32),
-                    //     decoration: const BoxDecoration(
-                    //         borderRadius: BorderRadius.all(Radius.circular(30)),
-                    //         gradient: LinearGradient(
-                    //             begin: Alignment.topCenter,
-                    //             end: Alignment.bottomCenter,
-                    //             colors: [
-                    //               Color(0xFF8C001A),
-                    //               Color(0xF56C0609),
-                    //             ])),
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       children: <Widget>[
-                    //         SizedBox(
-                    //           height: 20,
-                    //         ),
-                    //         const Text(
-                    //           "YOUR CURRENT",
-                    //           style: TextStyle(
-                    //               color: Colors.white60,
-                    //               fontSize: 20,
-                    //               fontWeight: FontWeight.w700),
-                    //         ),
-                    //         const Text("BODY MASS INDEX",
-                    //             style: TextStyle(
-                    //                 color: Colors.white54,
-                    //                 fontSize: 25,
-                    //                 fontWeight: FontWeight.w700)),
-                    //         Text(widget.user.bmi,
-                    //             style: const TextStyle(
-                    //                 color: Colors.white,
-                    //                 fontSize: 30,
-                    //                 fontWeight: FontWeight.w700)),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
+                    Expanded(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(
+                            bottom: 10, left: 32, right: 32),
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Color(0xFF8C001A),
+                                  Color(0xF56C0609),
+                                ])),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 20,
+                            ),
+                            const Text(
+                              "YOUR CURRENT",
+                              style: TextStyle(
+                                  color: Colors.white60,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            const Text("BODY MASS INDEX",
+                                style: TextStyle(
+                                    color: Colors.white54,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w700)),
+                            Text(roundedBmiString,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w700)),
+                          ],
+                        ),
+                      ),
+                    ),
                   ]),
                 ),
               ),

@@ -58,9 +58,10 @@ class _ProfilePageState extends State<ProfilePage> {
   void calculateBMI(String weight, String height) {
     if (weight != "" && height != "") {
       double bmi =
-          double.parse(weight) / (double.parse(height) * double.parse(height));
+          double.parse(weight) / (double.parse(height)/100 * double.parse(height)/100);
+      double roundedBMI = double.parse((bmi).toStringAsFixed(2));
 
-      _caluclateBMIController.text = bmi.toString();
+      _caluclateBMIController.text = roundedBMI.toString();
     } else {
       _caluclateBMIController.text = "";
     }
@@ -210,6 +211,7 @@ class _ProfilePageState extends State<ProfilePage> {
         decoration: InputDecoration(
           errorText: "",
           labelText: 'Height',
+            suffix:Text("cm"),
           border: OutlineInputBorder(),
         ),
         onChanged: (text) {
@@ -221,11 +223,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget Weight() => TextField(
         controller: _weightController,
+
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
           errorText: "",
           labelText: 'Weight',
           border: OutlineInputBorder(),
+            suffix:Text("Kg"),
         ),
         onChanged: (text) {
           calculateBMI(weight, height);
@@ -239,6 +243,24 @@ class _ProfilePageState extends State<ProfilePage> {
         decoration: InputDecoration(
           errorText: "",
           labelText: 'BMI',
+          suffix:Text.rich(
+            TextSpan(
+              text: 'Kg/m', // Normal text
+              style: TextStyle(fontSize: 16.0), // Base text size
+              children: <InlineSpan>[
+                WidgetSpan(
+                  child: Transform.translate(
+                    offset: const Offset(0, -5), // Adjust the offset to move it up
+                    child: Text(
+                      '2',
+                      textScaleFactor: 0.7, // Adjust the scale to make it smaller
+                      style: TextStyle(fontSize: 16.0), // Base text size
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           border: OutlineInputBorder(),
         ),
         onChanged: (text) {},

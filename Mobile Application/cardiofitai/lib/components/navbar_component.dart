@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../models/user.dart';
 import '../screens/diet_plan/modiRecognitionScreen.dart';
+import '../screens/diet_plan/scan.dart';
 
 class LeftNavBar extends StatelessWidget {
   final String name;
@@ -111,7 +112,7 @@ class LeftNavBar extends StatelessWidget {
               Navigator.of(context).pop(); // Close the drawer
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => OcrReader(),
+                  builder: (context) => RecognitionScreenScan(),
                 ),
               );
             },
