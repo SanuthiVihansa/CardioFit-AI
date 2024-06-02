@@ -9,18 +9,18 @@ class MedicineAlertPage extends StatefulWidget {
 }
 
 class _MedicineAlertPageState extends State<MedicineAlertPage> {
-  late String _selectedInterval;
+  String _selectedInterval='1';
   final List<String> _intervals = ['1', '2', '4', '6', '8', '12', '24'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New'),
+        title: Text('Set Reminder'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Handle back button press
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -41,41 +41,10 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 20),
-            Text('Medicine Type'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    Icon(Icons.medical_information_rounded, size: 50),
-                    Text('Bottle'),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Icon(Icons.masks, size: 50),
-                    Text('Pill'),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Icon(Icons.adb_rounded, size: 50),
-                    Text('Syringe'),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Icon(Icons.tablet, size: 50),
-                    Text('Tablet'),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
             Text('Interval Selection *'),
             Row(
               children: [
-                Text('Remind me every '),
+                Text('Remind me every  '),
                 DropdownButton<String>(
                   hint: Text('Select an interval'),
                   value: _selectedInterval,
@@ -92,6 +61,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                   },
                 ),
                 Text(' hours'),
+                Text('No. of days  '),
               ],
             ),
           ],

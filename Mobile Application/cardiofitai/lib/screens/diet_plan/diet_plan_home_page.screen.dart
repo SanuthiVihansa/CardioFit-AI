@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../../models/user.dart';
 import '../../services/user_information_service.dart';
 import 'dietaryplanprediction-homepage.dart';
+import 'medicineAlertScreen.dart';
 import 'modiRecognitionScreen.dart';
 
 class DietHomePage extends StatefulWidget {
@@ -134,6 +135,53 @@ class _DietHomePageState extends State<DietHomePage> {
                             fontWeight: FontWeight.w700)),
                   ),
                   Center(child: Text("Scan and analyse report information")),
+                  SizedBox(height: 10)
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget MedicineAlert() {
+    double halfScreenWidth = (MediaQuery.of(context).size.width / 2) - 50;
+
+    return Container(
+      width: halfScreenWidth,
+      margin: const EdgeInsets.only(right: 20, bottom: 10),
+      child: Material(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        elevation: 4,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Flexible(
+              fit: FlexFit.loose,
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                child: Image.asset(
+                  'assets/reportanalysis.jpg',
+                  width: halfScreenWidth,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                    child: Text("Notification Service ",
+                        style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  Center(child: Text("Upload prescription and set reminders for pill intake")),
                   SizedBox(height: 10)
                 ],
               ),
@@ -304,6 +352,16 @@ class _DietHomePageState extends State<DietHomePage> {
                                             RecognitionScreen()));
                               },
                               child: ReportAnalaysis(),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // Navigate to homepage
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            MedicineAlertPage()));
+                              },
+                              child: MedicineAlert(),
                             ),
                             const SizedBox(
                               width: 25,
