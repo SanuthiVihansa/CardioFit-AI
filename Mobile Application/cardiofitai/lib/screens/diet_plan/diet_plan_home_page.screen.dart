@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../../models/user.dart';
 import '../../services/user_information_service.dart';
+import 'dietaryplanprediction-homepage.dart';
 import 'modiRecognitionScreen.dart';
 
 class DietHomePage extends StatefulWidget {
@@ -290,7 +291,7 @@ class _DietHomePageState extends State<DietHomePage> {
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            DietHomePage(widget.user)));
+                                            DietaryPlanHomePage(widget.user)));
                                 ;
                               },
                               child: DietAdvice(),
@@ -302,7 +303,6 @@ class _DietHomePageState extends State<DietHomePage> {
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             RecognitionScreen()));
-                                ;
                               },
                               child: ReportAnalaysis(),
                             ),
