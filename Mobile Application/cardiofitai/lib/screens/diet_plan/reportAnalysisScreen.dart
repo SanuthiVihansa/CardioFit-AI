@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'modiRecognitionScreen.dart';
 
 class ReportAnalysisScreen extends StatefulWidget {
