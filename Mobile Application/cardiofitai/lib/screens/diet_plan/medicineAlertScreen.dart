@@ -9,8 +9,12 @@ class MedicineAlertPage extends StatefulWidget {
 }
 
 class _MedicineAlertPageState extends State<MedicineAlertPage> {
-  String _selectedInterval='1';
+  String _selectedInterval = '1';
   final List<String> _intervals = ['1', '2', '4', '6', '8', '12', '24'];
+  final TextEditingController _medicineNameController = TextEditingController();
+  final TextEditingController _dosageController = TextEditingController();
+  final TextEditingController _daysController = TextEditingController();
+  final List<Map<String, String>> _medicines = [];
 
   @override
   Widget build(BuildContext context) {
@@ -26,45 +30,142 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Medicine Name *',
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _medicineNameController,
+                      decoration: InputDecoration(
+                        labelText: 'Medicine Name *',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.text,
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: TextField(
+                      controller: _dosageController,
+                      decoration: InputDecoration(
+                        labelText: 'Dosage in mg',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Dosage in mg',
+              SizedBox(height: 16),
+              Text('Interval Selection *'),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Remind me every',
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        border: OutlineInputBorder(),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: _selectedInterval,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedInterval = newValue!;
+                            });
+                          },
+                          items: _intervals
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          isExpanded: true,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: TextField(
+                      controller: _daysController,
+                      decoration: InputDecoration(
+                        labelText: 'Number of days',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                ],
               ),
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(height: 20),
-            Text('Interval Selection *'),
-            Row(
-              children: [
-                Text('Remind me every  '),
-                DropdownButton<String>(
-                  hint: Text('Select an interval'),
-                  value: _selectedInterval,
-                  items: _intervals.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedInterval = newValue!;
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _medicines.add({
+                      'name': _medicineNameController.text,
+                      'dosage': _dosageController.text,
+                      'interval': _selectedInterval,
+                      'days': _daysController.text,
                     });
-                  },
-                ),
-                Text(' hours'),
-                Text('No. of days  '),
-              ],
-            ),
-          ],
+                    _medicineNameController.clear();
+                    _dosageController.clear();
+                    _daysController.clear();
+                    _selectedInterval = '1';
+                  });
+                },
+                child: Text('Add'),
+              ),
+              SizedBox(height: 16),
+              ListView.builder(
+                shrinkWrap: true, // Add this line
+                physics: NeverScrollableScrollPhysics(), // Add this line
+                itemCount: _medicines.length,
+                itemBuilder: (context, index) {
+                  final medicine = _medicines[index];
+                  return ListTile(
+                    title: Text('${medicine['name']} - ${medicine['dosage']} mg'),
+                    subtitle: Text(
+                        'Every ${medicine['interval']} hours for ${medicine['days']} days'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            // Populate fields with current data for editing
+                            _medicineNameController.text = medicine['name']!;
+                            _dosageController.text = medicine['dosage']!;
+                            _selectedInterval = medicine['interval']!;
+                            _daysController.text = medicine['days']!;
+                            // Remove the current item from the list
+                            setState(() {
+                              _medicines.removeAt(index);
+                            });
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              _medicines.removeAt(index);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
