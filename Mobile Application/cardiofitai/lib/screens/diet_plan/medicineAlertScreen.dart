@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MedicineAlertPage extends StatefulWidget {
   const MedicineAlertPage({super.key});
@@ -15,6 +17,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   final TextEditingController _dosageController = TextEditingController();
   final TextEditingController _daysController = TextEditingController();
   final List<Map<String, String>> _medicines = [];
+  File? pickedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,32 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                'Upload Prescription',
+                style: TextStyle(fontSize: 18),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                  if (image != null) {
+                    setState(() {
+                      pickedImage = File(image.path);
+                    });
+                  }
+                },
+                child: Text("Attach Report"),
+              ),
+              Center(
+                child: Text(
+                  'OR',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              Text(
+                'Set Reminder Manually',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 10),
               Row(
                 children: [
                   Expanded(
@@ -60,7 +89,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 ],
               ),
               SizedBox(height: 16),
-              Text('Interval Selection *'),
+              Text('Interval Selection'),
               SizedBox(height: 8),
               Row(
                 children: [
@@ -68,8 +97,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: 'Remind me every',
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         border: OutlineInputBorder(),
                       ),
                       child: DropdownButtonHideUnderline(
@@ -80,8 +108,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                               _selectedInterval = newValue!;
                             });
                           },
-                          items: _intervals
-                              .map<DropdownMenuItem<String>>((String value) {
+                          items: _intervals.map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
