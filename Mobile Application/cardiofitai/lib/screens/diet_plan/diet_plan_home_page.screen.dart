@@ -1,5 +1,4 @@
 import 'package:cardiofitai/components/navbar_component.dart';
-import 'package:cardiofitai/screens/diet_plan/recognitionscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
