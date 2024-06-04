@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
+import 'package:cardiofitai/screens/diet_plan/api_key.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+
 
 class MedicineAlertPage extends StatefulWidget {
   const MedicineAlertPage({super.key});
@@ -18,6 +21,53 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   final TextEditingController _daysController = TextEditingController();
   final List<Map<String, String>> _medicines = [];
   File? pickedImage;
+  XFile? image;
+  String apikey = APIKey.apiKey;
+
+  void _pickImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        pickedImage = File(image.path);
+      });
+
+      Future<String> encodeImage(String imagePath) async {
+        final bytes = await File(imagePath).readAsBytes();
+        return base64Encode(bytes);
+      }
+
+      String base64Image = await encodeImage(image.path);
+
+      Map<String, String> headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $apikey"
+      };
+
+      Map<String, dynamic> payload = {
+        "model": "gpt-4-vision-preview",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are an assistant that can understand and describe images."
+          },
+          {
+            "role": "user",
+            "content": "What’s in this image?"
+          }
+        ],
+        "image": "data:image/jpeg;base64,$base64Image",
+        "max_tokens": 300
+      };
+
+      final response = await http.post(
+        Uri.parse("https://api.openai.com/v1/chat/completions"),
+        headers: headers,
+        body: jsonEncode(payload),
+      );
+
+      print(response.body);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +92,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 style: TextStyle(fontSize: 18),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                  if (image != null) {
-                    setState(() {
-                      pickedImage = File(image.path);
-                    });
-                  }
-                },
+                onPressed: _pickImage,
                 child: Text("Attach Report"),
               ),
               Center(
@@ -152,8 +195,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               ),
               SizedBox(height: 16),
               ListView.builder(
-                shrinkWrap: true, // Add this line
-                physics: NeverScrollableScrollPhysics(), // Add this line
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: _medicines.length,
                 itemBuilder: (context, index) {
                   final medicine = _medicines[index];
@@ -191,6 +234,10 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                   );
                 },
               ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text('Set Alarm'),
+              )
             ],
           ),
         ),

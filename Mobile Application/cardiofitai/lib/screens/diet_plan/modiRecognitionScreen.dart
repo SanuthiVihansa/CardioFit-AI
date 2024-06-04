@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:io' as Io;
-import 'dart:typed_data';
+
 
 import 'package:cardiofitai/models/user.dart';
-import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
 import 'package:cardiofitai/screens/diet_plan/reportAnalysisScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +10,6 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/user.dart';
 
 class RecognitionScreen extends StatefulWidget {
   const RecognitionScreen({super.key});
@@ -63,50 +60,11 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     'Select Report',
     'Fasting blood Sugar',
     'Lipid profile',
-    //'Urine Full Report',
-    //'Full Blood Count Report',
-    // 'Random blood Sugar',
-    // 'Post prandial blood sugar ',
-    // 'Hba1c',
-    // '75g ogtt',
-    // 'Thyroid function test',
-    // 'Liver function test (alt, ast, bilirubin)',
-    // 'Blood urea',
-    // 'Serum creatinine',
-    // 'Serum electrolytes',
-    // 'Serum cholesterol',
-    // 'Esr',
-    // 'Urine hcg',
-    // 'HIV',
-    // 'Troponin i',
   ];
 
   User? get user => null;
 
-  //Pick Image from galley or Camera
-  // void optionsdialog(BuildContext context) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return SimpleDialog(
-  //           children: [
-  //             SimpleDialogOption(
-  //               onPressed: () => pickimage(ImageSource.gallery),
-  //               child: Text("Gallery"),
-  //             ),
-  //             SimpleDialogOption(
-  //               onPressed: () => pickimage(ImageSource.camera),
-  //               child: Text("Camera"),
-  //             ),
-  //             SimpleDialogOption(
-  //               onPressed: () => Navigator.pop(context),
-  //               child: Text("Back"),
-  //             ),
-  //           ],
-  //         );
-  //       });
-  // }
-  //Multiple Attachment control Screen
+
   Widget _multipleAttachmentControl() {
     return Container(
       height: 300,
@@ -624,23 +582,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               addMultipleReports.length != 0
                   ? _showAttachedItems()
                   : SizedBox(),
-
-              // InkWell(
-              //   onTap: () {},
-              //   child: pickedimage != null && pickedimage.path.isNotEmpty
-              //       ? Image.file(
-              //           pickedimage,
-              //           width: 256,
-              //           height: 256,
-              //           fit: BoxFit.fill,
-              //         )
-              //       : Image.asset(
-              //           'assets/icon.png',
-              //           width: 256,
-              //           height: 256,
-              //           fit: BoxFit.fill,
-              //         ),
-              // ),
               SizedBox(
                 height: 30,
               ),
