@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:cardiofitai/screens/diet_plan/api_key.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
+import '../../services/prescription_reading_api_service.dart';
 
 class MedicineAlertPage extends StatefulWidget {
   const MedicineAlertPage({super.key});
@@ -14,6 +15,7 @@ class MedicineAlertPage extends StatefulWidget {
 }
 
 class _MedicineAlertPageState extends State<MedicineAlertPage> {
+  final apiService = ApiService();
   String _selectedInterval = '1';
   final List<String> _intervals = ['1', '2', '4', '6', '8', '12', '24'];
   final TextEditingController _medicineNameController = TextEditingController();
@@ -22,51 +24,38 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   final List<Map<String, String>> _medicines = [];
   File? pickedImage;
   XFile? image;
-  String apikey = APIKey.apiKey;
+  String prescriptionInfo = '';
+  bool detecting = false;
 
-  void _pickImage() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image != null) {
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 50);
+    if (pickedFile != null) {
       setState(() {
-        pickedImage = File(image.path);
+        pickedImage = File(pickedFile.path);
       });
-
-      Future<String> encodeImage(String imagePath) async {
-        final bytes = await File(imagePath).readAsBytes();
-        return base64Encode(bytes);
-      }
-
-      String base64Image = await encodeImage(image.path);
-
-      Map<String, String> headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $apikey"
-      };
-
-      Map<String, dynamic> payload = {
-        "model": "gpt-4-vision-preview",
-        "messages": [
-          {
-            "role": "system",
-            "content": "You are an assistant that can understand and describe images."
-          },
-          {
-            "role": "user",
-            "content": "What’s in this image?"
-          }
-        ],
-        "image": "data:image/jpeg;base64,$base64Image",
-        "max_tokens": 300
-      };
-
-      final response = await http.post(
-        Uri.parse("https://api.openai.com/v1/chat/completions"),
-        headers: headers,
-        body: jsonEncode(payload),
-      );
-
-      print(response.body);
     }
+  }
+
+  detectDisease() async {
+    setState(() {
+      detecting = true;
+    });
+    try {
+      prescriptionInfo = await apiService.sendImageToGPT4Vision(image: pickedImage!);
+    } catch (error) {
+      _showErrorSnackBar(error);
+    } finally {
+      setState(() {
+        detecting = false;
+      });
+    }
+  }
+
+  void _showErrorSnackBar(Object error) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(error.toString()),
+      backgroundColor: Colors.red,
+    ));
   }
 
   @override
@@ -92,9 +81,95 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 style: TextStyle(fontSize: 18),
               ),
               ElevatedButton(
-                onPressed: _pickImage,
-                child: Text("Attach Report"),
+                onPressed: () {
+                  _pickImage(ImageSource.gallery);
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'OPEN GALLERY',
+                      style: TextStyle(color: Colors.blueGrey),
+                    ),
+                    const SizedBox(width: 10),
+                    Icon(
+                      Icons.image,
+                      color: Colors.blueGrey,
+                    )
+                  ],
+                ),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  _pickImage(ImageSource.camera);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white60,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('START CAMERA', style: TextStyle(color: Colors.blueGrey)),
+                    const SizedBox(width: 10),
+                    Icon(Icons.camera_alt, color: Colors.blueGrey)
+                  ],
+                ),
+              ),
+              pickedImage == null
+                  ? Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Image.asset('assets/pick1.png'),
+              )
+                  : Container(
+                width: double.infinity,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                padding: const EdgeInsets.all(20),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.file(
+                    pickedImage!,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              if (pickedImage != null)
+                detecting
+                    ? SpinKitWave(
+                  color: Colors.blueGrey,
+                  size: 30,
+                )
+                    : Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white54,
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    onPressed: () {
+                      detectDisease();
+                    },
+                    child: const Text(
+                      'DETECT',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              if (prescriptionInfo.isNotEmpty) // Ensure the prescriptionInfo is not empty
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    prescriptionInfo,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
               Center(
                 child: Text(
                   'OR',
