@@ -165,9 +165,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               if (prescriptionInfo.isNotEmpty) // Ensure the prescriptionInfo is not empty
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    prescriptionInfo,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Text(
+                      prescriptionInfo,
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               Center(
