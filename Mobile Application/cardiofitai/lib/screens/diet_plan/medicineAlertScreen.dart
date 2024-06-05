@@ -1,9 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
-
-
 import '../../services/prescription_reading_api_service.dart';
 
 class MedicineAlertPage extends StatefulWidget {
@@ -20,6 +19,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   final TextEditingController _medicineNameController = TextEditingController();
   final TextEditingController _dosageController = TextEditingController();
   final TextEditingController _daysController = TextEditingController();
+  final TextEditingController _pillIntakeController = TextEditingController();
   final List<Map<String, String>> _medicines = [];
   File? pickedImage;
   XFile? image;
@@ -41,6 +41,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     });
     try {
       prescriptionInfo = await apiService.sendImageToGPT4Vision(image: pickedImage!);
+      _addMedicinesFromPrescriptionInfo();
     } catch (error) {
       _showErrorSnackBar(error);
     } finally {
@@ -55,6 +56,34 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       content: Text(error.toString()),
       backgroundColor: Colors.red,
     ));
+  }
+
+  void _addMedicinesFromPrescriptionInfo() {
+    try {
+      final List<dynamic> parsedInfo = jsonDecode(prescriptionInfo);
+      for (var medicineInfo in parsedInfo) {
+        final Map<String, String> medicine = {
+          'name': medicineInfo['Medicine Name'] ?? '',
+          'dosage': medicineInfo['Dosage'] ?? '',
+          'interval': medicineInfo['Intake Frequency'] ?? '',
+          'days': medicineInfo['Duration'] ?? '',
+          'pillIntakePerTime': medicineInfo['Pill Intake per Time'] ?? '',
+        };
+        setState(() {
+          _medicines.add(medicine);
+        });
+      }
+    } catch (error) {
+      _showErrorSnackBar('Failed to parse prescription info');
+    }
+  }
+
+  void _populateFieldsForEditing(Map<String, String> medicine) {
+    _medicineNameController.text = medicine['name'] ?? '';
+    _dosageController.text = medicine['dosage'] ?? '';
+    _selectedInterval = _intervals.contains(medicine['interval']) ? medicine['interval']! : '1';
+    _daysController.text = medicine['days'] ?? '';
+    _pillIntakeController.text = medicine['pillIntakePerTime'] ?? '';
   }
 
   @override
@@ -253,6 +282,15 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 ],
               ),
               SizedBox(height: 16),
+              TextField(
+                controller: _pillIntakeController,
+                decoration: InputDecoration(
+                  labelText: 'Pill Intake per Time',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -261,10 +299,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                       'dosage': _dosageController.text,
                       'interval': _selectedInterval,
                       'days': _daysController.text,
+                      'pillIntakePerTime': _pillIntakeController.text,
                     });
                     _medicineNameController.clear();
                     _dosageController.clear();
                     _daysController.clear();
+                    _pillIntakeController.clear();
                     _selectedInterval = '1';
                   });
                 },
@@ -280,19 +320,14 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                   return ListTile(
                     title: Text('${medicine['name']} - ${medicine['dosage']} mg'),
                     subtitle: Text(
-                        'Every ${medicine['interval']} hours for ${medicine['days']} days'),
+                        'Every ${medicine['interval']} hours for ${medicine['days']} days. Pill Intake per Time: ${medicine['pillIntakePerTime']}'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
                           icon: Icon(Icons.edit),
                           onPressed: () {
-                            // Populate fields with current data for editing
-                            _medicineNameController.text = medicine['name']!;
-                            _dosageController.text = medicine['dosage']!;
-                            _selectedInterval = medicine['interval']!;
-                            _daysController.text = medicine['days']!;
-                            // Remove the current item from the list
+                            _populateFieldsForEditing(medicine);
                             setState(() {
                               _medicines.removeAt(index);
                             });
