@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
+
 
 import '../../services/prescription_reading_api_service.dart';
 

@@ -50,7 +50,7 @@ class ApiService {
 
   Future<String> sendImageToGPT4Vision({
     required File image,
-    int maxTokens = 50,
+    int maxTokens = 250,
     String model = "gpt-4-vision-preview",
   }) async {
     final String base64Image = await encodeImage(image);
@@ -76,7 +76,7 @@ class ApiService {
               'content': [
                 {
                   'type': 'text',
-                  'text': 'GPT assume you are nurse,analyze the attached image of a handwritten prescription. Extract all the details and provide the following details for each mentioned in a structured format:Medicine NameDosage (e.g., mg, ml)Intake Frequency (e.g., once a day, twice a day)Duration (e.g., 5 days, 1 week)Pill Intake per Time (e.g., 1 pill at a time).The prescription may contain multiple medicines. Ensure that details for all medicines are extracted.Format the output as a list of dictionaries with the following keys: "Medicine Name", "Dosage", "Intake Frequency", "Duration", and "Pill Intake per Time". If the inserted image is not a medicine prescription, display "Invalid request".',
+                  'text': 'GPT assume you are nurse,analyze the attached image of a handwritten prescription. Extract all the details and provide the following details for each mentioned in a structured format:Medicine NameDosage (e.g., mg, ml)Intake Frequency (e.g., once a day, twice a day)Duration (e.g., 5 days, 1 week)Pill Intake per Time (e.g., 1 pill at a time).The prescription may contain multiple medicines. Ensure that details for all medicines are extracted.Format the output as a list of dictionaries with the following keys: "Medicine Name", "Dosage", "Intake Frequency", "Duration", and "Pill Intake per Time". Do not output anything else, than what was requested.If the inserted image is not a medicine prescription, display "Invalid request".',
 
                 },
                 {
