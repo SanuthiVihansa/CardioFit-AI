@@ -14,7 +14,7 @@ class ApiService {
     return base64Encode(bytes);
   }
 
-  Future<String> sendMessageGPT({required String diseaseName}) async {
+  Future<String> sendMessageGPT({required String prescriptionInfo}) async {
     try {
       final response = await _dio.post(
         "$BASE_URL/chat/completions",
@@ -29,8 +29,9 @@ class ApiService {
           "messages": [
             {
               "role": "user",
-              "content":
-              "GPT, upon receiving the name of a plant disease, provide three precautionary measures to prevent or manage the disease. These measures should be concise, clear, and limited to one sentence each. No additional information or context is needed—only the three precautions in bullet-point format. The disease is $diseaseName",
+              "content": "upon receiving the text, Analyse and structure the content in dictionary key manner, to be used in alert system. provide the following details for each mentioned in a structured format:Medicine Name,Dosage (e.g., mg, ml),Intake Frequency (e.g., once a day, twice a day),Duration (e.g., 5 days, 1 week),Pill Intake per Time (e.g., 1 pill at a time). Avoid unnecessary details.The text is $prescriptionInfo",
+              //"GPT,Read the image and write its details in a dictionary format for patient understanding. Each entry should include the medicine name, dosage, frequency, and any specific instructions.",
+                  //"upon receiving the name of a plant disease, provide three precautionary measures to prevent or manage the disease. These measures should be concise, clear, and limited to one sentence each. No additional information or context is needed—only the three precautions in bullet-point format. The disease is $diseaseName",
             }
           ],
         },
@@ -50,8 +51,8 @@ class ApiService {
 
   Future<String> sendImageToGPT4Vision({
     required File image,
-    int maxTokens = 250,
-    String model = "gpt-4-vision-preview",
+    int maxTokens = 400,
+    String model = "gpt-4o",
   }) async {
     final String base64Image = await encodeImage(image);
 
@@ -76,7 +77,10 @@ class ApiService {
               'content': [
                 {
                   'type': 'text',
-                  'text': 'GPT assume you are nurse,analyze the attached image of a handwritten prescription. Extract all the details and provide the following details for each mentioned in a structured format:Medicine NameDosage (e.g., mg, ml)Intake Frequency (e.g., once a day, twice a day)Duration (e.g., 5 days, 1 week)Pill Intake per Time (e.g., 1 pill at a time).The prescription may contain multiple medicines. Ensure that details for all medicines are extracted.Format the output as a list of dictionaries with the following keys: "Medicine Name", "Dosage", "Intake Frequency", "Duration", and "Pill Intake per Time". Do not output anything else, than what was requested.If the inserted image is not a medicine prescription, display "Invalid request".',
+                  'text': 'Read and analyse the content as much as possible'
+                  //'GPT assume you are nurse,analyze the attached image of a handwritten prescription. Extract all the details and provide the following details for each mentioned in a structured format:Medicine Name,Dosage (e.g., mg, ml),Intake Frequency (e.g., once a day, twice a day),Duration (e.g., 5 days, 1 week),Pill Intake per Time (e.g., 1 pill at a time).The prescription may contain multiple medicines. You should be able to identify special notations used by doctors, and provide the details in a way a patient understand. Ensure that details for all medicines are extracted.Format the output as a list of dictionaries with the following keys: "Medicine Name", "Dosage", "Intake Frequency", "Duration", and "Pill Intake per Time". Do not output anything else.',
+                  //'GPT, I am to make a alert system,I want you to scan and analyse the uploaded image and output its content such as medicine name, dosage, frequency, and any specific instructions or number of pills per intake.',
+                  //'GPT assume you are nurse,analyze the attached image of a handwritten prescription. Extract all the details and provide the following details for each mentioned in a structured format:Medicine Name,Dosage (e.g., mg, ml),Intake Frequency (e.g., once a day, twice a day),Duration (e.g., 5 days, 1 week),Pill Intake per Time (e.g., 1 pill at a time).The prescription may contain multiple medicines. You should be able to identify special notations used by doctors, and provide the details in a way a patient understand. Ensure that details for all medicines are extracted.Format the output as a list of dictionaries with the following keys: "Medicine Name", "Dosage", "Intake Frequency", "Duration", and "Pill Intake per Time". Do not output anything else, than what was requested.If the inserted image is not a medicine prescription, display "Invalid request".',
 
                 },
                 {

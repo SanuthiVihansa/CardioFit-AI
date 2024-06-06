@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../services/prescription_reading_api_service.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class MedicineAlertPage extends StatefulWidget {
   const MedicineAlertPage({super.key});
@@ -21,6 +22,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   final TextEditingController _daysController = TextEditingController();
   final TextEditingController _pillIntakeController = TextEditingController();
   final List<Map<String, String>> _medicines = [];
+  bool precautionLoading = false;
+  String diseasePrecautions = '';
   File? pickedImage;
   XFile? image;
   String prescriptionInfo = '';
@@ -49,6 +52,37 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         detecting = false;
       });
     }
+  }
+
+  showPrecautions() async {
+    setState(() {
+      precautionLoading = true;
+    });
+    try {
+      if (diseasePrecautions == '') {
+        diseasePrecautions =
+        await apiService.sendMessageGPT(prescriptionInfo: prescriptionInfo);
+      }
+      _showSuccessDialog(prescriptionInfo, diseasePrecautions);
+    } catch (error) {
+      _showErrorSnackBar(error);
+    } finally {
+      setState(() {
+        precautionLoading = false;
+      });
+    }
+  }
+  void _showSuccessDialog(String title, String content) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      animType: AnimType.rightSlide,
+      title: title,
+      desc: content,
+      btnOkText: 'Got it',
+      btnOkColor: Colors.blueGrey,
+      btnOkOnPress: () {},
+    ).show();
   }
 
   void _showErrorSnackBar(Object error) {
@@ -201,6 +235,22 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                     ),
                   ),
                 ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 30, vertical: 15),
+                ),
+                onPressed: () {
+                  showPrecautions();
+                },
+                child: Text(
+                  'PRECAUTION',
+                  style: TextStyle(
+                    color: Colors.black12,
+                  ),
+                ),
+              ),
               Center(
                 child: Text(
                   'OR',
@@ -318,9 +368,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 itemBuilder: (context, index) {
                   final medicine = _medicines[index];
                   return ListTile(
-                    title: Text('${medicine['name']} - ${medicine['dosage']} mg'),
+                    title: Text('${medicine['name']} ${medicine['dosage']}'),
                     subtitle: Text(
-                        'Every ${medicine['interval']} hours for ${medicine['days']} days. Pill Intake per Time: ${medicine['pillIntakePerTime']}'),
+                        '${medicine['interval']} ${medicine['days']} ${medicine['pillIntakePerTime']}'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
