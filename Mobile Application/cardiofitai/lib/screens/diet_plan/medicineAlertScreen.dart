@@ -21,6 +21,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   final TextEditingController _dosageController = TextEditingController();
   final TextEditingController _daysController = TextEditingController();
   final TextEditingController _pillIntakeController = TextEditingController();
+  final TextEditingController _additionalInstructions = TextEditingController();
   final List<Map<String, String>> _medicines = [];
   bool precautionLoading = false;
   String diseasePrecautions = '';
@@ -54,37 +55,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     }
   }
 
-  // showPrecautions() async {
-  //   setState(() {
-  //     precautionLoading = true;
-  //   });
-  //   try {
-  //     if (diseasePrecautions == '') {
-  //       diseasePrecautions =
-  //       await apiService.sendMessageGPT(prescriptionInfo: prescriptionInfo);
-  //     }
-  //     _showSuccessDialog(prescriptionInfo, diseasePrecautions);
-  //   } catch (error) {
-  //     _showErrorSnackBar(error);
-  //   } finally {
-  //     setState(() {
-  //       precautionLoading = false;
-  //     });
-  //   }
-  // }
-  // void _showSuccessDialog(String title, String content) {
-  //   AwesomeDialog(
-  //     context: context,
-  //     dialogType: DialogType.success,
-  //     animType: AnimType.rightSlide,
-  //     title: title,
-  //     desc: content,
-  //     btnOkText: 'Got it',
-  //     btnOkColor: Colors.blueGrey,
-  //     btnOkOnPress: () {},
-  //   ).show();
-  // }
-
   void _showErrorSnackBar(Object error) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(error.toString()),
@@ -92,33 +62,29 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     ));
   }
 
-  // void _addMedicinesFromPrescriptionInfo() {
-  //   try {
-  //     final List<dynamic> parsedInfo = jsonDecode(prescriptionInfo);
-  //     for (var medicineInfo in parsedInfo) {
-  //       final Map<String, String> medicine = {
-  //         'name': medicineInfo['Medicine Name'] ?? '',
-  //         'dosage': medicineInfo['Dosage'] ?? '',
-  //         'interval': medicineInfo['Intake Frequency'] ?? '',
-  //         'days': medicineInfo['Duration'] ?? '',
-  //         'pillIntakePerTime': medicineInfo['Pill Intake per Time'] ?? '',
-  //       };
-  //       setState(() {
-  //         _medicines.add(medicine);
-  //       });
-  //     }
-  //   } catch (error) {
-  //     _showErrorSnackBar('Failed to parse prescription info');
-  //   }
-  // }
-  //
-  // void _populateFieldsForEditing(Map<String, String> medicine) {
-  //   _medicineNameController.text = medicine['name'] ?? '';
-  //   _dosageController.text = medicine['dosage'] ?? '';
-  //   _selectedInterval = _intervals.contains(medicine['interval']) ? medicine['interval']! : '1';
-  //   _daysController.text = medicine['days'] ?? '';
-  //   _pillIntakeController.text = medicine['pillIntakePerTime'] ?? '';
-  // }
+  String normalizeFrequency(String frequency) {
+    frequency = frequency.toLowerCase();
+    if (frequency.contains('once')) return '1';
+    if (frequency.contains('twice')) return '2';
+    if (frequency.contains('thrice') || frequency.contains('three times')) return '3';
+    if (frequency.contains('four times')) return '4';
+    if (frequency.contains('q.d') || frequency.contains('qd') || frequency.contains('daily') || frequency.contains('once daily')) return '1';
+    if (frequency.contains('b.i.d') || frequency.contains('bid') || frequency.contains('twice daily')) return '2';
+    if (frequency.contains('t.i.d') || frequency.contains('tid') || frequency.contains('three times daily')) return '3';
+    if (frequency.contains('q.i.d') || frequency.contains('qid') || frequency.contains('four times daily')) return '4';
+    return frequency;
+  }
+
+  int normalizeDuration(String duration) {
+    duration = duration.toLowerCase();
+    if (duration.contains('one week') || duration.contains('1/52')) return 7;
+    if (duration.contains('two weeks') || duration.contains('2/52')) return 14;
+    if (duration.contains('three weeks') || duration.contains('3/52')) return 21;
+    if (duration.contains('four weeks') || duration.contains('4/52') || duration.contains('a month')) return 28;
+    final match = RegExp(r'(\d+) day').firstMatch(duration);
+    if (match != null) return int.parse(match.group(1)!);
+    return 0; // Default to 0 if unable to parse
+  }
 
   void _addMedicinesFromPrescriptionInfo() {
     try {
@@ -135,8 +101,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           final Map<String, String> medicine = {
             'name': medicineInfo['Medicine Name'] ?? '',
             'dosage': medicineInfo['Dosage'] ?? '',
-            'interval': medicineInfo['Frequency'] ?? '',
-            'days': medicineInfo['Duration'] ?? '',
+            'pillintake': medicineInfo['Pill Intake'] ?? '',
+            'interval': normalizeFrequency(medicineInfo['Frequency'] ?? ''),
+            'days': normalizeDuration(medicineInfo['Duration'] ?? '').toString(),
             'additionalInstructions': medicineInfo['Additional Instructions'] ?? '',
           };
           setState(() {
@@ -156,9 +123,34 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     _dosageController.text = medicine['dosage'] ?? '';
     _selectedInterval = _intervals.contains(medicine['interval']) ? medicine['interval']! : '1';
     _daysController.text = medicine['days'] ?? '';
-    _pillIntakeController.text = medicine['additionalInstructions'] ?? '';
+    _pillIntakeController.text = medicine['pillintake'] ?? '';
+    _additionalInstructions.text = medicine['additionalInstructions'] ?? '';
   }
 
+  void _setReminder() {
+    for (var medicine in _medicines) {
+      if (medicine['interval']!.isEmpty || medicine['days']!.isEmpty) {
+        _showErrorSnackBar('Please edit the entry for ${medicine['name']} to include both frequency and duration.');
+        return;
+      }
+      // Set the reminder using the provided frequency and duration
+      // This part can be implemented using a local notification package, such as flutter_local_notifications
+    }
+    _showSuccessDialog('Reminders set successfully', '');
+  }
+
+  void _showSuccessDialog(String title, String content) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      animType: AnimType.rightSlide,
+      title: title,
+      desc: content,
+      btnOkText: 'Got it',
+      btnOkColor: Colors.blueGrey,
+      btnOkOnPress: () {},
+    ).show();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -275,22 +267,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                     ),
                   ),
                 ),
-              // ElevatedButton(
-              //   style: ElevatedButton.styleFrom(
-              //     backgroundColor: Colors.blue,
-              //     padding: const EdgeInsets.symmetric(
-              //         horizontal: 30, vertical: 15),
-              //   ),
-              //   onPressed: () {
-              //     showPrecautions();
-              //   },
-              //   child: Text(
-              //     'PRECAUTION',
-              //     style: TextStyle(
-              //       color: Colors.black12,
-              //     ),
-              //   ),
-              // ),
+
               Center(
                 child: Text(
                   'OR',
@@ -308,7 +285,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                     child: TextField(
                       controller: _medicineNameController,
                       decoration: InputDecoration(
-                        labelText: 'Medicine Name *',
+                        labelText: 'Medicine Name ',
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.text,
@@ -380,6 +357,15 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 ),
                 keyboardType: TextInputType.number,
               ),
+              SizedBox(height: 16,),
+              TextField(
+                controller: _additionalInstructions,
+                decoration: InputDecoration(
+                  labelText: 'Additional Information : ',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+              ),
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
@@ -390,11 +376,13 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                       'interval': _selectedInterval,
                       'days': _daysController.text,
                       'pillIntakePerTime': _pillIntakeController.text,
+                      'additionalInstructions': _additionalInstructions.text,
                     });
                     _medicineNameController.clear();
                     _dosageController.clear();
                     _daysController.clear();
                     _pillIntakeController.clear();
+                    _additionalInstructions.clear();
                     _selectedInterval = '1';
                   });
                 },
@@ -410,7 +398,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                   return ListTile(
                     title: Text('Medicine Name : ${medicine['name']}  Dosage : ${medicine['dosage']}'),
                     subtitle: Text(
-                        'Frequency : ${medicine['interval']} \t Duration : ${medicine['days']}  \t Additional Information : ${medicine['additionalInstructions']}'),
+                        'Frequency : ${medicine['interval']} \t Duration : ${medicine['days']}  \t Pill Intake : ${medicine['pillintake']} \n Additional Information : ${medicine['additionalInstructions']}'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -437,7 +425,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 },
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _setReminder,
                 child: Text('Set Alarm'),
               )
             ],

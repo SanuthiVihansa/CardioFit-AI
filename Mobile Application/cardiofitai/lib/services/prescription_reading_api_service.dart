@@ -77,7 +77,7 @@ class ApiService {
               'content': [
                 {
                   'type': 'text',
-                  'text': 'Read and analyse the content as much as possible. And follow this format Medicine Name: The name of the medicine.Dosage: The dosage prescribed.Frequency: How often the medicine should be taken,give in user understanding manner, avoid medical notations.Duration: The duration for which the medicine should be taken.Additional Instructions: (if specified) Any additional instructions provided by the doctor.give output in json format'
+                  'text': 'Read and analyse the content as much as possible. And follow this format Medicine Name: The name of the medicine.Dosage: The dosage prescribed.Frequency: How often the medicine should be taken,give in user understanding manner, avoid medical notations.Duration: The duration for which the medicine should be taken. Pill Intake : Number of pills per intake (if given).Additional Instructions: (if specified) Any additional instructions provided by the doctor.give output in json format'
 
                 },
                 {
