@@ -54,36 +54,36 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     }
   }
 
-  showPrecautions() async {
-    setState(() {
-      precautionLoading = true;
-    });
-    try {
-      if (diseasePrecautions == '') {
-        diseasePrecautions =
-        await apiService.sendMessageGPT(prescriptionInfo: prescriptionInfo);
-      }
-      _showSuccessDialog(prescriptionInfo, diseasePrecautions);
-    } catch (error) {
-      _showErrorSnackBar(error);
-    } finally {
-      setState(() {
-        precautionLoading = false;
-      });
-    }
-  }
-  void _showSuccessDialog(String title, String content) {
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.success,
-      animType: AnimType.rightSlide,
-      title: title,
-      desc: content,
-      btnOkText: 'Got it',
-      btnOkColor: Colors.blueGrey,
-      btnOkOnPress: () {},
-    ).show();
-  }
+  // showPrecautions() async {
+  //   setState(() {
+  //     precautionLoading = true;
+  //   });
+  //   try {
+  //     if (diseasePrecautions == '') {
+  //       diseasePrecautions =
+  //       await apiService.sendMessageGPT(prescriptionInfo: prescriptionInfo);
+  //     }
+  //     _showSuccessDialog(prescriptionInfo, diseasePrecautions);
+  //   } catch (error) {
+  //     _showErrorSnackBar(error);
+  //   } finally {
+  //     setState(() {
+  //       precautionLoading = false;
+  //     });
+  //   }
+  // }
+  // void _showSuccessDialog(String title, String content) {
+  //   AwesomeDialog(
+  //     context: context,
+  //     dialogType: DialogType.success,
+  //     animType: AnimType.rightSlide,
+  //     title: title,
+  //     desc: content,
+  //     btnOkText: 'Got it',
+  //     btnOkColor: Colors.blueGrey,
+  //     btnOkOnPress: () {},
+  //   ).show();
+  // }
 
   void _showErrorSnackBar(Object error) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -92,20 +92,59 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     ));
   }
 
+  // void _addMedicinesFromPrescriptionInfo() {
+  //   try {
+  //     final List<dynamic> parsedInfo = jsonDecode(prescriptionInfo);
+  //     for (var medicineInfo in parsedInfo) {
+  //       final Map<String, String> medicine = {
+  //         'name': medicineInfo['Medicine Name'] ?? '',
+  //         'dosage': medicineInfo['Dosage'] ?? '',
+  //         'interval': medicineInfo['Intake Frequency'] ?? '',
+  //         'days': medicineInfo['Duration'] ?? '',
+  //         'pillIntakePerTime': medicineInfo['Pill Intake per Time'] ?? '',
+  //       };
+  //       setState(() {
+  //         _medicines.add(medicine);
+  //       });
+  //     }
+  //   } catch (error) {
+  //     _showErrorSnackBar('Failed to parse prescription info');
+  //   }
+  // }
+  //
+  // void _populateFieldsForEditing(Map<String, String> medicine) {
+  //   _medicineNameController.text = medicine['name'] ?? '';
+  //   _dosageController.text = medicine['dosage'] ?? '';
+  //   _selectedInterval = _intervals.contains(medicine['interval']) ? medicine['interval']! : '1';
+  //   _daysController.text = medicine['days'] ?? '';
+  //   _pillIntakeController.text = medicine['pillIntakePerTime'] ?? '';
+  // }
+
   void _addMedicinesFromPrescriptionInfo() {
     try {
-      final List<dynamic> parsedInfo = jsonDecode(prescriptionInfo);
-      for (var medicineInfo in parsedInfo) {
-        final Map<String, String> medicine = {
-          'name': medicineInfo['Medicine Name'] ?? '',
-          'dosage': medicineInfo['Dosage'] ?? '',
-          'interval': medicineInfo['Intake Frequency'] ?? '',
-          'days': medicineInfo['Duration'] ?? '',
-          'pillIntakePerTime': medicineInfo['Pill Intake per Time'] ?? '',
-        };
-        setState(() {
-          _medicines.add(medicine);
-        });
+      // Extract the JSON part from the prescription info
+      final jsonStartIndex = prescriptionInfo.indexOf('[');
+      final jsonEndIndex = prescriptionInfo.lastIndexOf(']') + 1;
+
+      if (jsonStartIndex != -1 && jsonEndIndex != -1) {
+        final jsonString = prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
+
+        // Parse the JSON string
+        final List<dynamic> parsedInfo = jsonDecode(jsonString);
+        for (var medicineInfo in parsedInfo) {
+          final Map<String, String> medicine = {
+            'name': medicineInfo['Medicine Name'] ?? '',
+            'dosage': medicineInfo['Dosage'] ?? '',
+            'interval': medicineInfo['Frequency'] ?? '',
+            'days': medicineInfo['Duration'] ?? '',
+            'additionalInstructions': medicineInfo['Additional Instructions'] ?? '',
+          };
+          setState(() {
+            _medicines.add(medicine);
+          });
+        }
+      } else {
+        _showErrorSnackBar('Failed to find JSON data in the prescription info');
       }
     } catch (error) {
       _showErrorSnackBar('Failed to parse prescription info');
@@ -117,8 +156,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     _dosageController.text = medicine['dosage'] ?? '';
     _selectedInterval = _intervals.contains(medicine['interval']) ? medicine['interval']! : '1';
     _daysController.text = medicine['days'] ?? '';
-    _pillIntakeController.text = medicine['pillIntakePerTime'] ?? '';
+    _pillIntakeController.text = medicine['additionalInstructions'] ?? '';
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -235,22 +275,22 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                     ),
                   ),
                 ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 30, vertical: 15),
-                ),
-                onPressed: () {
-                  showPrecautions();
-                },
-                child: Text(
-                  'PRECAUTION',
-                  style: TextStyle(
-                    color: Colors.black12,
-                  ),
-                ),
-              ),
+              // ElevatedButton(
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: Colors.blue,
+              //     padding: const EdgeInsets.symmetric(
+              //         horizontal: 30, vertical: 15),
+              //   ),
+              //   onPressed: () {
+              //     showPrecautions();
+              //   },
+              //   child: Text(
+              //     'PRECAUTION',
+              //     style: TextStyle(
+              //       color: Colors.black12,
+              //     ),
+              //   ),
+              // ),
               Center(
                 child: Text(
                   'OR',
@@ -368,9 +408,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 itemBuilder: (context, index) {
                   final medicine = _medicines[index];
                   return ListTile(
-                    title: Text('${medicine['name']} ${medicine['dosage']}'),
+                    title: Text('Medicine Name : ${medicine['name']}  Dosage : ${medicine['dosage']}'),
                     subtitle: Text(
-                        '${medicine['interval']} ${medicine['days']} ${medicine['pillIntakePerTime']}'),
+                        'Frequency : ${medicine['interval']} \t Duration : ${medicine['days']}  \t Additional Information : ${medicine['additionalInstructions']}'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
