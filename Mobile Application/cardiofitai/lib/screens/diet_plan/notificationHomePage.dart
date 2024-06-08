@@ -1,3 +1,4 @@
+import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -15,7 +16,9 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       appBar: AppBar(title: Text("Medicine Reminder"),),
       body: Column(
         children: [
-          _addTaskBar()
+          _addTaskBar(),
+          _addDateBar(),
+
         ],
       ),
     );
@@ -41,6 +44,21 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
           ),
           ElevatedButton(onPressed: (){}, child: Text("+Add Reminder"))
         ],
+      ),
+    );
+  }
+
+  _addDateBar(){
+    return Container(
+      margin: const EdgeInsets.only(top: 20,left: 20),
+      child: DatePicker(
+        DateTime.now(),
+        height: 100,
+        width: 80,
+        initialSelectedDate: DateTime.now(),
+        selectedTextColor: Colors.white,
+        selectionColor: Colors.purple,
+        dateTextStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: Colors.grey),
       ),
     );
   }
