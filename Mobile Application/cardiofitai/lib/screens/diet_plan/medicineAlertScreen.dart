@@ -14,6 +14,7 @@ class MedicineAlertPage extends StatefulWidget {
 }
 
 class _MedicineAlertPageState extends State<MedicineAlertPage> {
+
   final apiService = ApiService();
   String _selectedInterval = '1';
   final List<String> _intervals = ['1', '2', '4', '6', '8', '12', '24'];

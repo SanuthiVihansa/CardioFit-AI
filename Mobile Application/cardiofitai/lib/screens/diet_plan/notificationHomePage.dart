@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/diet_plan/medicineAlertScreen.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -42,7 +43,10 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               ],
             ),
           ),
-          ElevatedButton(onPressed: (){}, child: Text("+Add Reminder"))
+          ElevatedButton(onPressed: (){Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      MedicineAlertPage()));}, child: Text("+Add Reminder"))
         ],
       ),
     );
