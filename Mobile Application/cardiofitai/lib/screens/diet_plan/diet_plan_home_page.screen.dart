@@ -1,4 +1,5 @@
 import 'package:cardiofitai/components/navbar_component.dart';
+import 'package:cardiofitai/screens/diet_plan/notificationHomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -359,7 +360,7 @@ class _DietHomePageState extends State<DietHomePage> {
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            MedicineAlertPage()));
+                                            NotificationHomePage()));
                               },
                               child: MedicineAlert(),
                             ),
