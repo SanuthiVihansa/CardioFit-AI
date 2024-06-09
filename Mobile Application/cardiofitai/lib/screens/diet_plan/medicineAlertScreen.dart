@@ -15,7 +15,6 @@ class MedicineAlertPage extends StatefulWidget {
 }
 
 class _MedicineAlertPageState extends State<MedicineAlertPage> {
-
   final apiService = ApiService();
   final TextEditingController _medicineNameController = TextEditingController();
   final TextEditingController _dosageController = TextEditingController();
@@ -23,7 +22,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   final TextEditingController _pillIntakeController = TextEditingController();
   final TextEditingController _additionalInstructions = TextEditingController();
   final TextEditingController _startDateController = TextEditingController();
-  final TextEditingController _endDateController = TextEditingController();
+  final TextEditingController _startTimeController = TextEditingController();
   final List<Map<String, String>> _medicines = [];
   bool precautionLoading = false;
   String diseasePrecautions = '';
@@ -33,6 +32,16 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   bool detecting = false;
   String _selectedFrequency = 'once';
   final List<String> _frequencyOptions = ['once', 'twice', 'thrice', 'four times'];
+  final List<String> _selectedDays = [];
+  final Map<int, String> _daysOfWeek = {
+    1: 'Mon',
+    2: 'Tue',
+    3: 'Wed',
+    4: 'Thu',
+    5: 'Fri',
+    6: 'Sat',
+    7: 'Sun'
+  };
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 50);
@@ -134,7 +143,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     _pillIntakeController.text = medicine['pillintake'] ?? '';
     _additionalInstructions.text = medicine['additionalInstructions'] ?? '';
     _startDateController.text = medicine['startDate'] ?? '';
-    _endDateController.text = medicine['endDate'] ?? '';
+    _startTimeController.text = ''; // Add logic to extract and populate start time if available
   }
 
   void _setReminder() {
@@ -160,6 +169,24 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       btnOkColor: Colors.blueGrey,
       btnOkOnPress: () {},
     ).show();
+  }
+
+  void _toggleDaySelection(String day) {
+    setState(() {
+      if (_selectedDays.contains(day)) {
+        _selectedDays.remove(day);
+      } else {
+        _selectedDays.add(day);
+      }
+    });
+  }
+
+  void _autoSelectDays(DateTime startDate, int days) {
+    _selectedDays.clear();
+    for (int i = 0; i < days; i++) {
+      final dayOfWeek = (startDate.add(Duration(days: i)).weekday) % 7 + 1;
+      _selectedDays.add(_daysOfWeek[dayOfWeek]!);
+    }
   }
 
   @override
@@ -277,7 +304,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                     ),
                   ),
                 ),
-
               Center(
                 child: Text(
                   'OR',
@@ -290,7 +316,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               ),
               SizedBox(height: 10),
               _setRemindersManuallyForm(),
-
               SizedBox(height: 16),
               ListView.builder(
                 shrinkWrap: true,
@@ -338,7 +363,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
-  _setRemindersManuallyForm(){
+  _setRemindersManuallyForm() {
     return Column(
       children: [
         Row(
@@ -348,7 +373,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 controller: _medicineNameController,
                 decoration: InputDecoration(
                   labelText: 'Medicine Name',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
                 ),
                 keyboardType: TextInputType.text,
               ),
@@ -359,7 +384,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 controller: _dosageController,
                 decoration: InputDecoration(
                   labelText: 'Dosage in mg',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
                 ),
                 keyboardType: TextInputType.number,
               ),
@@ -370,30 +395,30 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         Row(
           children: [
             Expanded(
-                child:TextField(
-                  controller: _pillIntakeController,
-                  decoration: InputDecoration(
-                    labelText: 'Pill Intake per Time',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
-                  ),
-                  keyboardType: TextInputType.number,
+              child: TextField(
+                controller: _pillIntakeController,
+                decoration: InputDecoration(
+                  labelText: 'Pill Intake per Time',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
                 ),
+                keyboardType: TextInputType.number,
+              ),
             ),
             SizedBox(width: 20),
             Expanded(
-                child: TextField(
-                  controller: _additionalInstructions,
-                  decoration: InputDecoration(
-                    labelText: 'Additional Information',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),),
-                  ),
-                  keyboardType: TextInputType.text,
+              child: TextField(
+                controller: _additionalInstructions,
+                decoration: InputDecoration(
+                  labelText: 'Additional Information',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
                 ),
+                keyboardType: TextInputType.text,
+              ),
             )
           ],
         ),
         SizedBox(height: 16),
-        Text('Reminder setup',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+        Text('Reminder setup', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         SizedBox(height: 8),
         Row(
           children: [
@@ -425,9 +450,16 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 controller: _daysController,
                 decoration: InputDecoration(
                   labelText: 'Number of days',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
                 ),
                 keyboardType: TextInputType.number,
+                onChanged: (text) {
+                  if (_startDateController.text.isNotEmpty && text.isNotEmpty) {
+                    final startDate = DateFormat('yyyy-MM-dd').parse(_startDateController.text);
+                    final days = int.tryParse(text) ?? 0;
+                    _autoSelectDays(startDate, days);
+                  }
+                },
               ),
             ),
           ],
@@ -440,53 +472,74 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 controller: _startDateController,
                 decoration: InputDecoration(
                   labelText: 'Start Date',
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.calendar_today_outlined),
+                    onPressed: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2101),
+                      );
+                      if (pickedDate != null) {
+                        setState(() {
+                          _startDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                          if (_daysController.text.isNotEmpty) {
+                            final days = int.tryParse(_daysController.text) ?? 0;
+                            _autoSelectDays(pickedDate, days);
+                          }
+                        });
+                      }
+                    },
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
                 keyboardType: TextInputType.datetime,
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2101),
-                  );
-                  if (pickedDate != null) {
-                    setState(() {
-                      _startDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-                    });
-                  }
-                },
               ),
             ),
             SizedBox(width: 20),
             Expanded(
               child: TextField(
-                controller: _endDateController,
+                controller: _startTimeController,
                 decoration: InputDecoration(
-                  labelText: 'End Date',
+                  labelText: 'Start Time',
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.access_time_outlined),
+                    onPressed: () async {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                        builder: (BuildContext context, Widget? child) {
+                          return MediaQuery(
+                            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+                            child: child!,
+                          );
+                        },
+                      );
+                      if (pickedTime != null) {
+                        setState(() {
+                          _startTimeController.text = pickedTime.format(context);
+                        });
+                      }
+                    },
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
                 keyboardType: TextInputType.datetime,
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2101),
-                  );
-                  if (pickedDate != null) {
-                    setState(() {
-                      _endDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-                    });
-                  }
-                },
               ),
             ),
           ],
+        ),
+        SizedBox(height: 16),
+        Text('Remind Every', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        SizedBox(height: 8),
+        Wrap(
+          spacing: 8.0,
+          children: _daysOfWeek.values.map((day) => _buildDayToggle(day)).toList(),
         ),
         SizedBox(height: 16),
         ElevatedButton(
@@ -499,8 +552,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 'days': _daysController.text,
                 'pillintake': _pillIntakeController.text,
                 'startDate': _startDateController.text,
-                'endDate': _endDateController.text,
+                'startTime': _startTimeController.text,
                 'additionalInstructions': _additionalInstructions.text,
+                'selectedDays': _selectedDays.join(', '),
               });
               _medicineNameController.clear();
               _dosageController.clear();
@@ -508,12 +562,29 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               _pillIntakeController.clear();
               _additionalInstructions.clear();
               _startDateController.clear();
-              _endDateController.clear();
+              _startTimeController.clear();
+              _selectedDays.clear();
             });
           },
           child: Text('Add'),
         ),
       ],
+    );
+  }
+
+  Widget _buildDayToggle(String day) {
+    final isSelected = _selectedDays.contains(day);
+    return ChoiceChip(
+      label: Text(day),
+      selected: isSelected,
+      onSelected: (selected) {
+        _toggleDaySelection(day);
+      },
+      selectedColor: Colors.blueGrey,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+        side: BorderSide(color: isSelected ? Colors.blueGrey : Colors.grey),
+      ),
     );
   }
 }
