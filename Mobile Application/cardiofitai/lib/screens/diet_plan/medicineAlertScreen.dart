@@ -43,6 +43,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     7: 'Sun'
   };
 
+  @override
+  void initState() {
+    super.initState();
+    _startTimeController.text = TimeOfDay.now().format(context); // Initialize with current time
+  }
+
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 50);
     if (pickedFile != null) {
