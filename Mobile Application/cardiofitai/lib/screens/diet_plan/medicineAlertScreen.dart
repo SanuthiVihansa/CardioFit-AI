@@ -46,7 +46,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   @override
   void initState() {
     super.initState();
-    _startTimeController.text = TimeOfDay.now().format(context); // Initialize with current time
+    // Do not initialize _startTimeController here
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -197,6 +197,10 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_startTimeController.text.isEmpty) {
+      _startTimeController.text = TimeOfDay.now().format(context);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Set Reminder'),
