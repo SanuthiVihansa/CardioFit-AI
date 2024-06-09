@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import '../../services/prescription_reading_api_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
@@ -16,13 +17,13 @@ class MedicineAlertPage extends StatefulWidget {
 class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
   final apiService = ApiService();
-  String _selectedInterval = '1';
-  final List<String> _intervals = ['1', '2', '4', '6', '8', '12', '24'];
   final TextEditingController _medicineNameController = TextEditingController();
   final TextEditingController _dosageController = TextEditingController();
   final TextEditingController _daysController = TextEditingController();
   final TextEditingController _pillIntakeController = TextEditingController();
   final TextEditingController _additionalInstructions = TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
   final List<Map<String, String>> _medicines = [];
   bool precautionLoading = false;
   String diseasePrecautions = '';
@@ -30,6 +31,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   XFile? image;
   String prescriptionInfo = '';
   bool detecting = false;
+  String _selectedFrequency = 'once';
+  final List<String> _frequencyOptions = ['once', 'twice', 'thrice', 'four times'];
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 50);
@@ -65,15 +68,15 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
   String normalizeFrequency(String frequency) {
     frequency = frequency.toLowerCase();
-    if (frequency.contains('once')) return '1';
-    if (frequency.contains('twice')) return '2';
-    if (frequency.contains('thrice') || frequency.contains('three times')) return '3';
-    if (frequency.contains('four times')) return '4';
-    if (frequency.contains('q.d') || frequency.contains('qd') || frequency.contains('daily') || frequency.contains('once daily')) return '1';
-    if (frequency.contains('b.i.d') || frequency.contains('bid') || frequency.contains('twice daily')) return '2';
-    if (frequency.contains('t.i.d') || frequency.contains('tid') || frequency.contains('three times daily')) return '3';
-    if (frequency.contains('q.i.d') || frequency.contains('qid') || frequency.contains('four times daily')) return '4';
-    return frequency;
+    if (frequency.contains('once')) return 'once';
+    if (frequency.contains('twice')) return 'twice';
+    if (frequency.contains('thrice') || frequency.contains('three times')) return 'thrice';
+    if (frequency.contains('four times')) return 'four times';
+    if (frequency.contains('q.d') || frequency.contains('qd') || frequency.contains('daily') || frequency.contains('once daily')) return 'once';
+    if (frequency.contains('b.i.d') || frequency.contains('bid') || frequency.contains('twice daily')) return 'twice';
+    if (frequency.contains('t.i.d') || frequency.contains('tid') || frequency.contains('three times daily')) return 'thrice';
+    if (frequency.contains('q.i.d') || frequency.contains('qid') || frequency.contains('four times daily')) return 'four times';
+    return 'once';
   }
 
   int normalizeDuration(String duration) {
@@ -89,22 +92,26 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
   void _addMedicinesFromPrescriptionInfo() {
     try {
-      // Extract the JSON part from the prescription info
       final jsonStartIndex = prescriptionInfo.indexOf('[');
       final jsonEndIndex = prescriptionInfo.lastIndexOf(']') + 1;
 
       if (jsonStartIndex != -1 && jsonEndIndex != -1) {
         final jsonString = prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
 
-        // Parse the JSON string
         final List<dynamic> parsedInfo = jsonDecode(jsonString);
         for (var medicineInfo in parsedInfo) {
+          final int days = normalizeDuration(medicineInfo['Duration'] ?? '');
+          final DateTime startDate = DateTime.now();
+          final DateTime endDate = startDate.add(Duration(days: days));
+
           final Map<String, String> medicine = {
             'name': medicineInfo['Medicine Name'] ?? '',
             'dosage': medicineInfo['Dosage'] ?? '',
             'pillintake': medicineInfo['Pill Intake'] ?? '',
             'interval': normalizeFrequency(medicineInfo['Frequency'] ?? ''),
-            'days': normalizeDuration(medicineInfo['Duration'] ?? '').toString(),
+            'days': days.toString(),
+            'startDate': DateFormat('yyyy-MM-dd').format(startDate),
+            'endDate': DateFormat('yyyy-MM-dd').format(endDate),
             'additionalInstructions': medicineInfo['Additional Instructions'] ?? '',
           };
           setState(() {
@@ -122,10 +129,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   void _populateFieldsForEditing(Map<String, String> medicine) {
     _medicineNameController.text = medicine['name'] ?? '';
     _dosageController.text = medicine['dosage'] ?? '';
-    _selectedInterval = _intervals.contains(medicine['interval']) ? medicine['interval']! : '1';
+    _selectedFrequency = medicine['interval'] ?? 'once';
     _daysController.text = medicine['days'] ?? '';
     _pillIntakeController.text = medicine['pillintake'] ?? '';
     _additionalInstructions.text = medicine['additionalInstructions'] ?? '';
+    _startDateController.text = medicine['startDate'] ?? '';
+    _endDateController.text = medicine['endDate'] ?? '';
   }
 
   void _setReminder() {
@@ -257,7 +266,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                     ),
                   ),
                 ),
-              if (prescriptionInfo.isNotEmpty) // Ensure the prescriptionInfo is not empty
+              if (prescriptionInfo.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SingleChildScrollView(
@@ -280,115 +289,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _medicineNameController,
-                      decoration: InputDecoration(
-                        labelText: 'Medicine Name ',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.text,
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: TextField(
-                      controller: _dosageController,
-                      decoration: InputDecoration(
-                        labelText: 'Dosage in mg',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Text('Interval Selection'),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: 'Remind me every',
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        border: OutlineInputBorder(),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: _selectedInterval,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _selectedInterval = newValue!;
-                            });
-                          },
-                          items: _intervals.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          isExpanded: true,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: TextField(
-                      controller: _daysController,
-                      decoration: InputDecoration(
-                        labelText: 'Number of days',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: _pillIntakeController,
-                decoration: InputDecoration(
-                  labelText: 'Pill Intake per Time',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              SizedBox(height: 16,),
-              TextField(
-                controller: _additionalInstructions,
-                decoration: InputDecoration(
-                  labelText: 'Additional Information : ',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _medicines.add({
-                      'name': _medicineNameController.text,
-                      'dosage': _dosageController.text,
-                      'interval': _selectedInterval,
-                      'days': _daysController.text,
-                      'pillIntakePerTime': _pillIntakeController.text,
-                      'additionalInstructions': _additionalInstructions.text,
-                    });
-                    _medicineNameController.clear();
-                    _dosageController.clear();
-                    _daysController.clear();
-                    _pillIntakeController.clear();
-                    _additionalInstructions.clear();
-                    _selectedInterval = '1';
-                  });
-                },
-                child: Text('Add'),
-              ),
+              _setRemindersManuallyForm(),
+
               SizedBox(height: 16),
               ListView.builder(
                 shrinkWrap: true,
@@ -397,9 +299,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 itemBuilder: (context, index) {
                   final medicine = _medicines[index];
                   return ListTile(
-                    title: Text('Medicine Name : ${medicine['name']}  Dosage : ${medicine['dosage']}'),
+                    title: Text('Medicine Name: ${medicine['name']}  Dosage: ${medicine['dosage']}'),
                     subtitle: Text(
-                        'Frequency : ${medicine['interval']} \t Duration : ${medicine['days']}  \t Pill Intake : ${medicine['pillintake']} \n Additional Information : ${medicine['additionalInstructions']}'),
+                        'Frequency: ${medicine['interval']} \t Duration: ${medicine['days']}  \t Pill Intake: ${medicine['pillintake']} \n Start Date: ${medicine['startDate']} \t End Date: ${medicine['endDate']} \n Additional Information: ${medicine['additionalInstructions']}'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -433,6 +335,177 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           ),
         ),
       ),
+    );
+  }
+
+  _setRemindersManuallyForm(){
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _medicineNameController,
+                decoration: InputDecoration(
+                  labelText: 'Medicine Name',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),),
+                ),
+                keyboardType: TextInputType.text,
+              ),
+            ),
+            SizedBox(width: 20),
+            Expanded(
+              child: TextField(
+                controller: _dosageController,
+                decoration: InputDecoration(
+                  labelText: 'Dosage in mg',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 16),
+        TextField(
+          controller: _additionalInstructions,
+          decoration: InputDecoration(
+            labelText: 'Additional Information',
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),),
+          ),
+          keyboardType: TextInputType.text,
+        ),
+        SizedBox(height: 16),
+        Text('Reminder setup',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+        SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: DropdownButtonFormField<String>(
+                value: _selectedFrequency,
+                items: _frequencyOptions.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  labelText: 'Frequency',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedFrequency = newValue!;
+                  });
+                },
+              ),
+            ),
+            SizedBox(width: 20),
+            Expanded(
+              child: TextField(
+                controller: _daysController,
+                decoration: InputDecoration(
+                  labelText: 'Number of days',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 16),
+        TextField(
+          controller: _pillIntakeController,
+          decoration: InputDecoration(
+            labelText: 'Pill Intake per Time',
+            border: OutlineInputBorder(),
+          ),
+          keyboardType: TextInputType.number,
+        ),
+        SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _startDateController,
+                decoration: InputDecoration(
+                  labelText: 'Start Date',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+                keyboardType: TextInputType.datetime,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    setState(() {
+                      _startDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                    });
+                  }
+                },
+              ),
+            ),
+            SizedBox(width: 20),
+            Expanded(
+              child: TextField(
+                controller: _endDateController,
+                decoration: InputDecoration(
+                  labelText: 'End Date',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+                keyboardType: TextInputType.datetime,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    setState(() {
+                      _endDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                    });
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              _medicines.add({
+                'name': _medicineNameController.text,
+                'dosage': _dosageController.text,
+                'interval': _selectedFrequency,
+                'days': _daysController.text,
+                'pillintake': _pillIntakeController.text,
+                'startDate': _startDateController.text,
+                'endDate': _endDateController.text,
+                'additionalInstructions': _additionalInstructions.text,
+              });
+              _medicineNameController.clear();
+              _dosageController.clear();
+              _daysController.clear();
+              _pillIntakeController.clear();
+              _additionalInstructions.clear();
+              _startDateController.clear();
+              _endDateController.clear();
+            });
+          },
+          child: Text('Add'),
+        ),
+      ],
     );
   }
 }
