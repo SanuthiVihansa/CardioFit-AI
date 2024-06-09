@@ -367,13 +367,30 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           ],
         ),
         SizedBox(height: 16),
-        TextField(
-          controller: _additionalInstructions,
-          decoration: InputDecoration(
-            labelText: 'Additional Information',
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),),
-          ),
-          keyboardType: TextInputType.text,
+        Row(
+          children: [
+            Expanded(
+                child:TextField(
+                  controller: _pillIntakeController,
+                  decoration: InputDecoration(
+                    labelText: 'Pill Intake per Time',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+            ),
+            SizedBox(width: 20),
+            Expanded(
+                child: TextField(
+                  controller: _additionalInstructions,
+                  decoration: InputDecoration(
+                    labelText: 'Additional Information',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),),
+                  ),
+                  keyboardType: TextInputType.text,
+                ),
+            )
+          ],
         ),
         SizedBox(height: 16),
         Text('Reminder setup',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
@@ -414,15 +431,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               ),
             ),
           ],
-        ),
-        SizedBox(height: 16),
-        TextField(
-          controller: _pillIntakeController,
-          decoration: InputDecoration(
-            labelText: 'Pill Intake per Time',
-            border: OutlineInputBorder(),
-          ),
-          keyboardType: TextInputType.number,
         ),
         SizedBox(height: 16),
         Row(
