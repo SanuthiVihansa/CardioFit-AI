@@ -104,4 +104,31 @@ class MedicineReminderService {
 
     return response;
   }
+
+  //Delete a reminder
+  static deleteReminder(MedicalReminder medicalReminder) async {
+    Response response = Response();
+
+    try {
+      QuerySnapshot querySnapshot = await medicineReminderCollectionReference
+          .where("userEmail", isEqualTo: medicalReminder.userEmail)
+          .where("reminderNo", isEqualTo: medicalReminder.reminderNo)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot document = querySnapshot.docs[0];
+        await document.reference.delete(); // delete the document
+        response.code = 200;
+        response.message = "Reminder deleted successfully!";
+      } else {
+        response.code = 404;
+        response.message = "Reminder not found";
+      }
+    } catch (e) {
+      response.code = 500;
+      response.message = "Server Error: ${e.toString()}";
+    }
+
+    return response;
+  }
 }
