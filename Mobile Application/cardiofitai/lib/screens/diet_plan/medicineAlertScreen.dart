@@ -2,13 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import '../../models/response.dart';
+import '../../services/medicineReminderService.dart';
 import '../../services/prescription_reading_api_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class MedicineAlertPage extends StatefulWidget {
-  const MedicineAlertPage({super.key});
+
+  const MedicineAlertPage({super.key}); // Initialize user email
 
   @override
   State<MedicineAlertPage> createState() => _MedicineAlertPageState();
@@ -23,7 +27,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   final TextEditingController _additionalInstructions = TextEditingController();
   final TextEditingController _startDateController = TextEditingController();
   final TextEditingController _startTimeController = TextEditingController();
-  final List<Map<String, String>> _medicines = [];
+  final List<Map<String, dynamic>> _medicines = [];
   bool precautionLoading = false;
   String diseasePrecautions = '';
   File? pickedImage;
@@ -46,7 +50,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   @override
   void initState() {
     super.initState();
-    // Do not initialize _startTimeController here
+    _startTimeController.text = TimeOfDay.now().format(context); // Initialize _startTimeController here
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -105,6 +109,10 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     return 0; // Default to 0 if unable to parse
   }
 
+  int _generateUniqueReminderNo() {
+    return DateTime.now().millisecondsSinceEpoch; // Generate a unique number based on the current time
+  }
+
   void _addMedicinesFromPrescriptionInfo() {
     try {
       final jsonStartIndex = prescriptionInfo.indexOf('[');
@@ -119,15 +127,18 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           final DateTime startDate = DateTime.now();
           final DateTime endDate = startDate.add(Duration(days: days));
 
-          final Map<String, String> medicine = {
+          final Map<String, dynamic> medicine = {
+            'reminderNo': _generateUniqueReminderNo(),
+            'userEmail': "widget.userEmail",
             'name': medicineInfo['Medicine Name'] ?? '',
             'dosage': medicineInfo['Dosage'] ?? '',
             'pillintake': medicineInfo['Pill Intake'] ?? '',
             'interval': normalizeFrequency(medicineInfo['Frequency'] ?? ''),
-            'days': days.toString(),
+            'days': days,
             'startDate': DateFormat('yyyy-MM-dd').format(startDate),
-            'endDate': DateFormat('yyyy-MM-dd').format(endDate),
+            'startTime': TimeOfDay.now().format(context),
             'additionalInstructions': medicineInfo['Additional Instructions'] ?? '',
+            'selectedDays': _selectedDays,
           };
           setState(() {
             _medicines.add(medicine);
@@ -141,20 +152,22 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     }
   }
 
-  void _populateFieldsForEditing(Map<String, String> medicine) {
+  void _populateFieldsForEditing(Map<String, dynamic> medicine) {
     _medicineNameController.text = medicine['name'] ?? '';
     _dosageController.text = medicine['dosage'] ?? '';
     _selectedFrequency = medicine['interval'] ?? 'once';
-    _daysController.text = medicine['days'] ?? '';
+    _daysController.text = medicine['days'].toString();
     _pillIntakeController.text = medicine['pillintake'] ?? '';
     _additionalInstructions.text = medicine['additionalInstructions'] ?? '';
     _startDateController.text = medicine['startDate'] ?? '';
-    _startTimeController.text = ''; // Add logic to extract and populate start time if available
+    _startTimeController.text = medicine['startTime'] ?? '';
+    _selectedDays.clear();
+    _selectedDays.addAll(medicine['selectedDays'] ?? []);
   }
 
   void _setReminder() {
     for (var medicine in _medicines) {
-      if (medicine['interval']!.isEmpty || medicine['days']!.isEmpty) {
+      if (medicine['interval'].isEmpty || medicine['days'] == 0) {
         _showErrorSnackBar('Please edit the entry for ${medicine['name']} to include both frequency and duration.');
         return;
       }
@@ -192,6 +205,45 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     for (int i = 0; i < days; i++) {
       final dayOfWeek = (startDate.add(Duration(days: i)).weekday) % 7 + 1;
       _selectedDays.add(_daysOfWeek[dayOfWeek]!);
+    }
+  }
+
+  Future<void> _onTapSubmitBtn(BuildContext context) async {
+
+    // Map <String,dynamic> _medicines = {
+    //   'reminderNo': _generateUniqueReminderNo(),
+    //   'userEmail': widget.userEmail,
+    //   'name': medicineInfo['Medicine Name'] ?? '',
+    //   'dosage': medicineInfo['Dosage'] ?? '',
+    //   'pillintake': medicineInfo['Pill Intake'] ?? '',
+    //   'interval': normalizeFrequency(medicineInfo['Frequency'] ?? ''),
+    //   'days': days,
+    //   'startDate': DateFormat('yyyy-MM-dd').format(startDate),
+    //   'startTime': TimeOfDay.now().format(context),
+    //   'additionalInstructions': medicineInfo['Additional Instructions'] ?? '',
+    //   'selectedDays': _selectedDays,
+    // };
+
+    Response response = await MedicineReminderService.medicineReminder(_medicines);
+    if (response.code == 200) {
+      Fluttertoast.showToast(
+          msg: "Alarm Set Successfully!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      Navigator.pop(context);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 
@@ -336,7 +388,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                   return ListTile(
                     title: Text('Medicine Name: ${medicine['name']}  Dosage: ${medicine['dosage']}'),
                     subtitle: Text(
-                        'Frequency: ${medicine['interval']} \t Duration: ${medicine['days']}  \t Pill Intake: ${medicine['pillintake']} \n Start Date: ${medicine['startDate']} \t End Date: ${medicine['endDate']} \n Additional Information: ${medicine['additionalInstructions']}'),
+                        'Frequency: ${medicine['interval']} \t Duration: ${medicine['days']}  \t Pill Intake: ${medicine['pillintake']} \n Start Date: ${medicine['startDate']} \t End Date: ${medicine['endDate']} \n Additional Information: ${medicine['additionalInstructions']} \n Start Time: ${medicine['startTime']} \n Days of Week: ${medicine['selectedDays'].join(', ')}'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -363,7 +415,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 },
               ),
               ElevatedButton(
-                onPressed: _setReminder,
+                onPressed: () => _onTapSubmitBtn(context),
                 child: Text('Set Alarm'),
               )
             ],
@@ -556,15 +608,17 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           onPressed: () {
             setState(() {
               _medicines.add({
+                'reminderNo': _generateUniqueReminderNo(),
+                'userEmail': "",
                 'name': _medicineNameController.text,
                 'dosage': _dosageController.text,
                 'interval': _selectedFrequency,
-                'days': _daysController.text,
+                'days': int.tryParse(_daysController.text) ?? 0,
                 'pillintake': _pillIntakeController.text,
                 'startDate': _startDateController.text,
                 'startTime': _startTimeController.text,
                 'additionalInstructions': _additionalInstructions.text,
-                'selectedDays': _selectedDays.join(', '),
+                'selectedDays': List<String>.from(_selectedDays),
               });
               _medicineNameController.clear();
               _dosageController.clear();
@@ -598,3 +652,5 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 }
+
+
