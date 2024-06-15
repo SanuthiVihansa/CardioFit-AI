@@ -14,6 +14,16 @@ class MedicineReminderService {
         .get();
   }
 
+  //Get MedicineReminder
+  static Future<QuerySnapshot<Object?>> findLastReminderSubmitted(
+      String email) async {
+    return await medicineReminderCollectionReference
+        .where("userEmail", isEqualTo: email)
+        .orderBy("reminderNo", descending: true)
+        .limit(1)
+        .get();
+  }
+
   // Get specific Reminder of specific User
   static Future<QuerySnapshot<Object?>> getUserReminder(
       String email, int reminderNo) async {

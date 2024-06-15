@@ -360,7 +360,7 @@ class _DietHomePageState extends State<DietHomePage> {
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            NotificationHomePage()));
+                                            NotificationHomePage(widget.user)));
                               },
                               child: MedicineAlert(),
                             ),

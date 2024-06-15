@@ -1,18 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cardiofitai/models/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import '../../models/response.dart';
 import '../../services/medicineReminderService.dart';
 import '../../services/prescription_reading_api_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class MedicineAlertPage extends StatefulWidget {
 
-  const MedicineAlertPage({super.key}); // Initialize user email
+  const MedicineAlertPage(this.user,{super.key}); // Initialize user email
+
+  final User user;
 
   @override
   State<MedicineAlertPage> createState() => _MedicineAlertPageState();
@@ -35,7 +38,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   String prescriptionInfo = '';
   bool detecting = false;
   String _selectedFrequency = 'once';
-  final List<String> _frequencyOptions = ['once', 'twice', 'thrice', 'four times'];
+  final List<String> _frequencyOptions = [
+    'once',
+    'twice',
+    'thrice',
+    'four times'
+  ];
   final List<String> _selectedDays = [];
   final Map<int, String> _daysOfWeek = {
     1: 'Mon',
@@ -46,15 +54,20 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     6: 'Sat',
     7: 'Sun'
   };
+  late QuerySnapshot<Object?> _lastSubmittedRecordInfo;
+  int _lastSubmitRecordNo=0;
 
   @override
   void initState() {
     super.initState();
-    _startTimeController.text = TimeOfDay.now().format(context); // Initialize _startTimeController here
+    _generateReminderNo();
+
+    // _startTimeController.text = TimeOfDay.now().format(context); // Initialize _startTimeController here
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 50);
+    final pickedFile = await ImagePicker().pickImage(
+        source: source, imageQuality: 50);
     if (pickedFile != null) {
       setState(() {
         pickedImage = File(pickedFile.path);
@@ -67,7 +80,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       detecting = true;
     });
     try {
-      prescriptionInfo = await apiService.sendImageToGPT4Vision(image: pickedImage!);
+      prescriptionInfo =
+      await apiService.sendImageToGPT4Vision(image: pickedImage!);
       _addMedicinesFromPrescriptionInfo();
     } catch (error) {
       _showErrorSnackBar(error);
@@ -89,12 +103,18 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     frequency = frequency.toLowerCase();
     if (frequency.contains('once')) return 'once';
     if (frequency.contains('twice')) return 'twice';
-    if (frequency.contains('thrice') || frequency.contains('three times')) return 'thrice';
+    if (frequency.contains('thrice') || frequency.contains('three times'))
+      return 'thrice';
     if (frequency.contains('four times')) return 'four times';
-    if (frequency.contains('q.d') || frequency.contains('qd') || frequency.contains('daily') || frequency.contains('once daily')) return 'once';
-    if (frequency.contains('b.i.d') || frequency.contains('bid') || frequency.contains('twice daily')) return 'twice';
-    if (frequency.contains('t.i.d') || frequency.contains('tid') || frequency.contains('three times daily')) return 'thrice';
-    if (frequency.contains('q.i.d') || frequency.contains('qid') || frequency.contains('four times daily')) return 'four times';
+    if (frequency.contains('q.d') || frequency.contains('qd') ||
+        frequency.contains('daily') || frequency.contains('once daily'))
+      return 'once';
+    if (frequency.contains('b.i.d') || frequency.contains('bid') ||
+        frequency.contains('twice daily')) return 'twice';
+    if (frequency.contains('t.i.d') || frequency.contains('tid') ||
+        frequency.contains('three times daily')) return 'thrice';
+    if (frequency.contains('q.i.d') || frequency.contains('qid') ||
+        frequency.contains('four times daily')) return 'four times';
     return 'once';
   }
 
@@ -102,15 +122,19 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     duration = duration.toLowerCase();
     if (duration.contains('one week') || duration.contains('1/52')) return 7;
     if (duration.contains('two weeks') || duration.contains('2/52')) return 14;
-    if (duration.contains('three weeks') || duration.contains('3/52')) return 21;
-    if (duration.contains('four weeks') || duration.contains('4/52') || duration.contains('a month')) return 28;
+    if (duration.contains('three weeks') || duration.contains('3/52'))
+      return 21;
+    if (duration.contains('four weeks') || duration.contains('4/52') ||
+        duration.contains('a month')) return 28;
     final match = RegExp(r'(\d+) day').firstMatch(duration);
     if (match != null) return int.parse(match.group(1)!);
     return 0; // Default to 0 if unable to parse
   }
 
   int _generateUniqueReminderNo() {
-    return DateTime.now().millisecondsSinceEpoch; // Generate a unique number based on the current time
+    return DateTime
+        .now()
+        .millisecondsSinceEpoch; // Generate a unique number based on the current time
   }
 
   void _addMedicinesFromPrescriptionInfo() {
@@ -119,7 +143,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       final jsonEndIndex = prescriptionInfo.lastIndexOf(']') + 1;
 
       if (jsonStartIndex != -1 && jsonEndIndex != -1) {
-        final jsonString = prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
+        final jsonString = prescriptionInfo.substring(
+            jsonStartIndex, jsonEndIndex);
 
         final List<dynamic> parsedInfo = jsonDecode(jsonString);
         for (var medicineInfo in parsedInfo) {
@@ -129,7 +154,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
           final Map<String, dynamic> medicine = {
             'reminderNo': _generateUniqueReminderNo(),
-            'userEmail': "widget.userEmail",
+            'userEmail': widget.user.email,
             'name': medicineInfo['Medicine Name'] ?? '',
             'dosage': medicineInfo['Dosage'] ?? '',
             'pillintake': medicineInfo['Pill Intake'] ?? '',
@@ -137,13 +162,15 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             'days': days,
             'startDate': DateFormat('yyyy-MM-dd').format(startDate),
             'startTime': TimeOfDay.now().format(context),
-            'additionalInstructions': medicineInfo['Additional Instructions'] ?? '',
+            'additionalInstructions': medicineInfo['Additional Instructions'] ??
+                '',
             'selectedDays': _selectedDays,
           };
           setState(() {
             _medicines.add(medicine);
           });
         }
+        print("done");
       } else {
         _showErrorSnackBar('Failed to find JSON data in the prescription info');
       }
@@ -163,18 +190,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     _startTimeController.text = medicine['startTime'] ?? '';
     _selectedDays.clear();
     _selectedDays.addAll(medicine['selectedDays'] ?? []);
-  }
-
-  void _setReminder() {
-    for (var medicine in _medicines) {
-      if (medicine['interval'].isEmpty || medicine['days'] == 0) {
-        _showErrorSnackBar('Please edit the entry for ${medicine['name']} to include both frequency and duration.');
-        return;
-      }
-      // Set the reminder using the provided frequency and duration
-      // This part can be implemented using a local notification package, such as flutter_local_notifications
-    }
-    _showSuccessDialog('Reminders set successfully', '');
   }
 
   void _showSuccessDialog(String title, String content) {
@@ -203,48 +218,50 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   void _autoSelectDays(DateTime startDate, int days) {
     _selectedDays.clear();
     for (int i = 0; i < days; i++) {
-      final dayOfWeek = (startDate.add(Duration(days: i)).weekday) % 7 + 1;
+      final dayOfWeek = (startDate
+          .add(Duration(days: i))
+          .weekday) % 7 + 1;
       _selectedDays.add(_daysOfWeek[dayOfWeek]!);
     }
   }
 
-  Future<void> _onTapSubmitBtn(BuildContext context) async {
+  Future <void> _generateReminderNo() async {
+    _lastSubmittedRecordInfo= await MedicineReminderService.findLastReminderSubmitted(widget.user.email);
+    _lastSubmitRecordNo = _lastSubmittedRecordInfo.docs[0]["remindNo"];
+  }
 
-    // Map <String,dynamic> _medicines = {
-    //   'reminderNo': _generateUniqueReminderNo(),
-    //   'userEmail': widget.userEmail,
-    //   'name': medicineInfo['Medicine Name'] ?? '',
-    //   'dosage': medicineInfo['Dosage'] ?? '',
-    //   'pillintake': medicineInfo['Pill Intake'] ?? '',
-    //   'interval': normalizeFrequency(medicineInfo['Frequency'] ?? ''),
-    //   'days': days,
-    //   'startDate': DateFormat('yyyy-MM-dd').format(startDate),
-    //   'startTime': TimeOfDay.now().format(context),
-    //   'additionalInstructions': medicineInfo['Additional Instructions'] ?? '',
-    //   'selectedDays': _selectedDays,
-    // };
-
-    Response response = await MedicineReminderService.medicineReminder(_medicines);
-    if (response.code == 200) {
-      Fluttertoast.showToast(
-          msg: "Alarm Set Successfully!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      Navigator.pop(context);
-    } else {
-      Fluttertoast.showToast(
-          msg: "Error!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+  void _setReminder() {
+    for (var medicine in _medicines) {
+      if (medicine['interval'].isEmpty || medicine['days'] == 0) {
+        _showErrorSnackBar(
+            'Please edit the entry for ${medicine['name']} to include both frequency and duration.');
+        return;
+      }
+      // Set the reminder using the provided frequency and duration
+      // This part can be implemented using a local notification package, such as flutter_local_notifications
     }
+    _showSuccessDialog('Reminders set successfully', '');
+  }
+
+  Future<void> _onTapSubmitBtn(BuildContext context) async {
+    _lastSubmitRecordNo = _lastSubmitRecordNo+1;
+    for (var extractedMedicine in _medicines) {
+      MedicineReminderService.medicineReminder(
+          _lastSubmitRecordNo,
+          extractedMedicine["userEmail"],
+          extractedMedicine["medicineName"],
+          extractedMedicine["extractedMedicine"],
+          extractedMedicine["pillIntake"],
+          extractedMedicine["interval"],
+          extractedMedicine["days"],
+          extractedMedicine["startDate"],
+          extractedMedicine["additionalInstructions"],
+          extractedMedicine["daysOfWeek"],
+          extractedMedicine["startTime"],
+          );
+    }
+
+
   }
 
   @override
@@ -302,7 +319,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('START CAMERA', style: TextStyle(color: Colors.blueGrey)),
+                    Text('START CAMERA',
+                        style: TextStyle(color: Colors.blueGrey)),
                     const SizedBox(width: 10),
                     Icon(Icons.camera_alt, color: Colors.blueGrey)
                   ],
@@ -310,12 +328,16 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               ),
               pickedImage == null
                   ? Container(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.5,
                 child: Image.asset('assets/pick1.png'),
               )
                   : Container(
                 width: double.infinity,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20)),
                 padding: const EdgeInsets.all(20),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
@@ -333,11 +355,13 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 )
                     : Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 0, horizontal: 20),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white54,
-                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -362,7 +386,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                     scrollDirection: Axis.vertical,
                     child: Text(
                       prescriptionInfo,
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -386,9 +411,11 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 itemBuilder: (context, index) {
                   final medicine = _medicines[index];
                   return ListTile(
-                    title: Text('Medicine Name: ${medicine['name']}  Dosage: ${medicine['dosage']}'),
+                    title: Text(
+                        'Medicine Name: ${medicine['name']}  Dosage: ${medicine['dosage']}'),
                     subtitle: Text(
-                        'Frequency: ${medicine['interval']} \t Duration: ${medicine['days']}  \t Pill Intake: ${medicine['pillintake']} \n Start Date: ${medicine['startDate']} \t End Date: ${medicine['endDate']} \n Additional Information: ${medicine['additionalInstructions']} \n Start Time: ${medicine['startTime']} \n Days of Week: ${medicine['selectedDays'].join(', ')}'),
+                        'Frequency: ${medicine['interval']} \t Duration: ${medicine['days']}  \t Pill Intake: ${medicine['pillintake']} \n Start Date: ${medicine['startDate']} \t End Date: ${medicine['endDate']} \n Additional Information: ${medicine['additionalInstructions']} \n Start Time: ${medicine['startTime']} \n Days of Week: ${medicine['selectedDays']
+                            .join(', ')}'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -435,7 +462,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 controller: _medicineNameController,
                 decoration: InputDecoration(
                   labelText: 'Medicine Name',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0)),
                 ),
                 keyboardType: TextInputType.text,
               ),
@@ -446,7 +474,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 controller: _dosageController,
                 decoration: InputDecoration(
                   labelText: 'Dosage in mg',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0)),
                 ),
                 keyboardType: TextInputType.number,
               ),
@@ -461,7 +490,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 controller: _pillIntakeController,
                 decoration: InputDecoration(
                   labelText: 'Pill Intake per Time',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0)),
                 ),
                 keyboardType: TextInputType.number,
               ),
@@ -472,7 +502,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 controller: _additionalInstructions,
                 decoration: InputDecoration(
                   labelText: 'Additional Information',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0)),
                 ),
                 keyboardType: TextInputType.text,
               ),
@@ -480,7 +511,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           ],
         ),
         SizedBox(height: 16),
-        Text('Reminder setup', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        Text('Reminder setup',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         SizedBox(height: 8),
         Row(
           children: [
@@ -512,12 +544,14 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                 controller: _daysController,
                 decoration: InputDecoration(
                   labelText: 'Number of days',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0)),
                 ),
                 keyboardType: TextInputType.number,
                 onChanged: (text) {
                   if (_startDateController.text.isNotEmpty && text.isNotEmpty) {
-                    final startDate = DateFormat('yyyy-MM-dd').parse(_startDateController.text);
+                    final startDate = DateFormat('yyyy-MM-dd').parse(
+                        _startDateController.text);
                     final days = int.tryParse(text) ?? 0;
                     _autoSelectDays(startDate, days);
                   }
@@ -545,9 +579,11 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                       );
                       if (pickedDate != null) {
                         setState(() {
-                          _startDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                          _startDateController.text =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
                           if (_daysController.text.isNotEmpty) {
-                            final days = int.tryParse(_daysController.text) ?? 0;
+                            final days = int.tryParse(_daysController.text) ??
+                                0;
                             _autoSelectDays(pickedDate, days);
                           }
                         });
@@ -575,14 +611,16 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
                         initialTime: TimeOfDay.now(),
                         builder: (BuildContext context, Widget? child) {
                           return MediaQuery(
-                            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+                            data: MediaQuery.of(context).copyWith(
+                                alwaysUse24HourFormat: true),
                             child: child!,
                           );
                         },
                       );
                       if (pickedTime != null) {
                         setState(() {
-                          _startTimeController.text = pickedTime.format(context);
+                          _startTimeController.text =
+                              pickedTime.format(context);
                         });
                       }
                     },
@@ -597,11 +635,13 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           ],
         ),
         SizedBox(height: 16),
-        Text('Remind Every', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        Text('Remind Every',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         SizedBox(height: 8),
         Wrap(
           spacing: 8.0,
-          children: _daysOfWeek.values.map((day) => _buildDayToggle(day)).toList(),
+          children: _daysOfWeek.values.map((day) => _buildDayToggle(day))
+              .toList(),
         ),
         SizedBox(height: 16),
         ElevatedButton(

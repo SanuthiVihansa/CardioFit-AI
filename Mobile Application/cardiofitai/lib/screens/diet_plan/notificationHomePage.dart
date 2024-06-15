@@ -1,10 +1,13 @@
+import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/medicineAlertScreen.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NotificationHomePage extends StatefulWidget {
-  const NotificationHomePage({super.key});
+  const NotificationHomePage(this.user,{super.key});
+
+  final User user;
 
   @override
   State<NotificationHomePage> createState() => _NotificationHomePageState();
@@ -46,7 +49,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
           ElevatedButton(onPressed: (){Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      MedicineAlertPage()));}, child: Text("+Add Reminder"))
+                      MedicineAlertPage(widget.user)));}, child: Text("+Add Reminder"))
         ],
       ),
     );
