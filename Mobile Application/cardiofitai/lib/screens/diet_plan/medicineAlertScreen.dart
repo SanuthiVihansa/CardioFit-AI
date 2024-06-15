@@ -225,10 +225,20 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     }
   }
 
-  Future <void> _generateReminderNo() async {
-    _lastSubmittedRecordInfo= await MedicineReminderService.findLastReminderSubmitted(widget.user.email);
-    _lastSubmitRecordNo = _lastSubmittedRecordInfo.docs[0]["remindNo"];
+  Future<void> _generateReminderNo() async {
+    try {
+      _lastSubmittedRecordInfo = await MedicineReminderService.findLastReminderSubmitted(widget.user.email);
+      if (_lastSubmittedRecordInfo.docs.isNotEmpty) {
+        _lastSubmitRecordNo = _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
+      } else {
+        _lastSubmitRecordNo = 0; // Initialize to 0 if no previous record found
+      }
+    } catch (e) {
+      _showErrorSnackBar('Error fetching last reminder: $e');
+      _lastSubmitRecordNo = 0; // Default to 0 in case of an error
+    }
   }
+
 
   void _setReminder() {
     for (var medicine in _medicines) {
@@ -240,29 +250,30 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       // Set the reminder using the provided frequency and duration
       // This part can be implemented using a local notification package, such as flutter_local_notifications
     }
+
     _showSuccessDialog('Reminders set successfully', '');
   }
 
   Future<void> _onTapSubmitBtn(BuildContext context) async {
-    _lastSubmitRecordNo = _lastSubmitRecordNo+1;
     for (var extractedMedicine in _medicines) {
-      MedicineReminderService.medicineReminder(
-          _lastSubmitRecordNo,
-          extractedMedicine["userEmail"],
-          extractedMedicine["medicineName"],
-          extractedMedicine["extractedMedicine"],
-          extractedMedicine["pillIntake"],
-          extractedMedicine["interval"],
-          extractedMedicine["days"],
-          extractedMedicine["startDate"],
-          extractedMedicine["additionalInstructions"],
-          extractedMedicine["daysOfWeek"],
-          extractedMedicine["startTime"],
-          );
+      _lastSubmitRecordNo += 1;
+      await MedicineReminderService.medicineReminder(
+        _lastSubmitRecordNo,
+        extractedMedicine["userEmail"] ?? widget.user.email,
+        extractedMedicine["name"] ?? '',
+        extractedMedicine["dosage"] ?? '',
+        extractedMedicine["pillintake"] ?? '',
+        extractedMedicine["interval"] ?? '',
+        extractedMedicine["days"] ?? 0,
+        extractedMedicine["startDate"] ?? '',
+        extractedMedicine["additionalInstructions"] ?? '',
+        List<String>.from(extractedMedicine["selectedDays"] ?? []),
+        extractedMedicine["startTime"] ?? '',
+      );
     }
-
-
+    _showSuccessDialog('Reminders set successfully', '');
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -443,6 +454,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               ),
               ElevatedButton(
                 onPressed: () => _onTapSubmitBtn(context),
+
                 child: Text('Set Alarm'),
               )
             ],
