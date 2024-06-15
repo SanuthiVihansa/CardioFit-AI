@@ -1,6 +1,6 @@
 import 'package:cardiofitai/screens/common/ecg_monitoring_home_screen.dart';
 import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
-import 'package:cardiofitai/screens/diet_plan/diet_plan_home_page.screen.dart';
+import 'package:cardiofitai/screens/diet_plan/diet_,mainhome_page.screen.dart';
 import 'package:cardiofitai/screens/ecg_comparison_and_analysis/analysis_file_selection_screen.dart';
 import 'package:cardiofitai/screens/ecg_comparison_and_analysis/comparison_file_selection_screen.dart';
 import 'package:flutter/material.dart';

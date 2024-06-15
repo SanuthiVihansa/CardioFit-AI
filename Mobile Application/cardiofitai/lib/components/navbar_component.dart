@@ -9,8 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/user.dart';
-import '../screens/diet_plan/modiRecognitionScreen.dart';
-import '../screens/diet_plan/scan.dart';
+import '../screens/diet_plan/ReportReading/modiRecognitionScreen.dart';
+//import '../screens/diet_plan/modiRecognitionScreen.dart';
+import '../screens/diet_plan/ReportReading/scan.dart';
 
 class LeftNavBar extends StatelessWidget {
   final String name;

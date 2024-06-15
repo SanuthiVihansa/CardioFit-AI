@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../models/response.dart';
+import '../../../models/response.dart';
 
 class OcrReader extends StatefulWidget {
   const OcrReader({Key? key}) : super(key: key);

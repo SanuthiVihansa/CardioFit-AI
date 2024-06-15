@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../models/user.dart';
 import '../../services/user_information_service.dart';
-import 'diet_plan_home_page.screen.dart';
+import 'diet_,mainhome_page.screen.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage(this.user, {super.key});

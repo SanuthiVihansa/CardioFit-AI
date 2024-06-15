@@ -1,5 +1,5 @@
 import 'package:cardiofitai/models/user.dart';
-import 'package:cardiofitai/screens/diet_plan/medicineAlertScreen.dart';
+import 'package:cardiofitai/screens/diet_plan/AlertService/medicineAlertScreen.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +14,8 @@ class NotificationHomePage extends StatefulWidget {
 }
 
 class _NotificationHomePageState extends State<NotificationHomePage> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

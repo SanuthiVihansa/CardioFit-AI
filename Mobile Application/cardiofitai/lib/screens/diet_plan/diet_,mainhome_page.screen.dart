@@ -9,9 +9,11 @@ import 'package:intl/intl.dart';
 
 import '../../models/user.dart';
 import '../../services/user_information_service.dart';
-import 'dietaryplanprediction-homepage.dart';
-import 'medicineAlertScreen.dart';
-import 'modiRecognitionScreen.dart';
+import 'AlertService/notificationHomePage.dart';
+import 'DietPlan/dietaryplanprediction-homepage.dart';
+import 'AlertService/medicineAlertScreen.dart';
+import 'ReportReading/modiRecognitionScreen.dart';
+//import 'modiRecognitionScreen.dart';
 
 class DietHomePage extends StatefulWidget {
   const DietHomePage(this.user, {super.key});

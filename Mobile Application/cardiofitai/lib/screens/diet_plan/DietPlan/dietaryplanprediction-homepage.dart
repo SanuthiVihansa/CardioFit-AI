@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../components/navbar_component.dart';
-import '../../models/user.dart';
-import '../../services/user_information_service.dart';
+import '../../../components/navbar_component.dart';
+import '../../../models/user.dart';
+import '../../../services/user_information_service.dart';
 
 class DietaryPlanHomePage extends StatefulWidget {
   const DietaryPlanHomePage(this.user, {super.key});

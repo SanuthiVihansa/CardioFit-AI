@@ -7,8 +7,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import '../../services/medicineReminderService.dart';
-import '../../services/prescription_reading_api_service.dart';
+import '../../../services/medicineReminderService.dart';
+import '../../../services/prescription_reading_api_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class MedicineAlertPage extends StatefulWidget {

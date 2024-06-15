@@ -3,7 +3,8 @@ import 'dart:io';
 
 
 import 'package:cardiofitai/models/user.dart';
-import 'package:cardiofitai/screens/diet_plan/reportAnalysisScreen.dart';
+import 'package:cardiofitai/screens/diet_plan/ReportReading/reportAnalysisScreen.dart';
+//import 'package:cardiofitai/screens/diet_plan/reportAnalysisScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
