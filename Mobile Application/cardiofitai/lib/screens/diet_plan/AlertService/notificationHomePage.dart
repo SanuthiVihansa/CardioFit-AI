@@ -74,11 +74,11 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                 children: [
                   Text(
                     DateFormat.yMMMMd().format(DateTime.now()),
-                    style: TextStyle(fontSize: screenWidth * 0.08, fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(fontSize: screenWidth * 0.06, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                   Text(
                     "Today",
-                    style: TextStyle(fontSize: screenWidth * 0.06, fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                 ],
               ),
@@ -95,14 +95,14 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: Colors.red,
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: 8),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
             child: Text(
               "+ Add Reminder",
-              style: TextStyle(fontSize: screenWidth * 0.045),
+              style: TextStyle(fontSize: screenWidth * 0.04),
             ),
           ),
         ],
@@ -141,93 +141,57 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   }
 
   Widget _buildReminderItem(DocumentSnapshot reminder, double screenWidth) {
-    return Container(
+    return Card(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.05),
-      padding: EdgeInsets.all(screenWidth * 0.04),
-      decoration: BoxDecoration(
-        color: Colors.redAccent,
-        borderRadius: BorderRadius.circular(12.0),
+      child: ListTile(
+        leading: Icon(Icons.alarm, color: Colors.redAccent, size: screenWidth * 0.1),
+        title: Text(
+          reminder['medicineName'] ?? 'No Medicine Name',
+          style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        subtitle: Text(
+          'Dosage: ${reminder['dosage'] ?? 'N/A'}\n'
+              'Frequency: ${reminder['interval'] ?? 'N/A'}',
+          style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.black),
+        ),
+        trailing: Icon(Icons.chevron_right, color: Colors.grey, size: screenWidth * 0.08),
+        onTap: () {
+          _showReminderDetails(context, reminder);
+        },
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            reminder['medicineName'] ?? 'No Medicine Name',
-            style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          SizedBox(height: screenWidth * 0.02),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Dosage: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: '${reminder['dosage'] ?? 'N/A'}\n',
-                  style: TextStyle(color: Colors.white),
-                ),
-                TextSpan(
-                  text: 'Frequency: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: '${reminder['interval'] ?? 'N/A'}\n',
-                  style: TextStyle(color: Colors.white),
-                ),
-                TextSpan(
-                  text: 'Pill Intake: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: '${reminder['pillIntake'] ?? 'N/A'}\n',
-                  style: TextStyle(color: Colors.white),
-                ),
-                TextSpan(
-                  text: 'Start Date: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: '${reminder['startDate'] ?? 'N/A'}\n',
-                  style: TextStyle(color: Colors.white),
-                ),
-                TextSpan(
-                  text: 'Start Time: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: '${reminder['startTime'] ?? 'N/A'}\n',
-                  style: TextStyle(color: Colors.white),
-                ),
-                TextSpan(
-                  text: 'Days: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: '${reminder['days'] ?? 'N/A'}\n',
-                  style: TextStyle(color: Colors.white),
-                ),
-                TextSpan(
-                  text: 'Additional Instructions: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: '${reminder['additionalInstructions'] ?? 'N/A'}\n',
-                  style: TextStyle(color: Colors.white),
-                ),
-                TextSpan(
-                  text: 'Days of Week: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: (reminder['daysOfWeek'] as List<dynamic>).join(', '),
-                  style: TextStyle(color: Colors.white),
-                ),
+    );
+  }
+
+  void _showReminderDetails(BuildContext context, DocumentSnapshot reminder) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(reminder['medicineName'] ?? 'No Medicine Name'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Dosage: ${reminder['dosage'] ?? 'N/A'}'),
+                Text('Frequency: ${reminder['interval'] ?? 'N/A'}'),
+                Text('Pill Intake: ${reminder['pillIntake'] ?? 'N/A'}'),
+                Text('Start Date: ${reminder['startDate'] ?? 'N/A'}'),
+                Text('Start Time: ${reminder['startTime'] ?? 'N/A'}'),
+                Text('Days: ${reminder['days'] ?? 'N/A'}'),
+                Text('Additional Instructions: ${reminder['additionalInstructions'] ?? 'N/A'}'),
+                Text('Days of Week: ${(reminder['daysOfWeek'] as List<dynamic>).join(', ')}'),
               ],
             ),
           ),
-        ],
-      ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
