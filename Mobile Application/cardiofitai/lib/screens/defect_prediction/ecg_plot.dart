@@ -51,7 +51,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
 
   Future<List<double>> _readFile(File file) async {
     String fileContent = await file.readAsString();
-    Map<String, dynamic> jsonData = json.decode(fileContent);
+    Map<String, dynamic> jsonData = jsonDecode(fileContent);
 
     if (jsonData.containsKey('l1')) {
       return (jsonData['l1'] as List).map<double>((value) {
