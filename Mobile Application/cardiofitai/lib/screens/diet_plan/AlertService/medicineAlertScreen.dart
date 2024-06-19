@@ -1,16 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/services/notification_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import '../../../services/medicineReminderService.dart';
 import '../../../services/prescription_reading_api_service.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
-
 import 'notificationHomePage.dart';
 
 class MedicineAlertPage extends StatefulWidget {
@@ -39,9 +41,22 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   String prescriptionInfo = '';
   bool detecting = false;
   String _selectedFrequency = 'once';
-  final List<String> _frequencyOptions = ['once', 'twice', 'thrice', 'four times'];
+  final List<String> _frequencyOptions = [
+    'once',
+    'twice',
+    'thrice',
+    'four times'
+  ];
   final List<String> _selectedDays = [];
-  final Map<int, String> _daysOfWeek = {1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat', 7: 'Sun'};
+  final Map<int, String> _daysOfWeek = {
+    1: 'Mon',
+    2: 'Tue',
+    3: 'Wed',
+    4: 'Thu',
+    5: 'Fri',
+    6: 'Sat',
+    7: 'Sun'
+  };
   late QuerySnapshot<Object?> _lastSubmittedRecordInfo;
   int _lastSubmitRecordNo = 0;
 
@@ -49,10 +64,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   void initState() {
     super.initState();
     _generateReminderNo();
+    AndroidAlarmManager.initialize();
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 50);
+    final pickedFile =
+    await ImagePicker().pickImage(source: source, imageQuality: 50);
     if (pickedFile != null) {
       setState(() {
         pickedImage = File(pickedFile.path);
@@ -65,7 +82,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       detecting = true;
     });
     try {
-      prescriptionInfo = await apiService.sendImageToGPT4Vision(image: pickedImage!);
+      prescriptionInfo =
+      await apiService.sendImageToGPT4Vision(image: pickedImage!);
       _addMedicinesFromPrescriptionInfo();
     } catch (error) {
       _showErrorSnackBar(error);
@@ -87,12 +105,22 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     frequency = frequency.toLowerCase();
     if (frequency.contains('once')) return 'once';
     if (frequency.contains('twice')) return 'twice';
-    if (frequency.contains('thrice') || frequency.contains('three times')) return 'thrice';
+    if (frequency.contains('thrice') || frequency.contains('three times'))
+      return 'thrice';
     if (frequency.contains('four times')) return 'four times';
-    if (frequency.contains('q.d') || frequency.contains('qd') || frequency.contains('daily') || frequency.contains('once daily')) return 'once';
-    if (frequency.contains('b.i.d') || frequency.contains('bid') || frequency.contains('twice daily')) return 'twice';
-    if (frequency.contains('t.i.d') || frequency.contains('tid') || frequency.contains('three times daily')) return 'thrice';
-    if (frequency.contains('q.i.d') || frequency.contains('qid') || frequency.contains('four times daily')) return 'four times';
+    if (frequency.contains('q.d') ||
+        frequency.contains('qd') ||
+        frequency.contains('daily') ||
+        frequency.contains('once daily')) return 'once';
+    if (frequency.contains('b.i.d') ||
+        frequency.contains('bid') ||
+        frequency.contains('twice daily')) return 'twice';
+    if (frequency.contains('t.i.d') ||
+        frequency.contains('tid') ||
+        frequency.contains('three times daily')) return 'thrice';
+    if (frequency.contains('q.i.d') ||
+        frequency.contains('qid') ||
+        frequency.contains('four times daily')) return 'four times';
     return 'once';
   }
 
@@ -100,15 +128,19 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     duration = duration.toLowerCase();
     if (duration.contains('one week') || duration.contains('1/52')) return 7;
     if (duration.contains('two weeks') || duration.contains('2/52')) return 14;
-    if (duration.contains('three weeks') || duration.contains('3/52')) return 21;
-    if (duration.contains('four weeks') || duration.contains('4/52') || duration.contains('a month')) return 28;
+    if (duration.contains('three weeks') || duration.contains('3/52'))
+      return 21;
+    if (duration.contains('four weeks') ||
+        duration.contains('4/52') ||
+        duration.contains('a month')) return 28;
     final match = RegExp(r'(\d+) day').firstMatch(duration);
     if (match != null) return int.parse(match.group(1)!);
     return 0; // Default to 0 if unable to parse
   }
 
   int _generateUniqueReminderNo() {
-    return DateTime.now().millisecondsSinceEpoch; // Generate a unique number based on the current time
+    return 1;
+    //return DateTime.now().millisecondsSinceEpoch; // Generate a unique number based on the current time
   }
 
   void _addMedicinesFromPrescriptionInfo() {
@@ -117,7 +149,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       final jsonEndIndex = prescriptionInfo.lastIndexOf(']') + 1;
 
       if (jsonStartIndex != -1 && jsonEndIndex != -1) {
-        final jsonString = prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
+        final jsonString =
+        prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
 
         final List<dynamic> parsedInfo = jsonDecode(jsonString);
         for (var medicineInfo in parsedInfo) {
@@ -135,7 +168,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             'days': days,
             'startDate': DateFormat('yyyy-MM-dd').format(startDate),
             'startTime': TimeOfDay.now().format(context),
-            'additionalInstructions': medicineInfo['Additional Instructions'] ?? '',
+            'additionalInstructions':
+            medicineInfo['Additional Instructions'] ?? '',
             'selectedDays': _selectedDays,
           };
           setState(() {
@@ -196,9 +230,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
   Future<void> _generateReminderNo() async {
     try {
-      _lastSubmittedRecordInfo = await MedicineReminderService.findLastReminderSubmitted(widget.user.email);
+      _lastSubmittedRecordInfo =
+      await MedicineReminderService.findLastReminderSubmitted(
+          widget.user.email);
       if (_lastSubmittedRecordInfo.docs.isNotEmpty) {
-        _lastSubmitRecordNo = _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
+        _lastSubmitRecordNo =
+            _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
       } else {
         _lastSubmitRecordNo = 0; // Initialize to 0 if no previous record found
       }
@@ -211,14 +248,42 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   void _setReminder() {
     for (var medicine in _medicines) {
       if (medicine['interval'].isEmpty || medicine['days'] == 0) {
-        _showErrorSnackBar('Please edit the entry for ${medicine['name']} to include both frequency and duration.');
+        _showErrorSnackBar(
+            'Please edit the entry for ${medicine['name']} to include both frequency and duration.');
         return;
       }
-      // Set the reminder using the provided frequency and duration
-      // This part can be implemented using a local notification package, such as flutter_local_notifications
+      //_scheduleNotifications(medicine); // Set the reminder using the provided frequency and duration
     }
 
+    _onTapSubmitBtn(context);
+
     _showSuccessDialog('Reminders set successfully', '');
+  }
+
+  static Future<void> alarmCallback(int id) async {
+    print("Alarm fired! ID: $id");
+    // Add your code to handle the alarm event here.
+  }
+
+  String _getDayName(int dayNumber) {
+    switch (dayNumber) {
+      case DateTime.monday:
+        return "Mon";
+      case DateTime.tuesday:
+        return "Tue";
+      case DateTime.wednesday:
+        return "Wed";
+      case DateTime.thursday:
+        return "Thu";
+      case DateTime.friday:
+        return "Fri";
+      case DateTime.saturday:
+        return "Sat";
+      case DateTime.sunday:
+        return "Sun";
+      default:
+        return "";
+    }
   }
 
   Future<void> _onTapSubmitBtn(BuildContext context) async {
@@ -226,7 +291,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       _lastSubmitRecordNo += 1;
       await MedicineReminderService.medicineReminder(
         _lastSubmitRecordNo,
-        extractedMedicine["userEmail"] ?? widget.user.email,
+        widget.user.email,
         extractedMedicine["name"] ?? '',
         extractedMedicine["dosage"] ?? '',
         extractedMedicine["pillintake"] ?? '',
@@ -237,16 +302,133 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         List<String>.from(extractedMedicine["selectedDays"] ?? []),
         extractedMedicine["startTime"] ?? '',
       );
+
+      // Schedule alarms for each medicine
+      await scheduleAlarmsForMedicine(
+        medicineName: extractedMedicine["name"],
+        dosage: extractedMedicine["dosage"],
+        pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
+        frequency: extractedMedicine["interval"],
+        days: extractedMedicine["days"],
+        startDate: DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
+        selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
+        startTime: extractedMedicine["startTime"],
+      );
     }
+
     _showSuccessDialog('Reminders set successfully', '');
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (BuildContext context) => NotificationHomePage(widget.user),
-        ),
-      );
-
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (BuildContext context) => NotificationHomePage(widget.user),
+      ),
+    );
   }
+
+  Future<void> scheduleAlarmsForMedicine({
+    required String medicineName,
+    required String dosage,
+    required int pillIntake,
+    required String frequency,
+    required int days,
+    required DateTime startDate,
+    required List<String> selectedDays,
+    required String startTime,
+  }) async {
+    // Parse the start time
+    final parsedTime = TimeOfDay(
+      hour: int.parse(startTime.split(":")[0]),
+      minute: int.parse(startTime.split(":")[1].split(" ")[0]),
+    );
+
+    // Calculate the start date and time
+    final DateTime startDateTime = DateTime(
+      startDate.year,
+      startDate.month,
+      startDate.day,
+      parsedTime.hour,
+      parsedTime.minute,
+    );
+
+    // Schedule alarms based on frequency and duration
+    for (int i = 0; i < days; i++) {
+      final DateTime scheduledAlarmDateTime =
+      startDateTime.add(Duration(days: i));
+
+      // Check if the day is in the selected days
+      if (selectedDays.contains(_getDayName(scheduledAlarmDateTime.weekday))) {
+        // Use a unique ID for each alarm
+        final int alarmId = scheduledAlarmDateTime.millisecondsSinceEpoch % 100000;
+
+        // Store alarm information in Firestore
+        await FirebaseFirestore.instance.collection('alarms').add({
+          'userEmail': widget.user.email,
+          'medicineName': medicineName,
+          'dosage': dosage,
+          'pillIntake': pillIntake,
+          'frequency': frequency,
+          'days': days,
+          'startDate': startDate.toIso8601String(),
+          'selectedDays': selectedDays,
+          'startTime': startTime,
+          'alarmId': alarmId,
+          'scheduledAlarmDateTime': scheduledAlarmDateTime.toIso8601String(),
+        });
+
+        await AndroidAlarmManager.oneShotAt(
+          scheduledAlarmDateTime,
+          alarmId,
+          alarmCallback,
+          exact: true,
+          wakeup: true,
+        );
+      }
+    }
+  }
+
+  Future<void> _getSetAlarms() async {
+    final QuerySnapshot alarmSnapshot = await FirebaseFirestore.instance
+        .collection('alarms')
+        .where('userEmail', isEqualTo: widget.user.email)
+        .get();
+
+    for (var doc in alarmSnapshot.docs) {
+      print(doc.data());
+    }
+  }
+
+  Future<void> scheduleTestAlarm() async {
+    final DateTime scheduledAlarmDateTime = DateTime.now().add(Duration(minutes: 3));
+
+    // Use a unique ID for the alarm
+    final int alarmId = scheduledAlarmDateTime.millisecondsSinceEpoch % 100000;
+
+    // Store alarm information in Firestore
+    await FirebaseFirestore.instance.collection('alarms').add({
+      'userEmail': widget.user.email,
+      'medicineName': 'Test Medicine',
+      'dosage': '10mg',
+      'pillIntake': 1,
+      'frequency': 'once',
+      'days': 1,
+      'startDate': DateTime.now().toIso8601String(),
+      'selectedDays': ['Mon'],
+      'startTime': DateFormat.Hm().format(DateTime.now()),
+      'alarmId': alarmId,
+      'scheduledAlarmDateTime': scheduledAlarmDateTime.toIso8601String(),
+    });
+
+    await AndroidAlarmManager.oneShotAt(
+      scheduledAlarmDateTime,
+      alarmId,
+      alarmCallback,
+      exact: true,
+      wakeup: true,
+    );
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -264,6 +446,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           },
         ),
         backgroundColor: Colors.red,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.alarm),
+            onPressed: _getSetAlarms,
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -283,6 +471,25 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               SizedBox(height: 16),
               _buildMedicineList(),
               _buildSetAlarmButton(),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: scheduleTestAlarm,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                child: Text(
+                  'Set Test Alarm (3 min)',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -290,10 +497,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
+
   Widget _buildTitle(String title) {
     return Text(
       title,
-      style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+      style: TextStyle(
+          fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
     );
   }
 
@@ -303,15 +512,18 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildImagePickerButton('Open Gallery', Icons.image, () => _pickImage(ImageSource.gallery)),
-            _buildImagePickerButton('Start Camera', Icons.camera_alt, () => _pickImage(ImageSource.camera)),
+            _buildImagePickerButton('Open Gallery', Icons.image,
+                    () => _pickImage(ImageSource.gallery)),
+            _buildImagePickerButton('Start Camera', Icons.camera_alt,
+                    () => _pickImage(ImageSource.camera)),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildImagePickerButton(String text, IconData icon, VoidCallback onPressed) {
+  Widget _buildImagePickerButton(
+      String text, IconData icon, VoidCallback onPressed) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
@@ -370,7 +582,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.red,
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          padding:
+          const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -396,8 +609,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         //use this testing purpose to view what was scanned
-        child: Text(
-          ""
+        child: Text(""
           //prescriptionInfo,
           //style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
@@ -409,7 +621,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     return Center(
       child: Text(
         'OR',
-        style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+        style: TextStyle(
+            fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -420,11 +633,13 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         Row(
           children: [
             Expanded(
-              child: _buildTextField(_medicineNameController, 'Medicine Name', TextInputType.text),
+              child: _buildTextField(
+                  _medicineNameController, 'Medicine Name', TextInputType.text),
             ),
             SizedBox(width: 20),
             Expanded(
-              child: _buildTextField(_dosageController, 'Dosage in mg', TextInputType.number),
+              child: _buildTextField(
+                  _dosageController, 'Dosage in mg', TextInputType.number),
             ),
           ],
         ),
@@ -432,16 +647,22 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         Row(
           children: [
             Expanded(
-              child: _buildTextField(_pillIntakeController, 'Pill Intake per Time', TextInputType.number),
+              child: _buildTextField(_pillIntakeController,
+                  'Pill Intake per Time', TextInputType.number),
             ),
             SizedBox(width: 20),
             Expanded(
-              child: _buildTextField(_additionalInstructions, 'Additional Information', TextInputType.text),
+              child: _buildTextField(_additionalInstructions,
+                  'Additional Information', TextInputType.text),
             ),
           ],
         ),
         SizedBox(height: 16),
-        Text('Reminder setup', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+        Text('Reminder setup',
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black)),
         SizedBox(height: 8),
         Row(
           children: [
@@ -450,7 +671,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             ),
             SizedBox(width: 20),
             Expanded(
-              child: _buildTextField(_daysController, 'Number of days', TextInputType.number),
+              child: _buildTextField(
+                  _daysController, 'Number of days', TextInputType.number),
             ),
           ],
         ),
@@ -467,11 +689,16 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           ],
         ),
         SizedBox(height: 16),
-        Text('Remind Every', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+        Text('Remind Every',
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black)),
         SizedBox(height: 8),
         Wrap(
           spacing: 8.0,
-          children: _daysOfWeek.values.map((day) => _buildDayToggle(day)).toList(),
+          children:
+          _daysOfWeek.values.map((day) => _buildDayToggle(day)).toList(),
         ),
         SizedBox(height: 16),
         Row(
@@ -481,14 +708,20 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               onPressed: _addMedicine,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              child: Text('Add',style: TextStyle(color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,),),
+              child: Text(
+                'Add',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
@@ -496,7 +729,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, TextInputType keyboardType) {
+  Widget _buildTextField(TextEditingController controller, String label,
+      TextInputType keyboardType) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -562,7 +796,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             );
             if (pickedDate != null) {
               setState(() {
-                _startDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                _startDateController.text =
+                    DateFormat('yyyy-MM-dd').format(pickedDate);
                 if (_daysController.text.isNotEmpty) {
                   final days = int.tryParse(_daysController.text) ?? 0;
                   _autoSelectDays(pickedDate, days);
@@ -599,7 +834,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               initialTime: TimeOfDay.now(),
               builder: (BuildContext context, Widget? child) {
                 return MediaQuery(
-                  data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+                  data: MediaQuery.of(context)
+                      .copyWith(alwaysUse24HourFormat: true),
                   child: child!,
                 );
               },
@@ -721,7 +957,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     setState(() {
       _medicines.add({
         'reminderNo': _generateUniqueReminderNo(),
-        'userEmail': "",
+        'userEmail': widget.user.email,
         'name': _medicineNameController.text,
         'dosage': _dosageController.text,
         'interval': _selectedFrequency,
