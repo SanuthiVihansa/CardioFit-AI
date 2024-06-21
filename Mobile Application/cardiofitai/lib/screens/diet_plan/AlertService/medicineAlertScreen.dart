@@ -1,21 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cardiofitai/models/user.dart';
-import 'package:cardiofitai/services/notification_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import '../../../services/medicineReminderService.dart';
 import '../../../services/prescription_reading_api_service.dart';
 import 'notificationHomePage.dart';
-
-
 
 class MedicineAlertPage extends StatefulWidget {
   const MedicineAlertPage(this.user, {super.key});
@@ -66,7 +61,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   void initState() {
     super.initState();
     _generateReminderNo();
-    AndroidAlarmManager.initialize();
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -140,11 +134,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     return 0; // Default to 0 if unable to parse
   }
 
-  int _generateUniqueReminderNo() {
-    return 1;
-    //return DateTime.now().millisecondsSinceEpoch; // Generate a unique number based on the current time
-  }
-
   void _addMedicinesFromPrescriptionInfo() {
     try {
       final jsonStartIndex = prescriptionInfo.indexOf('[');
@@ -161,7 +150,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           final DateTime endDate = startDate.add(Duration(days: days));
 
           final Map<String, dynamic> medicine = {
-            'reminderNo': _generateUniqueReminderNo(),
+            'reminderNo': _lastSubmitRecordNo,
             'userEmail': widget.user.email,
             'name': medicineInfo['Medicine Name'] ?? '',
             'dosage': medicineInfo['Dosage'] ?? '',
@@ -254,7 +243,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             'Please edit the entry for ${medicine['name']} to include both frequency and duration.');
         return;
       }
-      //_scheduleNotifications(medicine); // Set the reminder using the provided frequency and duration
     }
 
     _onTapSubmitBtn(context);
@@ -264,10 +252,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
   static Future<void> alarmCallback(int id) async {
     print("Alarm fired! ID: $id");
-    // Add your code to handle the alarm event here.
-
-    //FlutterAlarmClock.createTimer(length: 02);
-    //FlutterAlarmClock.showAlarms();
+    // Add your alarm logic here
   }
 
   String _getDayName(int dayNumber) {
@@ -289,6 +274,11 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       default:
         return "";
     }
+  }
+
+  int _getWeekdayNumber(String dayName) {
+    return _daysOfWeek.keys
+        .firstWhere((k) => _daysOfWeek[k] == dayName, orElse: () => 0);
   }
 
   Future<void> _onTapSubmitBtn(BuildContext context) async {
@@ -362,9 +352,10 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
       // Check if the day is in the selected days
       if (selectedDays.contains(_getDayName(scheduledAlarmDateTime.weekday))) {
-        // Use a unique ID for each alarm
-        final int alarmId = scheduledAlarmDateTime.millisecondsSinceEpoch % 100000;
-
+        // Schedule the alarm
+        FlutterAlarmClock.createAlarm(
+            hour: scheduledAlarmDateTime.hour, minutes: scheduledAlarmDateTime.minute, title: "Please take your medicine: " + medicineName
+        );
 
         // Store alarm information in Firestore
         await FirebaseFirestore.instance.collection('alarms').add({
@@ -377,17 +368,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           'startDate': startDate.toIso8601String(),
           'selectedDays': selectedDays,
           'startTime': startTime,
-          'alarmId': alarmId,
           'scheduledAlarmDateTime': scheduledAlarmDateTime.toIso8601String(),
         });
-
-        await AndroidAlarmManager.oneShotAt(
-          scheduledAlarmDateTime,
-          alarmId,
-          alarmCallback,
-          exact: true,
-          wakeup: true,
-        );
       }
     }
   }
@@ -406,9 +388,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   Future<void> scheduleTestAlarm() async {
     final DateTime scheduledAlarmDateTime = DateTime.now().add(Duration(minutes: 3));
 
-    // Use a unique ID for the alarm
-    final int alarmId = scheduledAlarmDateTime.millisecondsSinceEpoch % 100000;
-
     // Store alarm information in Firestore
     await FirebaseFirestore.instance.collection('alarms').add({
       'userEmail': widget.user.email,
@@ -420,21 +399,16 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       'startDate': DateTime.now().toIso8601String(),
       'selectedDays': ['Mon'],
       'startTime': DateFormat.Hm().format(DateTime.now()),
-      'alarmId': alarmId,
       'scheduledAlarmDateTime': scheduledAlarmDateTime.toIso8601String(),
     });
 
-    await AndroidAlarmManager.oneShotAt(
-      scheduledAlarmDateTime,
-      alarmId,
-      alarmCallback,
-      exact: true,
-      wakeup: true,
+    // Schedule the alarm
+    FlutterAlarmClock.createAlarm(
+        hour: scheduledAlarmDateTime.hour,
+        minutes: scheduledAlarmDateTime.minute,
+        title: "Please take your medicine: Test Medicine"
     );
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -502,7 +476,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ),
     );
   }
-
 
   Widget _buildTitle(String title) {
     return Text(
@@ -962,7 +935,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   void _addMedicine() {
     setState(() {
       _medicines.add({
-        'reminderNo': _generateUniqueReminderNo(),
+        'reminderNo': _lastSubmitRecordNo,
         'userEmail': widget.user.email,
         'name': _medicineNameController.text,
         'dosage': _dosageController.text,

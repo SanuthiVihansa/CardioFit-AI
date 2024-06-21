@@ -89,7 +89,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => AlarmAppExample(),//MedicineAlertPage(widget.user),
+                  builder: (BuildContext context) => MedicineAlertPage(widget.user),
                 ),
               );
             },

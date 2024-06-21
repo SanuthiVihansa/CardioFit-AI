@@ -26,7 +26,7 @@ class _AlarmAppExampleState extends State<AlarmAppExample> {
                   style: TextStyle(fontSize: 20),
                 ),
                 onPressed: () {
-                  FlutterAlarmClock.createAlarm(hour: 23, minutes: 59);
+                  FlutterAlarmClock.createAlarm(hour: 19, minutes: 25);
                 },
               ),
             ),
