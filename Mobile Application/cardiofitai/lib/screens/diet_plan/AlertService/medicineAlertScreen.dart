@@ -15,6 +15,8 @@ import '../../../services/medicineReminderService.dart';
 import '../../../services/prescription_reading_api_service.dart';
 import 'notificationHomePage.dart';
 
+
+
 class MedicineAlertPage extends StatefulWidget {
   const MedicineAlertPage(this.user, {super.key});
 
@@ -263,6 +265,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   static Future<void> alarmCallback(int id) async {
     print("Alarm fired! ID: $id");
     // Add your code to handle the alarm event here.
+
+    //FlutterAlarmClock.createTimer(length: 02);
+    //FlutterAlarmClock.showAlarms();
   }
 
   String _getDayName(int dayNumber) {
@@ -359,6 +364,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       if (selectedDays.contains(_getDayName(scheduledAlarmDateTime.weekday))) {
         // Use a unique ID for each alarm
         final int alarmId = scheduledAlarmDateTime.millisecondsSinceEpoch % 100000;
+
 
         // Store alarm information in Firestore
         await FirebaseFirestore.instance.collection('alarms').add({

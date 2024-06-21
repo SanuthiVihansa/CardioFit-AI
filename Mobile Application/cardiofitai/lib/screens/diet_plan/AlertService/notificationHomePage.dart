@@ -1,4 +1,5 @@
 import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/screens/diet_plan/AlertService/alarmappexample.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/medicineAlertScreen.dart';
 import 'package:cardiofitai/services/medicineReminderService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -88,7 +89,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => MedicineAlertPage(widget.user),
+                  builder: (BuildContext context) => AlarmAppExample(),//MedicineAlertPage(widget.user),
                 ),
               );
             },

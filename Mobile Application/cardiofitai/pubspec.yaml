@@ -42,7 +42,7 @@ dependencies:
   cloud_firestore: ^4.16.1
   syncfusion_flutter_charts: ^25.1.35
 #  google_ml_kit: ^0.7.3
-  google_mlkit_text_recognition: ^0.11.0
+#  google_mlkit_text_recognition: ^0.11.0
 #  gallery_picker: ^0.5.1
   image_picker: ^0.8.4+9
   camera: ^0.10.5+9
@@ -73,6 +73,9 @@ dependencies:
   timezone: ^0.8.0
   android_alarm_manager_plus: ^3.0.0
   provider: ^6.0.3
+  assets_audio_player: 3.0.3+3
+  flutter_alarm_clock: ^0.1.1
+
 #  dio: ^5.4.3+1
 
 
@@ -133,6 +136,7 @@ flutter:
     - assets/defect_prediction/icons8-play-button-circled.gif
     - assets/defect_prediction/icons8-play-button-50.png
     - assets/pick1.png
+    - assets/diet_component/audio_assets/alarmsound.wav
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
