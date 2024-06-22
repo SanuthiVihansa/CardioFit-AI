@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/screens/diet_plan/AlertService/confirmAlarmScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
@@ -56,6 +57,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   };
   late QuerySnapshot<Object?> _lastSubmittedRecordInfo;
   int _lastSubmitRecordNo = 0;
+  int _thisAlarmReferenceNo = 0;
 
   @override
   void initState() {
@@ -70,8 +72,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           await MedicineReminderService.findLastReminderSubmitted(
               widget.user.email);
       if (_lastSubmittedRecordInfo.docs.isNotEmpty) {
-        _lastSubmitRecordNo =
-            _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
+        _lastSubmitRecordNo = _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
+        _thisAlarmReferenceNo = _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
+        _thisAlarmReferenceNo=_thisAlarmReferenceNo+1;
       } else {
         _lastSubmitRecordNo = 0; // Initialize to 0 if no previous record found
       }
@@ -290,124 +293,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     });
   }
 
-  //When set alarm button is clicked
-  // Future<void> _onTapSubmitBtn(BuildContext context) async {
-  //   for (var medicine in _medicines) {
-  //     if (medicine['interval'].isEmpty || medicine['days'] == 0) {
-  //       _showErrorSnackBar(
-  //           'Please edit the entry for ${medicine['name']} to include both frequency and duration.');
-  //       return;
-  //     } else {
-  //       for (var extractedMedicine in _medicines) {
-  //         _lastSubmitRecordNo += 1;
-  //         await MedicineReminderService.medicineReminder(
-  //           _lastSubmitRecordNo,
-  //           widget.user.email,
-  //           extractedMedicine["name"] ?? '',
-  //           extractedMedicine["dosage"] ?? '',
-  //           extractedMedicine["pillintake"] ?? '',
-  //           extractedMedicine["interval"] ?? '',
-  //           extractedMedicine["days"] ?? 0,
-  //           extractedMedicine["startDate"] ?? '',
-  //           extractedMedicine["additionalInstructions"] ?? '',
-  //           List<String>.from(extractedMedicine["selectedDays"] ?? []),
-  //           extractedMedicine["startTime"] ?? '',
-  //         );
-  //
-  //         // Schedule alarms for each medicine
-  //         await scheduleAlarmsForMedicine(
-  //           medicineName: extractedMedicine["name"],
-  //           dosage: extractedMedicine["dosage"],
-  //           pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
-  //           frequency: extractedMedicine["interval"],
-  //           days: extractedMedicine["days"],
-  //           startDate:
-  //               DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
-  //           selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
-  //           startTime: extractedMedicine["startTime"],
-  //         );
-  //       }
-  //
-  //       _showSuccessDialog('Reminders set successfully', '');
-  //
-  //       Navigator.of(context).pushReplacement(
-  //         MaterialPageRoute(
-  //           builder: (BuildContext context) =>
-  //               NotificationHomePage(widget.user),
-  //         ),
-  //       );
-  //     }
-  //   }
-  // }
-  //
-  //
-  // //When set alarm button is clicked set alarm function is called to set the alarm
-  // Future<void> scheduleAlarmsForMedicine({
-  //   required String medicineName,
-  //   required String dosage,
-  //   required int pillIntake,
-  //   required String frequency,
-  //   required int days,
-  //   required DateTime startDate,
-  //   required List<String> selectedDays,
-  //   required String startTime,
-  // }) async {
-  //   // Parse the start time
-  //   final parsedTime = TimeOfDay(
-  //     hour: int.parse(startTime.split(":")[0]),
-  //     minute: int.parse(startTime.split(":")[1].split(" ")[0]),
-  //   );
-  //
-  //   // Calculate the start date and time
-  //   final DateTime startDateTime = DateTime(
-  //     startDate.year,
-  //     startDate.month,
-  //     startDate.day,
-  //     parsedTime.hour,
-  //     parsedTime.minute,
-  //   );
-  //
-  //   // Schedule alarms based on frequency and duration
-  //   for (int i = 0; i < days; i++) {
-  //     final DateTime scheduledAlarmDateTime =
-  //         startDateTime.add(Duration(days: i));
-  //
-  //     // Check if the day is in the selected days
-  //     if (selectedDays.contains(_getDayName(scheduledAlarmDateTime.weekday))) {
-  //       // Schedule the alarm
-  //       FlutterAlarmClock.createAlarm(
-  //           hour: scheduledAlarmDateTime.hour,
-  //           minutes: scheduledAlarmDateTime.minute,
-  //           title: "Please take your medicine: " + medicineName);
-  //
-  //       // Store alarm information in Firestore
-  //       await FirebaseFirestore.instance.collection('alarms').add({
-  //         'userEmail': widget.user.email,
-  //         'medicineName': medicineName,
-  //         'dosage': dosage,
-  //         'pillIntake': pillIntake,
-  //         'frequency': frequency,
-  //         'days': days,
-  //         'startDate': startDate.toIso8601String(),
-  //         'selectedDays': selectedDays,
-  //         'startTime': startTime,
-  //         'scheduledAlarmDateTime': scheduledAlarmDateTime.toIso8601String(),
-  //       });
-  //     }
-  //   }
-  // }
-
-  // Future<void> _getSetAlarms() async {
-  //   final QuerySnapshot alarmSnapshot = await FirebaseFirestore.instance
-  //       .collection('alarms')
-  //       .where('userEmail', isEqualTo: widget.user.email)
-  //       .get();
-  //
-  //   for (var doc in alarmSnapshot.docs) {
-  //     print(doc.data());
-  //   }
-  // }
-
   Future<void> _onTapSubmitBtn(BuildContext context) async {
     for (var medicine in _medicines) {
       if (medicine['interval'].isEmpty || medicine['days'] == 0) {
@@ -439,7 +324,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             frequency: extractedMedicine["interval"],
             days: extractedMedicine["days"],
             startDate:
-            DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
+                DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
             selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
             startTime: extractedMedicine["startTime"],
           );
@@ -447,12 +332,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
         _showSuccessDialog('Reminders set successfully', '');
 
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (BuildContext context) =>
-                NotificationHomePage(widget.user),
-          ),
-        );
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (buildContext) => ConfirmAlarm(widget.user,_thisAlarmReferenceNo)));
       }
     }
   }
@@ -475,38 +356,45 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     for (int i = 0; i < days; i++) {
       final DateTime currentDate = startDate.add(Duration(days: i));
       if (currentDate.isAfter(endDate)) break;
-
+      //calculate the intervals
       for (int j = 0; j < interval; j++) {
-        final DateTime alarmTime = currentDate.add(Duration(hours: j * (24 ~/ interval)));
+        final DateTime alarmTime =
+            currentDate.add(Duration(hours: j * (24 ~/ interval)));
 
         // Extract hours and minutes from alarmTime
         final int hour = alarmTime.hour;
         final int minute = alarmTime.minute;
 
         // Use FlutterAlarmClock to set the alarm
-        FlutterAlarmClock.createAlarm(hour: hour, minutes: minute, title: '$medicineName - $dosage');
+        FlutterAlarmClock.createAlarm(
+            hour: hour, minutes: minute, title: '$medicineName - $dosage');
 
         await FirebaseFirestore.instance.collection('alarms').add({
-                  'userEmail': widget.user.email,
-                  'medicineName': medicineName,
-                  'dosage': dosage,
-                  'pillIntake': pillIntake,
-                  'frequency': frequency,
-                  'days': days,
-                  'startDate': startDate.toIso8601String(),
-                  'selectedDays': selectedDays,
-                  'startTime': startTime,
-                  'scheduledAlarmDateTime': alarmTime,
-                });
+          'userEmail': widget.user.email,
+          'reminderNo':_thisAlarmReferenceNo,
+          'medicineName': medicineName,
+          'dosage': dosage,
+          'pillIntake': pillIntake,
+          'frequency': frequency,
+          'days': days,
+          'startDate': startDate.toIso8601String(),
+          'selectedDays': selectedDays,
+          'startTime': startTime,
+          'scheduledAlarmDateTime': alarmTime.toIso8601String(),
+        }).catchError((error) {
+          _showErrorSnackBar('Failed to add alarm: $error');
+        });
       }
     }
+
   }
 
   @override
   Widget build(BuildContext context) {
     if (_startTimeController.text.isEmpty) {
       _startTimeController.text = TimeOfDay.now().format(context);
-    }return Scaffold(
+    }
+    return Scaffold(
       appBar: AppBar(
         title: Center(
             child: Text(
