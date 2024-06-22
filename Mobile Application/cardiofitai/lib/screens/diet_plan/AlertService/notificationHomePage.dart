@@ -145,15 +145,15 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.05),
       child: ListTile(
-        leading: Icon(Icons.alarm, color: Colors.redAccent, size: screenWidth * 0.1),
+        leading: Icon(Icons.alarm, color: Colors.redAccent, size: screenWidth * 0.05),
         title: Text(
           reminder['medicineName'] ?? 'No Medicine Name',
-          style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(fontSize: screenWidth * 0.03, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         subtitle: Text(
-          'Dosage: ${reminder['dosage'] ?? 'N/A'}\n'
-              'Frequency: ${reminder['interval'] ?? 'N/A'}',
-          style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.black),
+          'Pill Intake: ${reminder['pillIntake'] ?? 'N/A'}\n'
+              'Frequency: ${reminder['interval'] +' times'?? 'N/A'}',
+          style: TextStyle(fontSize: screenWidth * 0.028, color: Colors.black),
         ),
         trailing: Icon(Icons.chevron_right, color: Colors.grey, size: screenWidth * 0.08),
         onTap: () {
