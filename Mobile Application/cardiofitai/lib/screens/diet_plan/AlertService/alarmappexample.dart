@@ -9,6 +9,10 @@ class AlarmAppExample extends StatefulWidget {
 }
 
 class _AlarmAppExampleState extends State<AlarmAppExample> {
+  static Future<void> alarmCallback(int id) async {
+    print("Alarm fired! ID: $id");
+    // Add your alarm logic here
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

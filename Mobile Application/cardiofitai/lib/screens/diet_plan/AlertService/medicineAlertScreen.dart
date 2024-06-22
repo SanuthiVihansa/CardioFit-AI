@@ -63,9 +63,28 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     _generateReminderNo();
   }
 
+  //Unique reference number for each reminder
+  Future<void> _generateReminderNo() async {
+    try {
+      _lastSubmittedRecordInfo =
+          await MedicineReminderService.findLastReminderSubmitted(
+              widget.user.email);
+      if (_lastSubmittedRecordInfo.docs.isNotEmpty) {
+        _lastSubmitRecordNo =
+            _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
+      } else {
+        _lastSubmitRecordNo = 0; // Initialize to 0 if no previous record found
+      }
+    } catch (e) {
+      _showErrorSnackBar('Error fetching last reminder: $e');
+      _lastSubmitRecordNo = 0; // Default to 0 in case of an error
+    }
+  }
+
+  //Scan medicine prescription related
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile =
-    await ImagePicker().pickImage(source: source, imageQuality: 50);
+        await ImagePicker().pickImage(source: source, imageQuality: 50);
     if (pickedFile != null) {
       setState(() {
         pickedImage = File(pickedFile.path);
@@ -79,7 +98,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     });
     try {
       prescriptionInfo =
-      await apiService.sendImageToGPT4Vision(image: pickedImage!);
+          await apiService.sendImageToGPT4Vision(image: pickedImage!);
       _addMedicinesFromPrescriptionInfo();
     } catch (error) {
       _showErrorSnackBar(error);
@@ -97,6 +116,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     ));
   }
 
+  //Normalize the scanned output
   String normalizeFrequency(String frequency) {
     frequency = frequency.toLowerCase();
     if (frequency.contains('once')) return 'once';
@@ -134,6 +154,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     return 0; // Default to 0 if unable to parse
   }
 
+  //Add prescription to the map named medicine
   void _addMedicinesFromPrescriptionInfo() {
     try {
       final jsonStartIndex = prescriptionInfo.indexOf('[');
@@ -141,7 +162,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
       if (jsonStartIndex != -1 && jsonEndIndex != -1) {
         final jsonString =
-        prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
+            prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
 
         final List<dynamic> parsedInfo = jsonDecode(jsonString);
         for (var medicineInfo in parsedInfo) {
@@ -160,7 +181,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             'startDate': DateFormat('yyyy-MM-dd').format(startDate),
             'startTime': TimeOfDay.now().format(context),
             'additionalInstructions':
-            medicineInfo['Additional Instructions'] ?? '',
+                medicineInfo['Additional Instructions'] ?? '',
             'selectedDays': _selectedDays,
           };
           setState(() {
@@ -175,6 +196,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     }
   }
 
+  //When edit icon is clicked populate the form values
   void _populateFieldsForEditing(Map<String, dynamic> medicine) {
     _medicineNameController.text = medicine['name'] ?? '';
     _dosageController.text = medicine['dosage'] ?? '';
@@ -211,48 +233,13 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     });
   }
 
+  //Based on the number days automatically select the days that the alarm will repeat
   void _autoSelectDays(DateTime startDate, int days) {
     _selectedDays.clear();
     for (int i = 0; i < days; i++) {
       final dayOfWeek = (startDate.add(Duration(days: i)).weekday) % 7 + 1;
       _selectedDays.add(_daysOfWeek[dayOfWeek]!);
     }
-  }
-
-  Future<void> _generateReminderNo() async {
-    try {
-      _lastSubmittedRecordInfo =
-      await MedicineReminderService.findLastReminderSubmitted(
-          widget.user.email);
-      if (_lastSubmittedRecordInfo.docs.isNotEmpty) {
-        _lastSubmitRecordNo =
-            _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
-      } else {
-        _lastSubmitRecordNo = 0; // Initialize to 0 if no previous record found
-      }
-    } catch (e) {
-      _showErrorSnackBar('Error fetching last reminder: $e');
-      _lastSubmitRecordNo = 0; // Default to 0 in case of an error
-    }
-  }
-
-  void _setReminder() {
-    for (var medicine in _medicines) {
-      if (medicine['interval'].isEmpty || medicine['days'] == 0) {
-        _showErrorSnackBar(
-            'Please edit the entry for ${medicine['name']} to include both frequency and duration.');
-        return;
-      }
-    }
-
-    _onTapSubmitBtn(context);
-
-    _showSuccessDialog('Reminders set successfully', '');
-  }
-
-  static Future<void> alarmCallback(int id) async {
-    print("Alarm fired! ID: $id");
-    // Add your alarm logic here
   }
 
   String _getDayName(int dayNumber) {
@@ -276,48 +263,198 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     }
   }
 
-  int _getWeekdayNumber(String dayName) {
-    return _daysOfWeek.keys
-        .firstWhere((k) => _daysOfWeek[k] == dayName, orElse: () => 0);
+  //Adding medicine to the map named medicine when data are inserted mannually
+  void _addMedicine() {
+    setState(() {
+      _medicines.add({
+        'reminderNo': _lastSubmitRecordNo,
+        'userEmail': widget.user.email,
+        'name': _medicineNameController.text,
+        'dosage': _dosageController.text,
+        'interval': _selectedFrequency,
+        'days': int.tryParse(_daysController.text) ?? 0,
+        'pillintake': _pillIntakeController.text,
+        'startDate': _startDateController.text,
+        'startTime': _startTimeController.text,
+        'additionalInstructions': _additionalInstructions.text,
+        'selectedDays': List<String>.from(_selectedDays),
+      });
+      _medicineNameController.clear();
+      _dosageController.clear();
+      _daysController.clear();
+      _pillIntakeController.clear();
+      _additionalInstructions.clear();
+      _startDateController.clear();
+      _startTimeController.clear();
+      _selectedDays.clear();
+    });
   }
 
+  //When set alarm button is clicked
+  // Future<void> _onTapSubmitBtn(BuildContext context) async {
+  //   for (var medicine in _medicines) {
+  //     if (medicine['interval'].isEmpty || medicine['days'] == 0) {
+  //       _showErrorSnackBar(
+  //           'Please edit the entry for ${medicine['name']} to include both frequency and duration.');
+  //       return;
+  //     } else {
+  //       for (var extractedMedicine in _medicines) {
+  //         _lastSubmitRecordNo += 1;
+  //         await MedicineReminderService.medicineReminder(
+  //           _lastSubmitRecordNo,
+  //           widget.user.email,
+  //           extractedMedicine["name"] ?? '',
+  //           extractedMedicine["dosage"] ?? '',
+  //           extractedMedicine["pillintake"] ?? '',
+  //           extractedMedicine["interval"] ?? '',
+  //           extractedMedicine["days"] ?? 0,
+  //           extractedMedicine["startDate"] ?? '',
+  //           extractedMedicine["additionalInstructions"] ?? '',
+  //           List<String>.from(extractedMedicine["selectedDays"] ?? []),
+  //           extractedMedicine["startTime"] ?? '',
+  //         );
+  //
+  //         // Schedule alarms for each medicine
+  //         await scheduleAlarmsForMedicine(
+  //           medicineName: extractedMedicine["name"],
+  //           dosage: extractedMedicine["dosage"],
+  //           pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
+  //           frequency: extractedMedicine["interval"],
+  //           days: extractedMedicine["days"],
+  //           startDate:
+  //               DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
+  //           selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
+  //           startTime: extractedMedicine["startTime"],
+  //         );
+  //       }
+  //
+  //       _showSuccessDialog('Reminders set successfully', '');
+  //
+  //       Navigator.of(context).pushReplacement(
+  //         MaterialPageRoute(
+  //           builder: (BuildContext context) =>
+  //               NotificationHomePage(widget.user),
+  //         ),
+  //       );
+  //     }
+  //   }
+  // }
+  //
+  //
+  // //When set alarm button is clicked set alarm function is called to set the alarm
+  // Future<void> scheduleAlarmsForMedicine({
+  //   required String medicineName,
+  //   required String dosage,
+  //   required int pillIntake,
+  //   required String frequency,
+  //   required int days,
+  //   required DateTime startDate,
+  //   required List<String> selectedDays,
+  //   required String startTime,
+  // }) async {
+  //   // Parse the start time
+  //   final parsedTime = TimeOfDay(
+  //     hour: int.parse(startTime.split(":")[0]),
+  //     minute: int.parse(startTime.split(":")[1].split(" ")[0]),
+  //   );
+  //
+  //   // Calculate the start date and time
+  //   final DateTime startDateTime = DateTime(
+  //     startDate.year,
+  //     startDate.month,
+  //     startDate.day,
+  //     parsedTime.hour,
+  //     parsedTime.minute,
+  //   );
+  //
+  //   // Schedule alarms based on frequency and duration
+  //   for (int i = 0; i < days; i++) {
+  //     final DateTime scheduledAlarmDateTime =
+  //         startDateTime.add(Duration(days: i));
+  //
+  //     // Check if the day is in the selected days
+  //     if (selectedDays.contains(_getDayName(scheduledAlarmDateTime.weekday))) {
+  //       // Schedule the alarm
+  //       FlutterAlarmClock.createAlarm(
+  //           hour: scheduledAlarmDateTime.hour,
+  //           minutes: scheduledAlarmDateTime.minute,
+  //           title: "Please take your medicine: " + medicineName);
+  //
+  //       // Store alarm information in Firestore
+  //       await FirebaseFirestore.instance.collection('alarms').add({
+  //         'userEmail': widget.user.email,
+  //         'medicineName': medicineName,
+  //         'dosage': dosage,
+  //         'pillIntake': pillIntake,
+  //         'frequency': frequency,
+  //         'days': days,
+  //         'startDate': startDate.toIso8601String(),
+  //         'selectedDays': selectedDays,
+  //         'startTime': startTime,
+  //         'scheduledAlarmDateTime': scheduledAlarmDateTime.toIso8601String(),
+  //       });
+  //     }
+  //   }
+  // }
+
+  // Future<void> _getSetAlarms() async {
+  //   final QuerySnapshot alarmSnapshot = await FirebaseFirestore.instance
+  //       .collection('alarms')
+  //       .where('userEmail', isEqualTo: widget.user.email)
+  //       .get();
+  //
+  //   for (var doc in alarmSnapshot.docs) {
+  //     print(doc.data());
+  //   }
+  // }
+
   Future<void> _onTapSubmitBtn(BuildContext context) async {
-    for (var extractedMedicine in _medicines) {
-      _lastSubmitRecordNo += 1;
-      await MedicineReminderService.medicineReminder(
-        _lastSubmitRecordNo,
-        widget.user.email,
-        extractedMedicine["name"] ?? '',
-        extractedMedicine["dosage"] ?? '',
-        extractedMedicine["pillintake"] ?? '',
-        extractedMedicine["interval"] ?? '',
-        extractedMedicine["days"] ?? 0,
-        extractedMedicine["startDate"] ?? '',
-        extractedMedicine["additionalInstructions"] ?? '',
-        List<String>.from(extractedMedicine["selectedDays"] ?? []),
-        extractedMedicine["startTime"] ?? '',
-      );
+    for (var medicine in _medicines) {
+      if (medicine['interval'].isEmpty || medicine['days'] == 0) {
+        _showErrorSnackBar(
+            'Please edit the entry for ${medicine['name']} to include both frequency and duration.');
+        return;
+      } else {
+        for (var extractedMedicine in _medicines) {
+          _lastSubmitRecordNo += 1;
+          await MedicineReminderService.medicineReminder(
+            _lastSubmitRecordNo,
+            widget.user.email,
+            extractedMedicine["name"] ?? '',
+            extractedMedicine["dosage"] ?? '',
+            extractedMedicine["pillintake"] ?? '',
+            extractedMedicine["interval"] ?? '',
+            extractedMedicine["days"] ?? 0,
+            extractedMedicine["startDate"] ?? '',
+            extractedMedicine["additionalInstructions"] ?? '',
+            List<String>.from(extractedMedicine["selectedDays"] ?? []),
+            extractedMedicine["startTime"] ?? '',
+          );
 
-      // Schedule alarms for each medicine
-      await scheduleAlarmsForMedicine(
-        medicineName: extractedMedicine["name"],
-        dosage: extractedMedicine["dosage"],
-        pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
-        frequency: extractedMedicine["interval"],
-        days: extractedMedicine["days"],
-        startDate: DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
-        selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
-        startTime: extractedMedicine["startTime"],
-      );
+          // Schedule alarms for each medicine
+          await scheduleAlarmsForMedicine(
+            medicineName: extractedMedicine["name"],
+            dosage: extractedMedicine["dosage"],
+            pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
+            frequency: extractedMedicine["interval"],
+            days: extractedMedicine["days"],
+            startDate:
+            DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
+            selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
+            startTime: extractedMedicine["startTime"],
+          );
+        }
+
+        _showSuccessDialog('Reminders set successfully', '');
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) =>
+                NotificationHomePage(widget.user),
+          ),
+        );
+      }
     }
-
-    _showSuccessDialog('Reminders set successfully', '');
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (BuildContext context) => NotificationHomePage(widget.user),
-      ),
-    );
   }
 
   Future<void> scheduleAlarmsForMedicine({
@@ -330,108 +467,62 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     required List<String> selectedDays,
     required String startTime,
   }) async {
-    // Parse the start time
-    final parsedTime = TimeOfDay(
-      hour: int.parse(startTime.split(":")[0]),
-      minute: int.parse(startTime.split(":")[1].split(" ")[0]),
-    );
+    final int interval = int.parse(frequency);
 
-    // Calculate the start date and time
-    final DateTime startDateTime = DateTime(
-      startDate.year,
-      startDate.month,
-      startDate.day,
-      parsedTime.hour,
-      parsedTime.minute,
-    );
+    // Calculate end date based on the number of days
+    final DateTime endDate = startDate.add(Duration(days: days - 1));
 
-    // Schedule alarms based on frequency and duration
     for (int i = 0; i < days; i++) {
-      final DateTime scheduledAlarmDateTime =
-      startDateTime.add(Duration(days: i));
+      final DateTime currentDate = startDate.add(Duration(days: i));
+      if (currentDate.isAfter(endDate)) break;
 
-      // Check if the day is in the selected days
-      if (selectedDays.contains(_getDayName(scheduledAlarmDateTime.weekday))) {
-        // Schedule the alarm
-        FlutterAlarmClock.createAlarm(
-            hour: scheduledAlarmDateTime.hour, minutes: scheduledAlarmDateTime.minute, title: "Please take your medicine: " + medicineName
-        );
+      for (int j = 0; j < interval; j++) {
+        final DateTime alarmTime = currentDate.add(Duration(hours: j * (24 ~/ interval)));
 
-        // Store alarm information in Firestore
+        // Extract hours and minutes from alarmTime
+        final int hour = alarmTime.hour;
+        final int minute = alarmTime.minute;
+
+        // Use FlutterAlarmClock to set the alarm
+        FlutterAlarmClock.createAlarm(hour: hour, minutes: minute, title: '$medicineName - $dosage');
+
         await FirebaseFirestore.instance.collection('alarms').add({
-          'userEmail': widget.user.email,
-          'medicineName': medicineName,
-          'dosage': dosage,
-          'pillIntake': pillIntake,
-          'frequency': frequency,
-          'days': days,
-          'startDate': startDate.toIso8601String(),
-          'selectedDays': selectedDays,
-          'startTime': startTime,
-          'scheduledAlarmDateTime': scheduledAlarmDateTime.toIso8601String(),
-        });
+                  'userEmail': widget.user.email,
+                  'medicineName': medicineName,
+                  'dosage': dosage,
+                  'pillIntake': pillIntake,
+                  'frequency': frequency,
+                  'days': days,
+                  'startDate': startDate.toIso8601String(),
+                  'selectedDays': selectedDays,
+                  'startTime': startTime,
+                  'scheduledAlarmDateTime': alarmTime,
+                });
       }
     }
-  }
-
-  Future<void> _getSetAlarms() async {
-    final QuerySnapshot alarmSnapshot = await FirebaseFirestore.instance
-        .collection('alarms')
-        .where('userEmail', isEqualTo: widget.user.email)
-        .get();
-
-    for (var doc in alarmSnapshot.docs) {
-      print(doc.data());
-    }
-  }
-
-  Future<void> scheduleTestAlarm() async {
-    final DateTime scheduledAlarmDateTime = DateTime.now().add(Duration(minutes: 3));
-
-    // Store alarm information in Firestore
-    await FirebaseFirestore.instance.collection('alarms').add({
-      'userEmail': widget.user.email,
-      'medicineName': 'Test Medicine',
-      'dosage': '10mg',
-      'pillIntake': 1,
-      'frequency': 'once',
-      'days': 1,
-      'startDate': DateTime.now().toIso8601String(),
-      'selectedDays': ['Mon'],
-      'startTime': DateFormat.Hm().format(DateTime.now()),
-      'scheduledAlarmDateTime': scheduledAlarmDateTime.toIso8601String(),
-    });
-
-    // Schedule the alarm
-    FlutterAlarmClock.createAlarm(
-        hour: scheduledAlarmDateTime.hour,
-        minutes: scheduledAlarmDateTime.minute,
-        title: "Please take your medicine: Test Medicine"
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     if (_startTimeController.text.isEmpty) {
       _startTimeController.text = TimeOfDay.now().format(context);
-    }
-
-    return Scaffold(
+    }return Scaffold(
       appBar: AppBar(
-        title: Text('Set Reminder'),
+        title: Center(
+            child: Text(
+          'Set Reminder',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        )),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         backgroundColor: Colors.red,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.alarm),
-            onPressed: _getSetAlarms,
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -452,24 +543,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               _buildMedicineList(),
               _buildSetAlarmButton(),
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: scheduleTestAlarm,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                child: Text(
-                  'Set Test Alarm (3 min)',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -477,6 +550,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
+  //Widgets made for the fields to type reminders manually or to edit fetched details
   Widget _buildTitle(String title) {
     return Text(
       title,
@@ -492,9 +566,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildImagePickerButton('Open Gallery', Icons.image,
-                    () => _pickImage(ImageSource.gallery)),
+                () => _pickImage(ImageSource.gallery)),
             _buildImagePickerButton('Start Camera', Icons.camera_alt,
-                    () => _pickImage(ImageSource.camera)),
+                () => _pickImage(ImageSource.camera)),
           ],
         ),
       ],
@@ -530,56 +604,56 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   Widget _buildPickedImage() {
     return pickedImage == null
         ? Center(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: Image.asset('assets/pick1.png'),
-      ),
-    )
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: Image.asset('assets/pick1.png'),
+            ),
+          )
         : Container(
-      width: double.infinity,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-      padding: const EdgeInsets.all(20),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image.file(
-          pickedImage!,
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
+            width: double.infinity,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+            padding: const EdgeInsets.all(20),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.file(
+                pickedImage!,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
   }
 
   Widget _buildDetectButton() {
     return detecting
         ? SpinKitWave(
-      color: Colors.red,
-      size: 30,
-    )
+            color: Colors.red,
+            size: 30,
+          )
         : Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
-          padding:
-          const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-        ),
-        onPressed: () {
-          detectDisease();
-        },
-        child: const Text(
-          'Analyse',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              onPressed: () {
+                detectDisease();
+              },
+              child: const Text(
+                'Analyse',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          );
   }
 
   Widget _buildPrescriptionInfo() {
@@ -589,9 +663,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         scrollDirection: Axis.vertical,
         //use this testing purpose to view what was scanned
         child: Text(""
-          //prescriptionInfo,
-          //style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-        ),
+            //prescriptionInfo,
+            //style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            ),
       ),
     );
   }
@@ -677,7 +751,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         Wrap(
           spacing: 8.0,
           children:
-          _daysOfWeek.values.map((day) => _buildDayToggle(day)).toList(),
+              _daysOfWeek.values.map((day) => _buildDayToggle(day)).toList(),
         ),
         SizedBox(height: 16),
         Row(
@@ -688,7 +762,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 padding:
-                const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -930,31 +1004,5 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         ),
       ),
     );
-  }
-
-  void _addMedicine() {
-    setState(() {
-      _medicines.add({
-        'reminderNo': _lastSubmitRecordNo,
-        'userEmail': widget.user.email,
-        'name': _medicineNameController.text,
-        'dosage': _dosageController.text,
-        'interval': _selectedFrequency,
-        'days': int.tryParse(_daysController.text) ?? 0,
-        'pillintake': _pillIntakeController.text,
-        'startDate': _startDateController.text,
-        'startTime': _startTimeController.text,
-        'additionalInstructions': _additionalInstructions.text,
-        'selectedDays': List<String>.from(_selectedDays),
-      });
-      _medicineNameController.clear();
-      _dosageController.clear();
-      _daysController.clear();
-      _pillIntakeController.clear();
-      _additionalInstructions.clear();
-      _startDateController.clear();
-      _startTimeController.clear();
-      _selectedDays.clear();
-    });
   }
 }
