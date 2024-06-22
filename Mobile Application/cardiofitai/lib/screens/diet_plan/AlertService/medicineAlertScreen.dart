@@ -119,25 +119,25 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   //Normalize the scanned output
   String normalizeFrequency(String frequency) {
     frequency = frequency.toLowerCase();
-    if (frequency.contains('once')) return 'once';
-    if (frequency.contains('twice')) return 'twice';
+    if (frequency.contains('once')) return '1';
+    if (frequency.contains('twice')) return '2';
     if (frequency.contains('thrice') || frequency.contains('three times'))
-      return 'thrice';
-    if (frequency.contains('four times')) return 'four times';
+      return '3';
+    if (frequency.contains('four times')) return '4';
     if (frequency.contains('q.d') ||
         frequency.contains('qd') ||
         frequency.contains('daily') ||
-        frequency.contains('once daily')) return 'once';
+        frequency.contains('once daily')) return '1';
     if (frequency.contains('b.i.d') ||
         frequency.contains('bid') ||
-        frequency.contains('twice daily')) return 'twice';
+        frequency.contains('twice daily')) return '2';
     if (frequency.contains('t.i.d') ||
         frequency.contains('tid') ||
-        frequency.contains('three times daily')) return 'thrice';
+        frequency.contains('three times daily')) return '3';
     if (frequency.contains('q.i.d') ||
         frequency.contains('qid') ||
-        frequency.contains('four times daily')) return 'four times';
-    return 'once';
+        frequency.contains('four times daily')) return '4';
+    return '1';
   }
 
   int normalizeDuration(String duration) {
@@ -271,7 +271,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         'userEmail': widget.user.email,
         'name': _medicineNameController.text,
         'dosage': _dosageController.text,
-        'interval': _selectedFrequency,
+        'interval': normalizeFrequency(_selectedFrequency ?? ''),
         'days': int.tryParse(_daysController.text) ?? 0,
         'pillintake': _pillIntakeController.text,
         'startDate': _startDateController.text,
