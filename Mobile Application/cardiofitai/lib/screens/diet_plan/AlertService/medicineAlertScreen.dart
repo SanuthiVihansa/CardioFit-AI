@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:alarm/alarm.dart';
+import 'package:alarm/model/alarm_settings.dart';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/confirmAlarmScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -382,8 +384,23 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           final int minute = alarmTime.minute;
 
           // Use FlutterAlarmClock to set the alarm
-          FlutterAlarmClock.createAlarm(
-              hour: hour, minutes: minute, title: '$medicineName - $dosage');
+          // FlutterAlarmClock.createAlarm(
+          //     hour: hour, minutes: minute, title: '$medicineName - $dosage')
+
+          final alarmSettings = AlarmSettings(
+            id: _lastSubmitRecordNo,
+            dateTime: alarmTime,
+            assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
+            loopAudio: true,
+            vibrate: true,
+            volume: 0.8,
+            fadeDuration: 3.0,
+            notificationTitle: 'This is the title',
+            notificationBody: 'This is the body',
+            enableNotificationOnKill: Platform.isIOS,
+          );
+
+          await Alarm.set(alarmSettings: alarmSettings);
 
           await FirebaseFirestore.instance.collection('alarms').add({
             'userEmail': widget.user.email,
