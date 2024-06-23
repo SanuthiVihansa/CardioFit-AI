@@ -72,11 +72,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   Future<void> _generateReminderNo() async {
     try {
       _lastSubmittedRecordInfo =
-      await MedicineReminderService.findLastReminderSubmitted(
-          widget.user.email);
+          await MedicineReminderService.findLastReminderSubmitted(
+              widget.user.email);
       if (_lastSubmittedRecordInfo.docs.isNotEmpty) {
-        _lastSubmitRecordNo = _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
-        _thisAlarmReferenceNo=_lastSubmitRecordNo;
+        _lastSubmitRecordNo =
+            _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
+        _thisAlarmReferenceNo = _lastSubmitRecordNo;
       } else {
         _lastSubmitRecordNo = 0; // Initialize to 0 if no previous record found
       }
@@ -89,7 +90,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   //Scan medicine prescription related
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile =
-    await ImagePicker().pickImage(source: source, imageQuality: 50);
+        await ImagePicker().pickImage(source: source, imageQuality: 50);
     if (pickedFile != null) {
       setState(() {
         pickedImage = File(pickedFile.path);
@@ -103,7 +104,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     });
     try {
       prescriptionInfo =
-      await apiService.sendImageToGPT4Vision(image: pickedImage!);
+          await apiService.sendImageToGPT4Vision(image: pickedImage!);
       _addMedicinesFromPrescriptionInfo();
     } catch (error) {
       _showErrorSnackBar(error);
@@ -167,7 +168,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
       if (jsonStartIndex != -1 && jsonEndIndex != -1) {
         final jsonString =
-        prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
+            prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
 
         final List<dynamic> parsedInfo = jsonDecode(jsonString);
         for (var medicineInfo in parsedInfo) {
@@ -187,7 +188,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             'startTime': TimeOfDay.now().format(context),
             'endDate': DateFormat('yyyy-MM-dd').format(endDate),
             'additionalInstructions':
-            medicineInfo['Additional Instructions'] ?? '',
+                medicineInfo['Additional Instructions'] ?? '',
             'selectedDays': _selectedDays,
           };
           setState(() {
@@ -274,7 +275,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   void _calculateEndDate() {
     if (_startDateController.text.isNotEmpty &&
         _daysController.text.isNotEmpty) {
-      final startDate = DateFormat('yyyy-MM-dd').parse(_startDateController.text);
+      final startDate =
+          DateFormat('yyyy-MM-dd').parse(_startDateController.text);
       final days = int.tryParse(_daysController.text) ?? 0;
       final endDate = startDate.add(Duration(days: days));
       _endDateController.text = DateFormat('yyyy-MM-dd').format(endDate);
@@ -310,10 +312,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     });
   }
 
-
   Future<void> _onTapSubmitBtn(BuildContext context) async {
     for (var medicine in _medicines) {
-      if (medicine['interval'].isEmpty || medicine['days'] == 0 || medicine['startDate'].isEmpty || medicine['endDate'].isEmpty) {
+      if (medicine['interval'].isEmpty ||
+          medicine['days'] == 0 ||
+          medicine['startDate'].isEmpty ||
+          medicine['endDate'].isEmpty) {
         _showErrorSnackBar(
             'Please edit the entry for ${medicine['name']} to include frequency, duration, start date, and end date.');
         return;
@@ -341,8 +345,10 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             dosage: extractedMedicine["dosage"],
             pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
             frequency: extractedMedicine["interval"],
-            startDate: DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
-            endDate: DateFormat('yyyy-MM-dd').parse(extractedMedicine["endDate"]),
+            startDate:
+                DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
+            endDate:
+                DateFormat('yyyy-MM-dd').parse(extractedMedicine["endDate"]),
             selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
             startTime: extractedMedicine["startTime"],
           );
@@ -350,8 +356,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
         _showSuccessDialog('Reminders set successfully', '');
 
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (buildContext) => ConfirmAlarm(widget.user, _thisAlarmReferenceNo)));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (buildContext) =>
+                ConfirmAlarm(widget.user, _thisAlarmReferenceNo)));
       }
     }
   }
@@ -370,14 +377,14 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
     // Loop through each day between the start date and end date
     for (DateTime currentDate = startDate;
-    currentDate.isBefore(endDate) || currentDate.isAtSameMomentAs(endDate);
-    currentDate = currentDate.add(Duration(days: 1))) {
+        currentDate.isBefore(endDate) || currentDate.isAtSameMomentAs(endDate);
+        currentDate = currentDate.add(Duration(days: 1))) {
       // Check if the current date matches any of the selected days
       if (selectedDays.contains(DateFormat('E').format(currentDate))) {
         // Calculate the intervals
         for (int j = 0; j < interval; j++) {
           final DateTime alarmTime =
-          currentDate.add(Duration(hours: j * (24 ~/ interval)));
+              currentDate.add(Duration(hours: j * (24 ~/ interval)));
 
           // Extract hours and minutes from alarmTime
           final int hour = alarmTime.hour;
@@ -386,21 +393,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           // Use FlutterAlarmClock to set the alarm
           // FlutterAlarmClock.createAlarm(
           //     hour: hour, minutes: minute, title: '$medicineName - $dosage')
-
-          final alarmSettings = AlarmSettings(
-            id: _lastSubmitRecordNo,
-            dateTime: alarmTime,
-            assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
-            loopAudio: true,
-            vibrate: true,
-            volume: 0.8,
-            fadeDuration: 3.0,
-            notificationTitle: 'This is the title',
-            notificationBody: 'This is the body',
-            enableNotificationOnKill: Platform.isIOS,
-          );
-
-          await Alarm.set(alarmSettings: alarmSettings);
 
           await FirebaseFirestore.instance.collection('alarms').add({
             'userEmail': widget.user.email,
@@ -420,6 +412,21 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         }
       }
     }
+    await Alarm.setNotificationOnAppKillContent("Mytitle", "Mybody");
+    final alarmSettings = AlarmSettings(
+      id: 1,
+      dateTime: DateTime(2024, 06, 23, 14, 59),
+      assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
+      loopAudio: true,
+      vibrate: true,
+      volume: 0.8,
+      fadeDuration: 3.0,
+      notificationTitle: 'This is the title',
+      notificationBody: 'This is the body',
+      enableNotificationOnKill: true,
+    );
+
+    await Alarm.set(alarmSettings: alarmSettings);
   }
 
   @override
@@ -431,16 +438,17 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       appBar: AppBar(
         title: Center(
             child: Text(
-              'Set Reminder',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-            )),
+          'Set Reminder',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        )),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (buildContext)=>NotificationHomePage(widget.user)));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (buildContext) => NotificationHomePage(widget.user)));
           },
         ),
         backgroundColor: Colors.red,
@@ -487,9 +495,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildImagePickerButton('Open Gallery', Icons.image,
-                    () => _pickImage(ImageSource.gallery)),
+                () => _pickImage(ImageSource.gallery)),
             _buildImagePickerButton('Start Camera', Icons.camera_alt,
-                    () => _pickImage(ImageSource.camera)),
+                () => _pickImage(ImageSource.camera)),
           ],
         ),
       ],
@@ -525,56 +533,56 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   Widget _buildPickedImage() {
     return pickedImage == null
         ? Center(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: Image.asset('assets/pick1.png'),
-      ),
-    )
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: Image.asset('assets/pick1.png'),
+            ),
+          )
         : Container(
-      width: double.infinity,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-      padding: const EdgeInsets.all(20),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image.file(
-          pickedImage!,
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
+            width: double.infinity,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+            padding: const EdgeInsets.all(20),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.file(
+                pickedImage!,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
   }
 
   Widget _buildDetectButton() {
     return detecting
         ? SpinKitWave(
-      color: Colors.red,
-      size: 30,
-    )
+            color: Colors.red,
+            size: 30,
+          )
         : Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
-          padding:
-          const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-        ),
-        onPressed: () {
-          detectDisease();
-        },
-        child: const Text(
-          'Analyse',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              onPressed: () {
+                detectDisease();
+              },
+              child: const Text(
+                'Analyse',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          );
   }
 
   Widget _buildPrescriptionInfo() {
@@ -584,9 +592,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         scrollDirection: Axis.vertical,
         //use this testing purpose to view what was scanned
         child: Text(""
-          //prescriptionInfo,
-          //style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-        ),
+            //prescriptionInfo,
+            //style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            ),
       ),
     );
   }
@@ -673,7 +681,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
         Wrap(
           spacing: 8.0,
           children:
-          _daysOfWeek.values.map((day) => _buildDayToggle(day)).toList(),
+              _daysOfWeek.values.map((day) => _buildDayToggle(day)).toList(),
         ),
         SizedBox(height: 16),
         Row(
@@ -684,7 +692,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 padding:
-                const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
