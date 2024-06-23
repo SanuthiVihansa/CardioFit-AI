@@ -17,6 +17,7 @@ class ConfirmAlarm extends StatefulWidget {
 class _ConfirmAlarmState extends State<ConfirmAlarm> {
   List<Map<String, dynamic>> _medicinesWithAlarms = [];
   int _currentMedicineIndex = 0;
+  bool _isAlarmEnabled = true;
 
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _ConfirmAlarmState extends State<ConfirmAlarm> {
       data['id'] = doc.id; // Store the document ID for later updates
 
       final existingMedicineIndex = medicines.indexWhere(
-          (medicine) => medicine['medicineName'] == data['medicineName']);
+              (medicine) => medicine['medicineName'] == data['medicineName']);
 
       if (existingMedicineIndex >= 0) {
         medicines[existingMedicineIndex]['alarms'].add(data);
@@ -63,7 +64,7 @@ class _ConfirmAlarmState extends State<ConfirmAlarm> {
 
   void _editAlarm(Map<String, dynamic> alarm) async {
     final DateTime initialDateTime =
-        DateTime.parse(alarm['scheduledAlarmDateTime']);
+    DateTime.parse(alarm['scheduledAlarmDateTime']);
 
     final DateTime? newDate = await showDatePicker(
       context: context,
@@ -147,6 +148,13 @@ class _ConfirmAlarmState extends State<ConfirmAlarm> {
         builder: (buildContext) => NotificationHomePage(widget.user)));
   }
 
+  void _toggleAlarm(bool value) {
+    setState(() {
+      _isAlarmEnabled = value;
+    });
+    // Add your logic here to enable or disable the alarm
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,13 +192,13 @@ class _ConfirmAlarmState extends State<ConfirmAlarm> {
               Expanded(
                 child: ListView.builder(
                   itemCount: _medicinesWithAlarms[_currentMedicineIndex]
-                          ['alarms']
+                  ['alarms']
                       .length,
                   itemBuilder: (context, index) {
                     final alarm = _medicinesWithAlarms[_currentMedicineIndex]
-                        ['alarms'][index];
+                    ['alarms'][index];
                     final alarmTime =
-                        DateTime.parse(alarm['scheduledAlarmDateTime']);
+                    DateTime.parse(alarm['scheduledAlarmDateTime']);
 
                     return Card(
                       color: Colors.white,
@@ -280,6 +288,12 @@ class _ConfirmAlarmState extends State<ConfirmAlarm> {
                       child: Text('Confirm'),
                     ),
                 ],
+              ),
+              SwitchListTile(
+                title: Text("Enable Alarm"),
+                value: _isAlarmEnabled,
+                onChanged: _toggleAlarm,
+                activeColor: Colors.red,
               ),
             ],
           ],
