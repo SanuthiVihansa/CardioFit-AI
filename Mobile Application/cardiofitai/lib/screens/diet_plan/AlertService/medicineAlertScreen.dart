@@ -6,7 +6,6 @@ import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/confirmAlarmScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -415,7 +414,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     await Alarm.setNotificationOnAppKillContent("Mytitle", "Mybody");
     final alarmSettings = AlarmSettings(
       id: 1,
-      dateTime: DateTime(2024, 06, 23, 14, 59),
+      dateTime: DateTime(2024, 06, 23, 15, 18),
       assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
       loopAudio: true,
       vibrate: true,
