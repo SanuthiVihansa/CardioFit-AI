@@ -113,7 +113,7 @@ class LeftNavBar extends StatelessWidget {
               Navigator.of(context).pop(); // Close the drawer
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => RecognitionScreenScan(),
+                  builder: (context) => RecognitionScreen(),
                 ),
               );
             },
