@@ -1,5 +1,6 @@
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/alarmappexample.dart';
+import 'package:cardiofitai/screens/diet_plan/AlertService/current_alarms.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/medicineAlertScreen.dart';
 import 'package:cardiofitai/services/medicineReminderService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,7 +27,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   }
 
   Future<void> getSavedAlerts() async {
-    QuerySnapshot querySnapshot = await MedicineReminderService.getAllUserReminder(widget.user.email);
+    QuerySnapshot querySnapshot =
+        await MedicineReminderService.getAllUserReminder(widget.user.email);
     setState(() {
       _allAlerts = querySnapshot.docs;
     });
@@ -63,7 +65,11 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
 
   Widget _addTaskBar(double screenWidth) {
     return Container(
-      margin: EdgeInsets.only(left: screenWidth * 0.05, right: screenWidth * 0.05, top: 20, bottom: 10),
+      margin: EdgeInsets.only(
+          left: screenWidth * 0.05,
+          right: screenWidth * 0.05,
+          top: 20,
+          bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -75,11 +81,17 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                 children: [
                   Text(
                     DateFormat.yMMMMd().format(DateTime.now()),
-                    style: TextStyle(fontSize: screenWidth * 0.06, fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: screenWidth * 0.06,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                   Text(
                     "Today",
-                    style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: screenWidth * 0.05,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                 ],
               ),
@@ -89,14 +101,16 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => MedicineAlertPage(widget.user),
+                  builder: (BuildContext context) =>
+                      MedicineAlertPage(widget.user),
                 ),
               );
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: Colors.red,
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: 8),
+              padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.04, vertical: 8),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -106,6 +120,12 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               style: TextStyle(fontSize: screenWidth * 0.04),
             ),
           ),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext) => CurrentAlarms()));
+              },
+              child: Text("Alarms"))
         ],
       ),
     );
@@ -121,14 +141,17 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         initialSelectedDate: DateTime.now(),
         selectedTextColor: Colors.white,
         selectionColor: Colors.red,
-        dateTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.grey),
+        dateTextStyle: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.w600, color: Colors.grey),
       ),
     );
   }
 
   Widget _showReminders(double screenHeight, double screenWidth) {
     if (_allAlerts.isEmpty) {
-      return Center(child: Text('No reminders found.', style: TextStyle(color: Colors.black)));
+      return Center(
+          child: Text('No reminders found.',
+              style: TextStyle(color: Colors.black)));
     }
     return ListView.builder(
       shrinkWrap: true,
@@ -143,19 +166,25 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
 
   Widget _buildReminderItem(DocumentSnapshot reminder, double screenWidth) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.05),
+      margin:
+          EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.05),
       child: ListTile(
-        leading: Icon(Icons.alarm, color: Colors.redAccent, size: screenWidth * 0.05),
+        leading: Icon(Icons.alarm,
+            color: Colors.redAccent, size: screenWidth * 0.05),
         title: Text(
           reminder['medicineName'] ?? 'No Medicine Name',
-          style: TextStyle(fontSize: screenWidth * 0.03, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+              fontSize: screenWidth * 0.03,
+              fontWeight: FontWeight.bold,
+              color: Colors.black),
         ),
         subtitle: Text(
           'Pill Intake: ${reminder['pillIntake'] ?? 'N/A'}\n'
-              'Frequency: ${reminder['interval'] +' times'?? 'N/A'}',
+          'Frequency: ${reminder['interval'] + ' times' ?? 'N/A'}',
           style: TextStyle(fontSize: screenWidth * 0.028, color: Colors.black),
         ),
-        trailing: Icon(Icons.chevron_right, color: Colors.grey, size: screenWidth * 0.08),
+        trailing: Icon(Icons.chevron_right,
+            color: Colors.grey, size: screenWidth * 0.08),
         onTap: () {
           _showReminderDetails(context, reminder);
         },
@@ -178,8 +207,10 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                 Text('Start Date: ${reminder['startDate'] ?? 'N/A'}'),
                 Text('Start Time: ${reminder['startTime'] ?? 'N/A'}'),
                 Text('Days: ${reminder['days'] ?? 'N/A'}'),
-                Text('Additional Instructions: ${reminder['additionalInstructions'] ?? 'N/A'}'),
-                Text('Days of Week: ${(reminder['daysOfWeek'] as List<dynamic>).join(', ')}'),
+                Text(
+                    'Additional Instructions: ${reminder['additionalInstructions'] ?? 'N/A'}'),
+                Text(
+                    'Days of Week: ${(reminder['daysOfWeek'] as List<dynamic>).join(', ')}'),
               ],
             ),
           ),
