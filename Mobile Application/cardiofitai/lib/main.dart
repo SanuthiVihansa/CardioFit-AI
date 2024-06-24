@@ -1,4 +1,4 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+// import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:cardiofitai/screens/common/login_exchange_screen.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter/material.dart';
@@ -16,16 +16,16 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await AndroidAlarmManager.initialize();
-  tz.initializeTimeZones();
-
-  const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/launcher_icon');
-
-  const InitializationSettings initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid);
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  // await AndroidAlarmManager.initialize();
+  // tz.initializeTimeZones();
+  //
+  // const AndroidInitializationSettings initializationSettingsAndroid =
+  // AndroidInitializationSettings('@mipmap/launcher_icon');
+  //
+  // const InitializationSettings initializationSettings =
+  // InitializationSettings(android: initializationSettingsAndroid);
+  //
+  // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   await Alarm.init();
 
