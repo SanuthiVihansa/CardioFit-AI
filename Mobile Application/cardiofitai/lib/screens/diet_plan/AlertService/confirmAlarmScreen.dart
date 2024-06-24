@@ -144,8 +144,11 @@ class _ConfirmAlarmState extends State<ConfirmAlarm> {
 
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('Alarms updated successfully')));
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (buildContext) => NotificationHomePage(widget.user)));
+    // Navigator.of(context).push(MaterialPageRoute(
+    //     builder: (buildContext) => NotificationHomePage(widget.user)));
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
   }
 
   void _toggleAlarm(bool value) {

@@ -1,12 +1,18 @@
+import 'dart:async';
+
+import 'package:alarm/alarm.dart';
+import 'package:alarm/model/alarm_settings.dart';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/alarmappexample.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/current_alarms.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/medicineAlertScreen.dart';
+import 'package:cardiofitai/screens/diet_plan/AlertService/ring.dart';
 import 'package:cardiofitai/services/medicineReminderService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NotificationHomePage extends StatefulWidget {
   const NotificationHomePage(this.user, {super.key});
@@ -19,11 +25,60 @@ class NotificationHomePage extends StatefulWidget {
 
 class _NotificationHomePageState extends State<NotificationHomePage> {
   List<DocumentSnapshot> _allAlerts = [];
+  late List<AlarmSettings> alarms;
+  static StreamSubscription<AlarmSettings>? subscription;
 
   @override
   void initState() {
     super.initState();
+    if (Alarm.android) {
+      checkAndroidNotificationPermission();
+      checkAndroidScheduleExactAlarmPermission();
+    }
     getSavedAlerts();
+    subscription ??= Alarm.ringStream.stream.listen(navigateToRingScreen);
+    loadAlarms();
+  }
+
+  Future<void> checkAndroidNotificationPermission() async {
+    final status = await Permission.notification.status;
+    if (status.isDenied) {
+      alarmPrint('Requesting notification permission...');
+      final res = await Permission.notification.request();
+      alarmPrint(
+        'Notification permission ${res.isGranted ? '' : 'not '}granted',
+      );
+    }
+  }
+
+  Future<void> checkAndroidScheduleExactAlarmPermission() async {
+    final status = await Permission.scheduleExactAlarm.status;
+    alarmPrint('Schedule exact alarm permission: $status.');
+    if (status.isDenied) {
+      alarmPrint('Requesting schedule exact alarm permission...');
+      final res = await Permission.scheduleExactAlarm.request();
+      alarmPrint(
+        'Schedule exact alarm permission ${res.isGranted ? '' : 'not'} granted',
+      );
+    }
+  }
+
+  Future<void> navigateToRingScreen(AlarmSettings alarmSettings) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) =>
+            ExampleAlarmRingScreen(alarmSettings: alarmSettings),
+      ),
+    );
+    loadAlarms();
+  }
+
+  void loadAlarms() {
+    setState(() {
+      alarms = Alarm.getAlarms();
+      alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
+    });
   }
 
   Future<void> getSavedAlerts() async {
@@ -32,6 +87,12 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     setState(() {
       _allAlerts = querySnapshot.docs;
     });
+  }
+
+  @override
+  void dispose() {
+    subscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -99,7 +160,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) =>
                       MedicineAlertPage(widget.user),

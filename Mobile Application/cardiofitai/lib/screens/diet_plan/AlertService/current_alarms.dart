@@ -28,34 +28,49 @@ class _CurrentAlarmsState extends State<CurrentAlarms> {
 
   @override
   Widget build(BuildContext context) {
-    print(alarms);
     return Scaffold(
       body: alarms.isNotEmpty
           ? ListView.separated(
-        itemCount: alarms.length,
-        separatorBuilder: (context, index) => const Divider(height: 1),
-        itemBuilder: (context, index) {
-          return ListTile(
-            key: Key(alarms[index].id.toString()),
-            title: Text(TimeOfDay(
-              hour: alarms[index].dateTime.hour,
-              minute: alarms[index].dateTime.minute,
-            ).format(context)),
-            onTap: (){
-              // navigateToAlarmScreen(alarms[index])
-            },
-            onLongPress: () {
-              Alarm.stop(alarms[index].id).then((_) => loadAlarms());
-            },
-          );
-        },
-      )
+              itemCount: alarms.length,
+              separatorBuilder: (context, index) => const Divider(height: 1),
+              itemBuilder: (context, index) {
+                return ListTile(
+                  key: Key(alarms[index].id.toString()),
+                  title: Text(TimeOfDay(
+                        hour: alarms[index].dateTime.hour,
+                        minute: alarms[index].dateTime.minute,
+                      ).format(context) +
+                      " " +
+                      alarms[index].dateTime.day.toString()),
+                  onTap: () {
+                    // navigateToAlarmScreen(alarms[index])
+                  },
+                  onLongPress: () {
+                    Alarm.stop(alarms[index].id).then((_) => loadAlarms());
+                  },
+                );
+              },
+            )
           : Center(
-        child: Text(
-          'No alarms set',
-          style: Theme.of(context).textTheme.titleMedium,
+              child: Text(
+                'No alarms set',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // ExampleAlarmHomeShortcutButton(refreshAlarms: loadAlarms),
+            FloatingActionButton(
+              onPressed: () {},
+              child: const Icon(Icons.alarm_add_rounded, size: 33),
+            ),
+          ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
