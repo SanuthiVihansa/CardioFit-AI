@@ -77,7 +77,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       if (_lastSubmittedRecordInfo.docs.isNotEmpty) {
         _lastSubmitRecordNo =
             _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
-        _thisAlarmReferenceNo = _lastSubmitRecordNo;
       } else {
         _lastSubmitRecordNo = 0; // Initialize to 0 if no previous record found
       }
@@ -372,6 +371,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     final int startHour = int.parse(timeParts[0]);
     final int startMinute = int.parse(timeParts[1].split(" ")[0]);
 
+
+
     for (DateTime currentDate = startDate;
     currentDate.isBefore(endDate) || currentDate.isAtSameMomentAs(endDate);
     currentDate = currentDate.add(Duration(days: 1))) {
@@ -386,8 +387,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           );
 
           // Create a document in Firestore and get its ID
-          final alarmDocRef =
-          FirebaseFirestore.instance.collection('alarms').doc();
+          final alarmDocRef = FirebaseFirestore.instance.collection('alarms').doc();
           final alarmId = alarmDocRef.id;
           final int alarmIdHash = alarmId.hashCode;
 
@@ -408,7 +408,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
           await alarmDocRef.set({
             'userEmail': widget.user.email,
-            'reminderNo': _thisAlarmReferenceNo,
+            'reminderNo': _lastSubmitRecordNo,
+            'alarmIdNo':alarmIdHash,
             'medicineName': medicineName,
             'dosage': dosage,
             'pillIntake': pillIntake,
