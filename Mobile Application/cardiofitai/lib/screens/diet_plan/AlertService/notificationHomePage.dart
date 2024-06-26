@@ -27,6 +27,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   static StreamSubscription<AlarmSettings>? subscription;
   DateTime _selectedDate = DateTime.now();
   late BuildContext _buildContext;
+  final dateController = TextEditingController();
+  final timeController = TextEditingController();
 
   @override
   void initState() {
@@ -84,7 +86,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
 
   Future<void> getSavedAlerts() async {
     QuerySnapshot querySnapshot =
-        await MedicineReminderService.getAllUserReminder(widget.user.email);
+    await MedicineReminderService.getAllUserReminder(widget.user.email);
     setState(() {
       _allAlerts = querySnapshot.docs;
       _filterAlertsForSelectedDate();
@@ -185,15 +187,13 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                     itemCount: _filteredAlerts.length,
                     itemBuilder: (context, index) {
                       final alarm = _filteredAlerts[index];
-                      // final TextEditingController dosageController = TextEditingController(text: alarm['dosage']);
-                      // final TextEditingController intakeController = TextEditingController(text: alarm['pillIntake']);
-                      // final TextEditingController intervalController = TextEditingController(text: alarm['frequency']);
-                      // final TextEditingController instructionsController = TextEditingController(text: alarm['additionalInstructions']);
-                      // final TextEditingController daysController = TextEditingController(text: alarm['selectedDays'].join(', '));
-                      final TextEditingController startDateController =
-                      TextEditingController(text: alarm['startDate']);
-                      final TextEditingController startTimeController =
-                      TextEditingController(text: alarm['startTime']);
+                      final DateTime scheduledAlarmDateTime = DateTime.parse(alarm['scheduledAlarmDateTime']);
+                      final TextEditingController dateController = TextEditingController(
+                        text: DateFormat('yyyy-MM-dd').format(scheduledAlarmDateTime),
+                      );
+                      final TextEditingController timeController = TextEditingController(
+                        text: DateFormat('HH:mm').format(scheduledAlarmDateTime),
+                      );
 
                       return Column(
                         children: [
@@ -202,15 +202,10 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          // _buildTextField(dosageController, 'Dosage', TextInputType.number),
-                          // _buildTextField(intakeController, 'Pill Intake', TextInputType.number),
-                          // _buildTextField(intervalController, 'Frequency', TextInputType.text),
-                          // _buildTextField(instructionsController, 'Additional Instructions', TextInputType.text),
-                          // _buildTextField(daysController, 'Days', TextInputType.text),
                           _buildDatePickerTextField(
-                              startDateController, 'Start Date'),
+                              dateController, 'Scheduled Date', context),
                           _buildTimePickerTextField(
-                              startTimeController, 'Start Time'),
+                              timeController, 'Scheduled Time', context),
                           SizedBox(height: 20),
                         ],
                       );
@@ -223,19 +218,15 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                     TextButton(
                       child: Text('Save'),
                       onPressed: () {
-                        // for (var alarm in _filteredAlerts) {
-                        //   _updateReminder(
-                        //     //alarm.id,
-                        //     alarm['reminderNo'],
-                        //     // alarm['dosage'],
-                        //     // alarm['pillIntake'],
-                        //     // alarm['frequency'],
-                        //     // alarm['additionalInstructions'],
-                        //     // alarm['selectedDays'].join(', '),
-                        //     alarm['startDate'],
-                        //     alarm['startTime'],
-                        //   );
-                        // }
+                        for (var alarm in _filteredAlerts) {
+                          final DateTime updatedDateTime = DateFormat('yyyy-MM-dd HH:mm').parse(
+                            '${dateController.text} ${timeController.text}',
+                          );
+                          _updateReminder(
+                            alarm['reminderNo'],
+                            DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(updatedDateTime),
+                          );
+                        }
                         Navigator.of(context).pop();
                       },
                     ),
@@ -255,41 +246,23 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  Future<void> _updateReminder(
-      int reminderNo, String startDate, String startTime) async {
+  Future<void> _updateReminder(int reminderNo, String scheduledAlarmDateTime) async {
     try {
       DocumentReference documentReference = FirebaseFirestore.instance
           .collection('alarms')
-          .doc(reminderNo as String?);
+          .doc(reminderNo.toString());
 
-      // Check if the document exists
       DocumentSnapshot snapshot = await documentReference.get();
       if (!snapshot.exists) {
         throw Exception('Document does not exist');
       }
 
       await documentReference.update({
-        'startDate': startDate,
-        'startTime': startTime,
+        'scheduledAlarmDateTime': scheduledAlarmDateTime,
       });
-
-      //   final alarmSettings = AlarmSettings(
-      //     id: id.hashCode,
-      //     dateTime: DateFormat('yyyy-MM-dd HH:mm').parse('$startDate $startTime'),
-      //     assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
-      //     loopAudio: true,
-      //     vibrate: true,
-      //     volume: 0.8,
-      //     fadeDuration: 2,
-      //     notificationTitle: name,
-      //     notificationBody: 'Take $intake pill(s) of $name. $dosage mg. $instructions',
-      //   );
-      //
-      //   await Alarm.set(alarmSettings: alarmSettings);
-      //   getSavedAlerts();
     } catch (e) {
-      //   print('Error updating reminder: $e');
-      //   _showErrorSnackBar('Error updating reminder: ${e.toString()}');
+      print('Error updating reminder: $e');
+      _showErrorSnackBar('Error updating reminder: ${e.toString()}');
     }
   }
 
@@ -473,7 +446,6 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-
   Widget _buildTextField(TextEditingController controller, String label,
       TextInputType keyboardType) {
     return TextField(
@@ -496,7 +468,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   }
 
   Widget _buildDatePickerTextField(
-      TextEditingController controller, String label) {
+      TextEditingController controller, String label, BuildContext context) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -533,7 +505,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   }
 
   Widget _buildTimePickerTextField(
-      TextEditingController controller, String label) {
+      TextEditingController controller, String label, BuildContext context) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -573,6 +545,4 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       cursorColor: Colors.red,
     );
   }
-
-
 }
