@@ -82,14 +82,12 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
 
   Future<void> getSavedAlerts() async {
     QuerySnapshot querySnapshot =
-    await MedicineReminderService.getAllUserReminder(widget.user.email);
+        await MedicineReminderService.getAllUserReminder(widget.user.email);
     setState(() {
       _allAlerts = querySnapshot.docs;
       _filterAlertsForSelectedDate();
     });
   }
-
-
 
   Future<void> getSavedAlarms(int reminderNo) async {
     final QuerySnapshot alarmSnapshot = await FirebaseFirestore.instance
@@ -107,7 +105,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       _filteredAlerts = _allAlerts.where((alert) {
         DateTime startDate = DateTime.parse(alert['startDate']);
         DateTime endDate = DateTime.parse(alert['endDate']);
-        return startDate.isBefore(_selectedDate) && endDate.isAfter(_selectedDate);
+        return startDate.isBefore(_selectedDate) &&
+            endDate.isAfter(_selectedDate);
       }).toList();
     });
   }
@@ -251,7 +250,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   Widget _buildReminderItem(DocumentSnapshot reminder, double screenWidth) {
     return Card(
       margin:
-      EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.05),
+          EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.05),
       child: ListTile(
         leading: Icon(Icons.alarm,
             color: Colors.redAccent, size: screenWidth * 0.05),
@@ -264,7 +263,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         ),
         subtitle: Text(
           'Pill Intake: ${reminder['pillIntake'] ?? 'N/A'}\n'
-              'Frequency: ${reminder['interval'] + ' times' ?? 'N/A'}',
+          'Frequency: ${reminder['interval'] + ' times' ?? 'N/A'}',
           style: TextStyle(fontSize: screenWidth * 0.028, color: Colors.black),
         ),
         trailing: Icon(Icons.chevron_right,
@@ -286,11 +285,13 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
             child: ListBody(
               children: <Widget>[
                 Text('Dosage: ${reminder['dosage'] ?? 'N/A'}'),
-                Text('Frequency: ${reminder['interval']+' times' ?? 'N/A'}'),
+                Text('Frequency: ${reminder['interval'] + ' times' ?? 'N/A'}'),
                 Text('Pill Intake: ${reminder['pillIntake'] ?? 'N/A'}'),
                 Text('Days: ${reminder['days'] ?? 'N/A'}'),
-                Text('Additional Instructions: ${reminder['additionalInstructions'] ?? 'N/A'}'),
-                Text('Repeat: ${(reminder['daysOfWeek'] as List<dynamic>).join(', ')}'),
+                Text(
+                    'Additional Instructions: ${reminder['additionalInstructions'] ?? 'N/A'}'),
+                Text(
+                    'Repeat: ${(reminder['daysOfWeek'] as List<dynamic>).join(', ')}'),
               ],
             ),
           ),
@@ -298,7 +299,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
             TextButton(
               child: Text('Edit'),
               onPressed: () {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
                 _showEditDialog(context, reminder);
               },
             ),
@@ -351,22 +352,27 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                       // final TextEditingController intervalController = TextEditingController(text: alarm['frequency']);
                       // final TextEditingController instructionsController = TextEditingController(text: alarm['additionalInstructions']);
                       // final TextEditingController daysController = TextEditingController(text: alarm['selectedDays'].join(', '));
-                      final TextEditingController startDateController = TextEditingController(text: alarm['startDate']);
-                      final TextEditingController startTimeController = TextEditingController(text: alarm['startTime']);
+                      final TextEditingController startDateController =
+                          TextEditingController(text: alarm['startDate']);
+                      final TextEditingController startTimeController =
+                          TextEditingController(text: alarm['startTime']);
 
                       return Column(
                         children: [
                           Text(
                             'Alarm ${index + 1}',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           // _buildTextField(dosageController, 'Dosage', TextInputType.number),
                           // _buildTextField(intakeController, 'Pill Intake', TextInputType.number),
                           // _buildTextField(intervalController, 'Frequency', TextInputType.text),
                           // _buildTextField(instructionsController, 'Additional Instructions', TextInputType.text),
                           // _buildTextField(daysController, 'Days', TextInputType.text),
-                          _buildDatePickerTextField(startDateController, 'Start Date'),
-                          _buildTimePickerTextField(startTimeController, 'Start Time'),
+                          _buildDatePickerTextField(
+                              startDateController, 'Start Date'),
+                          _buildTimePickerTextField(
+                              startTimeController, 'Start Time'),
                           SizedBox(height: 20),
                         ],
                       );
@@ -545,7 +551,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   //   );
   // }
 
-  Widget _buildTextField(TextEditingController controller, String label, TextInputType keyboardType) {
+  Widget _buildTextField(TextEditingController controller, String label,
+      TextInputType keyboardType) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -565,7 +572,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  Widget _buildDatePickerTextField(TextEditingController controller, String label) {
+  Widget _buildDatePickerTextField(
+      TextEditingController controller, String label) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -601,7 +609,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  Widget _buildTimePickerTextField(TextEditingController controller, String label) {
+  Widget _buildTimePickerTextField(
+      TextEditingController controller, String label) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -615,7 +624,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               initialTime: TimeOfDay.now(),
               builder: (BuildContext context, Widget? child) {
                 return MediaQuery(
-                  data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+                  data: MediaQuery.of(context)
+                      .copyWith(alwaysUse24HourFormat: true),
                   child: child!,
                 );
               },
@@ -641,9 +651,12 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  Future<void> _updateReminder(int reminderNo,String startDate, String startTime) async {
+  Future<void> _updateReminder(
+      int reminderNo, String startDate, String startTime) async {
     try {
-      DocumentReference documentReference = FirebaseFirestore.instance.collection('alarms').doc(reminderNo as String?);
+      DocumentReference documentReference = FirebaseFirestore.instance
+          .collection('alarms')
+          .doc(reminderNo as String?);
 
       // Check if the document exists
       DocumentSnapshot snapshot = await documentReference.get();
@@ -656,23 +669,23 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         'startTime': startTime,
       });
 
-    //   final alarmSettings = AlarmSettings(
-    //     id: id.hashCode,
-    //     dateTime: DateFormat('yyyy-MM-dd HH:mm').parse('$startDate $startTime'),
-    //     assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
-    //     loopAudio: true,
-    //     vibrate: true,
-    //     volume: 0.8,
-    //     fadeDuration: 2,
-    //     notificationTitle: name,
-    //     notificationBody: 'Take $intake pill(s) of $name. $dosage mg. $instructions',
-    //   );
-    //
-    //   await Alarm.set(alarmSettings: alarmSettings);
-    //   getSavedAlerts();
+      //   final alarmSettings = AlarmSettings(
+      //     id: id.hashCode,
+      //     dateTime: DateFormat('yyyy-MM-dd HH:mm').parse('$startDate $startTime'),
+      //     assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
+      //     loopAudio: true,
+      //     vibrate: true,
+      //     volume: 0.8,
+      //     fadeDuration: 2,
+      //     notificationTitle: name,
+      //     notificationBody: 'Take $intake pill(s) of $name. $dosage mg. $instructions',
+      //   );
+      //
+      //   await Alarm.set(alarmSettings: alarmSettings);
+      //   getSavedAlerts();
     } catch (e) {
-    //   print('Error updating reminder: $e');
-    //   _showErrorSnackBar('Error updating reminder: ${e.toString()}');
+      //   print('Error updating reminder: $e');
+      //   _showErrorSnackBar('Error updating reminder: ${e.toString()}');
     }
   }
 
@@ -684,7 +697,10 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   }
 
   Future<void> _deleteReminder(DocumentSnapshot reminder) async {
-    await FirebaseFirestore.instance.collection('alarms').doc(reminder.id).delete();
+    await FirebaseFirestore.instance
+        .collection('alarms')
+        .doc(reminder.id)
+        .delete();
     Alarm.stop(reminder.id.hashCode).then((_) => loadAlarms());
     //Alarm.stop(alarms[index].id).then((_) => loadAlarms());
     getSavedAlerts();
