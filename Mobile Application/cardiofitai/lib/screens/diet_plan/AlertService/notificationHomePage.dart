@@ -26,10 +26,12 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   late List<AlarmSettings> alarms;
   static StreamSubscription<AlarmSettings>? subscription;
   DateTime _selectedDate = DateTime.now();
+  late BuildContext _buildContext;
 
   @override
   void initState() {
     super.initState();
+
     if (Alarm.android) {
       checkAndroidNotificationPermission();
       checkAndroidScheduleExactAlarmPermission();
@@ -444,32 +446,33 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   }
 
   Widget _buildReminderItem(DocumentSnapshot reminder, double screenWidth) {
+    final data = reminder.data() as Map<String, dynamic>?;
+
     return Card(
-      margin:
-          EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.05),
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.05),
       child: ListTile(
-        leading: Icon(Icons.alarm,
-            color: Colors.redAccent, size: screenWidth * 0.05),
+        leading: Icon(Icons.alarm, color: Colors.redAccent, size: screenWidth * 0.05),
         title: Text(
-          reminder['medicineName'] ?? 'No Medicine Name',
+          data != null && data.containsKey('medicineName') ? data['medicineName'] : 'No Medicine Name',
           style: TextStyle(
-              fontSize: screenWidth * 0.03,
-              fontWeight: FontWeight.bold,
-              color: Colors.black),
+            fontSize: screenWidth * 0.03,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
         ),
         subtitle: Text(
-          'Pill Intake: ${reminder['pillIntake'] ?? 'N/A'}\n'
-              'Frequency: ${(reminder['interval'] ?? 'N/A').toString() + ' times'}',
+          'Pill Intake: ${data != null && data.containsKey('pillIntake') ? data['pillIntake'] : 'N/A'}\n'
+              'Frequency: ${data != null && data.containsKey('interval') ? data['interval'].toString() + ' times' : 'N/A'}',
           style: TextStyle(fontSize: screenWidth * 0.028, color: Colors.black),
         ),
-        trailing: Icon(Icons.chevron_right,
-            color: Colors.grey, size: screenWidth * 0.08),
+        trailing: Icon(Icons.chevron_right, color: Colors.grey, size: screenWidth * 0.08),
         onTap: () {
           _showReminderDetails(context, reminder);
         },
       ),
     );
   }
+
 
   Widget _buildTextField(TextEditingController controller, String label,
       TextInputType keyboardType) {
