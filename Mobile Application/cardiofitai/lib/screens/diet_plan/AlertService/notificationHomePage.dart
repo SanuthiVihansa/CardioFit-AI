@@ -111,12 +111,208 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     });
   }
 
+  void _showReminderDetails(BuildContext context, DocumentSnapshot reminder) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(reminder['medicineName'] ?? 'No Medicine Name'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Dosage: ${reminder['dosage'] ?? 'N/A'}'),
+                Text('Frequency: ${reminder['interval'] + ' times' ?? 'N/A'}'),
+                Text('Pill Intake: ${reminder['pillIntake'] ?? 'N/A'}'),
+                Text('Days: ${reminder['days'] ?? 'N/A'}'),
+                Text(
+                    'Additional Instructions: ${reminder['additionalInstructions'] ?? 'N/A'}'),
+                Text(
+                    'Repeat: ${(reminder['daysOfWeek'] as List<dynamic>).join(', ')}'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Edit'),
+              onPressed: () {
+                // Navigator.of(context).pop();
+                _showEditDialog(context, reminder);
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteReminder(reminder);
+              },
+            ),
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEditDialog(BuildContext context, DocumentSnapshot reminder) async {
+    final int reminderNo = reminder['reminderNo'];
+    await getSavedAlarms(reminderNo);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: EdgeInsets.all(10),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height * 0.8,
+            padding: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Edit Alarms for ${reminder['medicineName']}',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _filteredAlerts.length,
+                    itemBuilder: (context, index) {
+                      final alarm = _filteredAlerts[index];
+                      // final TextEditingController dosageController = TextEditingController(text: alarm['dosage']);
+                      // final TextEditingController intakeController = TextEditingController(text: alarm['pillIntake']);
+                      // final TextEditingController intervalController = TextEditingController(text: alarm['frequency']);
+                      // final TextEditingController instructionsController = TextEditingController(text: alarm['additionalInstructions']);
+                      // final TextEditingController daysController = TextEditingController(text: alarm['selectedDays'].join(', '));
+                      final TextEditingController startDateController =
+                      TextEditingController(text: alarm['startDate']);
+                      final TextEditingController startTimeController =
+                      TextEditingController(text: alarm['startTime']);
+
+                      return Column(
+                        children: [
+                          Text(
+                            'Alarm ${index + 1}',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          // _buildTextField(dosageController, 'Dosage', TextInputType.number),
+                          // _buildTextField(intakeController, 'Pill Intake', TextInputType.number),
+                          // _buildTextField(intervalController, 'Frequency', TextInputType.text),
+                          // _buildTextField(instructionsController, 'Additional Instructions', TextInputType.text),
+                          // _buildTextField(daysController, 'Days', TextInputType.text),
+                          _buildDatePickerTextField(
+                              startDateController, 'Start Date'),
+                          _buildTimePickerTextField(
+                              startTimeController, 'Start Time'),
+                          SizedBox(height: 20),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      child: Text('Save'),
+                      onPressed: () {
+                        // for (var alarm in _filteredAlerts) {
+                        //   _updateReminder(
+                        //     //alarm.id,
+                        //     alarm['reminderNo'],
+                        //     // alarm['dosage'],
+                        //     // alarm['pillIntake'],
+                        //     // alarm['frequency'],
+                        //     // alarm['additionalInstructions'],
+                        //     // alarm['selectedDays'].join(', '),
+                        //     alarm['startDate'],
+                        //     alarm['startTime'],
+                        //   );
+                        // }
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _updateReminder(
+      int reminderNo, String startDate, String startTime) async {
+    try {
+      DocumentReference documentReference = FirebaseFirestore.instance
+          .collection('alarms')
+          .doc(reminderNo as String?);
+
+      // Check if the document exists
+      DocumentSnapshot snapshot = await documentReference.get();
+      if (!snapshot.exists) {
+        throw Exception('Document does not exist');
+      }
+
+      await documentReference.update({
+        'startDate': startDate,
+        'startTime': startTime,
+      });
+
+      //   final alarmSettings = AlarmSettings(
+      //     id: id.hashCode,
+      //     dateTime: DateFormat('yyyy-MM-dd HH:mm').parse('$startDate $startTime'),
+      //     assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
+      //     loopAudio: true,
+      //     vibrate: true,
+      //     volume: 0.8,
+      //     fadeDuration: 2,
+      //     notificationTitle: name,
+      //     notificationBody: 'Take $intake pill(s) of $name. $dosage mg. $instructions',
+      //   );
+      //
+      //   await Alarm.set(alarmSettings: alarmSettings);
+      //   getSavedAlerts();
+    } catch (e) {
+      //   print('Error updating reminder: $e');
+      //   _showErrorSnackBar('Error updating reminder: ${e.toString()}');
+    }
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+    ));
+  }
+
+  Future<void> _deleteReminder(DocumentSnapshot reminder) async {
+    await FirebaseFirestore.instance
+        .collection('alarms')
+        .doc(reminder.id)
+        .delete();
+    Alarm.stop(reminder.id.hashCode).then((_) => loadAlarms());
+    //Alarm.stop(alarms[index].id).then((_) => loadAlarms());
+    getSavedAlerts();
+  }
+
   @override
   void dispose() {
     subscription?.cancel();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -263,7 +459,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         ),
         subtitle: Text(
           'Pill Intake: ${reminder['pillIntake'] ?? 'N/A'}\n'
-          'Frequency: ${reminder['interval'] + ' times' ?? 'N/A'}',
+              'Frequency: ${(reminder['interval'] ?? 'N/A').toString() + ' times'}',
           style: TextStyle(fontSize: screenWidth * 0.028, color: Colors.black),
         ),
         trailing: Icon(Icons.chevron_right,
@@ -274,282 +470,6 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       ),
     );
   }
-
-  void _showReminderDetails(BuildContext context, DocumentSnapshot reminder) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(reminder['medicineName'] ?? 'No Medicine Name'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Dosage: ${reminder['dosage'] ?? 'N/A'}'),
-                Text('Frequency: ${reminder['interval'] + ' times' ?? 'N/A'}'),
-                Text('Pill Intake: ${reminder['pillIntake'] ?? 'N/A'}'),
-                Text('Days: ${reminder['days'] ?? 'N/A'}'),
-                Text(
-                    'Additional Instructions: ${reminder['additionalInstructions'] ?? 'N/A'}'),
-                Text(
-                    'Repeat: ${(reminder['daysOfWeek'] as List<dynamic>).join(', ')}'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Edit'),
-              onPressed: () {
-                // Navigator.of(context).pop();
-                _showEditDialog(context, reminder);
-              },
-            ),
-            TextButton(
-              child: Text('Delete'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _deleteReminder(reminder);
-              },
-            ),
-            TextButton(
-              child: Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showEditDialog(BuildContext context, DocumentSnapshot reminder) async {
-    final int reminderNo = reminder['reminderNo'];
-    await getSavedAlarms(reminderNo);
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          insetPadding: EdgeInsets.all(10),
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.height * 0.8,
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Edit Alarms for ${reminder['medicineName']}',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: _filteredAlerts.length,
-                    itemBuilder: (context, index) {
-                      final alarm = _filteredAlerts[index];
-                      // final TextEditingController dosageController = TextEditingController(text: alarm['dosage']);
-                      // final TextEditingController intakeController = TextEditingController(text: alarm['pillIntake']);
-                      // final TextEditingController intervalController = TextEditingController(text: alarm['frequency']);
-                      // final TextEditingController instructionsController = TextEditingController(text: alarm['additionalInstructions']);
-                      // final TextEditingController daysController = TextEditingController(text: alarm['selectedDays'].join(', '));
-                      final TextEditingController startDateController =
-                          TextEditingController(text: alarm['startDate']);
-                      final TextEditingController startTimeController =
-                          TextEditingController(text: alarm['startTime']);
-
-                      return Column(
-                        children: [
-                          Text(
-                            'Alarm ${index + 1}',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          // _buildTextField(dosageController, 'Dosage', TextInputType.number),
-                          // _buildTextField(intakeController, 'Pill Intake', TextInputType.number),
-                          // _buildTextField(intervalController, 'Frequency', TextInputType.text),
-                          // _buildTextField(instructionsController, 'Additional Instructions', TextInputType.text),
-                          // _buildTextField(daysController, 'Days', TextInputType.text),
-                          _buildDatePickerTextField(
-                              startDateController, 'Start Date'),
-                          _buildTimePickerTextField(
-                              startTimeController, 'Start Time'),
-                          SizedBox(height: 20),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      child: Text('Save'),
-                      onPressed: () {
-                        // for (var alarm in _filteredAlerts) {
-                        //   _updateReminder(
-                        //     //alarm.id,
-                        //     alarm['reminderNo'],
-                        //     // alarm['dosage'],
-                        //     // alarm['pillIntake'],
-                        //     // alarm['frequency'],
-                        //     // alarm['additionalInstructions'],
-                        //     // alarm['selectedDays'].join(', '),
-                        //     alarm['startDate'],
-                        //     alarm['startTime'],
-                        //   );
-                        // }
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    TextButton(
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  // void _showReminderDetails(BuildContext context, DocumentSnapshot reminder) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text(reminder['medicineName'] ?? 'No Medicine Name'),
-  //         content: SingleChildScrollView(
-  //           child: ListBody(
-  //             children: <Widget>[
-  //               Text('Dosage: ${reminder['dosage'] ?? 'N/A'}'),
-  //               Text('Frequency: ${reminder['interval']+' times' ?? 'N/A'}'),
-  //               Text('Pill Intake: ${reminder['pillIntake'] ?? 'N/A'}'),
-  //               // Text('Start Date: ${reminder['startDate'] ?? 'N/A'}'),
-  //               // Text('Start Time: ${reminder['startTime'] ?? 'N/A'}'),
-  //               Text('Days: ${reminder['days'] ?? 'N/A'}'),
-  //               Text(
-  //                   'Additional Instructions: ${reminder['additionalInstructions'] ?? 'N/A'}'),
-  //               Text(
-  //                   'Repeat: ${(reminder['daysOfWeek'] as List<dynamic>).join(', ')}'),
-  //             ],
-  //           ),
-  //         ),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: Text('Edit'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //               _showEditDialog(context, reminder);
-  //             },
-  //           ),
-  //           TextButton(
-  //             child: Text('Delete'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //               _deleteReminder(reminder);
-  //             },
-  //           ),
-  //           TextButton(
-  //             child: Text('Close'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-  //
-  // void _showEditDialog(BuildContext context, DocumentSnapshot reminder) {
-  //   final TextEditingController nameController = TextEditingController(text: reminder['medicineName']);
-  //   final TextEditingController dosageController = TextEditingController(text: reminder['dosage']);
-  //   final TextEditingController intakeController = TextEditingController(text: reminder['pillIntake']);
-  //   final TextEditingController intervalController = TextEditingController(text: reminder['interval']);
-  //   final TextEditingController instructionsController = TextEditingController(text: reminder['additionalInstructions']);
-  //   final TextEditingController daysController = TextEditingController(text: reminder['days'].toString());
-  //   final TextEditingController startDateController = TextEditingController(text: reminder['startDate']);
-  //   final TextEditingController startTimeController = TextEditingController(text: reminder['startTime']);
-  //
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return Dialog(
-  //         insetPadding: EdgeInsets.all(10),
-  //         child: Container(
-  //           width: MediaQuery.of(context).size.width * 0.9,
-  //           height: MediaQuery.of(context).size.height * 0.8,
-  //           padding: EdgeInsets.all(20),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 'Edit Reminder',
-  //                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-  //               ),
-  //               Expanded(
-  //                 child: SingleChildScrollView(
-  //                   child: Column(
-  //                     children: [
-  //                       _buildTextField(nameController, 'Medicine Name', TextInputType.text),
-  //                       SizedBox(height: 10),
-  //                       _buildTextField(dosageController, 'Dosage', TextInputType.number),
-  //                       SizedBox(height: 10),
-  //                       _buildTextField(intakeController, 'Pill Intake', TextInputType.number),
-  //                       SizedBox(height: 10),
-  //                       _buildTextField(intervalController, 'Frequency', TextInputType.text),
-  //                       SizedBox(height: 10),
-  //                       _buildTextField(instructionsController, 'Additional Instructions', TextInputType.text),
-  //                       SizedBox(height: 10),
-  //                       _buildTextField(daysController, 'Days', TextInputType.number),
-  //                       // SizedBox(height: 10),
-  //                       // _buildDatePickerTextField(startDateController, 'Start Date'),
-  //                       // SizedBox(height: 10),
-  //                       // _buildTimePickerTextField(startTimeController, 'Start Time'),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.end,
-  //                 children: [
-  //                   TextButton(
-  //                     child: Text('Save'),
-  //                     onPressed: () {
-  //                       _updateReminder(
-  //                         reminder.id,
-  //                         nameController.text,
-  //                         dosageController.text,
-  //                         intakeController.text,
-  //                         intervalController.text,
-  //                         instructionsController.text,
-  //                         daysController.text,
-  //                         startDateController.text,
-  //                         startTimeController.text,
-  //                       );
-  //                       Navigator.of(context).pop();
-  //                     },
-  //                   ),
-  //                   TextButton(
-  //                     child: Text('Cancel'),
-  //                     onPressed: () {
-  //                       Navigator.of(context).pop();
-  //                     },
-  //                   ),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   Widget _buildTextField(TextEditingController controller, String label,
       TextInputType keyboardType) {
@@ -651,58 +571,5 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  Future<void> _updateReminder(
-      int reminderNo, String startDate, String startTime) async {
-    try {
-      DocumentReference documentReference = FirebaseFirestore.instance
-          .collection('alarms')
-          .doc(reminderNo as String?);
 
-      // Check if the document exists
-      DocumentSnapshot snapshot = await documentReference.get();
-      if (!snapshot.exists) {
-        throw Exception('Document does not exist');
-      }
-
-      await documentReference.update({
-        'startDate': startDate,
-        'startTime': startTime,
-      });
-
-      //   final alarmSettings = AlarmSettings(
-      //     id: id.hashCode,
-      //     dateTime: DateFormat('yyyy-MM-dd HH:mm').parse('$startDate $startTime'),
-      //     assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
-      //     loopAudio: true,
-      //     vibrate: true,
-      //     volume: 0.8,
-      //     fadeDuration: 2,
-      //     notificationTitle: name,
-      //     notificationBody: 'Take $intake pill(s) of $name. $dosage mg. $instructions',
-      //   );
-      //
-      //   await Alarm.set(alarmSettings: alarmSettings);
-      //   getSavedAlerts();
-    } catch (e) {
-      //   print('Error updating reminder: $e');
-      //   _showErrorSnackBar('Error updating reminder: ${e.toString()}');
-    }
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.red,
-    ));
-  }
-
-  Future<void> _deleteReminder(DocumentSnapshot reminder) async {
-    await FirebaseFirestore.instance
-        .collection('alarms')
-        .doc(reminder.id)
-        .delete();
-    Alarm.stop(reminder.id.hashCode).then((_) => loadAlarms());
-    //Alarm.stop(alarms[index].id).then((_) => loadAlarms());
-    getSavedAlerts();
-  }
 }
