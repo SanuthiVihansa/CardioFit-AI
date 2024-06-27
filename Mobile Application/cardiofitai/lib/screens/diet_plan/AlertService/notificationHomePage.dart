@@ -242,6 +242,12 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                             DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
                                 .format(_updatedScheduledDateTimes[index1]),
                           );
+                          _reCreateAlarm(
+                              int.parse(alarm["alarmIdNo"].toString()),
+                              _updatedScheduledDateTimes[index1],
+                              alarm["medicineName"],
+                              int.parse(alarm["pillIntake"].toString()),
+                              int.parse(alarm["dosage"].toString()));
                           index1++;
                         }
                         Navigator.of(context).pop();
@@ -261,6 +267,25 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         );
       },
     );
+  }
+
+  void _reCreateAlarm(int alarmId, DateTime dateTime, String medicineName,
+      int pillIntake, int dosage) {
+    Alarm.stop(alarmId).then((_) async {
+      final alarmSettings = AlarmSettings(
+        id: alarmId,
+        dateTime: dateTime,
+        assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
+        loopAudio: true,
+        vibrate: true,
+        volume: 0.8,
+        fadeDuration: 2,
+        notificationTitle: medicineName,
+        notificationBody:
+            'Take $pillIntake pill(s) of $medicineName. $dosage mg.',
+      );
+      await Alarm.set(alarmSettings: alarmSettings);
+    });
   }
 
   Future<void> _updateReminder(
