@@ -30,6 +30,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   final dateController = TextEditingController();
   final timeController = TextEditingController();
   List<DateTime> _updatedScheduledDateTimes = [];
+  List<bool> alarmStatusList = [];
 
   @override
   void initState() {
@@ -110,6 +111,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     for (var alarm in _filteredAlerts) {
       _updatedScheduledDateTimes
           .add(DateTime.parse(alarm["scheduledAlarmDateTime"]));
+      alarmStatusList.add(alarm['isActive']);
     }
   }
 
@@ -207,6 +209,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                       TextEditingController(
                         text: DateFormat('HH:mm').format(scheduledAlarmDateTime),
                       );
+                      bool alarmStatus = alarmStatusList[index];
+                      final DateTime updatedDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('${dateController.text} ${timeController.text}');
 
                       return Column(
                         children: [
@@ -229,12 +233,28 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                               ),
                               SizedBox(width: 20),
                               Switch(
-                                value: alarm['isActive'],
-                                onChanged: (bool value) {
+                                value: alarmStatus,
+                                onChanged: (bool value){
                                   setState(() {
-                                    Alarm.stop(alarm['alarmIdNo']);
+                                    alarmStatusList[index] = value;
                                   });
-                                },
+                                  if (value) {
+                                    //alarmStatus=true;
+                                    _updateReminderAlarmStatusTrue(alarm['alarmIdNo']);
+                                    _reCreateAlarm(
+                                        int.parse(alarm["alarmIdNo"].toString()),
+                                        updatedDateTime,
+                                        alarm["medicineName"],
+                                        int.parse(alarm["pillIntake"].toString()),
+                                        int.parse(alarm["dosage"].toString()));
+
+                                  } else {
+                                    _updateReminderAlarmStatus(alarm['alarmIdNo']);
+                                    //alarmStatus=false;
+                                    Alarm.stop(alarm['alarmIdNo']);
+                                  }
+                                }
+
                               ),
                             ],
                           ),
@@ -252,9 +272,6 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                       onPressed: () {
                         int index1 = 0;
                         for (var alarm in _filteredAlerts) {
-                          // final DateTime updatedDateTime = DateFormat('yyyy-MM-dd HH:mm').parse(
-                          //   '${dateController.text} ${timeController.text}',
-                          // );
                           _updateReminder(
                             alarm['alarmIdNo'],
                             DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
@@ -432,6 +449,59 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     }
   }
 
+  Future<void> _updateReminderAlarmStatus(
+      int alarmIdNo) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('alarms')
+          .where("alarmIdNo", isEqualTo: alarmIdNo)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        throw Exception('Document does not exist');
+      }
+
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        // Get the document reference
+        DocumentReference documentReference = documentSnapshot.reference;
+
+        // Update the document
+        await documentReference.update({
+          'isActive': false,
+        });
+      }
+    } catch (e) {
+      print('Error updating reminder: $e');
+      _showErrorSnackBar('Error updating reminder: ${e.toString()}');
+    }
+  }
+
+  Future<void> _updateReminderAlarmStatusTrue(
+      int alarmIdNo) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('alarms')
+          .where("alarmIdNo", isEqualTo: alarmIdNo)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        throw Exception('Document does not exist');
+      }
+
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        // Get the document reference
+        DocumentReference documentReference = documentSnapshot.reference;
+
+        // Update the document
+        await documentReference.update({
+          'isActive': true,
+        });
+      }
+    } catch (e) {
+      print('Error updating reminder: $e');
+      _showErrorSnackBar('Error updating reminder: ${e.toString()}');
+    }
+  }
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
