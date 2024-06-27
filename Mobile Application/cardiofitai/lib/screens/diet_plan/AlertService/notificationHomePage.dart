@@ -199,18 +199,21 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                     itemBuilder: (context, index) {
                       final alarm = _filteredAlerts[index];
                       final DateTime scheduledAlarmDateTime =
-                      DateTime.parse(alarm['scheduledAlarmDateTime']);
+                          DateTime.parse(alarm['scheduledAlarmDateTime']);
                       final TextEditingController dateController =
-                      TextEditingController(
+                          TextEditingController(
                         text: DateFormat('yyyy-MM-dd')
                             .format(scheduledAlarmDateTime),
                       );
                       final TextEditingController timeController =
-                      TextEditingController(
-                        text: DateFormat('HH:mm').format(scheduledAlarmDateTime),
+                          TextEditingController(
+                        text:
+                            DateFormat('HH:mm').format(scheduledAlarmDateTime),
                       );
                       bool alarmStatus = alarmStatusList[index];
-                      final DateTime updatedDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('${dateController.text} ${timeController.text}');
+                      final DateTime updatedDateTime =
+                          DateFormat('yyyy-MM-dd HH:mm').parse(
+                              '${dateController.text} ${timeController.text}');
 
                       return Column(
                         children: [
@@ -223,39 +226,41 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                           Row(
                             children: [
                               Expanded(
-                                child: _buildDatePickerTextField(
-                                    dateController, 'Scheduled Date', context, index),
+                                child: _buildDatePickerTextField(dateController,
+                                    'Scheduled Date', context, index),
                               ),
                               SizedBox(width: 20),
                               Expanded(
-                                child: _buildTimePickerTextField(
-                                    timeController, 'Scheduled Time', context, index),
+                                child: _buildTimePickerTextField(timeController,
+                                    'Scheduled Time', context, index),
                               ),
                               SizedBox(width: 20),
                               Switch(
-                                value: alarmStatus,
-                                onChanged: (bool value){
-                                  setState(() {
-                                    alarmStatusList[index] = value;
-                                  });
-                                  if (value) {
-                                    //alarmStatus=true;
-                                    _updateReminderAlarmStatusTrue(alarm['alarmIdNo']);
-                                    _reCreateAlarm(
-                                        int.parse(alarm["alarmIdNo"].toString()),
-                                        updatedDateTime,
-                                        alarm["medicineName"],
-                                        int.parse(alarm["pillIntake"].toString()),
-                                        int.parse(alarm["dosage"].toString()));
-
-                                  } else {
-                                    _updateReminderAlarmStatus(alarm['alarmIdNo']);
-                                    //alarmStatus=false;
-                                    Alarm.stop(alarm['alarmIdNo']);
-                                  }
-                                }
-
-                              ),
+                                  value: alarmStatusList[index],
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      alarmStatusList[index] = value;
+                                    });
+                                    if (value) {
+                                      //alarmStatus=true;
+                                      _updateReminderAlarmStatusTrue(
+                                          alarm['alarmIdNo']);
+                                      _reCreateAlarm(
+                                          int.parse(
+                                              alarm["alarmIdNo"].toString()),
+                                          updatedDateTime,
+                                          alarm["medicineName"],
+                                          int.parse(
+                                              alarm["pillIntake"].toString()),
+                                          int.parse(
+                                              alarm["dosage"].toString()));
+                                    } else {
+                                      _updateReminderAlarmStatus(
+                                          alarm['alarmIdNo']);
+                                      //alarmStatus=false;
+                                      Alarm.stop(alarm['alarmIdNo']);
+                                    }
+                                  }),
                             ],
                           ),
                           SizedBox(height: 20),
@@ -449,8 +454,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     }
   }
 
-  Future<void> _updateReminderAlarmStatus(
-      int alarmIdNo) async {
+  Future<void> _updateReminderAlarmStatus(int alarmIdNo) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('alarms')
@@ -476,8 +480,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     }
   }
 
-  Future<void> _updateReminderAlarmStatusTrue(
-      int alarmIdNo) async {
+  Future<void> _updateReminderAlarmStatusTrue(int alarmIdNo) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('alarms')
@@ -502,6 +505,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       _showErrorSnackBar('Error updating reminder: ${e.toString()}');
     }
   }
+
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
