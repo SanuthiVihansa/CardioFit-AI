@@ -29,6 +29,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   late BuildContext _buildContext;
   final dateController = TextEditingController();
   final timeController = TextEditingController();
+  List<DateTime> _updatedScheduledDateTimes = [];
 
   @override
   void initState() {
@@ -86,7 +87,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
 
   Future<void> getSavedAlerts() async {
     QuerySnapshot querySnapshot =
-    await MedicineReminderService.getAllUserReminder(widget.user.email);
+        await MedicineReminderService.getAllUserReminder(widget.user.email);
     setState(() {
       _allAlerts = querySnapshot.docs;
       _filterAlertsForSelectedDate();
@@ -101,7 +102,15 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         .get();
     setState(() {
       _filteredAlerts = alarmSnapshot.docs;
+      _assignUpdatedScheduledDateTimes(_filteredAlerts);
     });
+  }
+
+  void _assignUpdatedScheduledDateTimes(List<DocumentSnapshot> filteredAlerts) {
+    for (var alarm in _filteredAlerts) {
+      _updatedScheduledDateTimes
+          .add(DateTime.parse(alarm["scheduledAlarmDateTime"]));
+    }
   }
 
   void _filterAlertsForSelectedDate() {
@@ -187,12 +196,17 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                     itemCount: _filteredAlerts.length,
                     itemBuilder: (context, index) {
                       final alarm = _filteredAlerts[index];
-                      final DateTime scheduledAlarmDateTime = DateTime.parse(alarm['scheduledAlarmDateTime']);
-                      final TextEditingController dateController = TextEditingController(
-                        text: DateFormat('yyyy-MM-dd').format(scheduledAlarmDateTime),
+                      final DateTime scheduledAlarmDateTime =
+                          DateTime.parse(alarm['scheduledAlarmDateTime']);
+                      final TextEditingController dateController =
+                          TextEditingController(
+                        text: DateFormat('yyyy-MM-dd')
+                            .format(scheduledAlarmDateTime),
                       );
-                      final TextEditingController timeController = TextEditingController(
-                        text: DateFormat('HH:mm').format(scheduledAlarmDateTime),
+                      final TextEditingController timeController =
+                          TextEditingController(
+                        text:
+                            DateFormat('HH:mm').format(scheduledAlarmDateTime),
                       );
 
                       return Column(
@@ -203,9 +217,9 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           _buildDatePickerTextField(
-                              dateController, 'Scheduled Date', context),
+                              dateController, 'Scheduled Date', context, index),
                           _buildTimePickerTextField(
-                              timeController, 'Scheduled Time', context),
+                              timeController, 'Scheduled Time', context, index),
                           SizedBox(height: 20),
                         ],
                       );
@@ -218,14 +232,17 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                     TextButton(
                       child: Text('Save'),
                       onPressed: () {
+                        int index1 = 0;
                         for (var alarm in _filteredAlerts) {
-                          final DateTime updatedDateTime = DateFormat('yyyy-MM-dd HH:mm').parse(
-                            '${dateController.text} ${timeController.text}',
-                          );
+                          // final DateTime updatedDateTime = DateFormat('yyyy-MM-dd HH:mm').parse(
+                          //   '${dateController.text} ${timeController.text}',
+                          // );
                           _updateReminder(
-                            alarm['reminderNo'],
-                            DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(updatedDateTime),
+                            alarm['alarmIdNo'],
+                            DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
+                                .format(_updatedScheduledDateTimes[index1]),
                           );
+                          index1++;
                         }
                         Navigator.of(context).pop();
                       },
@@ -246,20 +263,27 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  Future<void> _updateReminder(int reminderNo, String scheduledAlarmDateTime) async {
+  Future<void> _updateReminder(
+      int alarmIdNo, String scheduledAlarmDateTime) async {
     try {
-      DocumentReference documentReference = FirebaseFirestore.instance
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('alarms')
-          .doc(reminderNo.toString());
+          .where("alarmIdNo", isEqualTo: alarmIdNo)
+          .get();
 
-      DocumentSnapshot snapshot = await documentReference.get();
-      if (!snapshot.exists) {
+      if (querySnapshot.docs.isEmpty) {
         throw Exception('Document does not exist');
       }
 
-      await documentReference.update({
-        'scheduledAlarmDateTime': scheduledAlarmDateTime,
-      });
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        // Get the document reference
+        DocumentReference documentReference = documentSnapshot.reference;
+
+        // Update the document
+        await documentReference.update({
+          'scheduledAlarmDateTime': scheduledAlarmDateTime,
+        });
+      }
     } catch (e) {
       print('Error updating reminder: $e');
       _showErrorSnackBar('Error updating reminder: ${e.toString()}');
@@ -288,6 +312,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     subscription?.cancel();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -422,11 +447,15 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     final data = reminder.data() as Map<String, dynamic>?;
 
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.05),
+      margin:
+          EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.05),
       child: ListTile(
-        leading: Icon(Icons.alarm, color: Colors.redAccent, size: screenWidth * 0.05),
+        leading: Icon(Icons.alarm,
+            color: Colors.redAccent, size: screenWidth * 0.05),
         title: Text(
-          data != null && data.containsKey('medicineName') ? data['medicineName'] : 'No Medicine Name',
+          data != null && data.containsKey('medicineName')
+              ? data['medicineName']
+              : 'No Medicine Name',
           style: TextStyle(
             fontSize: screenWidth * 0.03,
             fontWeight: FontWeight.bold,
@@ -435,10 +464,11 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         ),
         subtitle: Text(
           'Pill Intake: ${data != null && data.containsKey('pillIntake') ? data['pillIntake'] : 'N/A'}\n'
-              'Frequency: ${data != null && data.containsKey('interval') ? data['interval'].toString() + ' times' : 'N/A'}',
+          'Frequency: ${data != null && data.containsKey('interval') ? data['interval'].toString() + ' times' : 'N/A'}',
           style: TextStyle(fontSize: screenWidth * 0.028, color: Colors.black),
         ),
-        trailing: Icon(Icons.chevron_right, color: Colors.grey, size: screenWidth * 0.08),
+        trailing: Icon(Icons.chevron_right,
+            color: Colors.grey, size: screenWidth * 0.08),
         onTap: () {
           _showReminderDetails(context, reminder);
         },
@@ -467,9 +497,10 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  Widget _buildDatePickerTextField(
-      TextEditingController controller, String label, BuildContext context) {
+  Widget _buildDatePickerTextField(TextEditingController controller,
+      String label, BuildContext context, int index) {
     return TextField(
+      readOnly: true,
       controller: controller,
       decoration: InputDecoration(
         labelText: label,
@@ -484,8 +515,15 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               lastDate: DateTime(2101),
             );
             if (pickedDate != null) {
+              DateTime dateTime = _updatedScheduledDateTimes[index];
               setState(() {
                 controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                _updatedScheduledDateTimes[index] = DateTime(
+                    pickedDate.year,
+                    pickedDate.month,
+                    pickedDate.day,
+                    dateTime.hour,
+                    dateTime.minute);
               });
             }
           },
@@ -504,9 +542,18 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  Widget _buildTimePickerTextField(
-      TextEditingController controller, String label, BuildContext context) {
+  String _formatTimeOfDay(TimeOfDay time) {
+    // Format the hour and minute to always be two digits
+    final String hour = time.hour.toString().padLeft(2, '0');
+    final String minute = time.minute.toString().padLeft(2, '0');
+
+    return '$hour:$minute';
+  }
+
+  Widget _buildTimePickerTextField(TextEditingController controller,
+      String label, BuildContext context, int index) {
     return TextField(
+      readOnly: true,
       controller: controller,
       decoration: InputDecoration(
         labelText: label,
@@ -526,9 +573,16 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               },
             );
             if (pickedTime != null) {
+              DateTime dateTime = _updatedScheduledDateTimes[index];
               setState(() {
-                controller.text = pickedTime.format(context);
+                controller.text = _formatTimeOfDay(pickedTime);
               });
+              _updatedScheduledDateTimes[index] = DateTime(
+                  dateTime.year,
+                  dateTime.month,
+                  dateTime.day,
+                  pickedTime.hour,
+                  pickedTime.minute);
             }
           },
         ),
