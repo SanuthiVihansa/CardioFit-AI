@@ -351,7 +351,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
         Navigator.of(context).push(MaterialPageRoute(
             builder: (buildContext) =>
-                ConfirmAlarm(widget.user, _thisAlarmReferenceNo)));
+                NotificationHomePage(widget.user)));
       }
     }
   }
