@@ -220,92 +220,91 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                           bool alarmStatus = alarmStatusList[index];
                           final DateTime updatedDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('${dateController.text} ${timeController.text}');
 
-                          return Column(
+                      return Column(
+                        children: [
+                          Text(
+                            'Alarm ${index + 1}',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 20),
+                          Row(
                             children: [
-                              Text(
-                                'Alarm ${index + 1}',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              Expanded(
+                                child: _buildDatePickerTextField(
+                                    dateController, 'Scheduled Date', context, index),
                               ),
-                              SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildDatePickerTextField(
-                                        dateController, 'Scheduled Date', context, index),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Expanded(
-                                    child: _buildTimePickerTextField(
-                                        timeController, 'Scheduled Time', context, index),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Switch(
-                                    value: alarmStatus,
-                                    onChanged: (bool value) {
-                                      setState(() {
-                                        alarmStatusList[index] = value;
-                                      });
-                                      if (value) {
-                                        _updateReminderAlarmStatusTrue(alarm['alarmIdNo']);
-                                        _reCreateAlarm(
-                                            int.parse(alarm["alarmIdNo"].toString()),
-                                            updatedDateTime,
-                                            alarm["medicineName"],
-                                            int.parse(alarm["pillIntake"].toString()),
-                                            int.parse(alarm["dosage"].toString()));
-                                      } else {
-                                        _updateReminderAlarmStatus(alarm['alarmIdNo']);
-                                        Alarm.stop(alarm['alarmIdNo']);
-                                      }
-                                    },
-                                  ),
-                                ],
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: _buildTimePickerTextField(
+                                    timeController, 'Scheduled Time', context, index),
                               ),
-                              SizedBox(height: 20),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          child: Text('Save'),
-                          onPressed: () {
-                            int index1 = 0;
-                            for (var alarm in _filteredAlerts) {
-                              _updateReminder(
-                                alarm['alarmIdNo'],
-                                DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
-                                    .format(_updatedScheduledDateTimes[index1]),
-                              );
-                              _reCreateAlarm(
-                                  int.parse(alarm["alarmIdNo"].toString()),
-                                  _updatedScheduledDateTimes[index1],
-                                  alarm["medicineName"],
-                                  int.parse(alarm["pillIntake"].toString()),
-                                  int.parse(alarm["dosage"].toString()));
-                              index1++;
-                            }
+                              SizedBox(width: 20),
+                              Switch(
+                                value: alarmStatus,
+                                onChanged: (bool value){
+                                  setState(() {
+                                    alarmStatusList[index] = value;
+                                  });
+                                  if (value) {
+                                    //alarmStatus=true;
+                                    _updateReminderAlarmStatusTrue(alarm['alarmIdNo']);
+                                    _reCreateAlarm(
+                                        int.parse(alarm["alarmIdNo"].toString()),
+                                        updatedDateTime,
+                                        alarm["medicineName"],
+                                        int.parse(alarm["pillIntake"].toString()),
+                                        int.parse(alarm["dosage"].toString()));
 
-                          },
-                        ),
-                        TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            setState(() {
-                              _filterAlertsForSelectedDate();
-                            });
-                          },
-                        ),
-                      ],
+                                  } else {
+                                    _updateReminderAlarmStatus(alarm['alarmIdNo']);
+                                    //alarmStatus=false;
+                                    Alarm.stop(alarm['alarmIdNo']);
+                                  }
+                                }
+
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      child: Text('Save'),
+                      onPressed: () {
+                        int index1 = 0;
+                        for (var alarm in _filteredAlerts) {
+                          _updateReminder(
+                            alarm['alarmIdNo'],
+                            DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
+                                .format(_updatedScheduledDateTimes[index1]),
+                          );
+                          _reCreateAlarm(
+                              int.parse(alarm["alarmIdNo"].toString()),
+                              _updatedScheduledDateTimes[index1],
+                              alarm["medicineName"],
+                              int.parse(alarm["pillIntake"].toString()),
+                              int.parse(alarm["dosage"].toString()));
+                          index1++;
+                        }
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                     ),
                   ],
-                );
-              },
+                ),
+              ],
             ),
           ),
         );
