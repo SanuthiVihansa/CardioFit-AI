@@ -1266,7 +1266,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
                     cardiacCondition = newValue!;
                   });
                 },
-                items: <String>['Normal', 'Abnormal']
+                items: <String>['No', 'Yes']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
