@@ -52,10 +52,8 @@ class ApiService {
   Future<String> sendImageToGPT4Vision({
     required File image,
     int maxTokens = 400,
-    String model = "gpt-4o",
-  }) async {
+    String model = "gpt-4o",}) async {
     final String base64Image = await encodeImage(image);
-
     try {
       final response = await _dio.post(
         "$BASE_URL/chat/completions",
@@ -78,6 +76,60 @@ class ApiService {
                 {
                   'type': 'text',
                   'text': 'Read and analyse the content as much as possible. And follow this format Medicine Name: The name of the medicine.Dosage: The dosage prescribed.Frequency: How often the medicine should be taken,give in user understanding manner, avoid medical notations.Duration: The duration for which the medicine should be taken. Pill Intake : Number of pills per intake (if given).Additional Instructions: (if specified) Any additional instructions provided by the doctor.give output in json format'
+
+                },
+                {
+                  'type': 'image_url',
+                  'image_url': {
+                    'url': 'data:image/jpeg;base64,$base64Image',
+                  },
+                },
+              ],
+            },
+          ],
+          'max_tokens': maxTokens,
+        }),
+      );
+
+      final jsonResponse = response.data;
+
+      if (jsonResponse['error'] != null) {
+        throw HttpException(jsonResponse['error']["message"]);
+      }
+      return jsonResponse["choices"][0]["message"]["content"];
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  //Send Image to GPT to get report information
+  Future<String> sendImageToGPT4VisionReport({
+    required File image,
+    int maxTokens = 400,
+    String model = "gpt-4o",}) async {
+    final String base64Image = await encodeImage(image);
+    try {
+      final response = await _dio.post(
+        "$BASE_URL/chat/completions",
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer $API_KEY',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+        data: jsonEncode({
+          'model': model,
+          'messages': [
+            {
+              'role': 'system',
+              'content': 'You have to give concise and short answers'
+            },
+            {
+              'role': 'user',
+              'content': [
+                {
+                  'type': 'text',
+                  'text': 'As an intelligent OCR reader read the Test Name, result and units correctly. Do not provide any other information, provide the result in one line.Avoid providing unessary characters like . or : or , in the output'
 
                 },
                 {
