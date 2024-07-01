@@ -103,56 +103,116 @@ class ApiService {
   }
 
   //Send Image to GPT to get report information
-  Future<String> sendImageToGPT4VisionReport({
-    required File image,
+  // Future<String> sendImageToGPT4VisionReport({
+  //   required File image,
+  //   int maxTokens = 400,
+  //   String model = "gpt-4o",}) async {
+  //   final String base64Image = await encodeImage(image);
+  //   try {
+  //     final response = await _dio.post(
+  //       "$BASE_URL/chat/completions",
+  //       options: Options(
+  //         headers: {
+  //           HttpHeaders.authorizationHeader: 'Bearer $API_KEY',
+  //           HttpHeaders.contentTypeHeader: "application/json",
+  //         },
+  //       ),
+  //       data: jsonEncode({
+  //         'model': model,
+  //         'messages': [
+  //           {
+  //             'role': 'system',
+  //             'content': 'You have to give concise and short answers'
+  //           },
+  //           {
+  //             'role': 'user',
+  //             'content': [
+  //               {
+  //                 'type': 'text',
+  //                 'text': 'As an intelligent OCR reader read the Test Name, result and units correctly. Do not provide any other information, provide the result in one line.Avoid providing unessary characters like . or : or , in the output'
+  //
+  //               },
+  //               {
+  //                 'type': 'image_url',
+  //                 'image_url': {
+  //                   'url': 'data:image/jpeg;base64,$base64Image',
+  //                 },
+  //               },
+  //             ],
+  //           },
+  //         ],
+  //         'max_tokens': maxTokens,
+  //       }),
+  //     );
+  //
+  //     final jsonResponse = response.data;
+  //
+  //     if (jsonResponse['error'] != null) {
+  //       throw HttpException(jsonResponse['error']["message"]);
+  //     }
+  //     return jsonResponse["choices"][0]["message"]["content"];
+  //   } catch (e) {
+  //     throw Exception('Error: $e');
+  //   }
+  // }
+
+  Future<List<String>> sendImagesToGPT4VisionReports({
+    required List<File> images,
     int maxTokens = 400,
-    String model = "gpt-4o",}) async {
-    final String base64Image = await encodeImage(image);
-    try {
-      final response = await _dio.post(
-        "$BASE_URL/chat/completions",
-        options: Options(
-          headers: {
-            HttpHeaders.authorizationHeader: 'Bearer $API_KEY',
-            HttpHeaders.contentTypeHeader: "application/json",
-          },
-        ),
-        data: jsonEncode({
-          'model': model,
-          'messages': [
-            {
-              'role': 'system',
-              'content': 'You have to give concise and short answers'
-            },
-            {
-              'role': 'user',
-              'content': [
-                {
-                  'type': 'text',
-                  'text': 'As an intelligent OCR reader read the Test Name, result and units correctly. Do not provide any other information, provide the result in one line.Avoid providing unessary characters like . or : or , in the output'
+    String model = "gpt-4o",
+  }) async {
+    List<String> results = [];
 
-                },
-                {
-                  'type': 'image_url',
-                  'image_url': {
-                    'url': 'data:image/jpeg;base64,$base64Image',
+    for (File image in images) {
+      final String base64Image = await encodeImage(image);
+
+      try {
+        final response = await _dio.post(
+          "$BASE_URL/chat/completions",
+          options: Options(
+            headers: {
+              HttpHeaders.authorizationHeader: 'Bearer $API_KEY',
+              HttpHeaders.contentTypeHeader: "application/json",
+            },
+          ),
+          data: jsonEncode({
+            'model': model,
+            'messages': [
+              {
+                'role': 'system',
+                'content': 'You have to give concise and short answers'
+              },
+              {
+                'role': 'user',
+                'content': [
+                  {
+                    'type': 'text',
+                    'text': 'As an intelligent OCR reader read the Test Name, result and units correctly. Do not provide any other information, provide the result in one line. Avoid providing unnecessary characters like . or : or , in the output'
                   },
-                },
-              ],
-            },
-          ],
-          'max_tokens': maxTokens,
-        }),
-      );
+                  {
+                    'type': 'image_url',
+                    'image_url': {
+                      'url': 'data:image/jpeg;base64,$base64Image',
+                    },
+                  },
+                ],
+              },
+            ],
+            'max_tokens': maxTokens,
+          }),
+        );
 
-      final jsonResponse = response.data;
+        // Extract the response from the GPT-4 Vision model
+        final result = response.data['choices'][0]['message']['content'];
+        results.add(result);
 
-      if (jsonResponse['error'] != null) {
-        throw HttpException(jsonResponse['error']["message"]);
+      } catch (e) {
+        print('Error processing image: $e');
+        results.add('Error processing image: $e');
       }
-      return jsonResponse["choices"][0]["message"]["content"];
-    } catch (e) {
-      throw Exception('Error: $e');
     }
+
+    return results;
   }
+
 }
