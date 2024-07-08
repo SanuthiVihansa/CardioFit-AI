@@ -1,5 +1,5 @@
 import 'package:cardiofitai/components/navbar_component.dart';
-//import 'package:cardiofitai/screens/diet_plan/notificationHomePage.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +11,13 @@ import '../../models/user.dart';
 import '../../services/user_information_service.dart';
 import 'AlertService/notificationHomePage.dart';
 import 'DietPlan/dietaryplanprediction-homepage.dart';
-import 'AlertService/medicineAlertScreen.dart';
+
 import 'ReportReading/modiRecognitionScreen.dart';
-//import 'modiRecognitionScreen.dart';
 
 class DietHomePage extends StatefulWidget {
   const DietHomePage(this.user, {super.key});
 
   final User user;
-
-
 
   @override
   State<DietHomePage> createState() => _DietHomePageState();
@@ -29,28 +26,23 @@ class DietHomePage extends StatefulWidget {
 class _DietHomePageState extends State<DietHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late QuerySnapshot<Object?> _userBMI;
-  String roundedBmiString="";
+  String roundedBmiString = "";
 
-  Future <void> _getUserBMI() async{
-    _userBMI =
-        await UserLoginService.getUserByEmail(widget.user.email);
+  Future<void> _getUserBMI() async {
+    _userBMI = await UserLoginService.getUserByEmail(widget.user.email);
     String bmiString = _userBMI.docs[0]["bmi"];
     double bmiValue = double.parse(bmiString);
     double roundedBmiValue = double.parse((bmiValue).toStringAsFixed(2));
     roundedBmiString = roundedBmiValue.toString();
-    setState(() {
-
-    });
+    setState(() {});
   }
 
-
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _getUserBMI();
   }
-
 
   Widget DietAdvice() {
     double halfScreenWidth = (MediaQuery.of(context).size.width / 2) - 50;
@@ -184,7 +176,9 @@ class _DietHomePageState extends State<DietHomePage> {
                             fontSize: 18,
                             fontWeight: FontWeight.w700)),
                   ),
-                  Center(child: Text("Upload prescription and set reminders for pill intake")),
+                  Center(
+                      child: Text(
+                          "Upload prescription and set reminders for pill intake")),
                   SizedBox(height: 10)
                 ],
               ),
@@ -199,7 +193,6 @@ class _DietHomePageState extends State<DietHomePage> {
     final _height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final today = DateTime.now();
-
 
     return Scaffold(
       backgroundColor: const Color(0xFFE9E9E9),
@@ -318,8 +311,7 @@ class _DietHomePageState extends State<DietHomePage> {
                         left: 32,
                         right: 16,
                       ),
-                      child:
-                      Text(
+                      child: Text(
                         "Health Insights",
                         style: TextStyle(
                             color: Colors.blueGrey,
@@ -427,10 +419,12 @@ class _DietHomePageState extends State<DietHomePage> {
                                   ),
                                   WidgetSpan(
                                     child: Transform.translate(
-                                      offset: const Offset(0, -10), // Adjust the offset to move it up
+                                      offset: const Offset(0, -10),
+                                      // Adjust the offset to move it up
                                       child: Text(
                                         '2',
-                                        textScaleFactor: 0.7, // Adjust the scale to make it smaller
+                                        textScaleFactor: 0.7,
+                                        // Adjust the scale to make it smaller
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 30,
@@ -446,8 +440,7 @@ class _DietHomePageState extends State<DietHomePage> {
                         ),
                       ),
                     ),
-                  ]
-                  ),
+                  ]),
                 ),
               ),
             ),
