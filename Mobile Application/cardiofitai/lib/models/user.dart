@@ -12,6 +12,7 @@ class User{
   String bloodGlucoseLevel;
   String bloodCholestrolLevel;
   String cardiacCondition;
+  String bloodTestType;
 
 
 
@@ -19,5 +20,5 @@ class User{
 
 
   User(this.name, this.email, this.password, this.age, this.height, this.weight,
-      this.bmi, this.dob,this.activeLevel,this.type,this.bloodCholestrolLevel,this.bloodGlucoseLevel,this.cardiacCondition);
+      this.bmi, this.dob,this.activeLevel,this.type,this.bloodCholestrolLevel,this.bloodGlucoseLevel,this.cardiacCondition,this.bloodTestType);
 }
