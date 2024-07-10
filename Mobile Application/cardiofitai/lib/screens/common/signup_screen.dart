@@ -63,13 +63,17 @@ class _SignUpPageState extends State<SignUpPage> {
         _nameController.text,
         _emailController.text,
         _passwordController.text,
-        "-1",
-        "-1",
-        "-1",
-        "-1",
-        "-1",
-        "-1",
-        "user");
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "user",
+        "",
+        "",
+        "",
+        "");
     if (response.code == 200) {
       Fluttertoast.showToast(
           msg: "Account Created Successfully!🎉",
@@ -215,8 +219,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             shape: MaterialStateProperty.all<OutlinedBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
-                                side:
-                                    const BorderSide(color: Colors.black, width: 2.0),
+                                side: const BorderSide(
+                                    color: Colors.black, width: 2.0),
                               ),
                             ),
                           ),

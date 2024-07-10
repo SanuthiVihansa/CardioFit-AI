@@ -45,8 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   //Function to generate a Report number
   Future<void> _userInfo() async {
-    _userSignUpInfo =
-        await UserLoginService.getUserByEmail(widget.user.email);
+    _userSignUpInfo = await UserLoginService.getUserByEmail(widget.user.email);
     _ageController.text = _userSignUpInfo.docs[0]["age"];
     _heightController.text = _userSignUpInfo.docs[0]["height"];
     _weightController.text = _userSignUpInfo.docs[0]["weight"];
@@ -57,8 +56,8 @@ class _ProfilePageState extends State<ProfilePage> {
   //Function to calculate BMI
   void calculateBMI(String weight, String height) {
     if (weight != "" && height != "") {
-      double bmi =
-          double.parse(weight) / (double.parse(height)/100 * double.parse(height)/100);
+      double bmi = double.parse(weight) /
+          (double.parse(height) / 100 * double.parse(height) / 100);
       double roundedBMI = double.parse((bmi).toStringAsFixed(2));
 
       _caluclateBMIController.text = roundedBMI.toString();
@@ -211,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
         decoration: InputDecoration(
           errorText: "",
           labelText: 'Height',
-            suffix:Text("cm"),
+          suffix: Text("cm"),
           border: OutlineInputBorder(),
         ),
         onChanged: (text) {
@@ -223,13 +222,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget Weight() => TextField(
         controller: _weightController,
-
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
           errorText: "",
           labelText: 'Weight',
           border: OutlineInputBorder(),
-            suffix:Text("Kg"),
+          suffix: Text("Kg"),
         ),
         onChanged: (text) {
           calculateBMI(weight, height);
@@ -243,17 +241,19 @@ class _ProfilePageState extends State<ProfilePage> {
         decoration: InputDecoration(
           errorText: "",
           labelText: 'BMI',
-          suffix:Text.rich(
+          suffix: Text.rich(
             TextSpan(
               text: 'Kg/m', // Normal text
               style: TextStyle(fontSize: 16.0), // Base text size
               children: <InlineSpan>[
                 WidgetSpan(
                   child: Transform.translate(
-                    offset: const Offset(0, -5), // Adjust the offset to move it up
+                    offset: const Offset(0, -5),
+                    // Adjust the offset to move it up
                     child: Text(
                       '2',
-                      textScaleFactor: 0.7, // Adjust the scale to make it smaller
+                      textScaleFactor: 0.7,
+                      // Adjust the scale to make it smaller
                       style: TextStyle(fontSize: 16.0), // Base text size
                     ),
                   ),
@@ -305,7 +305,11 @@ class _ProfilePageState extends State<ProfilePage> {
             _caluclateBMIController.text,
             _dateOfBirth.toString(),
             dropdownValue.characters.string,
-            widget.user.type);
+            widget.user.type,
+            "REPLACE THE VARIABLE OF bloodGlucoseLevel",
+            "REPLACE THE VARIABLE OF bloodCholestrolLevel",
+            "REPLACE THE VARIABLE OF cardiacCondition",
+            "REPLACE THE VARIABLE OF bloodTestType");
         UserLoginService.updateUser(updatedUserInfo);
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => DietHomePage(widget.user)));

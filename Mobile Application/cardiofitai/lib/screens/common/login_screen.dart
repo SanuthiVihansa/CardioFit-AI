@@ -97,6 +97,14 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["activeLevel"] +
         '", "type" : "' +
         doc["type"] +
+        '", "bloodGlucoseLevel" : "' +
+        doc["bloodGlucoseLevel"] +
+        '", "bloodCholestrolLevel" : "' +
+        doc["bloodCholestrolLevel"] +
+        '", "cardiacCondition" : "' +
+        doc["cardiacCondition"] +
+        '", "bloodTestType" : "' +
+        doc["bloodTestType"] +
         '"}';
 
     User user = User(
@@ -109,7 +117,11 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["bmi"],
         doc["dob"],
         doc["activeLevel"],
-        doc["type"]);
+        doc["type"],
+        doc["bloodGlucoseLevel"],
+        doc["bloodCholestrolLevel"],
+        doc["cardiacCondition"],
+        doc["bloodTestType"]);
 
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
@@ -211,8 +223,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             shape: MaterialStateProperty.all<OutlinedBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
-                                side:
-                                    const BorderSide(color: Colors.black, width: 2.0),
+                                side: const BorderSide(
+                                    color: Colors.black, width: 2.0),
                               ),
                             ),
                           ),
