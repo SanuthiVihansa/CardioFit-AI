@@ -4,17 +4,17 @@ import 'dart:io';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/ReportReading/reportAnalysisScreen.dart';
 
-//import 'package:cardiofitai/screens/diet_plan/reportAnalysisScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
+
 
 import '../../../services/prescription_reading_api_service.dart';
 
 class RecognitionScreen extends StatefulWidget {
-  const RecognitionScreen({super.key});
+  const RecognitionScreen(this.user,{super.key});
+  final User user;
 
   @override
   State<RecognitionScreen> createState() => _RecognitionScreenState();
@@ -457,7 +457,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (BuildContext context) =>
-              ReportAnalysisScreen(extractedText, addMultipleReports, setRows)));
+              ReportAnalysisScreen(extractedText, addMultipleReports, setRows,widget.user)));
     }
   }
 

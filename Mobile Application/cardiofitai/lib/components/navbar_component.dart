@@ -111,11 +111,11 @@ class LeftNavBar extends StatelessWidget {
             title: Text("OCR Reader"),
             onTap: () {
               Navigator.of(context).pop(); // Close the drawer
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => RecognitionScreen(),
-                ),
-              );
+              // Navigator.of(context).push(
+              //   // MaterialPageRoute(
+              //   //   builder: (context) => RecognitionScreen(),
+              //  // ),
+              // );
             },
           ),
           Divider(),
@@ -124,11 +124,11 @@ class LeftNavBar extends StatelessWidget {
             title: Text("Recognition Screen"),
             onTap: () {
               Navigator.of(context).pop(); // Close the drawer
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => RecognitionScreen(),
-                ),
-              );
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) => RecognitionScreen(),
+              //   ),
+              // );
             },
           ),
           Divider(),

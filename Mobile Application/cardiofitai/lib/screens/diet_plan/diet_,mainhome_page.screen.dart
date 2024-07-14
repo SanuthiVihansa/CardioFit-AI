@@ -344,7 +344,7 @@ class _DietHomePageState extends State<DietHomePage> {
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            RecognitionScreen()));
+                                            RecognitionScreen(widget.user)));
                               },
                               child: ReportAnalaysis(),
                             ),

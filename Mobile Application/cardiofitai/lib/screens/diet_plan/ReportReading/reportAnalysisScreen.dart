@@ -1,81 +1,48 @@
 import 'package:flutter/material.dart';
+import '../../../models/user.dart';
+import '../../../services/user_information_service.dart';
 import 'modiRecognitionScreen.dart';
 
 class ReportAnalysisScreen extends StatefulWidget {
-  ReportAnalysisScreen(this.extractedResult, this.addMultipleReports, this.rows,
-      {super.key});
+  ReportAnalysisScreen(this.extractedResult, this.addMultipleReports, this.rows, this.user, {super.key});
 
   final List<List<WordPair>> extractedResult;
   final List<Map<String, dynamic>> addMultipleReports;
   final List<List<DataRow>> rows;
+  final User user;
 
   @override
   State<ReportAnalysisScreen> createState() => _ReportAnalysisScreenState();
 }
 
 class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
+  @override
+  void initState() {
+    super.initState();
+    User updatedUserInfo = User(
+      widget.user.name,
+      widget.user.email,
+      widget.user.password,
+      widget.user.age,
+      widget.user.height,
+      widget.user.weight,
+      widget.user.bmi,
+      widget.user.dob,
+      widget.user.activeLevel,
+      widget.user.type,
+      "REPLACE THE VARIABLE OF bloodGlucoseLevel",
+      "REPLACE THE VARIABLE OF bloodCholestrolLevel",
+      "REPLACE THE VARIABLE OF cardiacCondition",
+      "REPLACE THE VARIABLE OF bloodTestType",
+    );
+  }
+
   int findIndex = -1;
-  // String compareValues(List<List<DataRow>> rows) {
-  //   for (List<DataRow> dataRows in rows) {
-  //     for (DataRow row in dataRows) {
-  //       String Component = row.cells[0].child.toString();
-  //       String Result = row.cells[1].child.toString();
-  //       RegExp regex = RegExp(r'\d+');
-  //       RegExpMatch? match = regex.firstMatch(Result);
-  //       if (match != null) {
-  //         String numericValue = match.group(0)!;
-  //         Result = numericValue;
-  //       }
-  //       //String Unit = row.cells[2].child.toString();
-  //
-  //       if (Component.toLowerCase() == "text(\"fasting plasma glucose\")") {
-  //         if (int.tryParse(Result) != null) {
-  //           int numericResult = int.parse(Result);
-  //           if (numericResult >= 126) {
-  //             return "Diabetes Mellitus";
-  //           } else if (numericResult > 100 && numericResult < 125) {
-  //             return "Pre Diabetes";
-  //           }
-  //         }
-  //       } else if (Component.toLowerCase() == "fasting blood sugar") {
-  //         if (int.tryParse(Result) != null) {
-  //           int numericResult = int.parse(Result);
-  //           if (numericResult > 126) {
-  //             return "Diabetes Mellitus";
-  //           } else if (numericResult > 100 && numericResult < 125) {
-  //             return "Pre Diabetes";
-  //           }
-  //         }
-  //       } else if (Component.toLowerCase() == "text(\"cholesterol-total\")") {
-  //         if (int.tryParse(Result) != null) {
-  //           int numericResult = int.parse(Result);
-  //           if (numericResult > 180) {
-  //             return "High Cholestrol";
-  //           }
-  //         }
-  //       } else if (Component.toLowerCase() == "text(\"ldl-c\")") {
-  //         if (int.tryParse(Result) != null) {
-  //           int numericResult = int.parse(Result);
-  //           if (numericResult > 150) {
-  //             return "LDL : High - Heart Disease Risk";
-  //           }
-  //         }
-  //       } else if (Component.toLowerCase() == "text(\"hdl-c\")") {
-  //         if (int.tryParse(Result) != null) {
-  //           int numericResult = int.parse(Result);
-  //           if (numericResult < 40) {
-  //             return "HDL : Low - Heart Disease Risk";
-  //           } else if (numericResult >= 60) {
-  //             return "HDL : High";
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return "Normal : No defects identified";
-  // }
+
   String compareValues(List<List<DataRow>> rows) {
     int fastingPlasmaGlucose = 0;
+    int RandomPlasmaGlucose = 0;
+    int RandomBloodSugar = 0;
     int fastingBloodSugar = 0;
     int cholesterolTotal = 0;
     int ldlC = 0;
@@ -105,20 +72,57 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
           ldlC = numericResult;
         } else if (component.contains("hdl-c")) {
           hdlC = numericResult;
+        } else if (component.contains("random plasma glucose")) {
+          RandomPlasmaGlucose = numericResult;
+        } else if (component.contains("random blood sugar")) {
+          RandomBloodSugar = numericResult;
         }
       }
     }
 
-    // Constructing the overall diagnosis
+    String bloodGlucoseLevel = RandomPlasmaGlucose != 0
+        ? RandomPlasmaGlucose.toString()
+        : (RandomBloodSugar != 0
+        ? RandomBloodSugar.toString()
+        : (fastingPlasmaGlucose != 0
+        ? fastingPlasmaGlucose.toString()
+        : fastingBloodSugar.toString()));
+
+    String cardiacCondition = ldlC > 150 || hdlC < 40 ? "Yes" : "No";
+
+    User updatedUser = User(
+      widget.user.name,
+      widget.user.email,
+      widget.user.password,
+      widget.user.age,
+      widget.user.height,
+      widget.user.weight,
+      widget.user.bmi,
+      widget.user.dob,
+      widget.user.activeLevel,
+      widget.user.type,
+      bloodGlucoseLevel,
+      cholesterolTotal.toString(),
+      cardiacCondition,
+      "REPLACE THE VARIABLE OF bloodTestType",
+    );
+
+    // Update the user information in the database
+    updateUserInformation(updatedUser);
+
     List<String> diagnoses = [];
 
-    if (fastingPlasmaGlucose >= 126 || fastingBloodSugar > 126) {
+    if (fastingPlasmaGlucose >= 126 ||
+        fastingBloodSugar >= 126 ||
+        RandomPlasmaGlucose > 200 ||
+        RandomBloodSugar > 200) {
       diagnoses.add("Diabetes Mellitus");
     } else if ((fastingPlasmaGlucose > 100 && fastingPlasmaGlucose < 125) ||
-        (fastingBloodSugar > 100 && fastingBloodSugar < 125)) {
+        (fastingBloodSugar > 100 && fastingBloodSugar < 125) ||
+        (RandomPlasmaGlucose > 140 && RandomPlasmaGlucose < 199) ||
+        (RandomBloodSugar > 140 && RandomBloodSugar < 199)) {
       diagnoses.add("Pre Diabetes");
     }
-
     if (cholesterolTotal > 180) {
       diagnoses.add("High Cholesterol");
     }
@@ -133,11 +137,16 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       diagnoses.add("HDL: High");
     }
 
-    if (diagnoses.isEmpty) {  // Corrected to use isEmpty without parentheses
+    if (diagnoses.isEmpty) {
       return "Normal: No defects identified";
     } else {
       return diagnoses.join(", ");
     }
+  }
+
+  void updateUserInformation(User updatedUser) async {
+    // Assuming UserInformationService has a method to update user info
+    await UserLoginService.updateUser(updatedUser);
   }
 
   @override
@@ -199,32 +208,3 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     );
   }
 }
-
-// body:SingleChildScrollView(
-//   scrollDirection: Axis.horizontal,
-//   child: SingleChildScrollView(
-//     child: SizedBox(
-//       width: MediaQuery.of(context).size.width,
-//       child: Column(
-//         children:
-//         widget.rows.map((e) => DataTable(
-//           columns: const [
-//             DataColumn(label: Text('Component')),
-//             DataColumn(label: Text('Result')),
-//             DataColumn(label: Text('Unit')),
-//           ],
-//           rows:e,
-//         )).toList(),
-//       ),
-//     ),
-//   ),
-// ),
-
-//SingleChildScrollView(
-//   child: widget.extractedResult.isNotEmpty
-//       ? Text("")
-//       : Text("Hi"),
-// ),
-//     );
-//   }
-// }
