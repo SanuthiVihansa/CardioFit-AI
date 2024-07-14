@@ -20,5 +20,5 @@ class User{
 
 
   User(this.name, this.email, this.password, this.age, this.height, this.weight,
-      this.bmi, this.dob,this.activeLevel,this.type,this.bloodCholestrolLevel,this.bloodGlucoseLevel,this.cardiacCondition,this.bloodTestType);
+      this.bmi, this.dob,this.activeLevel,this.type,this.bloodGlucoseLevel,this.bloodCholestrolLevel,this.cardiacCondition,this.bloodTestType);
 }
