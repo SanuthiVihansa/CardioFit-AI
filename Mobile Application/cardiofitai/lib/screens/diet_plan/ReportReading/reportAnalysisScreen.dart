@@ -39,10 +39,10 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
 
   int findIndex = -1;
 
-  String compareValues(List<List<DataRow>> rows) {
+  String compareValues(List<List<DataRow>> rows, User user) {
     int fastingPlasmaGlucose = 0;
-    int RandomPlasmaGlucose = 0;
-    int RandomBloodSugar = 0;
+    int randomPlasmaGlucose = 0;
+    int randomBloodSugar = 0;
     int fastingBloodSugar = 0;
     int cholesterolTotal = 0;
     int ldlC = 0;
@@ -50,7 +50,9 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
 
     for (List<DataRow> dataRows in rows) {
       for (DataRow row in dataRows) {
-        String component = (row.cells[0].child as Text).data!.toLowerCase().trim();
+        String component = (row.cells[0].child as Text).data!
+            .toLowerCase()
+            .trim();
         String result = (row.cells[1].child as Text).data!.toLowerCase().trim();
 
         RegExp regex = RegExp(r'\d+');
@@ -73,37 +75,37 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
         } else if (component.contains("hdl-c")) {
           hdlC = numericResult;
         } else if (component.contains("random plasma glucose")) {
-          RandomPlasmaGlucose = numericResult;
+          randomPlasmaGlucose = numericResult;
         } else if (component.contains("random blood sugar")) {
-          RandomBloodSugar = numericResult;
+          randomBloodSugar = numericResult;
         }
       }
     }
 
-    String bloodGlucoseLevel = RandomPlasmaGlucose != 0
-        ? RandomPlasmaGlucose.toString()
-        : (RandomBloodSugar != 0
-        ? RandomBloodSugar.toString()
+    int bloodGlucoseLevel = randomPlasmaGlucose != 0
+        ? randomPlasmaGlucose
+        : (randomBloodSugar != 0
+        ? randomBloodSugar
         : (fastingPlasmaGlucose != 0
-        ? fastingPlasmaGlucose.toString()
-        : fastingBloodSugar.toString()));
+        ? fastingPlasmaGlucose
+        : fastingBloodSugar));
 
     String cardiacCondition = ldlC > 150 || hdlC < 40 ? "Yes" : "No";
 
     User updatedUser = User(
-      widget.user.name,
-      widget.user.email,
-      widget.user.password,
-      widget.user.age,
-      widget.user.height,
-      widget.user.weight,
-      widget.user.bmi,
-      widget.user.dob,
-      widget.user.activeLevel,
-      widget.user.type,
-      bloodGlucoseLevel,
-      cholesterolTotal.toString(),
-      cardiacCondition,
+      user.name,
+      user.email,
+      user.password,
+      user.age,
+      user.height,
+      user.weight,
+      user.bmi,
+      user.dob,
+      user.activeLevel,
+      user.type,
+      bloodGlucoseLevel != 0 ? bloodGlucoseLevel.toString() : user.bloodGlucoseLevel,
+      cholesterolTotal != 0 ? cholesterolTotal.toString() : user.bloodCholestrolLevel,
+      "No",
       "REPLACE THE VARIABLE OF bloodTestType",
     );
 
@@ -114,13 +116,13 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
 
     if (fastingPlasmaGlucose >= 126 ||
         fastingBloodSugar >= 126 ||
-        RandomPlasmaGlucose > 200 ||
-        RandomBloodSugar > 200) {
+        randomPlasmaGlucose > 200 ||
+        randomBloodSugar > 200) {
       diagnoses.add("Diabetes Mellitus");
     } else if ((fastingPlasmaGlucose > 100 && fastingPlasmaGlucose < 125) ||
         (fastingBloodSugar > 100 && fastingBloodSugar < 125) ||
-        (RandomPlasmaGlucose > 140 && RandomPlasmaGlucose < 199) ||
-        (RandomBloodSugar > 140 && RandomBloodSugar < 199)) {
+        (randomPlasmaGlucose > 140 && randomPlasmaGlucose < 199) ||
+        (randomBloodSugar > 140 && randomBloodSugar < 199)) {
       diagnoses.add("Pre Diabetes");
     }
     if (cholesterolTotal > 180) {
@@ -144,8 +146,8 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     }
   }
 
+
   void updateUserInformation(User updatedUser) async {
-    // Assuming UserInformationService has a method to update user info
     await UserLoginService.updateUser(updatedUser);
   }
 
