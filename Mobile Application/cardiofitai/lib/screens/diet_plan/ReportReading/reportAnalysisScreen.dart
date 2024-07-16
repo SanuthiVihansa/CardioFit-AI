@@ -17,29 +17,9 @@ class ReportAnalysisScreen extends StatefulWidget {
 
 class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
   @override
-  void initState() {
-    super.initState();
-    User updatedUserInfo = User(
-      widget.user.name,
-      widget.user.email,
-      widget.user.password,
-      widget.user.age,
-      widget.user.height,
-      widget.user.weight,
-      widget.user.bmi,
-      widget.user.dob,
-      widget.user.activeLevel,
-      widget.user.type,
-      "REPLACE THE VARIABLE OF bloodGlucoseLevel",
-      "REPLACE THE VARIABLE OF bloodCholestrolLevel",
-      "REPLACE THE VARIABLE OF cardiacCondition",
-      "REPLACE THE VARIABLE OF bloodTestType",
-    );
-  }
-
   int findIndex = -1;
 
-  String compareValues(List<List<DataRow>> rows, User user) {
+  String compareValues(List<List<DataRow>> rows) {
     int fastingPlasmaGlucose = 0;
     int randomPlasmaGlucose = 0;
     int randomBloodSugar = 0;
@@ -93,18 +73,18 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     String cardiacCondition = ldlC > 150 || hdlC < 40 ? "Yes" : "No";
 
     User updatedUser = User(
-      user.name,
-      user.email,
-      user.password,
-      user.age,
-      user.height,
-      user.weight,
-      user.bmi,
-      user.dob,
-      user.activeLevel,
-      user.type,
-      bloodGlucoseLevel != 0 ? bloodGlucoseLevel.toString() : user.bloodGlucoseLevel,
-      cholesterolTotal != 0 ? cholesterolTotal.toString() : user.bloodCholestrolLevel,
+      widget.user.name,
+      widget.user.email,
+      widget.user.password,
+      widget.user.age,
+      widget.user.height,
+      widget.user.weight,
+      widget.user.bmi,
+      widget.user.dob,
+      widget.user.activeLevel,
+      widget.user.type,
+      bloodGlucoseLevel != 0 ? bloodGlucoseLevel.toString() : widget.user.bloodGlucoseLevel,
+      cholesterolTotal != 0 ? cholesterolTotal.toString() : widget.user.bloodCholestrolLevel,
       "No",
       "REPLACE THE VARIABLE OF bloodTestType",
     );
