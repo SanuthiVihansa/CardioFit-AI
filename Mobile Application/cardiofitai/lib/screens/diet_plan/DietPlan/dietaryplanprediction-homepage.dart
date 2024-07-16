@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../components/navbar_component.dart';
 import '../../../models/user.dart';
+import '../../../models/user.dart';
 import '../../../services/user_information_service.dart';
 
 class DietaryPlanHomePage extends StatefulWidget {
@@ -19,13 +20,13 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
   final TextEditingController bmiController = TextEditingController();
   final TextEditingController cholesterolController = TextEditingController();
   final TextEditingController sugarController = TextEditingController();
-  String gender = 'Female';
-  String cardiacCondition = 'No';
-  String bmiResult = 'Underweight';
-  String bloodSugarResult = 'High';
-  String cardiacConditionResult = 'Normal';
-  String cholesterolResult = 'Normal';
-  String ageRange = '0-19';
+  String gender = '';
+  String cardiacCondition = '';
+  String bmiResult = '';
+  String bloodSugarResult = '';
+  String cardiacConditionResult = '';
+  String cholesterolResult = '';
+  String ageRange = '';
   String advice = '';
 
 //Dictionary key for Diet advice proposal
@@ -1118,6 +1119,10 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
     _userSignUpInfo = await UserLoginService.getUserByEmail(widget.user.email);
     ageController.text = _userSignUpInfo.docs[0]["age"];
     bmiController.text = _userSignUpInfo.docs[0]["bmi"];
+    cholesterolController.text = _userSignUpInfo.docs[0]["bloodCholestrolLevel"];
+    sugarController.text = _userSignUpInfo.docs[0]["bloodGlucoseLevel"];
+    gender=_userSignUpInfo.docs[0]["gender"];
+    cardiacCondition=_userSignUpInfo.docs[0]["cardiacCondition"];
     setState(() {});
   }
 
@@ -1131,7 +1136,10 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
     setState(() {
       double bmi = double.tryParse(bmiController.text) ?? 0.0;
       String bmiCategory = categorizeBMI(bmi);
-      String ageRange = '';
+      double cholesterol = double.tryParse(cholesterolController.text) ?? 0.0;
+      cholesterolResult = categorizeCholesterol(cholesterol);
+      double sugar = double.tryParse(sugarController.text) ?? 0.0;
+      bloodSugarResult = categorizeBloodSugar(sugar, 'Fasting'); // or 'Fasting', as needed
 
       try {
         int age = int.parse(ageController.text);
@@ -1150,6 +1158,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
       }
     });
   }
+
 
   @override
   Widget build(BuildContext context) => Scaffold(
