@@ -21,6 +21,8 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
   bool _deviceIsDetected = false;
   int _countdown = 10;
   late Timer _timer;
+  late double _width;
+  late double _height;
 
   @override
   void initState() {
@@ -50,12 +52,10 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
           if (_ecgData.length == 1) {
             _startCountdown();
           }
-          if (_ecgData.length <= 4000) {
+          if (_ecgData.length < 5000) {
             setState(() {
               _ecgData.add(double.parse(data.trim()));
             });
-          } else {
-            print("More than 5000");
           }
         });
         setState(() {
@@ -114,53 +114,38 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
 
   @override
   Widget build(BuildContext context) {
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text("ECG Monitor"),
         ),
         body: _deviceIsDetected == false
             ? DeviceDisconnect()
-            : _ecgData.isEmpty
-                ? Center(
-                    child: Text(
-                        "Device is connected! Recording will start shortly."))
-                : RecordingPlot(_countdown, _ecgData)
-        // body: RecordingPlot(_countdown, [
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100,
-        //   100
-        // ])
-        );
+            // : _ecgData.isEmpty
+            : _ecgData.length < 5000
+                ? Row(
+                    children: [
+                      SizedBox(
+                        height: _height,
+                        width: 0,
+                      ),
+                      Text("Device is connected! ECG Capturing in progress..."),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Image.asset(
+                          "assets/palm_analysis/recording.gif",
+                          scale: 15,
+                        ),
+                      ),
+                      SizedBox(
+                        height: _height,
+                        width: 0,
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  )
+                : RecordingPlot(_countdown, _ecgData));
   }
 }
