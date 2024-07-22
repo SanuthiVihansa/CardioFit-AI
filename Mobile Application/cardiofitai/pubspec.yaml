@@ -65,7 +65,6 @@ dependencies:
 
   video_player: ^2.2.6
   fluttertoast: ^8.2.5
-#  usb_serial: ^0.2.3
   usb_serial: ^0.5.2
 
 dev_dependencies:
@@ -102,6 +101,7 @@ flutter:
     - assets/palm_analysis/usb.png
     - assets/palm_analysis/recording.gif
     - assets/palm_analysis/praying.png
+    - assets/palm_analysis/electrode_placement_palms.png
     - assets/icon_old.png
     - assets/icon.jpg
     - assets/coverimage.jpg
