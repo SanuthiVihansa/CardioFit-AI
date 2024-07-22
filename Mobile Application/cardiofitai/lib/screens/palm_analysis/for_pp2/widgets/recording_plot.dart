@@ -52,11 +52,11 @@ class RecordingPlot extends StatelessWidget {
                 ),
               ),
             ],
-            // minY: _getMinValue(),
-            minY: 500,
+            minY: _getMinValue(),
+            // minY: 500,
             // Adjust these values based on your data range
-            // maxY: _getMaxValue(),
-            maxY: 0,
+            maxY: _getMaxValue(),
+            // maxY: 0,
             titlesData: FlTitlesData(
               bottomTitles: SideTitles(
                 showTitles: true,
@@ -99,25 +99,25 @@ class RecordingPlot extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "Real-time Lead II ECG Signal",
+                "Lead II ECG Signal",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              Text("Remaining time: $_countdown s")
+              // Text("Remaining time: $_countdown s")
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-          child: Row(
-            children: [
-              Image.asset(
-                "assets/palm_analysis/recording.gif",
-                scale: 15,
-              ),
-              const Text("Capturing")
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+        //   child: Row(
+        //     children: [
+        //       Image.asset(
+        //         "assets/palm_analysis/recording.gif",
+        //         scale: 15,
+        //       ),
+        //       const Text("Capturing")
+        //     ],
+        //   ),
+        // ),
         Expanded(child: SizedBox(child: _ecgPlot())),
 
         // Text(_ecgData[_ecgData.length - 1].toString())
