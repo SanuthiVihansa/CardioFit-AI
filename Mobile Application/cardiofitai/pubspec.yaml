@@ -138,6 +138,7 @@ flutter:
     - assets/defect_prediction/icons8-play-button-50.png
     - assets/pick1.png
     - assets/diet_component/audio_assets/alarmsound.wav
+    - assets/cardioFitAI.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
