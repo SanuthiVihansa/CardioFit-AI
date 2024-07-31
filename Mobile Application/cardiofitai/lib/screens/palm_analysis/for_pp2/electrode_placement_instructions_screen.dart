@@ -51,9 +51,18 @@ class ElectrodePlacementInstructionsScreen extends StatelessWidget {
                               (_devHeight / 40)), // Button width and height
                     ),
                   ),
-                  child: Text(
-                    "Continue",
-                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Continue",
+                        style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                      ),
+                      Icon(
+                        Icons.arrow_right_outlined,
+                        size: _height / (_devHeight / 20),
+                      )
+                    ],
                   ))
             ],
           ),
