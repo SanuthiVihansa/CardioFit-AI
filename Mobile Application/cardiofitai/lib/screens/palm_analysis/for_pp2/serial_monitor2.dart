@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/widgets/device_disconnect.dart';
@@ -6,6 +7,7 @@ import 'package:cardiofitai/screens/palm_analysis/for_pp2/widgets/recording_plot
 import 'package:flutter/material.dart';
 import 'package:usb_serial/transaction.dart';
 import 'package:usb_serial/usb_serial.dart';
+import 'package:http/http.dart' as http;
 
 class SerialMonitor2 extends StatefulWidget {
   const SerialMonitor2({super.key});
@@ -24,6 +26,10 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
   late Timer _timer;
   late double _width;
   late double _height;
+  int _resCode = 0;
+
+  final String _filteringApiUrl =
+      'http://poornasenadheera100.pythonanywhere.com/filtering';
 
   @override
   void initState() {
@@ -49,18 +55,36 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
             9600, UsbPort.DATABITS_8, UsbPort.STOPBITS_1, UsbPort.PARITY_NONE);
         Transaction<String> transaction = Transaction.stringTerminated(
             _port!.inputStream!, Uint8List.fromList([13, 10]));
-        transaction.stream.listen((String data) {
+        transaction.stream.listen((String data) async {
           if (_ecgData.length == 1) {
             _startCountdown();
           }
-          if (_ecgData.length < 5000) {
+          if (_ecgData.length < 1000) {
             setState(() {
               _ecgData.add(double.parse(data.trim()));
             });
-          }
-          if (_ecgData.length == 5000) {
-            // Pass to the server and filter.
-            _filteredEcgData = _ecgData;
+            if (_ecgData.length == 1000) {
+              // Pass to the server and filter.
+              Map<String, dynamic> data = {
+                'l2': _ecgData,
+              };
+              String jsonString = jsonEncode(data);
+              var response = await http
+                  .post(Uri.parse(_filteringApiUrl),
+                      headers: <String, String>{
+                        'Content-Type': 'application/json; charset=UTF-8',
+                      },
+                      body: jsonString)
+                  .timeout(const Duration(seconds: 30));
+
+              _resCode = response.statusCode;
+
+              if (_resCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                _filteredEcgData = List<double>.from(
+                    decodedData["l2"].map((element) => element.toDouble()));
+              }
+            }
           }
         });
         setState(() {
@@ -88,12 +112,6 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
       });
     }
   }
-
-  // TODO - Delete this
-  // Widget _displayRecordingPlot() {
-  //   // _startCountdown();
-  //   return RecordingPlot(_countdown);
-  // }
 
   void _startCountdown() {
     const oneSec = Duration(seconds: 1);
@@ -125,11 +143,13 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text("ECG Monitor"),
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
         ),
         body: _deviceIsDetected == false
             ? DeviceDisconnect()
             // : _ecgData.isEmpty
-            : _filteredEcgData.length < 5000
+            : _filteredEcgData.length < 1000
                 ? Row(
                     children: [
                       SizedBox(
