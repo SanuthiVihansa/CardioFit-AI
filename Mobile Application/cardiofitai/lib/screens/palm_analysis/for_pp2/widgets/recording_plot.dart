@@ -106,19 +106,19 @@ class RecordingPlot extends StatelessWidget {
             ],
           ),
         ),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-        //   child: Row(
-        //     children: [
-        //       Image.asset(
-        //         "assets/palm_analysis/recording.gif",
-        //         scale: 15,
-        //       ),
-        //       const Text("Capturing")
-        //     ],
-        //   ),
-        // ),
         Expanded(child: SizedBox(child: _ecgPlot())),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  left: _width / (_devWidth / 20),
+                  right: _width / (_devWidth / 20),
+                  bottom: _height / (_devHeight / 5)),
+              child: ElevatedButton(onPressed: () {}, child: Text("Proceed")),
+            ),
+          ],
+        )
 
         // Text(_ecgData[_ecgData.length - 1].toString())
       ],
