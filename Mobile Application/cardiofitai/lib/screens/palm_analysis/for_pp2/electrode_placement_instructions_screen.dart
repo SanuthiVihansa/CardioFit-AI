@@ -43,7 +43,18 @@ class ElectrodePlacementInstructionsScreen extends StatelessWidget {
                   onPressed: () {
                     _onTapContinueBtn(context);
                   },
-                  child: Text("Continue"))
+                  style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all<Size>(
+                      Size(
+                          _width / (_devWidth / 160.0),
+                          _height /
+                              (_devHeight / 40)), // Button width and height
+                    ),
+                  ),
+                  child: Text(
+                    "Continue",
+                    style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                  ))
             ],
           ),
           Image.asset(
