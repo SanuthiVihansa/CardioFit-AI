@@ -67,7 +67,7 @@ class ElectrodePlacementInstructionsScreen extends StatelessWidget {
             ],
           ),
           Image.asset(
-            "assets/palm_analysis/electrode_placement_palms.png",
+            "assets/palm_analysis/3_electrode_placement_palms.png",
             scale: 1.5,
           )
         ],
