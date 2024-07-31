@@ -7,7 +7,6 @@ import 'package:cardiofitai/screens/palm_analysis/for_future_use/pmb_device_conn
 import 'package:cardiofitai/screens/palm_analysis/for_future_use/real_time_record.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/electrode_placement_instructions_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/serial_monitor.dart';
-import 'package:cardiofitai/screens/palm_analysis/for_pp2/serial_monitor2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

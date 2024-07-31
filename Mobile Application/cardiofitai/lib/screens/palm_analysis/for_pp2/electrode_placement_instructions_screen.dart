@@ -1,4 +1,4 @@
-import 'package:cardiofitai/screens/palm_analysis/for_pp2/serial_monitor2.dart';
+import 'package:cardiofitai/screens/palm_analysis/for_pp2/serial_monitor.dart';
 import 'package:flutter/material.dart';
 
 class ElectrodePlacementInstructionsScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class ElectrodePlacementInstructionsScreen extends StatelessWidget {
 
   void _onTapContinueBtn(BuildContext context) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext) => SerialMonitor2()));
+        MaterialPageRoute(builder: (BuildContext) => SerialMonitor()));
   }
 
   @override
