@@ -18,6 +18,7 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
   UsbPort? _port;
   String _status = "Idle";
   List<double> _ecgData = [];
+  List<double> _filteredEcgData = [];
   bool _deviceIsDetected = false;
   int _countdown = 10;
   late Timer _timer;
@@ -56,6 +57,10 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
             setState(() {
               _ecgData.add(double.parse(data.trim()));
             });
+          }
+          if (_ecgData.length == 5000) {
+            // Pass to the server and filter.
+            _filteredEcgData = _ecgData;
           }
         });
         setState(() {
@@ -124,7 +129,7 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
         body: _deviceIsDetected == false
             ? DeviceDisconnect()
             // : _ecgData.isEmpty
-            : _ecgData.length < 5000
+            : _filteredEcgData.length < 5000
                 ? Row(
                     children: [
                       SizedBox(
@@ -146,6 +151,6 @@ class _SerialMonitor2State extends State<SerialMonitor2> {
                     ],
                     mainAxisAlignment: MainAxisAlignment.center,
                   )
-                : RecordingPlot(_countdown, _ecgData));
+                : RecordingPlot(_countdown, _filteredEcgData));
   }
 }
