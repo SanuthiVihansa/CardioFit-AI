@@ -429,7 +429,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   text: 'Fit',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.amber,
+                    color: Colors.amberAccent,
                     fontSize: 20,
                   ),
                 ),
