@@ -408,6 +408,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
       MaterialPageRoute(builder: (BuildContext context) => screen),
     );
   }
+  void _onClickEcgAnalysisBtn() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                const AnalysisFileSelectionScreen()));
+  }
+
+  void _onClickEcgComparisonBtn() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                const ComparisonFileSelectionScreen()));
+  }
+
+  void _onClickDietPlanBtn() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => DietHomePage(widget.user)));
+  }
+
+  void _onClickDiseasePredictionBtn() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) => ReportHome()));
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -421,7 +452,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   text: 'Cardio',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.red,
+                    color: Colors.white,
                     fontSize: 20,
                   ),
                 ),
@@ -437,14 +468,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   text: ' AI',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey,
+                    color: Colors.black45,
                     fontSize: 20,
                   ),
                 ),
               ],
             ),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xFFFF5B61),
         ),
       // drawer: LeftNavBar(
       //   user: widget.user,
@@ -530,14 +561,14 @@ class InfoCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.green[50],
+        color: Colors.redAccent[50],
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         children: [
           Text(
             label,
-            style: TextStyle(color: Colors.green, fontSize: 12),
+            style: TextStyle(color: Colors.blueGrey, fontSize: 12),
           ),
           Text(
             value,
@@ -560,7 +591,7 @@ class CurrentHealthInfo extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.green[50],
+          color: Colors.blueGrey[50],
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -593,7 +624,7 @@ class StatCard extends StatelessWidget {
         ),
         Text(
           label,
-          style: TextStyle(color: Colors.green, fontSize: 12),
+          style: TextStyle(color: Colors.blueGrey, fontSize: 12),
         ),
       ],
     );
@@ -615,7 +646,7 @@ class ActivitiesGraph extends StatelessWidget {
           SizedBox(height: 8),
           Container(
             height: 200,
-            color: Colors.green[50], // Placeholder for graph
+            color: Colors.blueGrey[50], // Placeholder for graph
             child: Center(
               child: Text('Graph Placeholder'),
             ),
@@ -628,6 +659,7 @@ class ActivitiesGraph extends StatelessWidget {
 
 
 class NavigationPanel extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -637,24 +669,93 @@ class NavigationPanel extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 20), // Top padding
-            Icon(Icons.dashboard, color: Colors.white),
-            Text('Dashboard', style: TextStyle(color: Colors.white)),
-            SizedBox(height: 20),
-            Icon(Icons.alarm, color: Colors.white),
-            Text('Alarm', style: TextStyle(color: Colors.white)),
-            SizedBox(height: 20),
-            Icon(Icons.directions_run, color: Colors.white),
-            Text('ECG', style: TextStyle(color: Colors.white)),
-            SizedBox(height: 20),
-            Icon(Icons.insert_chart, color: Colors.white),
-            Text('Reports', style: TextStyle(color: Colors.white)),
-            SizedBox(height: 20),
-            Icon(Icons.emoji_food_beverage, color: Colors.white),
-            Text('Diet Plan', style: TextStyle(color: Colors.white)),
-            SizedBox(height: 20),
-            Icon(Icons.exit_to_app, color: Colors.white),
-            Text('Log Out', style: TextStyle(color: Colors.white)),
+            NavigationItem(
+              icon: Icons.dashboard,
+              label: 'Dashboard',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DashboardScreen()),
+                );
+              },
+            ),
+            NavigationItem(
+              icon: Icons.alarm,
+              label: 'Alarm',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AlarmScreen()),
+                );
+              },
+            ),
+            NavigationItem(
+              icon: Icons.directions_run,
+              label: 'ECG',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ECGScreen()),
+                );
+              },
+            ),
+            NavigationItem(
+              icon: Icons.insert_chart,
+              label: 'Reports',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ReportsScreen()),
+                );
+              },
+            ),
+            NavigationItem(
+              icon: Icons.emoji_food_beverage,
+              label: 'Diet Plan',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DietHomePage(widget.user)));
+                );
+              },
+            ),
+            NavigationItem(
+              icon: Icons.exit_to_app,
+              label: 'Log Out',
+              onTap: () {
+                // Handle logout
+              },
+            ),
             SizedBox(height: 20), // Bottom padding
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class NavigationItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  NavigationItem({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+  @override
+  Widget build(BuildContext context) {
+
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Column(
+          children: [
+            Icon(icon, color: Colors.white),
+            Text(label, style: TextStyle(color: Colors.white)),
           ],
         ),
       ),
