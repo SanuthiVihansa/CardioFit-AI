@@ -1,4 +1,5 @@
 import 'package:cardiofitai/components/navbar_component.dart';
+import 'package:cardiofitai/components/navigation_panel_component.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -203,249 +204,262 @@ class _DietHomePageState extends State<DietHomePage> {
           email: widget.user.email,
           width: 150,
           height: 300),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Positioned(
-              top: 0,
-              height: _height * 0.85,
-              left: 0,
-              right: 0,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  bottom: const Radius.circular(40),
-                ),
-                child: Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.only(
-                      top: 40, left: 32, right: 32, bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      ListTile(
-                        leading: IconButton(
-                          color: Colors.white,
-                          icon: const Icon(
-                            Icons.menu,
-                            color: CupertinoColors.secondaryLabel,
-                          ),
-                          onPressed: () {
-                            _scaffoldKey.currentState?.openDrawer();
-                          },
-                        ),
-                        title: Text(
-                          "${DateFormat("EEEE").format(today)},${DateFormat("d MMMM").format(today)}",
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w400),
-                        ),
-                        subtitle: Text(
-                          "Hello, " + widget.user.name,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w800),
-                        ),
-                        trailing: ClipOval(
-                          child: Image.network(
-                            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
-                          ),
-                        ),
+      body: Row(
+        children: [
+          NavigationPanelComponent("diet plan", widget.user),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Positioned(
+                    top: 0,
+                    height: _height * 0.85,
+                    left: 0,
+                    right: 0,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: const Radius.circular(40),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          _RadialProgress(
-                            key: UniqueKey(),
-                            width: width * 0.10,
-                            height: _height * 0.10,
-                          ),
-                          Spacer(),
-                          // This will push _RadialProgress to the start
-                          SizedBox(width: 200),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              _IngredientProgress(
-                                width: width * 0.28,
-                                ingredients: "PROTEIN",
-                                progress: 0.3,
-                                progressColor: Colors.green,
-                                leftAmount: 72,
-                              ),
-                              _IngredientProgress(
-                                width: width * 0.28,
-                                ingredients: "CARBS",
-                                progress: 0.3,
-                                progressColor: Colors.redAccent,
-                                leftAmount: 252,
-                              ),
-                              _IngredientProgress(
-                                width: width * 0.28,
-                                ingredients: "FAT",
-                                progress: 0.1,
-                                progressColor: Colors.yellowAccent,
-                                leftAmount: 61,
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: _height * 0.100,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: _height,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: (<Widget>[
-                    const Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 8,
-                        left: 32,
-                        right: 16,
-                      ),
-                      child: Text(
-                        "Health Insights",
-                        style: TextStyle(
-                            color: Colors.blueGrey,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
+                      child: Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.only(
+                            top: 40, left: 32, right: 32, bottom: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            ListTile(
+                              leading: IconButton(
+                                color: Colors.white,
+                                icon: const Icon(
+                                  Icons.menu,
+                                  color: CupertinoColors.secondaryLabel,
+                                ),
+                                onPressed: () {
+                                  _scaffoldKey.currentState?.openDrawer();
+                                },
+                              ),
+                              title: Text(
+                                "${DateFormat("EEEE").format(today)},${DateFormat("d MMMM").format(today)}",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w400),
+                              ),
+                              subtitle: Text(
+                                "Hello, " + widget.user.name,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w800),
+                              ),
+                              trailing: ClipOval(
+                                child: Image.network(
+                                  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                              width: 25,
+                              height: 15,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                // Navigate to homepage
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            DietaryPlanHomePage(widget.user)));
-                                ;
-                              },
-                              child: DietAdvice(),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // Navigate to homepage
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            RecognitionScreen(widget.user)));
-                              },
-                              child: ReportAnalaysis(),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // Navigate to homepage
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            NotificationHomePage(widget.user)));
-                              },
-                              child: MedicineAlert(),
-                            ),
-                            const SizedBox(
-                              width: 25,
+                            Row(
+                              children: <Widget>[
+                                _RadialProgress(
+                                  key: UniqueKey(),
+                                  width: width * 0.10,
+                                  height: _height * 0.10,
+                                ),
+                                Spacer(),
+                                // This will push _RadialProgress to the start
+                                SizedBox(width: 200),
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    _IngredientProgress(
+                                      width: width * 0.28,
+                                      ingredients: "PROTEIN",
+                                      progress: 0.3,
+                                      progressColor: Colors.green,
+                                      leftAmount: 72,
+                                    ),
+                                    _IngredientProgress(
+                                      width: width * 0.28,
+                                      ingredients: "CARBS",
+                                      progress: 0.3,
+                                      progressColor: Colors.redAccent,
+                                      leftAmount: 252,
+                                    ),
+                                    _IngredientProgress(
+                                      width: width * 0.28,
+                                      ingredients: "FAT",
+                                      progress: 0.1,
+                                      progressColor: Colors.yellowAccent,
+                                      leftAmount: 61,
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Expanded(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.only(
-                            bottom: 10, left: 32, right: 32),
-                        decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                            gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Color(0xFF8C001A),
-                                  Color(0xF56C0609),
-                                ])),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              height: 20,
+                  ),
+                  Positioned(
+                    top: _height * 0.100,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: _height,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: (<Widget>[
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 8,
+                              left: 32,
+                              right: 16,
                             ),
-                            const Text(
-                              "YOUR CURRENT",
+                            child: Text(
+                              "Health Insights",
                               style: TextStyle(
-                                  color: Colors.white60,
+                                  color: Colors.blueGrey,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700),
                             ),
-                            const Text("BODY MASS INDEX",
-                                style: TextStyle(
-                                    color: Colors.white54,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w700)),
-                            Text.rich(
-                              TextSpan(
-                                text: roundedBmiString, // The BMI value
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                children: <InlineSpan>[
-                                  TextSpan(
-                                    text: ' Kg/m', // The normal suffix text
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: 25,
                                   ),
-                                  WidgetSpan(
-                                    child: Transform.translate(
-                                      offset: const Offset(0, -10),
-                                      // Adjust the offset to move it up
-                                      child: Text(
-                                        '2',
-                                        textScaleFactor: 0.7,
-                                        // Adjust the scale to make it smaller
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      // Navigate to homepage
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  DietaryPlanHomePage(
+                                                      widget.user)));
+                                      ;
+                                    },
+                                    child: DietAdvice(),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      // Navigate to homepage
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  RecognitionScreen(
+                                                      widget.user)));
+                                    },
+                                    child: ReportAnalaysis(),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      // Navigate to homepage
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  NotificationHomePage(
+                                                      widget.user)));
+                                    },
+                                    child: MedicineAlert(),
+                                  ),
+                                  const SizedBox(
+                                    width: 25,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Expanded(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin: const EdgeInsets.only(
+                                  bottom: 10, left: 32, right: 32),
+                              decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30)),
+                                  gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color(0xFF8C001A),
+                                        Color(0xF56C0609),
+                                      ])),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  const Text(
+                                    "YOUR CURRENT",
+                                    style: TextStyle(
+                                        color: Colors.white60,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  const Text("BODY MASS INDEX",
+                                      style: TextStyle(
+                                          color: Colors.white54,
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.w700)),
+                                  Text.rich(
+                                    TextSpan(
+                                      text: roundedBmiString, // The BMI value
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.w700,
                                       ),
+                                      children: <InlineSpan>[
+                                        TextSpan(
+                                          text: ' Kg/m',
+                                          // The normal suffix text
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        WidgetSpan(
+                                          child: Transform.translate(
+                                            offset: const Offset(0, -10),
+                                            // Adjust the offset to move it up
+                                            child: Text(
+                                              '2',
+                                              textScaleFactor: 0.7,
+                                              // Adjust the scale to make it smaller
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ]),
                       ),
                     ),
-                  ]),
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/ReportReading/reportAnalysisScreen.dart';
 
@@ -9,11 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 import '../../../services/prescription_reading_api_service.dart';
 
 class RecognitionScreen extends StatefulWidget {
-  const RecognitionScreen(this.user,{super.key});
+  const RecognitionScreen(this.user, {super.key});
+
   final User user;
 
   @override
@@ -57,7 +58,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   String noSpace = "";
   List<DataRow> rows = [];
   List<List<DataRow>> setRows = [];
-  List <File> pickedImages = [];
+  List<File> pickedImages = [];
 
   //Drop down control values
   List<String> reports = [
@@ -92,7 +93,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 Container(
                   width: 250,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.deepOrangeAccent, width: 2.0),
+                    border:
+                        Border.all(color: Colors.deepOrangeAccent, width: 2.0),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: DropdownButton<String>(
@@ -109,7 +111,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                         });
                       }
                     },
-                    items: reports.map<DropdownMenuItem<String>>((String value) {
+                    items:
+                        reports.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Center(
@@ -125,10 +128,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 Flexible(
                   child: ElevatedButton(
                     onPressed: () async {
-                      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      final image = await ImagePicker()
+                          .pickImage(source: ImageSource.gallery);
                       if (image != null) {
                         File pickedImage = File(image.path);
-                        if (pickedImage.path.isNotEmpty && selectedReport != 'Select Report') {
+                        if (pickedImage.path.isNotEmpty &&
+                            selectedReport != 'Select Report') {
                           addMultipleReports.add({
                             "UploadedReport": selectedReport,
                             "UploadedImage": pickedImage,
@@ -136,7 +141,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                             "ExtractedText": "",
                             "obtainedRows": rows,
                           });
-                          pickedImages.add(pickedImage); // Add image to the list
+                          pickedImages
+                              .add(pickedImage); // Add image to the list
                           setState(() {});
                           print(addMultipleReports);
                         }
@@ -152,7 +158,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       ),
     );
   }
-
 
   Widget _showAttachedItems() {
     return Padding(
@@ -202,7 +207,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     );
   }
 
-
   //Remove confirmation widget
   void _removeItem(Map<String, dynamic> item) {
     showDialog(
@@ -222,7 +226,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               onPressed: () {
                 setState(() {
                   addMultipleReports.remove(item);
-                  pickedImages.remove(item["UploadedImage"]); // Remove image from the list
+                  pickedImages.remove(
+                      item["UploadedImage"]); // Remove image from the list
                 });
                 Navigator.of(context).pop();
               },
@@ -233,8 +238,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       },
     );
   }
-
-
 
   // Future<void> _pickImage() async {
   //   final pickedFile =
@@ -409,7 +412,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   // }
   void _pickImage() async {
     if (pickedImages.isNotEmpty) {
-      final results = await apiService.sendImagesToGPT4VisionReports(images: pickedImages);
+      final results =
+          await apiService.sendImagesToGPT4VisionReports(images: pickedImages);
 
       for (int i = 0; i < results.length; i++) {
         String scannedText = results[i];
@@ -418,7 +422,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           continue;
         }
         Map<String, dynamic> item = addMultipleReports[i];
-        item["ScannedText"] = scannedText; // Add or update the ScannedText field
+        item["ScannedText"] =
+            scannedText; // Add or update the ScannedText field
         print(scannedText);
         _removeSpaces(scannedText);
         List<String> lines = noSpace.split('\n');
@@ -429,25 +434,98 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
           switch (item["UploadedReport"]) {
             case 'Full Blood Count Report':
-              bloodComponents = ['WBC', 'Neutrophils', 'Lymphocytes', 'Monocytes', 'Eosinophils', 'Basophills', 'NeutrophilsAbsoluteCount', 'LymphocytesAbsoluteCount', 'MonocytesAbsoluteCount', 'EosinophilsAbsoluteCount', 'RBC', 'Haemoglobin', 'PackedCellVolume(PCV)', 'MCV', 'MCH', 'MCHC', 'RDW', 'PlateletCount'];
-              unitsComponents = ['/Cumm', '0/0', '0/0', '0/0', '0/0', '0/0', '/Cumm', '/Cumm', '/Cumm', '/Cumm', 'Million/pL', 'g/dl', '0/0', 'fL', 'pg', 'g/dL', '0/0', '/Cumm'];
+              bloodComponents = [
+                'WBC',
+                'Neutrophils',
+                'Lymphocytes',
+                'Monocytes',
+                'Eosinophils',
+                'Basophills',
+                'NeutrophilsAbsoluteCount',
+                'LymphocytesAbsoluteCount',
+                'MonocytesAbsoluteCount',
+                'EosinophilsAbsoluteCount',
+                'RBC',
+                'Haemoglobin',
+                'PackedCellVolume(PCV)',
+                'MCV',
+                'MCH',
+                'MCHC',
+                'RDW',
+                'PlateletCount'
+              ];
+              unitsComponents = [
+                '/Cumm',
+                '0/0',
+                '0/0',
+                '0/0',
+                '0/0',
+                '0/0',
+                '/Cumm',
+                '/Cumm',
+                '/Cumm',
+                '/Cumm',
+                'Million/pL',
+                'g/dl',
+                '0/0',
+                'fL',
+                'pg',
+                'g/dL',
+                '0/0',
+                '/Cumm'
+              ];
               break;
             case 'Lipid profile':
-              bloodComponents = ['Cholesterol-Total', 'Triglycerides', 'HDL-C', 'LDL-C', 'VLDL-C', 'CHO/HDL-CRatio'];
-              unitsComponents = ['mg/dL', 'mg/dL', 'mg/dL', 'mg/dL', 'mg/dL', ' '];
+              bloodComponents = [
+                'Cholesterol-Total',
+                'Triglycerides',
+                'HDL-C',
+                'LDL-C',
+                'VLDL-C',
+                'CHO/HDL-CRatio'
+              ];
+              unitsComponents = [
+                'mg/dL',
+                'mg/dL',
+                'mg/dL',
+                'mg/dL',
+                'mg/dL',
+                ' '
+              ];
               break;
             case 'Fasting blood Sugar':
-              bloodComponents = ['FastingPlasmaGlucose', 'FastingBloodSugar', 'FaøngmasmaGlucose'];
+              bloodComponents = [
+                'FastingPlasmaGlucose',
+                'FastingBloodSugar',
+                'FaøngmasmaGlucose'
+              ];
               unitsComponents = ['mg/dL', 'me/dl', 'mg/dL'];
               break;
             case 'Urine Full Report':
-              bloodComponents = ['Colour', 'Appearance', 'SpecificGravity', 'pH', 'Glucose', 'Protein', 'KetoneBodies', 'Bilirubin', 'Urobilinogen', 'PusCells', 'RedBloodCells', 'EpithelialCells', 'Organisms', 'Crystals', 'Casts'];
+              bloodComponents = [
+                'Colour',
+                'Appearance',
+                'SpecificGravity',
+                'pH',
+                'Glucose',
+                'Protein',
+                'KetoneBodies',
+                'Bilirubin',
+                'Urobilinogen',
+                'PusCells',
+                'RedBloodCells',
+                'EpithelialCells',
+                'Organisms',
+                'Crystals',
+                'Casts'
+              ];
               unitsComponents = [];
               break;
           }
 
           String selectedText = item["UploadedReport"];
-          rows = _buildRows(bloodComponents, unitsComponents, lines, selectedText);
+          rows =
+              _buildRows(bloodComponents, unitsComponents, lines, selectedText);
           setRows.add(rows);
           item["obtainedRows"] = rows;
           setState(() {});
@@ -456,11 +534,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       }
 
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) =>
-              ReportAnalysisScreen(extractedText, addMultipleReports, setRows,widget.user)));
+          builder: (BuildContext context) => ReportAnalysisScreen(
+              extractedText, addMultipleReports, setRows, widget.user)));
     }
   }
-
 
 //correct code
 // void _pickImage() async {
@@ -626,7 +703,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 //   return rows;
 // }
 
-  List<DataRow> _buildRows(List<String> bloodComponents, List<String> unitsComponents, List<String> lines, String selectedText) {
+  List<DataRow> _buildRows(List<String> bloodComponents,
+      List<String> unitsComponents, List<String> lines, String selectedText) {
     List<DataRow> rows = [];
 
     // Mapping of blood component names to display names
@@ -637,7 +715,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     };
 
     // Filter out lines that contain any of the blood components
-    List<String> filteredLines = lines.where((line) => bloodComponents.any((component) => line.contains(component))).toList();
+    List<String> filteredLines = lines
+        .where((line) =>
+            bloodComponents.any((component) => line.contains(component)))
+        .toList();
 
     for (String line in filteredLines) {
       print("Processing line: $line"); // Debug print
@@ -645,10 +726,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       // Iterate through each blood component and unit component
       for (int i = 0; i < bloodComponents.length; i++) {
         String bloodComponent = bloodComponents[i];
-        String unitComponent = unitsComponents.length > i ? unitsComponents[i] : '';
+        String unitComponent =
+            unitsComponents.length > i ? unitsComponents[i] : '';
 
         int bloodIndex = line.indexOf(bloodComponent);
-        int unitIndex = line.indexOf(unitComponent, bloodIndex + bloodComponent.length);
+        int unitIndex =
+            line.indexOf(unitComponent, bloodIndex + bloodComponent.length);
 
         // Ensure the indices are valid
         if (bloodIndex == -1 || unitIndex == -1) {
@@ -657,20 +740,26 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
         while (bloodIndex != -1 && unitIndex != -1) {
           // Extract the value between the blood component and unit component
-          String value = line.substring(bloodIndex + bloodComponent.length, unitIndex).trim();
+          String value = line
+              .substring(bloodIndex + bloodComponent.length, unitIndex)
+              .trim();
 
           // Debug print to verify extracted values
-          print("Component: $bloodComponent, Value: $value, Unit: $unitComponent");
+          print(
+              "Component: $bloodComponent, Value: $value, Unit: $unitComponent");
 
           rows.add(DataRow(cells: [
-            DataCell(Text(componentMap.containsKey(bloodComponent) ? componentMap[bloodComponent]! : bloodComponent)),
+            DataCell(Text(componentMap.containsKey(bloodComponent)
+                ? componentMap[bloodComponent]!
+                : bloodComponent)),
             DataCell(Text(value.trim())),
             DataCell(Text(unitComponent)),
           ]));
 
           // Update indices for the next occurrence
           bloodIndex = line.indexOf(bloodComponent, unitIndex);
-          unitIndex = line.indexOf(unitComponent, bloodIndex + bloodComponent.length);
+          unitIndex =
+              line.indexOf(unitComponent, bloodIndex + bloodComponent.length);
 
           // Ensure the indices are valid
           if (bloodIndex == -1 || unitIndex == -1) {
@@ -682,8 +771,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
     return rows;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -703,53 +790,60 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         ),
         backgroundColor: Colors.red,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              SizedBox(
-                height: 55 + MediaQuery.of(context).viewInsets.top,
+      body: Row(
+        children: [
+          NavigationPanelComponent("reports", widget.user),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 55 + MediaQuery.of(context).viewInsets.top,
+                    ),
+                    Text("Laboratory Report Diagnosis",
+                        style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.w700)),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    _multipleAttachmentControl(),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    addMultipleReports.length != 0
+                        ? _showAttachedItems()
+                        : SizedBox(),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text("Back")),
+                        SizedBox(width: 30),
+                        ElevatedButton(
+                            onPressed: () {
+                              _pickImage();
+                            },
+                            child: Text("Analyse")),
+                      ],
+                    ),
+                    SizedBox(height: 30),
+                    // wordPairs.length != 0 ? _displayOutputTable() : SizedBox()
+                  ],
+                ),
               ),
-              Text("Laboratory Report Diagnosis",
-                  style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.blueGrey,
-                      fontWeight: FontWeight.w700)),
-              SizedBox(
-                height: 30,
-              ),
-              _multipleAttachmentControl(),
-              SizedBox(
-                height: 30,
-              ),
-              addMultipleReports.length != 0
-                  ? _showAttachedItems()
-                  : SizedBox(),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text("Back")),
-                  SizedBox(width: 30),
-                  ElevatedButton(
-                      onPressed: () {
-                        _pickImage();
-                      },
-                      child: Text("Analyse")),
-                ],
-              ),
-              SizedBox(height: 30),
-// wordPairs.length != 0 ? _displayOutputTable() : SizedBox()
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

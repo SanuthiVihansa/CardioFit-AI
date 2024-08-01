@@ -371,7 +371,7 @@
 //   }
 // }
 
-
+import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/screens/common/ecg_monitoring_home_screen.dart';
 import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/diet_,mainhome_page.screen.dart';
@@ -408,6 +408,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       MaterialPageRoute(builder: (BuildContext context) => screen),
     );
   }
+
   void _onClickEcgAnalysisBtn() {
     Navigator.push(
         context,
@@ -436,47 +437,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
         MaterialPageRoute(builder: (BuildContext context) => ReportHome()));
   }
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-        appBar: AppBar(
-          title: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Cardio',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
+      appBar: AppBar(
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Cardio',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 20,
                 ),
-                TextSpan(
-                  text: 'Fit',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amberAccent,
-                    fontSize: 20,
-                  ),
+              ),
+              TextSpan(
+                text: 'Fit',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.amberAccent,
+                  fontSize: 20,
                 ),
-                TextSpan(
-                  text: ' AI',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black45,
-                    fontSize: 20,
-                  ),
+              ),
+              TextSpan(
+                text: ' AI',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black45,
+                  fontSize: 20,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          backgroundColor: Color(0xFFFF5B61),
         ),
+        backgroundColor: Color(0xFFFF5B61),
+      ),
       // drawer: LeftNavBar(
       //   user: widget.user,
       //   name: widget.user.name,
@@ -486,7 +483,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // ),
       body: Row(
         children: [
-          NavigationPanel(),
+          NavigationPanelComponent("dashboard", widget.user),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -520,8 +517,7 @@ class ProfileHeader extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundImage: NetworkImage(
-                'https://example.com/profile.jpg'),
+            backgroundImage: NetworkImage('https://example.com/profile.jpg'),
           ),
           SizedBox(width: 16),
           Column(
@@ -582,6 +578,7 @@ class InfoCard extends StatelessWidget {
 
 class CurrentHealthInfo extends StatelessWidget {
   final User user;
+
   const CurrentHealthInfo({required this.user});
 
   @override
@@ -598,7 +595,8 @@ class CurrentHealthInfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             StatCard(label: 'Blood Sugar Level', value: user.bloodGlucoseLevel),
-            StatCard(label: 'Cholestrol Level', value: user.bloodCholestrolLevel),
+            StatCard(
+                label: 'Cholestrol Level', value: user.bloodCholestrolLevel),
             StatCard(label: 'Heart Condition', value: user.cardiacCondition),
             StatCard(label: 'BMI status', value: user.bmi),
           ],
@@ -652,112 +650,6 @@ class ActivitiesGraph extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-
-class NavigationPanel extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 80,
-      color: Colors.blueGrey, // Set your desired color
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 20), // Top padding
-            NavigationItem(
-              icon: Icons.dashboard,
-              label: 'Dashboard',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DashboardScreen()),
-                );
-              },
-            ),
-            NavigationItem(
-              icon: Icons.alarm,
-              label: 'Alarm',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AlarmScreen()),
-                );
-              },
-            ),
-            NavigationItem(
-              icon: Icons.directions_run,
-              label: 'ECG',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ECGScreen()),
-                );
-              },
-            ),
-            NavigationItem(
-              icon: Icons.insert_chart,
-              label: 'Reports',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ReportsScreen()),
-                );
-              },
-            ),
-            NavigationItem(
-              icon: Icons.emoji_food_beverage,
-              label: 'Diet Plan',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DietHomePage(widget.user)));
-                );
-              },
-            ),
-            NavigationItem(
-              icon: Icons.exit_to_app,
-              label: 'Log Out',
-              onTap: () {
-                // Handle logout
-              },
-            ),
-            SizedBox(height: 20), // Bottom padding
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class NavigationItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  NavigationItem({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-  @override
-  Widget build(BuildContext context) {
-
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          children: [
-            Icon(icon, color: Colors.white),
-            Text(label, style: TextStyle(color: Colors.white)),
-          ],
-        ),
       ),
     );
   }

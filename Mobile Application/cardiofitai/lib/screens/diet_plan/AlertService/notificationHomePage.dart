@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
+import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/medicineAlertScreen.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/ring.dart';
@@ -476,8 +477,6 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     }
   }
 
-
-
   @override
   void dispose() {
     subscription?.cancel();
@@ -500,14 +499,21 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         ),
         backgroundColor: Colors.red,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _addTaskBar(screenWidth),
-            _addDateBar(screenWidth),
-            _showReminders(screenHeight, screenWidth),
-          ],
-        ),
+      body: Row(
+        children: [
+          NavigationPanelComponent("alarm", widget.user),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _addTaskBar(screenWidth),
+                  _addDateBar(screenWidth),
+                  _showReminders(screenHeight, screenWidth),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       backgroundColor: Colors.white,
     );
