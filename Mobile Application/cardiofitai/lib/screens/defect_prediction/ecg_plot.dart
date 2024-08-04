@@ -165,7 +165,7 @@
 //   }
 // }
 
-//Both Leads with extracted faetures
+//Both Leads with extracted features
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -378,132 +378,152 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 300,
-                  child: Stack(
-                    children: [
-                      LineChart(
-                        LineChartData(
-                          lineBarsData: [
-                            LineChartBarData(
-                              spots: List.generate(
-                                _ecgDataLead1.length,
-                                    (index) => FlSpot(index.toDouble(), _ecgDataLead1[index]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Lead 1',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 300,
+                      child: Stack(
+                        children: [
+                          LineChart(
+                            LineChartData(
+                              lineBarsData: [
+                                LineChartBarData(
+                                  spots: List.generate(
+                                    _ecgDataLead1.length,
+                                        (index) => FlSpot(index.toDouble(), _ecgDataLead1[index]),
+                                  ),
+                                  isCurved: false,
+                                  colors: [Colors.blue],
+                                  barWidth: 2,
+                                  isStrokeCapRound: true,
+                                  dotData: FlDotData(
+                                    show: true,
+                                    getDotPainter: (spot, xPercentage, bar, index) {
+                                      final feature = _getFeatureNameByIndex(index, _featureIndicesLead1);
+                                      if (feature != null) {
+                                        return FlDotCirclePainter(
+                                          radius: 3,
+                                          color: _getColorForFeature(feature),
+                                          strokeWidth: 0,
+                                        );
+                                      }
+                                      return FlDotCirclePainter(
+                                        radius: 0,
+                                        color: Colors.transparent,
+                                        strokeWidth: 0,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                              minY: _ecgDataLead1.reduce((min, current) => min < current ? min : current),
+                              maxY: _ecgDataLead1.reduce((max, current) => max > current ? max : current),
+                              titlesData: FlTitlesData(
+                                bottomTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitles: (value) {
+                                    return value.toInt().toString();
+                                  },
+                                ),
+                                leftTitles: SideTitles(showTitles: true),
                               ),
-                              isCurved: false,
-                              colors: [Colors.blue],
-                              barWidth: 2,
-                              isStrokeCapRound: true,
-                              dotData: FlDotData(
+                              borderData: FlBorderData(
                                 show: true,
-                                getDotPainter: (spot, xPercentage, bar, index) {
-                                  final feature = _getFeatureNameByIndex(index, _featureIndicesLead1);
-                                  if (feature != null) {
-                                    return FlDotCirclePainter(
-                                      radius: 3,
-                                      color: _getColorForFeature(feature),
-                                      strokeWidth: 0,
-                                    );
-                                  }
-                                  return FlDotCirclePainter(
-                                    radius: 0,
-                                    color: Colors.transparent,
-                                    strokeWidth: 0,
-                                  );
-                                },
+                                border: Border.all(color: Colors.black),
+                              ),
+                              gridData: FlGridData(
+                                show: true,
+                                drawHorizontalLine: true,
+                                drawVerticalLine: true,
                               ),
                             ),
-                          ],
-                          minY: _ecgDataLead1.reduce((min, current) => min < current ? min : current),
-                          maxY: _ecgDataLead1.reduce((max, current) => max > current ? max : current),
-                          titlesData: FlTitlesData(
-                            bottomTitles: SideTitles(
-                              showTitles: true,
-                              getTitles: (value) {
-                                return value.toInt().toString();
-                              },
-                            ),
-                            leftTitles: SideTitles(showTitles: true),
                           ),
-                          borderData: FlBorderData(
-                            show: true,
-                            border: Border.all(color: Colors.black),
-                          ),
-                          gridData: FlGridData(
-                            show: true,
-                            drawHorizontalLine: true,
-                            drawVerticalLine: true,
-                          ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 300,
-                  child: Stack(
-                    children: [
-                      LineChart(
-                        LineChartData(
-                          lineBarsData: [
-                            LineChartBarData(
-                              spots: List.generate(
-                                _ecgDataLead2.length,
-                                    (index) => FlSpot(index.toDouble(), _ecgDataLead2[index]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Lead 2',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 300,
+                      child: Stack(
+                        children: [
+                          LineChart(
+                            LineChartData(
+                              lineBarsData: [
+                                LineChartBarData(
+                                  spots: List.generate(
+                                    _ecgDataLead2.length,
+                                        (index) => FlSpot(index.toDouble(), _ecgDataLead2[index]),
+                                  ),
+                                  isCurved: false,
+                                  colors: [Colors.blue],
+                                  barWidth: 2,
+                                  isStrokeCapRound: true,
+                                  dotData: FlDotData(
+                                    show: true,
+                                    getDotPainter: (spot, xPercentage, bar, index) {
+                                      final feature = _getFeatureNameByIndex(index, _featureIndicesLead2);
+                                      if (feature != null) {
+                                        return FlDotCirclePainter(
+                                          radius: 3,
+                                          color: _getColorForFeature(feature),
+                                          strokeWidth: 0,
+                                        );
+                                      }
+                                      return FlDotCirclePainter(
+                                        radius: 0,
+                                        color: Colors.transparent,
+                                        strokeWidth: 0,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                              minY: _ecgDataLead2.reduce((min, current) => min < current ? min : current),
+                              maxY: _ecgDataLead2.reduce((max, current) => max > current ? max : current),
+                              titlesData: FlTitlesData(
+                                bottomTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitles: (value) {
+                                    return value.toInt().toString();
+                                  },
+                                ),
+                                leftTitles: SideTitles(showTitles: true),
                               ),
-                              isCurved: false,
-                              colors: [Colors.blue],
-                              barWidth: 2,
-                              isStrokeCapRound: true,
-                              dotData: FlDotData(
+                              borderData: FlBorderData(
                                 show: true,
-                                getDotPainter: (spot, xPercentage, bar, index) {
-                                  final feature = _getFeatureNameByIndex(index, _featureIndicesLead2);
-                                  if (feature != null) {
-                                    return FlDotCirclePainter(
-                                      radius: 3,
-                                      color: _getColorForFeature(feature),
-                                      strokeWidth: 0,
-                                    );
-                                  }
-                                  return FlDotCirclePainter(
-                                    radius: 0,
-                                    color: Colors.transparent,
-                                    strokeWidth: 0,
-                                  );
-                                },
+                                border: Border.all(color: Colors.black),
+                              ),
+                              gridData: FlGridData(
+                                show: true,
+                                drawHorizontalLine: true,
+                                drawVerticalLine: true,
                               ),
                             ),
-                          ],
-                          minY: _ecgDataLead2.reduce((min, current) => min < current ? min : current),
-                          maxY: _ecgDataLead2.reduce((max, current) => max > current ? max : current),
-                          titlesData: FlTitlesData(
-                            bottomTitles: SideTitles(
-                              showTitles: true,
-                              getTitles: (value) {
-                                return value.toInt().toString();
-                              },
-                            ),
-                            leftTitles: SideTitles(showTitles: true),
                           ),
-                          borderData: FlBorderData(
-                            show: true,
-                            border: Border.all(color: Colors.black),
-                          ),
-                          gridData: FlGridData(
-                            show: true,
-                            drawHorizontalLine: true,
-                            drawVerticalLine: true,
-                          ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
