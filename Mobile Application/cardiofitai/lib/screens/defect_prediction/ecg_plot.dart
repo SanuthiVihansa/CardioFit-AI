@@ -164,6 +164,8 @@
 //     );
 //   }
 // }
+
+//Both Leads with extracted faetures
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -184,10 +186,12 @@ class ECGDiagnosisScreen extends StatefulWidget {
 class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
   File? _selectedFile;
   String _predictedLabel = '';
-  List<double> _ecgData = [];
+  List<double> _ecgDataLead1 = [];
+  List<double> _ecgDataLead2 = [];
   bool _isLoading = true;
   String _errorMessage = '';
-  Map<String, List<int>> _featureIndices = {};
+  Map<String, List<int>> _featureIndicesLead1 = {};
+  Map<String, List<int>> _featureIndicesLead2 = {};
 
   @override
   void initState() {
@@ -200,10 +204,11 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
 
   Future<void> _processFile() async {
     try {
-      List<double> ecgData = await _readFile(_selectedFile!);
+      var ecgData = await _readFile(_selectedFile!);
 
       setState(() {
-        _ecgData = ecgData;
+        _ecgDataLead1 = ecgData['lead1']!;
+        _ecgDataLead2 = ecgData['lead2']!;
       });
 
       String predictedLabel = await _predictLabel(_selectedFile!);
@@ -212,8 +217,9 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
         _isLoading = false;
       });
 
-      // Extract features
-      _extractFeatures();
+      // Extract features for both leads
+      _extractFeatures(_ecgDataLead1, _featureIndicesLead1);
+      _extractFeatures(_ecgDataLead2, _featureIndicesLead2);
     } catch (e) {
       setState(() {
         _errorMessage = 'Error: $e';
@@ -222,15 +228,18 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
     }
   }
 
-  Future<List<double>> _readFile(File file) async {
+  Future<Map<String, List<double>>> _readFile(File file) async {
     try {
       String fileContent = await file.readAsString();
       Map<String, dynamic> jsonData = jsonDecode(fileContent);
 
-      if (jsonData.containsKey('l1')) {
-        return (jsonData['l1'] as List).map<double>((value) {
-          return value.toDouble();
-        }).toList();
+      if (jsonData.containsKey('l1') && jsonData.containsKey('l2')) {
+        List<double> lead1 = (jsonData['l1'] as List<dynamic>).map<double>((value) => value.toDouble()).toList();
+        List<double> lead2 = (jsonData['l2'] as List<dynamic>).map<double>((value) => value.toDouble()).toList();
+        return {
+          'lead1': lead1,
+          'lead2': lead2,
+        };
       } else {
         throw FormatException('No ECG data found in the file');
       }
@@ -255,31 +264,25 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
     }
   }
 
-  void _extractFeatures() {
-    List<int> rPeaks = _detectRPeaks(_ecgData);
-    Map<String, List<int>> featureIndices = {
-      'P wave': [],
-      'Q wave': [],
-      'R wave': rPeaks,
-      'S wave': [],
-      'T wave': [],
-    };
+  void _extractFeatures(List<double> ecgData, Map<String, List<int>> featureIndices) {
+    List<int> rPeaks = _detectRPeaks(ecgData);
+    featureIndices['P wave'] = [];
+    featureIndices['Q wave'] = [];
+    featureIndices['R wave'] = rPeaks;
+    featureIndices['S wave'] = [];
+    featureIndices['T wave'] = [];
 
     for (int rPeak in rPeaks) {
-      int qWave = _detectQWave(_ecgData, rPeak);
-      int sWave = _detectSWave(_ecgData, rPeak);
-      int tWave = _detectTWave(_ecgData, rPeak);
-      int pWave = _detectPWave(_ecgData, rPeak);
+      int qWave = _detectQWave(ecgData, rPeak);
+      int sWave = _detectSWave(ecgData, rPeak);
+      int tWave = _detectTWave(ecgData, rPeak);
+      int pWave = _detectPWave(ecgData, rPeak);
 
       featureIndices['Q wave']?.add(qWave);
       featureIndices['S wave']?.add(sWave);
       featureIndices['T wave']?.add(tWave);
       featureIndices['P wave']?.add(pWave);
     }
-
-    setState(() {
-      _featureIndices = featureIndices;
-    });
   }
 
   List<int> _detectRPeaks(List<double> data) {
@@ -362,98 +365,162 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
             style: const TextStyle(fontSize: 20, color: Colors.red),
           ),
         )
-            : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                'Diagnosis: $_predictedLabel',
-                style: const TextStyle(fontSize: 20),
+            : SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  'Diagnosis: $_predictedLabel',
+                  style: const TextStyle(fontSize: 20),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 300,
-                child: Stack(
-                  children: [
-                    LineChart(
-                      LineChartData(
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: List.generate(
-                              _ecgData.length,
-                                  (index) => FlSpot(
-                                  index.toDouble(), _ecgData[index]),
-                            ),
-                            isCurved: false,
-                            colors: [Colors.blue],
-                            barWidth: 2,
-                            isStrokeCapRound: true,
-                            dotData: FlDotData(
-                              show: true,
-                              getDotPainter: (spot, xPercentage, bar, index) {
-                                final feature = _getFeatureNameByIndex(index);
-                                if (feature != null) {
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 300,
+                  child: Stack(
+                    children: [
+                      LineChart(
+                        LineChartData(
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: List.generate(
+                                _ecgDataLead1.length,
+                                    (index) => FlSpot(index.toDouble(), _ecgDataLead1[index]),
+                              ),
+                              isCurved: false,
+                              colors: [Colors.blue],
+                              barWidth: 2,
+                              isStrokeCapRound: true,
+                              dotData: FlDotData(
+                                show: true,
+                                getDotPainter: (spot, xPercentage, bar, index) {
+                                  final feature = _getFeatureNameByIndex(index, _featureIndicesLead1);
+                                  if (feature != null) {
+                                    return FlDotCirclePainter(
+                                      radius: 3,
+                                      color: _getColorForFeature(feature),
+                                      strokeWidth: 0,
+                                    );
+                                  }
                                   return FlDotCirclePainter(
-                                    radius: 3,
-                                    color: _getColorForFeature(feature),
+                                    radius: 0,
+                                    color: Colors.transparent,
                                     strokeWidth: 0,
                                   );
-                                }
-                                return FlDotCirclePainter(
-                                  radius: 0,
-                                  color: Colors.transparent,
-                                  strokeWidth: 0,
-                                );
+                                },
+                              ),
+                            ),
+                          ],
+                          minY: _ecgDataLead1.reduce((min, current) => min < current ? min : current),
+                          maxY: _ecgDataLead1.reduce((max, current) => max > current ? max : current),
+                          titlesData: FlTitlesData(
+                            bottomTitles: SideTitles(
+                              showTitles: true,
+                              getTitles: (value) {
+                                return value.toInt().toString();
                               },
                             ),
+                            leftTitles: SideTitles(showTitles: true),
                           ),
-                        ],
-                        minY: _ecgData.reduce(
-                                (min, current) => min < current ? min : current),
-                        maxY: _ecgData.reduce(
-                                (max, current) => max > current ? max : current),
-                        titlesData: FlTitlesData(
-                          bottomTitles: SideTitles(
-                            showTitles: true,
-                            getTitles: (value) {
-                              return value.toInt().toString();
-                            },
+                          borderData: FlBorderData(
+                            show: true,
+                            border: Border.all(color: Colors.black),
                           ),
-                          leftTitles: SideTitles(showTitles: true),
-                        ),
-                        borderData: FlBorderData(
-                          show: true,
-                          border: Border.all(color: Colors.black),
-                        ),
-                        gridData: FlGridData(
-                          show: true,
-                          drawHorizontalLine: true,
-                          drawVerticalLine: true,
+                          gridData: FlGridData(
+                            show: true,
+                            drawHorizontalLine: true,
+                            drawVerticalLine: true,
+                          ),
                         ),
                       ),
-                    ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 300,
+                  child: Stack(
+                    children: [
+                      LineChart(
+                        LineChartData(
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: List.generate(
+                                _ecgDataLead2.length,
+                                    (index) => FlSpot(index.toDouble(), _ecgDataLead2[index]),
+                              ),
+                              isCurved: false,
+                              colors: [Colors.blue],
+                              barWidth: 2,
+                              isStrokeCapRound: true,
+                              dotData: FlDotData(
+                                show: true,
+                                getDotPainter: (spot, xPercentage, bar, index) {
+                                  final feature = _getFeatureNameByIndex(index, _featureIndicesLead2);
+                                  if (feature != null) {
+                                    return FlDotCirclePainter(
+                                      radius: 3,
+                                      color: _getColorForFeature(feature),
+                                      strokeWidth: 0,
+                                    );
+                                  }
+                                  return FlDotCirclePainter(
+                                    radius: 0,
+                                    color: Colors.transparent,
+                                    strokeWidth: 0,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                          minY: _ecgDataLead2.reduce((min, current) => min < current ? min : current),
+                          maxY: _ecgDataLead2.reduce((max, current) => max > current ? max : current),
+                          titlesData: FlTitlesData(
+                            bottomTitles: SideTitles(
+                              showTitles: true,
+                              getTitles: (value) {
+                                return value.toInt().toString();
+                              },
+                            ),
+                            leftTitles: SideTitles(showTitles: true),
+                          ),
+                          borderData: FlBorderData(
+                            show: true,
+                            border: Border.all(color: Colors.black),
+                          ),
+                          gridData: FlGridData(
+                            show: true,
+                            drawHorizontalLine: true,
+                            drawVerticalLine: true,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildLegendItem('P wave', Colors.green),
+                    _buildLegendItem('Q wave', Colors.orange),
+                    _buildLegendItem('R wave', Colors.red),
+                    _buildLegendItem('S wave', Colors.purple),
+                    _buildLegendItem('T wave', Colors.yellow),
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildLegendItem('P wave', Colors.green),
-                  _buildLegendItem('Q wave', Colors.orange),
-                  _buildLegendItem('R wave', Colors.red),
-                  _buildLegendItem('S wave', Colors.purple),
-                  _buildLegendItem('T wave', Colors.yellow),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -476,16 +543,16 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
     }
   }
 
-  String? _getFeatureNameByIndex(int index) {
-    if (_featureIndices['P wave']!.contains(index)) {
+  String? _getFeatureNameByIndex(int index, Map<String, List<int>> featureIndices) {
+    if (featureIndices['P wave']!.contains(index)) {
       return 'P wave';
-    } else if (_featureIndices['Q wave']!.contains(index)) {
+    } else if (featureIndices['Q wave']!.contains(index)) {
       return 'Q wave';
-    } else if (_featureIndices['R wave']!.contains(index)) {
+    } else if (featureIndices['R wave']!.contains(index)) {
       return 'R wave';
-    } else if (_featureIndices['S wave']!.contains(index)) {
+    } else if (featureIndices['S wave']!.contains(index)) {
       return 'S wave';
-    } else if (_featureIndices['T wave']!.contains(index)) {
+    } else if (featureIndices['T wave']!.contains(index)) {
       return 'T wave';
     } else {
       return null;
