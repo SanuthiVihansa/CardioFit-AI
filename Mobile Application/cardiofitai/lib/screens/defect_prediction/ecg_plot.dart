@@ -174,6 +174,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import 'EmergencyDialog.dart';
+
 class ECGDiagnosisScreen extends StatefulWidget {
   final File file;
 
@@ -220,6 +222,11 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
       // Extract features for both leads
       _extractFeatures(_ecgDataLead1, _featureIndicesLead1);
       _extractFeatures(_ecgDataLead2, _featureIndicesLead2);
+
+      // Check for emergency condition
+      if (predictedLabel == 'Incomplete Right Bundle Branch Block') {
+        _showEmergencyDialog('123-456-7890'); // Replace with the actual contact number
+      }
     } catch (e) {
       setState(() {
         _errorMessage = 'Error: $e';
@@ -329,6 +336,13 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
       }
     }
     return rPeak - 30;
+  }
+
+  void _showEmergencyDialog(String contactNumber) {
+    showDialog(
+      context: context,
+      builder: (context) => EmergencyDialog(contactNumber: contactNumber),
+    );
   }
 
   @override
