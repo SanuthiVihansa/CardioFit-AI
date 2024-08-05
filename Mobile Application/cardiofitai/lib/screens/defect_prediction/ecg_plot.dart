@@ -175,6 +175,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import 'EmergencyDialog.dart';
+ // Make sure to import the EmergencyDialog
 
 class ECGDiagnosisScreen extends StatefulWidget {
   final File file;
