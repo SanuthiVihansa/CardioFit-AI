@@ -283,7 +283,10 @@ class _ProfilePageState extends State<ProfilePage> {
             _caluclateBMIController.text,
             _dateOfBirth.toString(),
             dropdownValue.characters.string,
-            widget.user.type);
+            widget.user.type,
+        widget.user.memberName,
+        widget.user.memberRelationship,
+        widget.user.memberPhoneNo);
         UserLoginService.updateUser(updatedUserInfo);
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => DietHomePage(widget.user)));

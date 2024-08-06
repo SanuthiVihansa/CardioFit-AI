@@ -18,6 +18,9 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _memberNameController = TextEditingController();
+  final TextEditingController _memberRelationshipController = TextEditingController();
+  final TextEditingController _memberPhoneNoController = TextEditingController();
   late double _width;
   late double _height;
 
@@ -58,6 +61,30 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
+  //Member Name Field Validation
+  String? _validateMemberName(String text) {
+    if (text == "") {
+      return " Member Name is required!";
+    }
+    return null;
+  }
+  //Member Relationship Field Validation
+  String? _validateMemberRelationship(String text) {
+    if (text == "") {
+      return "Relationship is required!";
+    }
+    return null;
+  }
+
+  //Member Phone No Field Validation
+  String? _validateMemberPhoneNo(String text) {
+    if (text == "") {
+      return "Member Phone No is required!";
+    }
+    return null;
+  }
+
+
   Future<void> _onTapCreateAccount() async {
     Response response = await UserLoginService.addAccount(
         _nameController.text,
@@ -69,7 +96,11 @@ class _SignUpPageState extends State<SignUpPage> {
         "-1",
         "-1",
         "-1",
-        "user");
+        "user",
+      "memberName",
+      "memberRelationship",
+      "memberPhoneNo"
+    );
     if (response.code == 200) {
       Fluttertoast.showToast(
           msg: "Account Created Successfully!🎉",
@@ -165,6 +196,75 @@ class _SignUpPageState extends State<SignUpPage> {
                                     icon: const Icon(Icons.close),
                                     onPressed: () => _emailController.clear(),
                                   ),
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(_width / 49.09090909090909),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          controller: _memberNameController,
+                          validator: (text) {
+                            return _validateMemberName(text!);
+                          },
+                          onSaved: (text) {},
+                          decoration: InputDecoration(
+                            hintText: 'Sara James',
+                            prefixIcon: const Icon(Icons.person),
+                            suffixIcon: _memberNameController.text.isEmpty
+                                ? Container(width: 0)
+                                : IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () => _memberNameController.clear(),
+                            ),
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(_width / 49.09090909090909),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          controller: _memberRelationshipController,
+                          validator: (text) {
+                            return _validateMemberRelationship(text!);
+                          },
+                          onSaved: (text) {},
+                          decoration: InputDecoration(
+                            hintText: 'Mother',
+                            prefixIcon: const Icon(Icons.person),
+                            suffixIcon: _memberRelationshipController.text.isEmpty
+                                ? Container(width: 0)
+                                : IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () => _memberRelationshipController.clear(),
+                            ),
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(_width / 49.09090909090909),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          controller: _memberPhoneNoController,
+                          validator: (text) {
+                            return _validateMemberPhoneNo(text!);
+                          },
+                          onSaved: (text) {},
+                          decoration: InputDecoration(
+                            hintText: 'Mother',
+                            prefixIcon: const Icon(Icons.person),
+                            suffixIcon: _memberPhoneNoController.text.isEmpty
+                                ? Container(width: 0)
+                                : IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () => _memberPhoneNoController.clear(),
+                            ),
                             border: const OutlineInputBorder(),
                           ),
                         ),

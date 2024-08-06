@@ -23,7 +23,11 @@ class UserLoginService {
       String bmi,
       String dob,
       String activeLevel,
-      String type) async {
+      String type,
+      String memberName,
+      String memberRelationship,
+      String memberPhone,
+      ) async {
     Response response = Response();
     Map<String, dynamic> data = <String, dynamic>{
       "name": name,
@@ -36,6 +40,9 @@ class UserLoginService {
       "dob":dob,
       "activeLevel":activeLevel,
       "type": type,
+      "memberName": memberName,
+      "memberRelationship": memberRelationship,
+      "memberPhone": memberPhone
     };
 
     await userCollectionReference.doc().set(data).whenComplete(() {
@@ -69,6 +76,9 @@ class UserLoginService {
           "bmi":user.bmi,
           "dob":user.dob,
           "activeLevel":user.activeLevel,
+          "memberName" :user.memberName,
+          "memberRelationship" : user.memberRelationship,
+          "memberPhoneNo": user.memberPhoneNo,
 
         };
 

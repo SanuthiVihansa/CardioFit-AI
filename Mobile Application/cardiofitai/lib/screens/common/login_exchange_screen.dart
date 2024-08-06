@@ -39,7 +39,10 @@ class _LoginExchangeScreenState extends State<LoginExchangeScreen> {
             decodedUser["bmi"],
             decodedUser["dob"],
             decodedUser["activeLevel"],
-            decodedUser["type"]);
+            decodedUser["type"],
+            decodedUser["memberName"],
+            decodedUser["memberRelationship"],
+            decodedUser["memberPhoneNo"]);
 
         _navigate(user);
       } else {
