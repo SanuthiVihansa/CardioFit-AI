@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/ReportReading/reportAnalysisScreen.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -49,7 +49,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   bool scanning = false;
   String scannedText = '';
 
-  //List<WordIndex> wordIndexes = [];
+  Map<String, dynamic> apiData = {};
   List<WordPair> wordPairs = [];
   List<List<WordPair>> extractedText = [];
   String? selectedReport = 'Select Report';
@@ -64,7 +64,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   List<String> reports = [
     'Select Report',
     'Fasting blood Sugar',
+    'Urine Full Report',
     'Lipid profile',
+    'Full Blood Count Report'
   ];
 
   User? get user => null;
@@ -412,8 +414,27 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   // }
   void _pickImage() async {
     if (pickedImages.isNotEmpty) {
-      final results =
-          await apiService.sendImagesToGPT4VisionReports(images: pickedImages);
+      List<String> results=[];
+      if(selectedReport!="Urine Full Report" && selectedReport!="Full Blood Count Report"){
+        if(selectedReport=="Fasting blood Sugar"){
+          var response = await http.MultipartRequest("POST", Uri.parse("https://sanuthivihansa.pythonanywhere.com/glucose/extract-text"));
+          response.files.add(await http.MultipartFile.fromPath('file', image.path));
+
+    final response = await request.send();
+
+        }
+
+
+      }else{
+       results = await apiService.sendImagesToGPT4VisionReports(images: pickedImages);
+
+      }
+
+
+
+
+
+
 
       for (int i = 0; i < results.length; i++) {
         String scannedText = results[i];
