@@ -63,7 +63,7 @@ dependencies:
   esys_flutter_share_plus: ^2.2.0
   geolocator: ^8.2.0
   permission_handler: ^10.0.0
-  flutter_sms: ^2.3.2
+#  flutter_sms: ^2.3.2
   twilio_flutter: ^0.9.0
 
 

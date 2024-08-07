@@ -97,9 +97,9 @@ class _SignUpPageState extends State<SignUpPage> {
         "-1",
         "-1",
         "user",
-      "memberName",
-      "memberRelationship",
-      "memberPhoneNo"
+      _memberNameController.text,
+      _memberRelationshipController.text,
+      _memberPhoneNoController.text
     );
     if (response.code == 200) {
       Fluttertoast.showToast(
@@ -257,7 +257,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           onSaved: (text) {},
                           decoration: InputDecoration(
-                            hintText: 'Mother',
+                            hintText: 'Phone Number',
                             prefixIcon: const Icon(Icons.person),
                             suffixIcon: _memberPhoneNoController.text.isEmpty
                                 ? Container(width: 0)
