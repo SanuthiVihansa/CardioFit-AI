@@ -414,27 +414,29 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   // }
   void _pickImage() async {
     if (pickedImages.isNotEmpty) {
-      List<String> results=[];
-      if(selectedReport!="Urine Full Report" && selectedReport!="Full Blood Count Report"){
-        if(selectedReport=="Fasting blood Sugar"){
-          var response = await http.MultipartRequest("POST", Uri.parse("https://sanuthivihansa.pythonanywhere.com/glucose/extract-text"));
-          response.files.add(await http.MultipartFile.fromPath('file', image.path));
-
-    final response = await request.send();
-
+      List<String> results = [];
+      if (selectedReport != "Urine Full Report" &&
+          selectedReport != "Full Blood Count Report") {
+        if (selectedReport == "Fasting blood Sugar") {
+          for (File img in pickedImages) {
+            var request = await http.MultipartRequest(
+                "POST",
+                Uri.parse(
+                    "https://sanuthivihansa.pythonanywhere.com/glucose/extract-text"));
+            request.files
+                .add(await http.MultipartFile.fromPath('file', img.path));
+            final response = await request.send();
+            if (response.statusCode == 200) {
+              final responseData = await http.Response.fromStream(response);
+              final Map<String, dynamic> responseJson = json.decode(responseData.body);
+              print("STOP");
+            }
+          }
         }
-
-
-      }else{
-       results = await apiService.sendImagesToGPT4VisionReports(images: pickedImages);
-
+      } else {
+        results = await apiService.sendImagesToGPT4VisionReports(
+            images: pickedImages);
       }
-
-
-
-
-
-
 
       for (int i = 0; i < results.length; i++) {
         String scannedText = results[i];
