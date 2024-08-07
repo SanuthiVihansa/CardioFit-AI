@@ -97,7 +97,13 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["activeLevel"] +
         '", "type" : "' +
         doc["type"] +
-        '", }';
+        '", "memberName" : "' +
+        doc["memberName"] +
+        '", "memberRelationship" : "' +
+        doc["memberRelationship"] +
+        '", "memberPhone" : "' +
+        doc["memberPhone"] +
+        '"}';
 
     User user = User(
         doc["name"],
@@ -112,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["type"],
         doc["memberName"],
         doc["memberRelationship"],
-        doc["memberPhoneNo"]);
+        doc["memberPhone"]);
 
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;

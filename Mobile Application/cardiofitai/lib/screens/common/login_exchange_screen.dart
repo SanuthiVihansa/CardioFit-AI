@@ -42,7 +42,7 @@ class _LoginExchangeScreenState extends State<LoginExchangeScreen> {
             decodedUser["type"],
             decodedUser["memberName"],
             decodedUser["memberRelationship"],
-            decodedUser["memberPhoneNo"]);
+            decodedUser["memberPhone"]);
 
         _navigate(user);
       } else {
