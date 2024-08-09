@@ -175,7 +175,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import 'EmergencyDialog.dart';
- // Make sure to import the EmergencyDialog
 
 class ECGDiagnosisScreen extends StatefulWidget {
   final File file;
@@ -226,7 +225,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
 
       // Check for emergency condition
       if (predictedLabel == 'Incomplete Right Bundle Branch Block') {
-        _showEmergencyDialog('123-456-7890'); // Replace with the actual contact number
+        _showEmergencyDialog('94714204648'); // Hardcoded Sri Lankan phone number
       }
     } catch (e) {
       setState(() {
@@ -605,3 +604,4 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
     );
   }
 }
+
