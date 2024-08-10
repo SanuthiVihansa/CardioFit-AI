@@ -225,7 +225,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
 
       // Check for emergency condition
       if (predictedLabel == 'Incomplete Right Bundle Branch Block') {
-        _showEmergencyDialog('94714204648'); // Hardcoded Sri Lankan phone number
+        _showEmergencyDialog('94714204648');
       }
     } catch (e) {
       setState(() {
