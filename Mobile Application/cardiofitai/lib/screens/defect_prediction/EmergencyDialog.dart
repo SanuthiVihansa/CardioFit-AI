@@ -1,10 +1,8 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import '../../services/Location_Service.dart';
- // Import the location service
 
 class EmergencyDialog extends StatelessWidget {
   final String contactNumber;
@@ -44,10 +42,14 @@ class EmergencyDialog extends StatelessWidget {
   void _handleOkPressed(BuildContext context) async {
     try {
       Position position = await LocationService.getCurrentLocation();
-      String message = 'Emergency! The user is located at: '
-          'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
-
-      _sendSms(contactNumber, message); // Use notify.lk to send SMS
+      String message = 'Dear [Recipient],\n\n'
+          'This is an urgent notification from CardioFitAI. One of our users has been diagnosed with a critical condition and requires immediate attention. '
+          'The current location of the user is provided below:\n\n'
+          'Location: https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}\n\n'
+          'Please act promptly to ensure their safety.\n\n'
+          'Regards,\n'
+          'CardioFitAI Team';
+      await _sendSms(contactNumber, message); // Use notify.lk to send SMS
       Navigator.of(context).pop();
     } catch (e) {
       print('Failed to get location or send SMS: $e');
@@ -118,5 +120,3 @@ class EmergencyDialog extends StatelessWidget {
     );
   }
 }
-
-
