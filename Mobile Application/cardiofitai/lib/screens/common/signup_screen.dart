@@ -78,11 +78,19 @@ class _SignUpPageState extends State<SignUpPage> {
 
   //Member Phone No Field Validation
   String? _validateMemberPhoneNo(String text) {
-    if (text == "") {
+    if (text.isEmpty) {
       return "Member Phone No is required!";
+    } else if (text.length != 11) {
+      return "Phone Number must be 11 digits!";
+    } else if (!text.startsWith("947")) {
+      return "Phone Number must start with '947'!";
+    } else if (!RegExp(r'^\d+$').hasMatch(text)) {
+      return "Phone Number must contain only digits!";
     }
     return null;
   }
+
+
 
 
   Future<void> _onTapCreateAccount() async {
