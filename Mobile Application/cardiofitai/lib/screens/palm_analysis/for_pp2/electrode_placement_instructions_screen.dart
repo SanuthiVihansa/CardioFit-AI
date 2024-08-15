@@ -1,8 +1,11 @@
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/serial_monitor.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/user.dart';
+
 class ElectrodePlacementInstructionsScreen extends StatefulWidget {
-  ElectrodePlacementInstructionsScreen({super.key});
+  const ElectrodePlacementInstructionsScreen(this._user, {super.key});
+  final User _user;
 
   @override
   State<ElectrodePlacementInstructionsScreen> createState() =>
@@ -23,7 +26,7 @@ class _ElectrodePlacementInstructionsScreenState
 
   void _onTapContinueBtn(BuildContext context) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext) => SerialMonitor()));
+        MaterialPageRoute(builder: (BuildContext) => SerialMonitor(widget._user)));
   }
 
   @override
