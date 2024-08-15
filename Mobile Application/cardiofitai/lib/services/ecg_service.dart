@@ -33,8 +33,13 @@ class EcgService {
       "v3": v3Data,
       "v4": v4Data,
       "v5": v5Data,
-      "v6": v6Data
+      "v6": v6Data,
+      "datetime": Timestamp.now()
+      // use data["datetime"].toDate() when retrieving
     };
+
+    // String date = DateFormat('yyyy-MM-dd').format(dateTime); // Example: 2024-08-15
+    // String time = DateFormat('HH:mm:ss').format(dateTime);   // Example: 14:30:00
 
     await ecgCollectionReference.doc().set(data).whenComplete(() {
       response.code = 200;
