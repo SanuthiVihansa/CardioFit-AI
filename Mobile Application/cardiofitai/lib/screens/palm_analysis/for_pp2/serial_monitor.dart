@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/widgets/device_disconnect.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/widgets/recording_plot.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ import 'package:usb_serial/usb_serial.dart';
 import 'package:http/http.dart' as http;
 
 class SerialMonitor extends StatefulWidget {
-  const SerialMonitor({super.key});
+  const SerialMonitor(this._user, {super.key});
+  final User _user;
 
   @override
   State<SerialMonitor> createState() => _SerialMonitorState();
@@ -173,6 +175,6 @@ class _SerialMonitorState extends State<SerialMonitor> {
                     ],
                     mainAxisAlignment: MainAxisAlignment.center,
                   )
-                : RecordingPlot(_countdown, _filteredEcgData));
+                : RecordingPlot(_countdown, _filteredEcgData, widget._user));
   }
 }
