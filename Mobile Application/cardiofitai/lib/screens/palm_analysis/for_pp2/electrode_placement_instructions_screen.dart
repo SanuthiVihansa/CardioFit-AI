@@ -1,13 +1,25 @@
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/serial_monitor.dart';
 import 'package:flutter/material.dart';
 
-class ElectrodePlacementInstructionsScreen extends StatelessWidget {
+class ElectrodePlacementInstructionsScreen extends StatefulWidget {
   ElectrodePlacementInstructionsScreen({super.key});
 
+  @override
+  State<ElectrodePlacementInstructionsScreen> createState() =>
+      _ElectrodePlacementInstructionsScreenState();
+}
+
+class _ElectrodePlacementInstructionsScreenState
+    extends State<ElectrodePlacementInstructionsScreen> {
   late double _width;
   late double _height;
   final double _devWidth = 753.4545454545455;
   final double _devHeight = 392.72727272727275;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _onTapContinueBtn(BuildContext context) {
     Navigator.of(context).pushReplacement(
