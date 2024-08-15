@@ -64,7 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         context,
         MaterialPageRoute(
             builder: (BuildContext context) =>
-                ElectrodePlacementInstructionsScreen()));
+                ElectrodePlacementInstructionsScreen(widget.user)));
   }
 
   void _onClickDietPlanBtn() {
