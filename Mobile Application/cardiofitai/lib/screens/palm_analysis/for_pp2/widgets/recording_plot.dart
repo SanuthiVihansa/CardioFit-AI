@@ -1,12 +1,14 @@
+import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/all_lead_display_screen.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class RecordingPlot extends StatelessWidget {
-  RecordingPlot(this._countdown, this._ecgData, {super.key});
+  RecordingPlot(this._countdown, this._ecgData, this._user, {super.key});
 
   final int _countdown;
   final List<double> _ecgData;
+  final User _user;
   double _maxValue = 0;
   double _minValue = 0;
 
@@ -92,7 +94,7 @@ class RecordingPlot extends StatelessWidget {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext conext) => AllLeadDisplayScreen(_ecgData)));
+            builder: (BuildContext conext) => AllLeadDisplayScreen(_ecgData, _user)));
   }
 
   @override
