@@ -59,14 +59,14 @@ class _SerialMonitorState extends State<SerialMonitor> {
           if (_ecgData.length == 1) {
             _startCountdown();
           }
-          if (_ecgData.length < 1000) {
+          if (_ecgData.length < 2000) {
             setState(() {
               _ecgData.add(double.parse(data.trim()));
             });
-            if (_ecgData.length == 1000) {
+            if (_ecgData.length == 2000) {
               // Pass to the server and filter.
               Map<String, dynamic> data = {
-                'l2': _ecgData,
+                'l1': _ecgData,
               };
               String jsonString = jsonEncode(data);
               var response = await http
@@ -81,8 +81,10 @@ class _SerialMonitorState extends State<SerialMonitor> {
 
               if (_resCode == 200) {
                 var decodedData = jsonDecode(response.body);
-                _filteredEcgData = List<double>.from(
-                    decodedData["l2"].map((element) => element.toDouble()));
+                setState(() {
+                  _filteredEcgData = List<double>.from(
+                      decodedData["l1"].map((element) => element.toDouble()));
+                });
               }
             }
           }
@@ -149,7 +151,7 @@ class _SerialMonitorState extends State<SerialMonitor> {
         body: _deviceIsDetected == false
             ? DeviceDisconnect()
             // : _ecgData.isEmpty
-            : _filteredEcgData.length < 1000
+            : _filteredEcgData.length < 5000
                 ? Row(
                     children: [
                       SizedBox(
