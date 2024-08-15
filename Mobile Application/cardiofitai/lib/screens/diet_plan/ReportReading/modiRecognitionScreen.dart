@@ -419,7 +419,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         if(selectedReport=="Fasting blood Sugar"){
           var response = await http.MultipartRequest("POST", Uri.parse("https://sanuthivihansa.pythonanywhere.com/glucose/extract-text"));
           response.files.add(await http.MultipartFile.fromPath('file', image.path));
-
+// ls
     final response = await request.send();
 
         }
