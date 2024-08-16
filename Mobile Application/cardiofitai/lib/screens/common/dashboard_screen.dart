@@ -472,7 +472,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
         ),
-        backgroundColor: Color(0xFFFF5B61),
+        backgroundColor: const Color(0xFFFF5B61),
       ),
       // drawer: LeftNavBar(
       //   user: widget.user,
@@ -517,7 +517,7 @@ class ProfileHeader extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundImage: NetworkImage('https://example.com/profile.jpg'),
+            child: Image.asset("assets/profile_avatar.png"),
           ),
           SizedBox(width: 16),
           Column(
