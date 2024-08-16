@@ -377,6 +377,10 @@ import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/diet_,mainhome_page.screen.dart';
 import 'package:cardiofitai/screens/ecg_comparison_and_analysis/analysis_file_selection_screen.dart';
 import 'package:cardiofitai/screens/ecg_comparison_and_analysis/comparison_file_selection_screen.dart';
+import 'package:cardiofitai/screens/palm_analysis/for_future_use/pmb_device_connection_screen.dart';
+import 'package:cardiofitai/screens/palm_analysis/for_future_use/real_time_record.dart';
+import 'package:cardiofitai/screens/palm_analysis/for_pp2/electrode_placement_instructions_screen.dart';
+import 'package:cardiofitai/screens/palm_analysis/for_pp2/serial_monitor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -418,11 +422,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _onClickEcgComparisonBtn() {
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (BuildContext context) =>
+    //             const ComparisonFileSelectionScreen()));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (BuildContext context) => const SerialMonitor2()));
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (BuildContext context) =>
-                const ComparisonFileSelectionScreen()));
+                ElectrodePlacementInstructionsScreen()));
   }
 
   void _onClickDietPlanBtn() {
