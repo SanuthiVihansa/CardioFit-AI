@@ -85,7 +85,7 @@
 //               child: ClipRRect(
 //                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
 //                 child: Image.asset(
-//                   'assets/dieteryimage.jpg',
+//                   'assets/diet_component/dieteryimage.jpg',
 //                   width: halfScreenWidth,
 //                   fit: BoxFit.fitWidth,
 //                 ),
