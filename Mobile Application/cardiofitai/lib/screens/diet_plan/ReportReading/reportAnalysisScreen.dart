@@ -87,6 +87,10 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       cholesterolTotal != 0 ? cholesterolTotal.toString() : widget.user.bloodCholestrolLevel,
       "No",
       "REPLACE THE VARIABLE OF bloodTestType",
+      widget.user.memberName,
+      widget.user.memberRelationship,
+      widget.user.memberPhoneNo
+
     );
 
     // Update the user information in the database
