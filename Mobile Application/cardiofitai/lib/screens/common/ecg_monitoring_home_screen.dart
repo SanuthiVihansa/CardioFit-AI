@@ -1,7 +1,11 @@
 import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/screens/defect_prediction/ecg_plot.dart';
+import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
+import 'package:cardiofitai/screens/ecg_reconstruction/ecg_history_screen.dart';
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_future_use/file_selection_screen.dart';
+import 'package:cardiofitai/screens/palm_analysis/for_pp2/electrode_placement_instructions_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/temp_file_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,21 +47,25 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
   }
 
-  void _onClickFacialAnalysisBtn() {
+  void _onClickHistoryBtn() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) =>
-                FacialAnalysisHome(_width, _height, _hDevHeight, _hDevWidth)));
+            builder: (BuildContext context) => EcgHistoryScreen(widget._user)));
   }
 
-  void _onClickPalmAnalysisBtn() {
+  void _onClickTakeECGBtn() {
     Navigator.push(
         context,
         MaterialPageRoute(
             // builder: (BuildContext context) => const FileSelectionScreen()));
             builder: (BuildContext context) =>
-                const TempFileSelectionScreen()));
+                ElectrodePlacementInstructionsScreen(widget._user)));
+  }
+
+  void _onTapTempBtn() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) => ReportHome()));
   }
 
   @override
@@ -90,7 +98,7 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
                                   responsiveButtonLength,
                                   responsiveButtonRoundness))),
                           onPressed: () {
-                            _onClickFacialAnalysisBtn();
+                            _onClickHistoryBtn();
                           },
                           icon: Image.asset(
                               'assets/facial_analysis/face-scan_2818147.png',
@@ -98,7 +106,7 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
                               height: responsiveIconSize,
                               fit: BoxFit.contain),
                           label: Text(
-                            "Past Records",
+                            "History",
                             style: TextStyle(
                                 fontSize: responsiveIconTextFontSize,
                                 color: Colors.purple),
@@ -109,7 +117,7 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
                                   responsiveButtonLength,
                                   responsiveButtonRoundness))),
                           onPressed: () {
-                            _onClickPalmAnalysisBtn();
+                            _onClickTakeECGBtn();
                           },
                           icon: Image.asset('assets/palm_analysis/praying.png',
                               width: responsiveIconSize,
@@ -121,6 +129,11 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
                                 fontSize: responsiveIconTextFontSize,
                                 color: Colors.purple),
                           )),
+                      ElevatedButton(
+                          onPressed: () {
+                            _onTapTempBtn();
+                          },
+                          child: Text("Temp button for Diagnosis"))
                     ],
                   ),
                   Padding(
