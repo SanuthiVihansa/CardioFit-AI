@@ -1,11 +1,19 @@
+import 'package:cardiofitai/components/navigation_panel_component.dart';
+import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/screens/defect_prediction/ecg_plot.dart';
+import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
+import 'package:cardiofitai/screens/ecg_reconstruction/ecg_history_screen.dart';
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_future_use/file_selection_screen.dart';
+import 'package:cardiofitai/screens/palm_analysis/for_pp2/electrode_placement_instructions_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/temp_file_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ECGMonitoringHomeScreen extends StatefulWidget {
-  const ECGMonitoringHomeScreen({super.key});
+  const ECGMonitoringHomeScreen(this._user, {super.key});
+
+  final User _user;
 
   @override
   State<ECGMonitoringHomeScreen> createState() =>
@@ -39,21 +47,25 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
   }
 
-  void _onClickFacialAnalysisBtn() {
+  void _onClickHistoryBtn() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) =>
-                FacialAnalysisHome(_width, _height, _hDevHeight, _hDevWidth)));
+            builder: (BuildContext context) => EcgHistoryScreen(widget._user)));
   }
 
-  void _onClickPalmAnalysisBtn() {
+  void _onClickTakeECGBtn() {
     Navigator.push(
         context,
         MaterialPageRoute(
             // builder: (BuildContext context) => const FileSelectionScreen()));
             builder: (BuildContext context) =>
-                const TempFileSelectionScreen()));
+                ElectrodePlacementInstructionsScreen(widget._user)));
+  }
+
+  void _onTapTempBtn() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) => ReportHome()));
   }
 
   @override
@@ -69,47 +81,88 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
         ),
         backgroundColor: Colors.red,
       ),
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton.icon(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all<Size>(Size(
-                        responsiveButtonLength, responsiveButtonRoundness))),
-                onPressed: () {
-                  _onClickFacialAnalysisBtn();
-                },
-                icon: Image.asset(
-                    'assets/facial_analysis/face-scan_2818147.png',
-                    width: responsiveIconSize,
-                    height: responsiveIconSize,
-                    fit: BoxFit.contain),
-                label: Text(
-                  "Facial Analysis",
-                  style: TextStyle(
-                      fontSize: responsiveIconTextFontSize,
-                      color: Colors.purple),
-                )),
-            ElevatedButton.icon(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all<Size>(Size(
-                        responsiveButtonLength, responsiveButtonRoundness))),
-                onPressed: () {
-                  _onClickPalmAnalysisBtn();
-                },
-                icon: Image.asset('assets/palm_analysis/praying.png',
-                    width: responsiveIconSize,
-                    height: responsiveIconSize,
-                    fit: BoxFit.contain),
-                label: Text(
-                  "Palm Analysis",
-                  style: TextStyle(
-                      fontSize: responsiveIconTextFontSize,
-                      color: Colors.purple),
-                )),
-          ],
-        ),
+      body: Row(
+        children: [
+          NavigationPanelComponent("ecg", widget._user),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton.icon(
+                          style: ButtonStyle(
+                              fixedSize: MaterialStateProperty.all<Size>(Size(
+                                  responsiveButtonLength,
+                                  responsiveButtonRoundness))),
+                          onPressed: () {
+                            _onClickHistoryBtn();
+                          },
+                          icon: Image.asset(
+                              'assets/facial_analysis/face-scan_2818147.png',
+                              width: responsiveIconSize,
+                              height: responsiveIconSize,
+                              fit: BoxFit.contain),
+                          label: Text(
+                            "History",
+                            style: TextStyle(
+                                fontSize: responsiveIconTextFontSize,
+                                color: Colors.purple),
+                          )),
+                      ElevatedButton.icon(
+                          style: ButtonStyle(
+                              fixedSize: MaterialStateProperty.all<Size>(Size(
+                                  responsiveButtonLength,
+                                  responsiveButtonRoundness))),
+                          onPressed: () {
+                            _onClickTakeECGBtn();
+                          },
+                          icon: Image.asset('assets/palm_analysis/praying.png',
+                              width: responsiveIconSize,
+                              height: responsiveIconSize,
+                              fit: BoxFit.contain),
+                          label: Text(
+                            "Take ECG",
+                            style: TextStyle(
+                                fontSize: responsiveIconTextFontSize,
+                                color: Colors.purple),
+                          )),
+                      ElevatedButton(
+                          onPressed: () {
+                            _onTapTempBtn();
+                          },
+                          child: Text("Temp button for Diagnosis"))
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, right: 16, bottom: 16, top: 50),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ECG Graphical Illustrations',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 8),
+                        Container(
+                          height: _height / (_devHeight / 180),
+                          color: Colors.blueGrey[50], // Placeholder for graph
+                          child: Center(
+                            child: Text('Graph Placeholder'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

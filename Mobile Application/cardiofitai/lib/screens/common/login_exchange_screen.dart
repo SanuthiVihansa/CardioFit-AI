@@ -39,7 +39,15 @@ class _LoginExchangeScreenState extends State<LoginExchangeScreen> {
             decodedUser["bmi"],
             decodedUser["dob"],
             decodedUser["activeLevel"],
-            decodedUser["type"]);
+            decodedUser["type"],
+          decodedUser["bloodGlucoseLevel"],
+          decodedUser["bloodCholestrolLevel"],
+          decodedUser["cardiacCondition"],
+          decodedUser["bloodTestType"],
+            decodedUser["memberName"],
+            decodedUser["memberRelationship"],
+            decodedUser["memberPhone"]
+        );
 
         _navigate(user);
       } else {

@@ -1,15 +1,17 @@
 import 'dart:io';
 
-import 'package:cardiofitai/screens/diet_plan/ocr_reader.dart';
+
 import 'package:cardiofitai/screens/common/signup_screen.dart';
-import 'package:cardiofitai/screens/diet_plan/recognitionscreen.dart';
+
 import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/user.dart';
-import '../screens/diet_plan/modiRecognitionScreen.dart';
+import '../screens/diet_plan/ReportReading/modiRecognitionScreen.dart';
+//import '../screens/diet_plan/modiRecognitionScreen.dart';
+import '../screens/diet_plan/ReportReading/scan.dart';
 
 class LeftNavBar extends StatelessWidget {
   final String name;
@@ -109,11 +111,11 @@ class LeftNavBar extends StatelessWidget {
             title: Text("OCR Reader"),
             onTap: () {
               Navigator.of(context).pop(); // Close the drawer
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => OcrReader(),
-                ),
-              );
+              // Navigator.of(context).push(
+              //   // MaterialPageRoute(
+              //   //   builder: (context) => RecognitionScreen(),
+              //  // ),
+              // );
             },
           ),
           Divider(),
@@ -122,11 +124,11 @@ class LeftNavBar extends StatelessWidget {
             title: Text("Recognition Screen"),
             onTap: () {
               Navigator.of(context).pop(); // Close the drawer
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => RecognitionScreen(),
-                ),
-              );
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) => RecognitionScreen(),
+              //   ),
+              // );
             },
           ),
           Divider(),

@@ -97,6 +97,20 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["activeLevel"] +
         '", "type" : "' +
         doc["type"] +
+        '", "bloodGlucoseLevel" : "' +
+        doc["bloodGlucoseLevel"] +
+        '", "bloodCholestrolLevel" : "' +
+        doc["bloodCholestrolLevel"] +
+        '", "cardiacCondition" : "' +
+        doc["cardiacCondition"] +
+        '", "bloodTestType" : "' +
+        doc["bloodTestType"] +
+        '", "memberName" : "' +
+        doc["memberName"] +
+        '", "memberRelationship" : "' +
+        doc["memberRelationship"] +
+        '", "memberPhone" : "' +
+        doc["memberPhone"] +
         '"}';
 
     User user = User(
@@ -109,7 +123,15 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["bmi"],
         doc["dob"],
         doc["activeLevel"],
-        doc["type"]);
+        doc["type"],
+        doc["bloodGlucoseLevel"],
+        doc["bloodCholestrolLevel"],
+        doc["cardiacCondition"],
+        doc["bloodTestType"],
+        doc["memberName"],
+        doc["memberRelationship"],
+        doc["memberPhone"]
+    );
 
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
@@ -122,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _navigate(User user) {
     if (user.type == "user") {
       Navigator.pop(context);
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (BuildContext context) => DashboardScreen(user)));
     } else {
       // For Doctor login
@@ -211,8 +233,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             shape: MaterialStateProperty.all<OutlinedBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
-                                side:
-                                    const BorderSide(color: Colors.black, width: 2.0),
+                                side: const BorderSide(
+                                    color: Colors.black, width: 2.0),
                               ),
                             ),
                           ),

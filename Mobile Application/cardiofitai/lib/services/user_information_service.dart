@@ -23,7 +23,14 @@ class UserLoginService {
       String bmi,
       String dob,
       String activeLevel,
-      String type) async {
+      String type,
+      String bloodGlucoseLevel,
+      String bloodCholestrolLevel,
+      String cardiacCondition,
+      String bloodTestType,
+      String memberName,
+      String memberRelationship,
+      String memberPhone) async {
     Response response = Response();
     Map<String, dynamic> data = <String, dynamic>{
       "name": name,
@@ -32,10 +39,17 @@ class UserLoginService {
       "age": age,
       "height": height,
       "weight": weight,
-      "bmi":bmi,
-      "dob":dob,
-      "activeLevel":activeLevel,
+      "bmi": bmi,
+      "dob": dob,
+      "activeLevel": activeLevel,
       "type": type,
+      "bloodGlucoseLevel": bloodGlucoseLevel,
+      "bloodCholestrolLevel": bloodCholestrolLevel,
+      "cardiacCondition": cardiacCondition,
+      "bloodTestType": bloodTestType,
+      "memberName": memberName,
+      "memberRelationship": memberRelationship,
+      "memberPhone": memberPhone
     };
 
     await userCollectionReference.doc().set(data).whenComplete(() {
@@ -66,10 +80,17 @@ class UserLoginService {
           "age": user.age,
           "height": user.height,
           "weight": user.weight,
-          "bmi":user.bmi,
-          "dob":user.dob,
-          "activeLevel":user.activeLevel,
-
+          "bmi": user.bmi,
+          "dob": user.dob,
+          "activeLevel": user.activeLevel,
+          "type": user.type,
+          "bloodGlucoseLevel": user.bloodGlucoseLevel,
+          "bloodCholestrolLevel": user.bloodCholestrolLevel,
+          "cardiacCondition": user.cardiacCondition,
+          "bloodTestType": user.bloodTestType,
+          "memberName" :user.memberName,
+          "memberRelationship" : user.memberRelationship,
+          "memberPhoneNo": user.memberPhoneNo,
         };
 
         await document.reference.update(data); // Update the document

@@ -6,8 +6,12 @@
       <excludeFolder url="file://$MODULE_DIR$/cardiorespfitai/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/cardiorespfitai/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/cardiorespfitai/build" />
+      <excludeFolder url="file://$MODULE_DIR$/cardiofitai/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/cardiofitai/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/cardiofitai/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Dart SDK" level="project" />
   </component>
 </module>
