@@ -1,14 +1,20 @@
 import 'dart:convert';
 
+import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/services/ecg_service.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-class AllLeadDisplayScreen extends StatefulWidget {
-  const AllLeadDisplayScreen(this.l2Data, {super.key});
+import '../../../models/response.dart';
 
-  final List<double> l2Data;
+class AllLeadDisplayScreen extends StatefulWidget {
+  const AllLeadDisplayScreen(this.l1Data, this._user, {super.key});
+
+  final List<double> l1Data;
+  final User _user;
 
   @override
   State<AllLeadDisplayScreen> createState() => _AllLeadDisplayScreenState();
@@ -19,12 +25,13 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
   late double _height;
   final double _devWidth = 753.4545454545455;
   final double _devHeight = 392.72727272727275;
+  String _loadingSpinnerText = "Loading...";
 
   final String _predictionApiUrl =
       'http://poornasenadheera100.pythonanywhere.com/predict';
 
-  List<double> predl1Data = [];
-  List<double> actl2Data = [];
+  List<double> actl1Data = [];
+  List<double> predl2Data = [];
   List<double> predl3Data = [];
 
   List<double> predavrData = [];
@@ -153,7 +160,7 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
 
   Future<void> _getPredictions() async {
     try {
-      Map<String, dynamic> data = {'l2': widget.l2Data};
+      Map<String, dynamic> data = {'l1': widget.l1Data};
       String jsonString = jsonEncode(data);
       var response = await http
           .post(Uri.parse(_predictionApiUrl),
@@ -163,34 +170,36 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
               body: jsonString)
           .timeout(const Duration(seconds: 60));
 
-      _resCode = response.statusCode;
-
-      if (_resCode == 200) {
+      if (response.statusCode == 200) {
         var decodedData = jsonDecode(response.body);
-        predl1Data = List<double>.from(
-            decodedData["predl1"].map((element) => element.toDouble()));
-        actl2Data = List<double>.from(
-            decodedData["actl2"].map((element) => element.toDouble()));
+        actl1Data = List<double>.from(
+            decodedData["l1"].map((element) => element.toDouble()));
+        predl2Data = List<double>.from(
+            decodedData["l2"].map((element) => element.toDouble()));
         predl3Data = List<double>.from(
-            decodedData["predl3"].map((element) => element.toDouble()));
+            decodedData["l3"].map((element) => element.toDouble()));
         predavrData = List<double>.from(
-            decodedData["predavr"].map((element) => element.toDouble()));
+            decodedData["avr"].map((element) => element.toDouble()));
         predavlData = List<double>.from(
-            decodedData["predavl"].map((element) => element.toDouble()));
+            decodedData["avl"].map((element) => element.toDouble()));
         predavfData = List<double>.from(
-            decodedData["predavf"].map((element) => element.toDouble()));
+            decodedData["avf"].map((element) => element.toDouble()));
         predv1Data = List<double>.from(
-            decodedData["predv1"].map((element) => element.toDouble()));
+            decodedData["v1"].map((element) => element.toDouble()));
         predv2Data = List<double>.from(
-            decodedData["predv2"].map((element) => element.toDouble()));
+            decodedData["v2"].map((element) => element.toDouble()));
         predv3Data = List<double>.from(
-            decodedData["predv3"].map((element) => element.toDouble()));
+            decodedData["v3"].map((element) => element.toDouble()));
         predv4Data = List<double>.from(
-            decodedData["predv4"].map((element) => element.toDouble()));
+            decodedData["v4"].map((element) => element.toDouble()));
         predv5Data = List<double>.from(
-            decodedData["predv5"].map((element) => element.toDouble()));
+            decodedData["v5"].map((element) => element.toDouble()));
         predv6Data = List<double>.from(
-            decodedData["predv6"].map((element) => element.toDouble()));
+            decodedData["v6"].map((element) => element.toDouble()));
+
+        await _saveToDB();
+
+        _resCode = response.statusCode;
       } else {
         // print('Failed to send data. Status code: ${_resCode}');
       }
@@ -200,6 +209,59 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
     }
 
     setState(() {});
+  }
+
+  Future<void> _saveToDB() async {
+    setState(() {
+      _loadingSpinnerText = "Please wait...";
+    });
+    // Map<String, dynamic> ecgData = {
+    //   "l1": actl1Data,
+    //   "l2": predl2Data,
+    //   "l3": predl3Data,
+    //   "avr": predavrData,
+    //   "avl": predavlData,
+    //   "avf": predavfData,
+    //   "v1": predv1Data,
+    //   "v2": predv2Data,
+    //   "v3": predv3Data,
+    //   "v4": predv4Data,
+    //   "v5": predv5Data,
+    //   "v6": predv6Data,
+    // };
+    Response response = await EcgService.addECG(
+        widget._user.email,
+        actl1Data,
+        predl2Data,
+        predl3Data,
+        predavrData,
+        predavlData,
+        predavfData,
+        predv1Data,
+        predv2Data,
+        predv3Data,
+        predv4Data,
+        predv5Data,
+        predv6Data);
+    if (response.code == 200) {
+      Fluttertoast.showToast(
+          msg: "ECG Data Reconstructed Successfully!🎉",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Sorry! We have trouble in saving your ECG data. ☹️",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
   Future<void> _showTimeoutErrorMsg() async {
@@ -257,21 +319,44 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
                       style: TextStyle(fontSize: _width / (_devWidth / 14)),
                     ),
                     _leadSelectionDropDown(),
-                    ElevatedButton(
-                      onPressed: () {
-                        _onClickHomeBtn();
-                      },
-                      style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all<Size>(
-                          Size(
-                              _width / (_devWidth / 120.0),
-                              _height /
-                                  (_devHeight / 40)), // Button width and height
+                    Padding(
+                      padding: EdgeInsets.only(left: _width / (_devWidth / 20)),
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all<Size>(
+                            Size(
+                                _width / (_devWidth / 120.0),
+                                _height /
+                                    (_devHeight /
+                                        40)), // Button width and height
+                          ),
+                        ),
+                        child: Text(
+                          "Diagnose",
+                          style: TextStyle(fontSize: _width / (_devWidth / 10)),
                         ),
                       ),
-                      child: Text(
-                        "Home",
-                        style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: _width / (_devWidth / 20)),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _onClickHomeBtn();
+                        },
+                        style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all<Size>(
+                            Size(
+                                _width / (_devWidth / 120.0),
+                                _height /
+                                    (_devHeight /
+                                        40)), // Button width and height
+                          ),
+                        ),
+                        child: Text(
+                          "Home",
+                          style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                        ),
                       ),
                     )
                   ],
@@ -356,8 +441,8 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
         ),
         SizedBox(
             height: _height / (_devHeight / 200),
-            child: _ecgPlot(predl1Data, _calcMin(predl1Data),
-                _calcMax(predl1Data), Colors.blue)),
+            child: _ecgPlot(actl1Data, _calcMin(actl1Data), _calcMax(actl1Data),
+                Colors.green)),
       ],
     );
   }
@@ -375,8 +460,8 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
         ),
         SizedBox(
             height: _height / (_devHeight / 200),
-            child: _ecgPlot(actl2Data, _calcMin(actl2Data), _calcMax(actl2Data),
-                Colors.green)),
+            child: _ecgPlot(predl2Data, _calcMin(predl2Data),
+                _calcMax(predl2Data), Colors.blue)),
       ],
     );
   }
@@ -596,7 +681,7 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
                           padding:
                               EdgeInsets.only(top: _height / (_devHeight / 10)),
                           child: Text(
-                            "Loading...",
+                            _loadingSpinnerText,
                             style:
                                 TextStyle(fontSize: _width / (_devWidth / 10)),
                           ),

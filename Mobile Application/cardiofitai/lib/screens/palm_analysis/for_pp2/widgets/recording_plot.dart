@@ -1,11 +1,14 @@
+import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/screens/palm_analysis/for_pp2/all_lead_display_screen.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class RecordingPlot extends StatelessWidget {
-  RecordingPlot(this._countdown, this._ecgData, {super.key});
+  RecordingPlot(this._countdown, this._ecgData, this._user, {super.key});
 
   final int _countdown;
   final List<double> _ecgData;
+  final User _user;
   double _maxValue = 0;
   double _minValue = 0;
 
@@ -87,6 +90,13 @@ class RecordingPlot extends StatelessWidget {
     );
   }
 
+  void _onTapProceedBtn(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext conext) => AllLeadDisplayScreen(_ecgData, _user)));
+  }
+
   @override
   Widget build(BuildContext context) {
     _width = MediaQuery.of(context).size.width;
@@ -115,7 +125,11 @@ class RecordingPlot extends StatelessWidget {
                   left: _width / (_devWidth / 20),
                   right: _width / (_devWidth / 20),
                   bottom: _height / (_devHeight / 5)),
-              child: ElevatedButton(onPressed: () {}, child: Text("Proceed")),
+              child: ElevatedButton(
+                  onPressed: () {
+                    _onTapProceedBtn(context);
+                  },
+                  child: Text("Proceed")),
             ),
           ],
         )
