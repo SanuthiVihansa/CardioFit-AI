@@ -27,7 +27,10 @@ class UserLoginService {
       String bloodGlucoseLevel,
       String bloodCholestrolLevel,
       String cardiacCondition,
-      String bloodTestType) async {
+      String bloodTestType,
+      String memberName,
+      String memberRelationship,
+      String memberPhone) async {
     Response response = Response();
     Map<String, dynamic> data = <String, dynamic>{
       "name": name,
@@ -44,6 +47,9 @@ class UserLoginService {
       "bloodCholestrolLevel": bloodCholestrolLevel,
       "cardiacCondition": cardiacCondition,
       "bloodTestType": bloodTestType,
+      "memberName": memberName,
+      "memberRelationship": memberRelationship,
+      "memberPhone": memberPhone
     };
 
     await userCollectionReference.doc().set(data).whenComplete(() {
@@ -82,6 +88,9 @@ class UserLoginService {
           "bloodCholestrolLevel": user.bloodCholestrolLevel,
           "cardiacCondition": user.cardiacCondition,
           "bloodTestType": user.bloodTestType,
+          "memberName" :user.memberName,
+          "memberRelationship" : user.memberRelationship,
+          "memberPhoneNo": user.memberPhoneNo,
         };
 
         await document.reference.update(data); // Update the document

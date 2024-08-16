@@ -105,6 +105,12 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["cardiacCondition"] +
         '", "bloodTestType" : "' +
         doc["bloodTestType"] +
+        '", "memberName" : "' +
+        doc["memberName"] +
+        '", "memberRelationship" : "' +
+        doc["memberRelationship"] +
+        '", "memberPhone" : "' +
+        doc["memberPhone"] +
         '"}';
 
     User user = User(
@@ -121,7 +127,11 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["bloodGlucoseLevel"],
         doc["bloodCholestrolLevel"],
         doc["cardiacCondition"],
-        doc["bloodTestType"]);
+        doc["bloodTestType"],
+        doc["memberName"],
+        doc["memberRelationship"],
+        doc["memberPhone"]
+    );
 
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
