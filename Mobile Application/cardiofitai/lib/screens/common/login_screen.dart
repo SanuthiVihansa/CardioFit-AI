@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _navigate(User user) {
     if (user.type == "user") {
       Navigator.pop(context);
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (BuildContext context) => DashboardScreen(user)));
     } else {
       // For Doctor login

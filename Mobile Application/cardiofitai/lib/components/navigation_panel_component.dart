@@ -44,7 +44,7 @@ class NavigationPanelComponent extends StatelessWidget {
       File file = File('$path/userdata.txt');
       await file.delete();
 
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (BuildContext context) => SignUpPage()));
     }
@@ -80,7 +80,7 @@ class NavigationPanelComponent extends StatelessWidget {
               },
             ),
             NavigationItem(
-              icon: Icons.directions_run,
+              icon: Icons.monitor_heart,
               label: 'ECG',
               onTap: () {
                 if (_currentScreen != "ecg") {
