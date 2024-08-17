@@ -187,7 +187,7 @@ class ApiService {
                 'content': [
                   {
                     'type': 'text',
-                    'text': 'As an intelligent OCR reader read the Test Name, result and units correctly. Do not provide any other information, provide the result in one line. Avoid providing unnecessary characters like . or : or , in the output'
+                    'text': 'As an intelligent OCR reader read the Test Name, result and units correctly. Do not provide any other information, provide the result in JSON format. Avoid providing unnecessary characters like . or : or , in the output'
                   },
                   {
                     'type': 'image_url',
