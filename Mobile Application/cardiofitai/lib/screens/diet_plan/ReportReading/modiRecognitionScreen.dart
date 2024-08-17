@@ -52,13 +52,13 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   Map<String, dynamic> apiData = {};
   List<WordPair> wordPairs = [];
   List<List<WordPair>> extractedText = [];
-  String? selectedReport = 'Select Report';
+  String? _selectedReport = 'Select Report';
   String diagnosis = "";
-  late List<Map<String, dynamic>> addMultipleReports = [];
+  late List<Map<String, dynamic>> _selectedReports = [];
   String noSpace = "";
-  List<DataRow> rows = [];
-  List<List<DataRow>> setRows = [];
-  List<File> pickedImages = [];
+  List<DataRow> _rows = [];
+  List<List<DataRow>> _reportDataRows = [];
+  List<File> _pickedImages = [];
 
   //Drop down control values
   List<String> reports = [
@@ -100,7 +100,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: DropdownButton<String>(
-                    value: selectedReport,
+                    value: _selectedReport,
                     elevation: 16,
                     style: const TextStyle(color: Colors.blueGrey),
                     alignment: Alignment.topLeft,
@@ -109,7 +109,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                     onChanged: (String? newValue) {
                       if (newValue != null) {
                         setState(() {
-                          selectedReport = newValue;
+                          _selectedReport = newValue;
                         });
                       }
                     },
@@ -135,18 +135,17 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                       if (image != null) {
                         File pickedImage = File(image.path);
                         if (pickedImage.path.isNotEmpty &&
-                            selectedReport != 'Select Report') {
-                          addMultipleReports.add({
-                            "UploadedReport": selectedReport,
+                            _selectedReport != 'Select Report') {
+                          _selectedReports.add({
+                            "UploadedReport": _selectedReport,
                             "UploadedImage": pickedImage,
                             "ScannedItems": "",
                             "ExtractedText": "",
-                            "obtainedRows": rows,
+                            "obtainedRows": _rows,
                           });
-                          pickedImages
+                          _pickedImages
                               .add(pickedImage); // Add image to the list
                           setState(() {});
-                          print(addMultipleReports);
                         }
                       }
                     },
@@ -185,7 +184,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               DataColumn(label: Text('Report Type')),
               DataColumn(label: Text('Action')),
             ],
-            rows: addMultipleReports.map((e) {
+            rows: _selectedReports.map((e) {
               return DataRow(cells: [
                 DataCell(
                   Image.file(e["UploadedImage"], width: 50, height: 50),
@@ -227,8 +226,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  addMultipleReports.remove(item);
-                  pickedImages.remove(
+                  _selectedReports.remove(item);
+                  _pickedImages.remove(
                       item["UploadedImage"]); // Remove image from the list
                 });
                 Navigator.of(context).pop();
@@ -241,330 +240,233 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     );
   }
 
-  // Future<void> _pickImage() async {
-  //   final pickedFile =
-  //       await ImagePicker().pickImage(source: pickedImage, imageQuality: 50);
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       pickedImage = File(pickedFile.path);
-  //     });
-  //   }
-  // }
-  //
-  // detectReportContent() async {
-  //   setState(() {
-  //     detecting = true;
-  //   });
-  //   try {
-  //     scannedText = await apiService.sendImageToGPT4Vision(image: pickedImage!);
-  //     _reportDataAnalysis();
-  //   } catch (error) {
-  //     _showErrorSnackBar(error);
-  //   } finally {
-  //     setState(() {
-  //       detecting = false;
-  //     });
-  //   }
-  // }
-  //
-  // void _showErrorSnackBar(Object error) {
-  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //     content: Text(error.toString()),
-  //     backgroundColor: Colors.red,
-  //   ));
-  // }
-  //
-  // void _reportDataAnalysis() {
-  //   for (var item in addMultipleReports) {
-  //     if (item["UploadedImage"] != null) {
-  //       final image = item["UploadedImage"];
-  //       try {
-  //         // final result = jsonDecode(response.body);
-  //         // final scannedText = result["ParsedResults"][0]["ParsedText"];
-  //
-  //         item["ScannedText"] =
-  //             scannedText; // Add or update the ScannedText field
-  //         print(scannedText);
-  //         _removeSpaces(scannedText);
-  //         List<String> lines = noSpace.split('\n');
-  //
-  //         if (item["UploadedReport"] != 'Select Report') {
-  //           if (item["UploadedReport"] == 'Full Blood Count Report') {
-  //             List<String> bloodComponents = [
-  //               'WBC',
-  //               'Neutrophils',
-  //               'Lymphocytes',
-  //               'Monocytes',
-  //               'Eosinophils',
-  //               'Basophills',
-  //               'NeutrophilsAbsoluteCount',
-  //               'LymphocytesAbsoluteCount',
-  //               'MonocytesAbsoluteCount',
-  //               'EosinophilsAbsoluteCount',
-  //               'RBC',
-  //               'Haemoglobin',
-  //               'PackedCellVolume(PCV)',
-  //               'MCV',
-  //               'MCH',
-  //               'MCHC',
-  //               'RDW',
-  //               'PlateletCount'
-  //             ];
-  //             List<String> unitsComponents = [
-  //               '/Cumm',
-  //               '0/0',
-  //               '0/0',
-  //               '0/0',
-  //               '0/0',
-  //               '0/0',
-  //               '/Cumm',
-  //               '/Cumm',
-  //               '/Cumm',
-  //               '/Cumm',
-  //               'Million/pL',
-  //               'g/dl',
-  //               '0/0',
-  //               'fL',
-  //               'pg',
-  //               'g/dL',
-  //               '0/0',
-  //               '/Cumm'
-  //             ];
-  //             String selectedText = item["UploadedReport"];
-  //             // Update rows here
-  //             rows = _buildRows(
-  //                 bloodComponents, unitsComponents, lines, selectedText);
-  //             setRows.add(rows);
-  //             item["obtainedRows"] = rows;
-  //             setState(() {});
-  //           } else if (item["UploadedReport"] == 'Lipid profile') {
-  //             List<String> bloodComponents = [
-  //               'Cholesterol-Total',
-  //               'Triglycerides',
-  //               'HDL-C',
-  //               'LDL-C',
-  //               'VLDL-C',
-  //               'CHO/HDL-CRatio'
-  //             ];
-  //             List<String> unitsComponents = [
-  //               'mg/dL',
-  //               'mg/dL',
-  //               'mg/dL',
-  //               'mg/dL',
-  //               'mg/dL',
-  //               ' '
-  //             ];
-  //             String selectedText = item["UploadedReport"];
-  //             // Update rows here
-  //             rows = _buildRows(
-  //                 bloodComponents, unitsComponents, lines, selectedText);
-  //             setRows.add(rows);
-  //             item["obtainedRows"] = rows;
-  //             setState(() {});
-  //           } else if (item["UploadedReport"] == 'Fasting blood Sugar') {
-  //             List<String> bloodComponents = [
-  //               'FastingPlasmaGlucose',
-  //               'FastingBloodSugar',
-  //               'FaøngmasmaGlucose'
-  //             ];
-  //             List<String> unitsComponents = ['mg/dL', 'me/dl', 'mg/dL'];
-  //             String selectedText = item["UploadedReport"];
-  //             // Update rows here
-  //             rows = _buildRows(
-  //                 bloodComponents, unitsComponents, lines, selectedText);
-  //             setRows.add(rows);
-  //             item["obtainedRows"] = rows;
-  //             setState(() {});
-  //           } else if (item["UploadedReport"] == "Urine Full Report") {
-  //             List<String> bloodComponents = [
-  //               'Colour',
-  //               'Appearance',
-  //               'SpecificGravity',
-  //               'pH',
-  //               'Glucose',
-  //               'Protein',
-  //               'KetoneBodies',
-  //               'Bilirubin',
-  //               'Urobilinogen',
-  //               'PusCells',
-  //               'RedBloodCells',
-  //               'EpithelialCells',
-  //               'Organisms',
-  //               'Crystals',
-  //               'Casts'
-  //             ];
-  //             List<String> unitsComponents = [];
-  //             String selectedText = item["UploadedReport"];
-  //             rows = _buildRows(
-  //                 bloodComponents, unitsComponents, lines, selectedText);
-  //             setRows.add(rows);
-  //             item["obtainedRows"] = rows;
-  //             setState(() {});
-  //           }
-  //         }
-  //         item["ExtractedText"] = extractedText;
-  //       } catch (error) {
-  //         _showErrorSnackBar('Failed to parse prescription info');
-  //       }
-  //     }
-  //   }
-  //   Navigator.of(context).pushReplacement(MaterialPageRoute(
-  //       builder: (BuildContext context) =>
-  //           ReportAnalysisScreen(extractedText, addMultipleReports, setRows)));
-  // }
-  void _pickImage() async {
-    if (pickedImages.isNotEmpty) {
-      List<String> results = [];
-      if (selectedReport != "Urine Full Report" &&
-          selectedReport != "Full Blood Count Report") {
-        if (selectedReport == "Fasting blood Sugar") {
-          for (File img in pickedImages) {
-            var request = await http.MultipartRequest(
-                "POST",
-                Uri.parse(
-                    "https://sanuthivihansa.pythonanywhere.com/glucose/extract-text"));
-            request.files
-                .add(await http.MultipartFile.fromPath('file', img.path));
-            final response = await request.send();
-            if (response.statusCode == 200) {
-              final responseData = await http.Response.fromStream(response);
-              final Map<String, dynamic> responseJson = json.decode(responseData.body);
-              print("STOP");
+  void _onTapAnalyseBtn() async {
+    // =======================================================================================
+    _reportDataRows = [];
+    if (_pickedImages.isNotEmpty) {
+      for (int i = 0; i < _pickedImages.length; i++) {
+        List<DataRow> _singleReportDataRows = [];
+        if (_selectedReports[i]["UploadedReport"] == "Fasting blood Sugar") {
+          var request = http.MultipartRequest(
+              "POST",
+              Uri.parse(
+                  "https://sanuthivihansa.pythonanywhere.com/glucose/extract-text"));
+          request.files.add(
+              await http.MultipartFile.fromPath('file', _pickedImages[i].path));
+          final response = await request.send();
+          if (response.statusCode == 200) {
+            final responseData = await http.Response.fromStream(response);
+            final Map<String, dynamic> responseJson =
+                json.decode(responseData.body);
+
+            if (responseJson["extracted_text"]["Fasting Blood Sugar value?"] ==
+                null) {
+              _singleReportDataRows.add(DataRow(cells: [
+                DataCell(Text("Fasting Plasma Glucose")),
+                DataCell(Text(responseJson["extracted_text"]
+                    ["Fasting Plasma Glucose value?"])),
+                DataCell(Text(responseJson["extracted_text"]
+                    ["Fasting Plasma Glucose unit?"]))
+              ]));
+            } else {
+              _singleReportDataRows.add(DataRow(cells: [
+                const DataCell(Text("Fasting Blood Sugar")),
+                DataCell(Text(responseJson["extracted_text"]
+                    ["Fasting Blood Sugar value?"])),
+                DataCell(Text(responseJson["extracted_text"]
+                    ["Fasting Blood Sugar unit?"]))
+              ]));
             }
+            _reportDataRows.add(_singleReportDataRows);
           }
-        }
-      } else {
-        results = await apiService.sendImagesToGPT4VisionReports(
-            images: pickedImages);
-      }
-
-
-
-
-
-
-
-      for (int i = 0; i < results.length; i++) {
-        String scannedText = results[i];
-        if (i >= addMultipleReports.length) {
-          print('Index out of bounds: $i');
-          continue;
-        }
-        Map<String, dynamic> item = addMultipleReports[i];
-        item["ScannedText"] =
-            scannedText; // Add or update the ScannedText field
-        print(scannedText);
-        _removeSpaces(scannedText);
-        List<String> lines = noSpace.split('\n');
-
-        if (item["UploadedReport"] != 'Select Report') {
-          List<String> bloodComponents = [];
-          List<String> unitsComponents = [];
-
-          switch (item["UploadedReport"]) {
-            case 'Full Blood Count Report':
-              bloodComponents = [
-                'WBC',
-                'Neutrophils',
-                'Lymphocytes',
-                'Monocytes',
-                'Eosinophils',
-                'Basophills',
-                'NeutrophilsAbsoluteCount',
-                'LymphocytesAbsoluteCount',
-                'MonocytesAbsoluteCount',
-                'EosinophilsAbsoluteCount',
-                'RBC',
-                'Haemoglobin',
-                'PackedCellVolume(PCV)',
-                'MCV',
-                'MCH',
-                'MCHC',
-                'RDW',
-                'PlateletCount'
-              ];
-              unitsComponents = [
-                '/Cumm',
-                '0/0',
-                '0/0',
-                '0/0',
-                '0/0',
-                '0/0',
-                '/Cumm',
-                '/Cumm',
-                '/Cumm',
-                '/Cumm',
-                'Million/pL',
-                'g/dl',
-                '0/0',
-                'fL',
-                'pg',
-                'g/dL',
-                '0/0',
-                '/Cumm'
-              ];
-              break;
-            case 'Lipid profile':
-              bloodComponents = [
-                'Cholesterol-Total',
-                'Triglycerides',
-                'HDL-C',
-                'LDL-C',
-                'VLDL-C',
-                'CHO/HDL-CRatio'
-              ];
-              unitsComponents = [
-                'mg/dL',
-                'mg/dL',
-                'mg/dL',
-                'mg/dL',
-                'mg/dL',
-                ' '
-              ];
-              break;
-            case 'Fasting blood Sugar':
-              bloodComponents = [
-                'FastingPlasmaGlucose',
-                'FastingBloodSugar',
-                'FaøngmasmaGlucose'
-              ];
-              unitsComponents = ['mg/dL', 'me/dl', 'mg/dL'];
-              break;
-            case 'Urine Full Report':
-              bloodComponents = [
-                'Colour',
-                'Appearance',
-                'SpecificGravity',
-                'pH',
-                'Glucose',
-                'Protein',
-                'KetoneBodies',
-                'Bilirubin',
-                'Urobilinogen',
-                'PusCells',
-                'RedBloodCells',
-                'EpithelialCells',
-                'Organisms',
-                'Crystals',
-                'Casts'
-              ];
-              unitsComponents = [];
-              break;
+        } else if (_selectedReports[i]["UploadedReport"] ==
+            "Urine Full Report") {
+          List<String> results = [];
+          results = await apiService.sendImagesToGPT4VisionReports(
+              images: _pickedImages);
+          Map<String, dynamic> decodedJson =
+              json.decode(results[0].substring(8, results[0].length - 4));
+          for (int i = 0; i < decodedJson.keys.toList().length; i++) {
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text(decodedJson.keys.toList()[i])),
+              DataCell(
+                  Text(decodedJson[decodedJson.keys.toList()[i].toString()])),
+              const DataCell(Text(""))
+            ]));
           }
+          _reportDataRows.add(_singleReportDataRows);
+        } else if (_selectedReports[i]["UploadedReport"] == "Lipid Profile") {
 
-          String selectedText = item["UploadedReport"];
-          rows =
-              _buildRows(bloodComponents, unitsComponents, lines, selectedText);
-          setRows.add(rows);
-          item["obtainedRows"] = rows;
-          setState(() {});
+        } else if (_selectedReports[i]["UploadedReport"] ==
+            "Full Blood Count Report") {
+          List<String> results = [];
+          results = await apiService.sendImagesToGPT4VisionReports(
+              images: _pickedImages);
+          Map<String, dynamic> decodedJson =
+          json.decode(results[0].substring(8, results[0].length - 4));
+          for (int i = 0; i < decodedJson.keys.toList().length; i++) {
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text(decodedJson.keys.toList()[i])),
+              DataCell(
+                  Text(decodedJson[decodedJson.keys.toList()[i].toString()])),
+              const DataCell(Text(""))
+            ]));
+          }
+          _reportDataRows.add(_singleReportDataRows);
         }
-        item["ExtractedText"] = extractedText;
       }
+      // =======================================================================================
 
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
+      // List<String> results = [];
+      // List<Map<String, dynamic>> newResults = [];
+      // if (_selectedReport != "Urine Full Report" &&
+      //     _selectedReport != "Full Blood Count Report") {
+      //   if (_selectedReport == "Fasting blood Sugar") {
+      //     for (File img in _pickedImages) {
+      //       var request = await http.MultipartRequest(
+      //           "POST",
+      //           Uri.parse(
+      //               "https://sanuthivihansa.pythonanywhere.com/glucose/extract-text"));
+      //       request.files
+      //           .add(await http.MultipartFile.fromPath('file', img.path));
+      //       final response = await request.send();
+      //       if (response.statusCode == 200) {
+      //         final responseData = await http.Response.fromStream(response);
+      //         final Map<String, dynamic> responseJson =
+      //             json.decode(responseData.body);
+      //         newResults.add(responseJson);
+      //       }
+      //     }
+      //   }
+      // } else {
+      //   results = await apiService.sendImagesToGPT4VisionReports(
+      //       images: _pickedImages);
+      // }
+
+      // for (int i = 0; i < results.length; i++) {
+      //   String scannedText = results[i];
+      //   if (i >= _selectedReports.length) {
+      //     print('Index out of bounds: $i');
+      //     continue;
+      //   }
+      //   Map<String, dynamic> item = _selectedReports[i];
+      //   item["ScannedText"] =
+      //       scannedText; // Add or update the ScannedText field
+      //   print(scannedText);
+      //   _removeSpaces(scannedText);
+      //   List<String> lines = noSpace.split('\n');
+      //
+      //   if (item["UploadedReport"] != 'Select Report') {
+      //     List<String> bloodComponents = [];
+      //     List<String> unitsComponents = [];
+      //
+      //     switch (item["UploadedReport"]) {
+      //       case 'Full Blood Count Report':
+      //         bloodComponents = [
+      //           'WBC',
+      //           'Neutrophils',
+      //           'Lymphocytes',
+      //           'Monocytes',
+      //           'Eosinophils',
+      //           'Basophills',
+      //           'NeutrophilsAbsoluteCount',
+      //           'LymphocytesAbsoluteCount',
+      //           'MonocytesAbsoluteCount',
+      //           'EosinophilsAbsoluteCount',
+      //           'RBC',
+      //           'Haemoglobin',
+      //           'PackedCellVolume(PCV)',
+      //           'MCV',
+      //           'MCH',
+      //           'MCHC',
+      //           'RDW',
+      //           'PlateletCount'
+      //         ];
+      //         unitsComponents = [
+      //           '/Cumm',
+      //           '0/0',
+      //           '0/0',
+      //           '0/0',
+      //           '0/0',
+      //           '0/0',
+      //           '/Cumm',
+      //           '/Cumm',
+      //           '/Cumm',
+      //           '/Cumm',
+      //           'Million/pL',
+      //           'g/dl',
+      //           '0/0',
+      //           'fL',
+      //           'pg',
+      //           'g/dL',
+      //           '0/0',
+      //           '/Cumm'
+      //         ];
+      //         break;
+      //       case 'Lipid profile':
+      //         bloodComponents = [
+      //           'Cholesterol-Total',
+      //           'Triglycerides',
+      //           'HDL-C',
+      //           'LDL-C',
+      //           'VLDL-C',
+      //           'CHO/HDL-CRatio'
+      //         ];
+      //         unitsComponents = [
+      //           'mg/dL',
+      //           'mg/dL',
+      //           'mg/dL',
+      //           'mg/dL',
+      //           'mg/dL',
+      //           ' '
+      //         ];
+      //         break;
+      //       case 'Fasting blood Sugar':
+      //         bloodComponents = [
+      //           'FastingPlasmaGlucose',
+      //           'FastingBloodSugar',
+      //           'FaøngmasmaGlucose'
+      //         ];
+      //         unitsComponents = ['mg/dL', 'me/dl', 'mg/dL'];
+      //         break;
+      //       case 'Urine Full Report':
+      //         bloodComponents = [
+      //           'Colour',
+      //           'Appearance',
+      //           'SpecificGravity',
+      //           'pH',
+      //           'Glucose',
+      //           'Protein',
+      //           'KetoneBodies',
+      //           'Bilirubin',
+      //           'Urobilinogen',
+      //           'PusCells',
+      //           'RedBloodCells',
+      //           'EpithelialCells',
+      //           'Organisms',
+      //           'Crystals',
+      //           'Casts'
+      //         ];
+      //         unitsComponents = [];
+      //         break;
+      //     }
+      //
+      //     String selectedText = item["UploadedReport"];
+      //     _rows =
+      //         _buildRows(bloodComponents, unitsComponents, lines, selectedText);
+      //     _reportDataRows.add(_rows);
+      //     item["obtainedRows"] = _rows;
+      //     setState(() {});
+      //   }
+      //   item["ExtractedText"] = extractedText;
+      // }
+
+      Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => ReportAnalysisScreen(
-              extractedText, addMultipleReports, setRows, widget.user)));
+              // extractedText,
+              _selectedReports,
+              _reportDataRows,
+              widget.user)));
     }
   }
 
@@ -843,7 +745,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                     SizedBox(
                       height: 30,
                     ),
-                    addMultipleReports.length != 0
+                    _selectedReports.length != 0
                         ? _showAttachedItems()
                         : SizedBox(),
                     SizedBox(
@@ -860,7 +762,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                         SizedBox(width: 30),
                         ElevatedButton(
                             onPressed: () {
-                              _pickImage();
+                              _onTapAnalyseBtn();
                             },
                             child: Text("Analyse")),
                       ],
