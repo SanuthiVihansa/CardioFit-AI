@@ -4,10 +4,12 @@ import '../../../services/user_information_service.dart';
 import 'modiRecognitionScreen.dart';
 
 class ReportAnalysisScreen extends StatefulWidget {
-  ReportAnalysisScreen(this.extractedResult, this.addMultipleReports, this.rows, this.user, {super.key});
+  ReportAnalysisScreen(
+      // this._extractedResult,
+      this._selectedReports, this.rows, this.user, {super.key});
 
-  final List<List<WordPair>> extractedResult;
-  final List<Map<String, dynamic>> addMultipleReports;
+  // final List<List<WordPair>> _extractedResult;
+  final List<Map<String, dynamic>> _selectedReports;
   final List<List<DataRow>> rows;
   final User user;
 
@@ -162,11 +164,11 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
               children: [
                 ...widget.rows.map((e) {
                   findIndex += 1;
-                  if (findIndex < widget.addMultipleReports.length) {
+                  if (findIndex < widget._selectedReports.length) {
                     return Column(
                       children: [
-                        Image.file(widget.addMultipleReports[findIndex]["UploadedImage"], width: 200, height: 200),
-                        Text(widget.addMultipleReports[findIndex]['UploadedReport']),
+                        Image.file(widget._selectedReports[findIndex]["UploadedImage"], width: 200, height: 200),
+                        Text(widget._selectedReports[findIndex]['UploadedReport']),
                         DataTable(
                           columns: const [
                             DataColumn(label: Text('Component')),
