@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../models/response.dart';
+import '../../models/response.dart';
 
 class AllLeadDisplayScreen extends StatefulWidget {
   const AllLeadDisplayScreen(this.l1Data, this._user, {super.key});
