@@ -176,6 +176,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           onSaved: (text) {},
                           decoration: InputDecoration(
+                            labelText: "User Name",
                             hintText: 'Sara Lauranco',
                             prefixIcon: const Icon(Icons.person),
                             suffixIcon: _nameController.text.isEmpty
@@ -199,6 +200,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           onSaved: (text) {},
                           decoration: InputDecoration(
+                            labelText: "User Email",
                             hintText: 'name@gmail.com',
                             prefixIcon: const Icon(Icons.mail),
                             suffixIcon: _emailController.text.isEmpty
@@ -222,6 +224,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           onSaved: (text) {},
                           decoration: InputDecoration(
+                            labelText: "Guardian Name",
                             hintText: 'Sara James',
                             prefixIcon: const Icon(Icons.person),
                             suffixIcon: _memberNameController.text.isEmpty
@@ -245,6 +248,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           onSaved: (text) {},
                           decoration: InputDecoration(
+                            labelText: "Guardian Relationship",
                             hintText: 'Mother',
                             prefixIcon: const Icon(Icons.person),
                             suffixIcon: _memberRelationshipController.text.isEmpty
@@ -268,7 +272,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           onSaved: (text) {},
                           decoration: InputDecoration(
-                            hintText: 'Phone Number',
+                            labelText: "Mobile Number",
+                            hintText: '94711111111',
                             prefixIcon: const Icon(Icons.person),
                             suffixIcon: _memberPhoneNoController.text.isEmpty
                                 ? Container(width: 0)
@@ -287,6 +292,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           keyboardType: TextInputType.text,
                           obscureText: true,
                           decoration: const InputDecoration(
+                            labelText: "Password",
                             hintText: "Password",
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.password),
@@ -305,6 +311,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           keyboardType: TextInputType.text,
                           obscureText: true,
                           decoration: const InputDecoration(
+                            labelText: "Confirm Password",
                             hintText: "Confirm Password",
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.password),
