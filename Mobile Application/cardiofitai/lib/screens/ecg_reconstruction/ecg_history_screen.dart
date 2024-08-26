@@ -13,6 +13,15 @@ class EcgHistoryScreen extends StatefulWidget {
 class _EcgHistoryScreenState extends State<EcgHistoryScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
+        title: Text(
+          "ECG History",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
   }
 }
