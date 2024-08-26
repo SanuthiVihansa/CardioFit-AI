@@ -101,12 +101,12 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
                             _onClickHistoryBtn();
                           },
                           icon: Image.asset(
-                              'assets/facial_analysis/face-scan_2818147.png',
+                              'assets/ecg_reconstruction/history.png',
                               width: responsiveIconSize,
                               height: responsiveIconSize,
                               fit: BoxFit.contain),
                           label: Text(
-                            "History",
+                            "ECG History",
                             style: TextStyle(
                                 fontSize: responsiveIconTextFontSize,
                                 color: Colors.purple),
