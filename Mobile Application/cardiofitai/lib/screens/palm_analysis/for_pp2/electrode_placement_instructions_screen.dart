@@ -10,6 +10,7 @@ import '../../../models/user.dart';
 
 class ElectrodePlacementInstructionsScreen extends StatefulWidget {
   const ElectrodePlacementInstructionsScreen(this._user, {super.key});
+
   final User _user;
 
   @override
@@ -96,23 +97,23 @@ class _ElectrodePlacementInstructionsScreenState
     await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("No Internet"),
-          actionsAlignment: MainAxisAlignment.center,
-          content: const Text('Please connect to the network!'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () async {
-                return Navigator.pop(context, true);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ));
+              title: const Text("No Internet"),
+              actionsAlignment: MainAxisAlignment.center,
+              content: const Text('Please connect to the network!'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () async {
+                    return Navigator.pop(context, true);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ));
   }
 
   void _onTapContinueBtn(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext) => SerialMonitor(widget._user)));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext) => SerialMonitor(widget._user)));
   }
 
   @override
@@ -140,31 +141,50 @@ class _ElectrodePlacementInstructionsScreenState
                 "Place the electrodes along with the correct color",
                 style: TextStyle(fontSize: _width / (_devWidth / 15)),
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    _onTapContinueBtn(context);
-                  },
-                  style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all<Size>(
-                      Size(
-                          _width / (_devWidth / 160.0),
-                          _height /
-                              (_devHeight / 40)), // Button width and height
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Continue",
-                        style: TextStyle(fontSize: _width / (_devWidth / 10)),
+              Column(
+                children: [
+                  !_hasConnection
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              bottom: _height / (_devHeight / 10)),
+                          child: Text(
+                            "No Network Connection!",
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: _width / (_devWidth / 10)),
+                          ),
+                        )
+                      : const SizedBox(),
+                  ElevatedButton(
+                      onPressed: _hasConnection
+                          ? () {
+                              _onTapContinueBtn(context);
+                            }
+                          : null,
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all<Size>(
+                          Size(
+                              _width / (_devWidth / 160.0),
+                              _height /
+                                  (_devHeight / 40)), // Button width and height
+                        ),
                       ),
-                      Icon(
-                        Icons.arrow_right_outlined,
-                        size: _height / (_devHeight / 20),
-                      )
-                    ],
-                  ))
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Continue",
+                            style:
+                                TextStyle(fontSize: _width / (_devWidth / 10)),
+                          ),
+                          Icon(
+                            Icons.arrow_right_outlined,
+                            size: _height / (_devHeight / 20),
+                          )
+                        ],
+                      )),
+                ],
+              )
             ],
           ),
           Image.asset(
