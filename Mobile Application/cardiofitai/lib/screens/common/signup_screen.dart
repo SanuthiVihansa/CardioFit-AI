@@ -111,7 +111,9 @@ class _SignUpPageState extends State<SignUpPage> {
         "",
         _memberNameController.text,
         _memberRelationshipController.text,
-        _memberPhoneNoController.text);
+        _memberPhoneNoController.text,
+      true
+    );
     if (response.code == 200) {
       Fluttertoast.showToast(
           msg: "Account Created Successfully!🎉",
