@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cardiofitai/screens/common/dashboard_screen.dart';
+import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -111,6 +112,8 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["memberRelationship"] +
         '", "memberPhone" : "' +
         doc["memberPhone"] +
+        '", "newUser" : "' +
+        doc["newUser"].toString() +
         '"}';
 
     User user = User(
@@ -131,8 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["memberName"],
         doc["memberRelationship"],
         doc["memberPhone"],
-      doc["newUser"]
-    );
+        doc["newUser"]);
 
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
@@ -144,9 +146,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _navigate(User user) {
     if (user.type == "user") {
-      Navigator.pop(context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => DashboardScreen(user)));
+      if (user.newUser == false) {
+        Navigator.pop(context);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => DashboardScreen(user)));
+      } else {
+        // IF NEW USER
+        Navigator.pop(context);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => ProfilePage(user)));
+      }
     } else {
       // For Doctor login
     }

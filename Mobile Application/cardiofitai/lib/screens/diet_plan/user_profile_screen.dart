@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/diet_plan/ReportReading/modiRecognitionScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,6 @@ class _ProfilePageState extends State<ProfilePage> {
       _caluclateBMIController.text = "";
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -314,10 +314,16 @@ class _ProfilePageState extends State<ProfilePage> {
             widget.user.memberName,
             widget.user.memberRelationship,
             widget.user.memberPhoneNo,
-          widget.user.newUser
-        );
+            false);
         UserLoginService.updateUser(updatedUserInfo);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => DietHomePage(widget.user)));
+        if(widget.user.newUser == false){
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => DietHomePage(widget.user)));
+        } else{
+          // IF NEW USER
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => RecognitionScreen(widget.user)));
+        }
+
       });
 }
