@@ -91,7 +91,8 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       "REPLACE THE VARIABLE OF bloodTestType",
       widget.user.memberName,
       widget.user.memberRelationship,
-      widget.user.memberPhoneNo
+      widget.user.memberPhoneNo,
+        widget.user.newUser
 
     );
 

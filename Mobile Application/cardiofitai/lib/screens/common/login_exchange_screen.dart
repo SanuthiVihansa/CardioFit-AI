@@ -46,7 +46,8 @@ class _LoginExchangeScreenState extends State<LoginExchangeScreen> {
           decodedUser["bloodTestType"],
             decodedUser["memberName"],
             decodedUser["memberRelationship"],
-            decodedUser["memberPhone"]
+            decodedUser["memberPhone"],
+            decodedUser["newUser"]
         );
 
         _navigate(user);

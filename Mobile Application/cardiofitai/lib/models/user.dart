@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class User {
   String name;
   String email;
@@ -16,6 +18,7 @@ class User {
   String memberName;
   String memberRelationship;
   String memberPhoneNo;
+  bool newUser;
 
   User(
       this.name,
@@ -34,5 +37,6 @@ class User {
       this.bloodTestType,
       this.memberName,
       this.memberPhoneNo,
-      this.memberRelationship);
+      this.memberRelationship,
+      this.newUser);
 }

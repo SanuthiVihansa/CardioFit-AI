@@ -130,7 +130,8 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["bloodTestType"],
         doc["memberName"],
         doc["memberRelationship"],
-        doc["memberPhone"]
+        doc["memberPhone"],
+      doc["newUser"]
     );
 
     final directory = await getApplicationDocumentsDirectory();

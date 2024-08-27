@@ -313,7 +313,9 @@ class _ProfilePageState extends State<ProfilePage> {
             "REPLACE THE VARIABLE OF bloodTestType",
             widget.user.memberName,
             widget.user.memberRelationship,
-            widget.user.memberPhoneNo);
+            widget.user.memberPhoneNo,
+          widget.user.newUser
+        );
         UserLoginService.updateUser(updatedUserInfo);
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => DietHomePage(widget.user)));
