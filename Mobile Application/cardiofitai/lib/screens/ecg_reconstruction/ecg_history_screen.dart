@@ -30,7 +30,6 @@ class _EcgHistoryScreenState extends State<EcgHistoryScreen> {
 
   Future<void> _loadEcgHistory() async {
     _ecgHistoryData = await EcgService.getEcgHistory(widget._user.email);
-    print(_ecgHistoryData);
     setState(() {
       _isLoading = false;
     });
