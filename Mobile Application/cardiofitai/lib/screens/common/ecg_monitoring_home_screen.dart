@@ -140,7 +140,7 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: _height / (_devHeight / 25)),
+          padding: EdgeInsets.only(top: _height / (_devHeight / 10)),
           child: Text(
             "Lead I",
             style: TextStyle(fontSize: _width / (_devWidth / 10)),
@@ -249,24 +249,12 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Recent ECG Report         ',
-                              style: TextStyle(
-                                fontSize: _height / (_devHeight / 10),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            _lastEcgData.length != 0
-                                ? Text(
-                                    'Date: ${DateFormat('yyyy-MM-dd').format(_lastEcgData[0]["datetime"].toDate())}         Time: ${DateFormat('HH:mm:ss').format(_lastEcgData[0]["datetime"].toDate())}',
-                                    style: TextStyle(
-                                      fontSize: _height / (_devHeight / 10),
-                                    ),
-                                  )
-                                : SizedBox()
-                          ],
+                        Text(
+                          'Recent ECG Report         ',
+                          style: TextStyle(
+                            fontSize: _height / (_devHeight / 10),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(height: 8),
                         Container(
@@ -289,8 +277,25 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
                                   ? Center(
                                       child: Text('No ECG Report'),
                                     )
-                                  : _lead1Plot(
-                                      _lastEcgData[0]["l1"].cast<double>()),
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        _lead1Plot(_lastEcgData[0]["l1"]
+                                            .cast<double>()),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: _width / (_devWidth / 30)),
+                                          child: Text(
+                                            'Date: ${DateFormat('yyyy-MM-dd').format(_lastEcgData[0]["datetime"].toDate())}         Time: ${DateFormat('HH:mm:ss').format(_lastEcgData[0]["datetime"].toDate())}',
+                                            style: TextStyle(
+                                              fontSize:
+                                                  _height / (_devHeight / 10),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                         ),
                       ],
                     ),
