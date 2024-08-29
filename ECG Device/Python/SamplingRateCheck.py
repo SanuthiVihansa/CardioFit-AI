@@ -85,7 +85,7 @@ try:
         #     plt.xlabel('Sample')
         #     plt.ylabel('Amplitude')
         #     plt.show()
-            data =[]
+        #     data =[]
     print(data)
 except KeyboardInterrupt:
     ser.close()
