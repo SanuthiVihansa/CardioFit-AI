@@ -1,4 +1,4 @@
-/*import processing.serial.*;
+import processing.serial.*;
 
 Serial myPort;        // The serial port
 int xPos = 1;         // horizontal position of the graph
@@ -100,4 +100,3 @@ void calculateBPM (){
   beat_old = beat_new;
   beatIndex = (beatIndex + 1) % 500;  // cycle through the array instead of using FIFO queue
 }
-*/
