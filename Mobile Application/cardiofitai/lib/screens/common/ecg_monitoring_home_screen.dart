@@ -254,8 +254,9 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
                             Text(
                               'Recent ECG Report         ',
                               style: TextStyle(
-                                  fontSize: _height / (_devHeight / 10),
-                                  fontWeight: FontWeight.bold),
+                                fontSize: _height / (_devHeight / 10),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             _lastEcgData.length != 0
                                 ? Text(
