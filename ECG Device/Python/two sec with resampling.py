@@ -86,7 +86,7 @@ try:
             # #     plt.xlabel('Time(seconds)')
             # plt.ylabel('mV')
             # plt.legend()
-            # plt.show()
+            plt.show()
 
             data = []
 except KeyboardInterrupt:
