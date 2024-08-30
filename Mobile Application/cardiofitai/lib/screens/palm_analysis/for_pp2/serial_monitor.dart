@@ -36,7 +36,8 @@ class _SerialMonitorState extends State<SerialMonitor> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 1), (timer) {
+
+    Timer.periodic(Duration(seconds: 1), (timer) { // runs a task every second
       if (_deviceIsDetected == false) {
         _initUsb();
       } else {
@@ -45,11 +46,11 @@ class _SerialMonitorState extends State<SerialMonitor> {
     });
   }
 
-  void _initUsb() async {
-    List<UsbDevice> devices = await UsbSerial.listDevices();
+  void _initUsb() async { // initialize the USB connection between tab and the device
+    List<UsbDevice> devices = await UsbSerial.listDevices(); // get a list of connected USB devices
     if (devices.isNotEmpty) {
-      _port = await devices[0].create();
-      bool openResult = await _port!.open();
+      _port = await devices[0].create(); // create a port from the first device in the list
+      bool openResult = await _port!.open(); // open the port
       if (openResult) {
         await _port!.setDTR(true);
         await _port!.setRTS(true);
@@ -57,7 +58,7 @@ class _SerialMonitorState extends State<SerialMonitor> {
             9600, UsbPort.DATABITS_8, UsbPort.STOPBITS_1, UsbPort.PARITY_NONE);
         Transaction<String> transaction = Transaction.stringTerminated(
             _port!.inputStream!, Uint8List.fromList([13, 10]));
-        transaction.stream.listen((String data) async {
+        transaction.stream.listen((String data) async { // listen to the data stream
           if (_ecgData.length == 1) {
             _startCountdown();
           }
@@ -146,21 +147,22 @@ class _SerialMonitorState extends State<SerialMonitor> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("ECG Monitor"),
+          title: const Text("ECG Monitor"),
           backgroundColor: Colors.red,
           foregroundColor: Colors.white,
         ),
         body: _deviceIsDetected == false
-            ? DeviceDisconnect()
+            ? const DeviceDisconnect()
             // : _ecgData.isEmpty
             : _filteredEcgData.length < 5000
                 ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
                         height: _height,
                         width: 0,
                       ),
-                      Text("Device is connected! ECG Capturing in progress..."),
+                      const Text("Device is connected! ECG Capturing in progress..."),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Image.asset(
@@ -173,7 +175,6 @@ class _SerialMonitorState extends State<SerialMonitor> {
                         width: 0,
                       ),
                     ],
-                    mainAxisAlignment: MainAxisAlignment.center,
                   )
                 : RecordingPlot(_countdown, _filteredEcgData, widget._user));
   }
