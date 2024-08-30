@@ -375,16 +375,17 @@ import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/screens/common/ecg_monitoring_home_screen.dart';
 import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/diet_,mainhome_page.screen.dart';
+import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:cardiofitai/screens/ecg_comparison_and_analysis/analysis_file_selection_screen.dart';
 import 'package:cardiofitai/screens/ecg_comparison_and_analysis/comparison_file_selection_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_future_use/pmb_device_connection_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_future_use/real_time_record.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/electrode_placement_instructions_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/serial_monitor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../components/navbar_component.dart';
 import '../../models/user.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -528,9 +529,21 @@ class ProfileHeader extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 40,
-            child: Image.asset("assets/profile_avatar.png"),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context,MaterialPageRoute(builder: (context)=>ProfilePage(user)));
+            },
+            child: CircleAvatar(
+              radius: 40,
+                child: ClipOval(
+                  child: Image.network(
+                    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+            ),
           ),
           SizedBox(width: 16),
           Column(
