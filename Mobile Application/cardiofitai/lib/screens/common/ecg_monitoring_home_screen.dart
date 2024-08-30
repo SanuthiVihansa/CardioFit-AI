@@ -154,6 +154,98 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
     );
   }
 
+  Widget _ecgHistoryBtn() {
+    return Container(
+      height: _height / (_devHeight / 130),
+      width: _width / (_devWidth / 300),
+      margin: const EdgeInsets.only(right: 20, bottom: 10),
+      child: Material(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        elevation: 4,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Flexible(
+              fit: FlexFit.loose,
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                child: Image.asset(
+                  'assets/ecg_reconstruction/ecg_history_btn_bg.png',
+                  width: _width / (_devWidth / 300),
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                    child: Text("ECG History",
+                        style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: _height / (_devHeight / 8),
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  Center(child: Text("Explore ECG History")),
+                  SizedBox(height: 10)
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _takeECGBtn() {
+    return Container(
+      height: _height / (_devHeight / 130),
+      width: _width / (_devWidth / 300),
+      margin: const EdgeInsets.only(right: 20, bottom: 10),
+      child: Material(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        elevation: 4,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Flexible(
+              fit: FlexFit.loose,
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                child: Image.asset(
+                  'assets/ecg_reconstruction/take_ecg_btn_bg.jpeg',
+                  width: _width / (_devWidth / 300),
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                    child: Text("Take ECG",
+                        style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  Center(child: Text("Record Your ECG")),
+                  SizedBox(height: 10)
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   void _onClickHistoryBtn() {
     Navigator.push(
         context,
@@ -196,56 +288,36 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton.icon(
-                          style: ButtonStyle(
-                              fixedSize: MaterialStateProperty.all<Size>(Size(
-                                  responsiveButtonLength,
-                                  responsiveButtonRoundness))),
-                          onPressed: () {
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          child: _ecgHistoryBtn(),
+                          onTap: () {
                             _onClickHistoryBtn();
                           },
-                          icon: Image.asset(
-                              'assets/ecg_reconstruction/history.png',
-                              width: responsiveIconSize,
-                              height: responsiveIconSize,
-                              fit: BoxFit.contain),
-                          label: Text(
-                            "ECG History",
-                            style: TextStyle(
-                                fontSize: responsiveIconTextFontSize,
-                                color: Colors.purple),
-                          )),
-                      ElevatedButton.icon(
-                          style: ButtonStyle(
-                              fixedSize: MaterialStateProperty.all<Size>(Size(
-                                  responsiveButtonLength,
-                                  responsiveButtonRoundness))),
-                          onPressed: () {
+                        ),
+                        GestureDetector(
+                          child: _takeECGBtn(),
+                          onTap: () {
                             _onClickTakeECGBtn();
                           },
-                          icon: Image.asset('assets/palm_analysis/praying.png',
-                              width: responsiveIconSize,
-                              height: responsiveIconSize,
-                              fit: BoxFit.contain),
-                          label: Text(
-                            "Take ECG",
-                            style: TextStyle(
-                                fontSize: responsiveIconTextFontSize,
-                                color: Colors.purple),
-                          )),
-                      ElevatedButton(
-                          onPressed: () {
-                            _onTapTempBtn();
-                          },
-                          child: Text("Temp button for Diagnosis"))
-                    ],
+                        ),
+                        // ElevatedButton(
+                        //     onPressed: () {
+                        //       _onTapTempBtn();
+                        //     },
+                        //     child: Text("Temp button for Diagnosis"))
+                      ],
+                    ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16.0, right: 16, bottom: 16, top: 50),
+                    padding: EdgeInsets.only(
+                        left: _width / (_devWidth / 8),
+                        right: _width / (_devWidth / 8),
+                        bottom: _height / (_devHeight / 8),
+                        top: _height / (_devHeight / 1)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
