@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/common/dashboard_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/ReportReading/modiRecognitionScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -101,13 +102,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Weight(),
                 BMI(),
-                ActiveLevel(),
+                // ActiveLevel(),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Row(
                     children: [
-                      saveInfoBtn(),
                       backBtn(),
+                      SizedBox(width: 20,),
+                      saveInfoBtn()
                     ],
                   ),
                 )
@@ -290,7 +292,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Text("Back"),
       onPressed: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => DietHomePage(widget.user)));
+            builder: (BuildContext context) => DashboardScreen(widget.user)));
       });
 
   Widget saveInfoBtn() => ElevatedButton(
