@@ -270,12 +270,6 @@ class _AllLeadDisplayScreenFromHistoryState
             ),
           ),
         ),
-        Text(
-          'Date: ${DateFormat('yyyy-MM-dd').format(widget.datetime.toDate())}         Time: ${DateFormat('HH:mm:ss').format(widget.datetime.toDate())}',
-          style: TextStyle(
-            fontSize: _height / (_devHeight / 10),
-          ),
-        )
       ],
     );
   }
@@ -321,6 +315,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.l1Data, _calcMin(widget.l1Data),
                 _calcMax(widget.l1Data), Colors.green)),
+        _dateTime(),
       ],
     );
   }
@@ -340,6 +335,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.l2Data, _calcMin(widget.l2Data),
                 _calcMax(widget.l2Data), Colors.blue)),
+        _dateTime(),
       ],
     );
   }
@@ -359,6 +355,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.l3Data, _calcMin(widget.l3Data),
                 _calcMax(widget.l3Data), Colors.blue)),
+        _dateTime(),
       ],
     );
   }
@@ -378,6 +375,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.avrData, _calcMin(widget.avrData),
                 _calcMax(widget.avrData), Colors.blue)),
+        _dateTime(),
       ],
     );
   }
@@ -397,6 +395,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.avlData, _calcMin(widget.avlData),
                 _calcMax(widget.avlData), Colors.blue)),
+        _dateTime(),
       ],
     );
   }
@@ -416,6 +415,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.avfData, _calcMin(widget.avfData),
                 _calcMax(widget.avfData), Colors.blue)),
+        _dateTime(),
       ],
     );
   }
@@ -435,6 +435,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.v1Data, _calcMin(widget.v1Data),
                 _calcMax(widget.v1Data), Colors.blue)),
+        _dateTime(),
       ],
     );
   }
@@ -454,6 +455,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.v2Data, _calcMin(widget.v2Data),
                 _calcMax(widget.v2Data), Colors.blue)),
+        _dateTime(),
       ],
     );
   }
@@ -473,6 +475,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.v3Data, _calcMin(widget.v3Data),
                 _calcMax(widget.v3Data), Colors.blue)),
+        _dateTime(),
       ],
     );
   }
@@ -492,6 +495,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.v4Data, _calcMin(widget.v4Data),
                 _calcMax(widget.v4Data), Colors.blue)),
+        _dateTime(),
       ],
     );
   }
@@ -511,6 +515,7 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.v5Data, _calcMin(widget.v5Data),
                 _calcMax(widget.v5Data), Colors.blue)),
+        _dateTime(),
       ],
     );
   }
@@ -530,7 +535,24 @@ class _AllLeadDisplayScreenFromHistoryState
             height: _height / (_devHeight / 200),
             child: _ecgPlot(widget.v6Data, _calcMin(widget.v6Data),
                 _calcMax(widget.v6Data), Colors.blue)),
+        _dateTime(),
       ],
+    );
+  }
+
+  Widget _dateTime() {
+    return Padding(
+      padding: EdgeInsets.only(left: _width / (_devWidth / 30)),
+      child: Row(
+        children: [
+          Text(
+            'Date: ${DateFormat('yyyy-MM-dd').format(widget.datetime.toDate())}         Time: ${DateFormat('HH:mm:ss').format(widget.datetime.toDate())}',
+            style: TextStyle(
+              fontSize: _height / (_devHeight / 10),
+            ),
+          )
+        ],
+      ),
     );
   }
 
