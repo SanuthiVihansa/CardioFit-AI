@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/screens/common/dashboard_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/ReportReading/reportAnalysisScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
@@ -10,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../models/response.dart';
 import '../../../services/prescription_reading_api_service.dart';
+import '../../../services/user_information_service.dart';
 
 class RecognitionScreen extends StatefulWidget {
   const RecognitionScreen(this.user, {super.key});
@@ -755,8 +758,34 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
+                            onPressed: () async {
+                              User updateNewUserField = User(
+                                  widget.user.name,
+                                  widget.user.email,
+                                  widget.user.password,
+                                  widget.user.age,
+                                  widget.user.height,
+                                  widget.user.weight,
+                                  widget.user.bmi,
+                                  widget.user.dob,
+                                  widget.user.activeLevel,
+                                  widget.user.type,
+                                  widget.user.bloodGlucoseLevel,
+                                  widget.user.bloodCholestrolLevel,
+                                  widget.user.cardiacCondition,
+                                  widget.user.bloodTestType,
+                                  widget.user.memberName,
+                                  widget.user.memberRelationship,
+                                  widget.user.memberPhoneNo,
+                                  false  // Update newUser field to false
+                              );
+
+                              Response response = await UserLoginService.updateNewUser(updateNewUserField);
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => DashboardScreen(widget.user)),
+                              );
                             },
                             child: Text("Back")),
                         SizedBox(width: 30),
