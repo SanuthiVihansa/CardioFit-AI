@@ -88,7 +88,7 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       bloodGlucoseLevel != 0 ? bloodGlucoseLevel.toString() : widget.user.bloodGlucoseLevel,
       cholesterolTotal != 0 ? cholesterolTotal.toString() : widget.user.bloodCholestrolLevel,
       "No",
-      "REPLACE THE VARIABLE OF bloodTestType",
+      "0",
       widget.user.memberName,
       widget.user.memberRelationship,
       widget.user.memberPhoneNo,
