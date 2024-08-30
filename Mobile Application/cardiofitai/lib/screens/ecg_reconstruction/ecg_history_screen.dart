@@ -91,46 +91,86 @@ class _EcgHistoryScreenState extends State<EcgHistoryScreen> {
                 ? Center(
                     child: Text("No ECG Hostory"),
                   )
-                : ListView.builder(
-                    itemCount: _ecgHistoryData.length,
-                    itemBuilder: (context, index) => Column(
-                          children: [
-                            ListTile(
-                              title: Text(
-                                  "ECG Record ${_ecgHistoryData.length - index}"),
-                              subtitle: Row(
-                                children: [
-                                  Text(
-                                    "Date: ${DateFormat('yyyy-MM-dd').format(_ecgHistoryData[index]["datetime"].toDate())}",
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: _width / (_devWidth / 20)),
-                                    child: Text(
-                                      "Time: ${DateFormat('HH:mm:ss').format(_ecgHistoryData[index]["datetime"].toDate())}",
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onTap: () {
-                                _onTapSingleRecord(
-                                    _ecgHistoryData[index]["l1"].cast<double>(),
-                                    _ecgHistoryData[index]["l2"].cast<double>(),
-                                    _ecgHistoryData[index]["l3"].cast<double>(),
-                                    _ecgHistoryData[index]["avr"].cast<double>(),
-                                    _ecgHistoryData[index]["avl"].cast<double>(),
-                                    _ecgHistoryData[index]["avf"].cast<double>(),
-                                    _ecgHistoryData[index]["v1"].cast<double>(),
-                                    _ecgHistoryData[index]["v2"].cast<double>(),
-                                    _ecgHistoryData[index]["v3"].cast<double>(),
-                                    _ecgHistoryData[index]["v4"].cast<double>(),
-                                    _ecgHistoryData[index]["v5"].cast<double>(),
-                                    _ecgHistoryData[index]["v6"].cast<double>(),
-                                    _ecgHistoryData[index]["datetime"]);
-                              },
-                            ),
-                            Divider()
-                          ],
-                        )));
+                : Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: _width / (_devWidth / 80),
+                        vertical: _height / (_devHeight / 20)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              bottom: _height / (_devHeight / 20)),
+                          child: Text(
+                            "Tap to View Your ECG Reports",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: _height / (_devHeight / 20)),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                              itemCount: _ecgHistoryData.length,
+                              itemBuilder: (context, index) => Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(Icons.monitor_heart),
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text("${index + 1}"),
+                                            Text(
+                                              "Date: ${DateFormat('yyyy-MM-dd').format(_ecgHistoryData[index]["datetime"].toDate())}",
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: _width /
+                                                      (_devWidth / 20)),
+                                              child: Text(
+                                                "Time: ${DateFormat('HH:mm:ss').format(_ecgHistoryData[index]["datetime"].toDate())}",
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        trailing: Icon(
+                                            Icons.arrow_forward_ios_outlined),
+                                        onTap: () {
+                                          _onTapSingleRecord(
+                                              _ecgHistoryData[index]["l1"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["l2"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["l3"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["avr"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["avl"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["avf"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["v1"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["v2"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["v3"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["v4"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["v5"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]["v6"]
+                                                  .cast<double>(),
+                                              _ecgHistoryData[index]
+                                                  ["datetime"]);
+                                        },
+                                      ),
+                                      Divider()
+                                    ],
+                                  )),
+                        ),
+                      ],
+                    ),
+                  ));
   }
 }
