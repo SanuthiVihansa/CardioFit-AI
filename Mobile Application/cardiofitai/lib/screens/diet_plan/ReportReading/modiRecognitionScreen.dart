@@ -787,7 +787,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                 MaterialPageRoute(builder: (context) => DashboardScreen(widget.user)),
                               );
                             },
-                            child: Text("Back")),
+                            child: Text(widget.user.newUser ? "Skip" : "Back")),
                         SizedBox(width: 30),
                         ElevatedButton(
                             onPressed: () {
