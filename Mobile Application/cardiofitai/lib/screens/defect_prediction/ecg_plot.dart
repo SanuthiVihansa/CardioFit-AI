@@ -100,7 +100,10 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
       _extractFeatures(_ecgDataLead2, _featureIndicesLead2);
 
       // Check for emergency condition
-      if (predictedLabel == 'Incomplete Right Bundle Branch Block') {
+      if (predictedLabel == 'Incomplete Right Bundle Branch Block'||
+          predictedLabel == 'Abnormal QRS'||
+          predictedLabel == 'Inferior Myocardial Infarction'||
+          predictedLabel == 'Ventricular Tachycardia') {
         _showEmergencyDialog(widget.user.memberRelationship);
       }
     } catch (e) {
