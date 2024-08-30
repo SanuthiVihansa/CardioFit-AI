@@ -101,7 +101,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
 
       // Check for emergency condition
       if (predictedLabel == 'Incomplete Right Bundle Branch Block') {
-        _showEmergencyDialog(widget.user.memberPhoneNo);
+        _showEmergencyDialog(widget.user.memberRelationship);
       }
     } catch (e) {
       setState(() {
