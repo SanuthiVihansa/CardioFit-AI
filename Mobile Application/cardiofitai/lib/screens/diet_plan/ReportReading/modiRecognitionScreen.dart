@@ -81,18 +81,15 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       margin: const EdgeInsets.only(right: 20, bottom: 10),
       child: Material(
         borderRadius: BorderRadius.all(Radius.circular(20)),
-        color: Colors.white54,
-        elevation: 4,
+        //color: Colors.white54,
+        //elevation: 4,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(
               height: 80,
             ),
-            Center(
-                child: Text("\nPlease upload the medical reports\n",
-                    style: TextStyle(color: Colors.grey, fontSize: 20))),
-            Column(
+            Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
@@ -128,7 +125,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  width: 10,
                 ),
                 Flexible(
                   child: ElevatedButton(
@@ -152,7 +149,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                         }
                       }
                     },
-                    child: Text("Attach Report"),
+                    child: Text("Attach"),
                   ),
                 ),
               ],
@@ -711,15 +708,15 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     halfScreenWidth = (MediaQuery.of(context).size.width - 10) - 50;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          color: Colors.white,
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        // leading: IconButton(
+        //   color: Colors.white,
+        //   icon: const Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
         title: const Text(
-          "CardioFit AI",
+          "Laboratory Report Diagnosis",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.red,
@@ -736,7 +733,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                     SizedBox(
                       height: 55 + MediaQuery.of(context).viewInsets.top,
                     ),
-                    Text("Laboratory Report Diagnosis",
+                    Text("Please upload your medical reports",
                         style: TextStyle(
                             fontSize: 30,
                             color: Colors.blueGrey,
@@ -759,28 +756,30 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                       children: <Widget>[
                         ElevatedButton(
                             onPressed: () async {
-                              User updateNewUserField = User(
-                                  widget.user.name,
-                                  widget.user.email,
-                                  widget.user.password,
-                                  widget.user.age,
-                                  widget.user.height,
-                                  widget.user.weight,
-                                  widget.user.bmi,
-                                  widget.user.dob,
-                                  widget.user.activeLevel,
-                                  widget.user.type,
-                                  widget.user.bloodGlucoseLevel,
-                                  widget.user.bloodCholestrolLevel,
-                                  widget.user.cardiacCondition,
-                                  widget.user.bloodTestType,
-                                  widget.user.memberName,
-                                  widget.user.memberRelationship,
-                                  widget.user.memberPhoneNo,
-                                  false  // Update newUser field to false
-                              );
+                              if(widget.user.newUser==true){
+                                User updateNewUserField = User(
+                                    widget.user.name,
+                                    widget.user.email,
+                                    widget.user.password,
+                                    widget.user.age,
+                                    widget.user.height,
+                                    widget.user.weight,
+                                    widget.user.bmi,
+                                    widget.user.dob,
+                                    widget.user.activeLevel,
+                                    widget.user.type,
+                                    widget.user.bloodGlucoseLevel,
+                                    widget.user.bloodCholestrolLevel,
+                                    widget.user.cardiacCondition,
+                                    widget.user.bloodTestType,
+                                    widget.user.memberName,
+                                    widget.user.memberRelationship,
+                                    widget.user.memberPhoneNo,
+                                    false  // Update newUser field to false
+                                );
 
-                              Response response = await UserLoginService.updateNewUser(updateNewUserField);
+                                Response response = await UserLoginService.updateNewUser(updateNewUserField);
+                              }
 
                               Navigator.push(
                                 context,
