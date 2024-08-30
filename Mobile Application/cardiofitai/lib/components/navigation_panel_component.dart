@@ -52,8 +52,10 @@ class NavigationPanelComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Container(
       width: 80,
+      height: screenHeight,
       color: Colors.blueGrey, // Set your desired color
       child: SingleChildScrollView(
         child: Column(
