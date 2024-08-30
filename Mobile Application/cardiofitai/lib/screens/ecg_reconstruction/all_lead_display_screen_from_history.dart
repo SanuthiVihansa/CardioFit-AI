@@ -36,6 +36,8 @@ class AllLeadDisplayScreenFromHistory extends StatefulWidget {
   final List<double> v5Data;
   final List<double> v6Data;
   final Timestamp datetime;
+
+  // ignore: unused_field
   final User _user;
 
   @override
@@ -196,7 +198,7 @@ class _AllLeadDisplayScreenFromHistoryState
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all<Size>(
+                          fixedSize: WidgetStateProperty.all<Size>(
                             Size(
                                 _width / (_devWidth / 120.0),
                                 _height /
@@ -217,7 +219,7 @@ class _AllLeadDisplayScreenFromHistoryState
                           _onClickHomeBtn();
                         },
                         style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all<Size>(
+                          fixedSize: WidgetStateProperty.all<Size>(
                             Size(
                                 _width / (_devWidth / 120.0),
                                 _height /
@@ -276,7 +278,7 @@ class _AllLeadDisplayScreenFromHistoryState
 
   Widget _leadSelectionDropDown() {
     return Container(
-      width: 200,
+      width: _width / (_devWidth / 100),
       decoration: BoxDecoration(border: Border.all(color: Colors.black)),
       child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
