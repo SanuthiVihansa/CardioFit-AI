@@ -1,15 +1,9 @@
-import 'dart:convert';
-
 import 'package:cardiofitai/models/user.dart';
-import 'package:cardiofitai/services/ecg_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
-
-import '../../models/response.dart';
+import 'package:intl/intl.dart';
 
 class AllLeadDisplayScreenFromHistory extends StatefulWidget {
   const AllLeadDisplayScreenFromHistory(
@@ -167,12 +161,14 @@ class _AllLeadDisplayScreenFromHistoryState
 
   Widget _plotsWithoutComparison() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.only(
-              top: _height / (_devHeight / 10),
-              left: _width / (_devWidth / 20),
-              right: _width / (_devWidth / 20)),
+            top: _height / (_devHeight / 10),
+            left: _width / (_devWidth / 20),
+            right: _width / (_devWidth / 20),
+          ),
           child: Row(
             children: [
               Row(
@@ -274,6 +270,12 @@ class _AllLeadDisplayScreenFromHistoryState
             ),
           ),
         ),
+        Text(
+          'Date: ${DateFormat('yyyy-MM-dd').format(widget.datetime.toDate())}         Time: ${DateFormat('HH:mm:ss').format(widget.datetime.toDate())}',
+          style: TextStyle(
+            fontSize: _height / (_devHeight / 10),
+          ),
+        )
       ],
     );
   }
@@ -540,7 +542,7 @@ class _AllLeadDisplayScreenFromHistoryState
         appBar: AppBar(
           foregroundColor: Colors.white,
           title: const Text(
-            "Cardiac Analysis Through Palms",
+            "ECG History",
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
           backgroundColor: Colors.red,
