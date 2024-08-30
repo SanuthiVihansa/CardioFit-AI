@@ -89,8 +89,8 @@ class UserLoginService {
           "cardiacCondition": user.cardiacCondition,
           "bloodTestType": user.bloodTestType,
           "memberName" :user.memberName,
-          "memberRelationship" : user.memberRelationship,
-          "memberPhoneNo": user.memberPhoneNo,
+          "memberRelationship" : user.memberPhoneNo,
+          "memberPhone": user.memberRelationship,
         };
 
         await document.reference.update(data); // Update the document
