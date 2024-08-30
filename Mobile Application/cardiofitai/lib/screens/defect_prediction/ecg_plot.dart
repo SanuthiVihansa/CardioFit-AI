@@ -8,12 +8,23 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import '../../models/user.dart';
 import 'EmergencyDialog.dart';
+
+// class ECGDiagnosisScreen extends StatefulWidget {
+//   final File file;
+//
+//   const ECGDiagnosisScreen({Key? key, required this.file}) : super(key: key);
+//
+//   @override
+//   _ECGDiagnosisScreenState createState() => _ECGDiagnosisScreenState();
+// }
 
 class ECGDiagnosisScreen extends StatefulWidget {
   final File file;
+  final User user;
 
-  const ECGDiagnosisScreen({Key? key, required this.file}) : super(key: key);
+  const ECGDiagnosisScreen({Key? key, required this.file, required this.user}) : super(key: key);
 
   @override
   _ECGDiagnosisScreenState createState() => _ECGDiagnosisScreenState();
@@ -38,6 +49,37 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
     _processFile();
   }
 
+  // Future<void> _processFile() async {
+  //   try {
+  //     var ecgData = await _readFile(_selectedFile!);
+  //
+  //     setState(() {
+  //       _ecgDataLead1 = ecgData['lead1']!;
+  //       _ecgDataLead2 = ecgData['lead2']!;
+  //     });
+  //
+  //     String predictedLabel = await _predictLabel(_selectedFile!);
+  //     setState(() {
+  //       _predictedLabel = predictedLabel;
+  //       _isLoading = false;
+  //     });
+  //
+  //     // Extract features for both leads
+  //     _extractFeatures(_ecgDataLead1, _featureIndicesLead1);
+  //     _extractFeatures(_ecgDataLead2, _featureIndicesLead2);
+  //
+  //     // Check for emergency condition
+  //     if (predictedLabel == 'Incomplete Right Bundle Branch Block') {
+  //       _showEmergencyDialog('94714204648');
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       _errorMessage = 'Error: $e';
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
+
   Future<void> _processFile() async {
     try {
       var ecgData = await _readFile(_selectedFile!);
@@ -59,7 +101,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
 
       // Check for emergency condition
       if (predictedLabel == 'Incomplete Right Bundle Branch Block') {
-        _showEmergencyDialog('94714204648');
+        _showEmergencyDialog(widget.user.memberRelationship);
       }
     } catch (e) {
       setState(() {

@@ -14,8 +14,10 @@ class User {
   String cardiacCondition;
   String bloodTestType;
   String memberName;
-  String memberRelationship;
   String memberPhoneNo;
+  String memberRelationship;
+
+
 
   User(
       this.name,

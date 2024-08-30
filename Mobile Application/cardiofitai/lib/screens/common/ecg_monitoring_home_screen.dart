@@ -4,12 +4,10 @@ import 'dart:io';
 import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/defect_prediction/ecg_plot.dart';
-import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
 import 'package:cardiofitai/screens/ecg_reconstruction/ecg_history_screen.dart';
 import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_future_use/file_selection_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/electrode_placement_instructions_screen.dart';
-import 'package:cardiofitai/screens/palm_analysis/temp_file_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -60093,13 +60091,27 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
                 ElectrodePlacementInstructionsScreen(widget._user)));
   }
 
+  // void _onTapTempBtn() async {
+  //   try {
+  //     File ecgFile = await _saveLeadsToFile();
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (BuildContext context) => ECGDiagnosisScreen(file: ecgFile),
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     print("Error saving ECG data to file: $e");
+  //     // Optionally, show an error message to the user
+  //   }
+  // }
   void _onTapTempBtn() async {
     try {
       File ecgFile = await _saveLeadsToFile();
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => ECGDiagnosisScreen(file: ecgFile),
+          builder: (BuildContext context) => ECGDiagnosisScreen(file: ecgFile, user: widget._user),
         ),
       );
     } catch (e) {

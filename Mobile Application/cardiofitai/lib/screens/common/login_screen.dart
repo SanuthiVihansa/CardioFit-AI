@@ -107,10 +107,10 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["bloodTestType"] +
         '", "memberName" : "' +
         doc["memberName"] +
-        '", "memberRelationship" : "' +
-        doc["memberRelationship"] +
         '", "memberPhone" : "' +
         doc["memberPhone"] +
+        '", "memberRelationship" : "' +
+        doc["memberRelationship"] +
         '"}';
 
     User user = User(
