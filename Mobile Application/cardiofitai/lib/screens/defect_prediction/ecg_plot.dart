@@ -90,7 +90,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
       });
 
       // Determine the cardiac condition based on the predicted label
-      String cardiacCondition = (predictedLabel == 'Normal') ? 'Normal' : 'Abnormal';
+      String cardiacCondition = (predictedLabel == 'Normal') ? 'Yes' : 'No';
 
       // Update the user's cardiac condition in Firestore
       await _updateCardiacCondition(cardiacCondition);
