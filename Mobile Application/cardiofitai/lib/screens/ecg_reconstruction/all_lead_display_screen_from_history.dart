@@ -576,7 +576,7 @@ class _AllLeadDisplayScreenFromHistoryState
         ),
       );
     } catch (e) {
-      print("Error saving ECG data to file: $e");
+      // print("Error saving ECG data to file: $e");
       // Optionally, show an error message to the user
     }
   }
