@@ -1,9 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cardiofitai/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../defect_prediction/ecg_plot.dart';
 
 class AllLeadDisplayScreenFromHistory extends StatefulWidget {
   const AllLeadDisplayScreenFromHistory(
@@ -156,7 +162,7 @@ class _AllLeadDisplayScreenFromHistoryState
     );
   }
 
-  void _onClickHomeBtn() {
+  void _onTapHomeBtn() {
     Navigator.pop(context);
     Navigator.pop(context);
   }
@@ -196,7 +202,9 @@ class _AllLeadDisplayScreenFromHistoryState
                     Padding(
                       padding: EdgeInsets.only(left: _width / (_devWidth / 20)),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _onTapDiagnoseBtn();
+                        },
                         style: ButtonStyle(
                           fixedSize: WidgetStateProperty.all<Size>(
                             Size(
@@ -216,7 +224,7 @@ class _AllLeadDisplayScreenFromHistoryState
                       padding: EdgeInsets.only(left: _width / (_devWidth / 20)),
                       child: ElevatedButton(
                         onPressed: () {
-                          _onClickHomeBtn();
+                          _onTapHomeBtn();
                         },
                         style: ButtonStyle(
                           fixedSize: WidgetStateProperty.all<Size>(
@@ -556,6 +564,46 @@ class _AllLeadDisplayScreenFromHistoryState
         ],
       ),
     );
+  }
+
+  Future<void> _onTapDiagnoseBtn() async {
+    try {
+      File ecgFile = await _saveLeadsToFile();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => ECGDiagnosisScreen(file: ecgFile, user: widget._user),
+        ),
+      );
+    } catch (e) {
+      print("Error saving ECG data to file: $e");
+      // Optionally, show an error message to the user
+    }
+  }
+
+  Future<File> _saveLeadsToFile() async {
+    Map<String, List<double>> ecgData = {
+      'l1': widget.l1Data,
+      'l2': widget.l2Data,
+      'l3': widget.l3Data,
+      'avr': widget.avrData,
+      'avl': widget.avlData,
+      'avf': widget.avfData,
+      'v1': widget.v1Data,
+      'v2': widget.v2Data,
+      'v3': widget.v3Data,
+      'v4': widget.v4Data,
+      'v5': widget.v5Data,
+      'v6': widget.v6Data,
+    };
+
+    String jsonString = jsonEncode(ecgData);
+
+    Directory directory = await getApplicationDocumentsDirectory();
+    String filePath = '${directory.path}/ecg_data.txt';
+    File file = File(filePath);
+
+    return file.writeAsString(jsonString);
   }
 
   @override
