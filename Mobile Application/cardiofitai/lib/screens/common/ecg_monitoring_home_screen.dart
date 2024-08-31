@@ -5,10 +5,7 @@ import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/defect_prediction/ecg_plot.dart';
 import 'package:cardiofitai/screens/ecg_reconstruction/ecg_history_screen.dart';
-import 'package:cardiofitai/screens/facial_analysis/facial_analysis_home.dart';
-import 'package:cardiofitai/screens/palm_analysis/for_future_use/file_selection_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/electrode_placement_instructions_screen.dart';
-import 'package:cardiofitai/screens/palm_analysis/temp_file_selection_screen.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,7 +29,9 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
   late double _height;
   final double _devWidth = 753.4545454545455;
   final double _devHeight = 392.72727272727275;
+  // ignore: unused_field
   final double _hDevWidth = 1280.0;
+  // ignore: unused_field
   final double _hDevHeight = 740.0;
 
   final double iconSize = 100;
