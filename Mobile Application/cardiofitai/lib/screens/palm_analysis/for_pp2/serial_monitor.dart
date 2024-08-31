@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cardiofitai/models/user.dart';
-import 'package:cardiofitai/screens/palm_analysis/for_pp2/usb_permission_manager.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/widgets/device_disconnect.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/widgets/recording_plot.dart';
 import 'package:flutter/material.dart';
