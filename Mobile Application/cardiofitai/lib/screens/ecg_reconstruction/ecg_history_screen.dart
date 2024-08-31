@@ -88,8 +88,11 @@ class _EcgHistoryScreenState extends State<EcgHistoryScreen> {
                 ),
               )
             : _ecgHistoryData.isEmpty
-                ? const Center(
-                    child: Text("No ECG History"),
+                ? Center(
+                    child: Text(
+                      "No ECG History",
+                      style: TextStyle(fontSize: _height / (_devHeight / 10)),
+                    ),
                   )
                 : Padding(
                     padding: EdgeInsets.symmetric(
@@ -114,7 +117,8 @@ class _EcgHistoryScreenState extends State<EcgHistoryScreen> {
                               itemBuilder: (context, index) => Column(
                                     children: [
                                       ListTile(
-                                        leading: const Icon(Icons.monitor_heart),
+                                        leading:
+                                            const Icon(Icons.monitor_heart),
                                         title: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
