@@ -75,21 +75,21 @@ class _EcgHistoryScreenState extends State<EcgHistoryScreen> {
         appBar: AppBar(
           backgroundColor: Colors.red,
           foregroundColor: Colors.white,
-          title: Text(
+          title: const Text(
             "ECG History",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         body: _isLoading == true
-            ? Center(
+            ? const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [CircularProgressIndicator(), Text("Loading")],
                 ),
               )
-            : _ecgHistoryData.length == 0
-                ? Center(
-                    child: Text("No ECG Hostory"),
+            : _ecgHistoryData.isEmpty
+                ? const Center(
+                    child: Text("No ECG History"),
                   )
                 : Padding(
                     padding: EdgeInsets.symmetric(
@@ -114,7 +114,7 @@ class _EcgHistoryScreenState extends State<EcgHistoryScreen> {
                               itemBuilder: (context, index) => Column(
                                     children: [
                                       ListTile(
-                                        leading: Icon(Icons.monitor_heart),
+                                        leading: const Icon(Icons.monitor_heart),
                                         title: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
@@ -133,7 +133,7 @@ class _EcgHistoryScreenState extends State<EcgHistoryScreen> {
                                             ),
                                           ],
                                         ),
-                                        trailing: Icon(
+                                        trailing: const Icon(
                                             Icons.arrow_forward_ios_outlined),
                                         onTap: () {
                                           _onTapSingleRecord(
@@ -165,7 +165,7 @@ class _EcgHistoryScreenState extends State<EcgHistoryScreen> {
                                                   ["datetime"]);
                                         },
                                       ),
-                                      Divider()
+                                      const Divider()
                                     ],
                                   )),
                         ),
