@@ -469,6 +469,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           //     const DataCell(Text(""))
           //   ]));
           // }
+          //;
           _reportDataRows.add(_singleReportDataRows);
         }
       }
