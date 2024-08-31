@@ -215,20 +215,6 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
     setState(() {
       _loadingSpinnerText = "Please wait...";
     });
-    // Map<String, dynamic> ecgData = {
-    //   "l1": actl1Data,
-    //   "l2": predl2Data,
-    //   "l3": predl3Data,
-    //   "avr": predavrData,
-    //   "avl": predavlData,
-    //   "avf": predavfData,
-    //   "v1": predv1Data,
-    //   "v2": predv2Data,
-    //   "v3": predv3Data,
-    //   "v4": predv4Data,
-    //   "v5": predv5Data,
-    //   "v6": predv6Data,
-    // };
     Response response = await EcgService.addECG(
         widget._user.email,
         actl1Data,
@@ -324,7 +310,7 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all<Size>(
+                          fixedSize: WidgetStateProperty.all<Size>(
                             Size(
                                 _width / (_devWidth / 120.0),
                                 _height /
@@ -345,7 +331,7 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
                           _onClickHomeBtn();
                         },
                         style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all<Size>(
+                          fixedSize: WidgetStateProperty.all<Size>(
                             Size(
                                 _width / (_devWidth / 120.0),
                                 _height /
@@ -404,7 +390,7 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
 
   Widget _leadSelectionDropDown() {
     return Container(
-      width: 200,
+      width: _width / (_devWidth / 100),
       decoration: BoxDecoration(border: Border.all(color: Colors.black)),
       child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
