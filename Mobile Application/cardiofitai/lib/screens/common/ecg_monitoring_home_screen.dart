@@ -40,12 +40,6 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
   final double buttonLength = 400;
   final double buttonRoundness = 150;
 
-  late double responsiveIconSize = _height / (_hDevHeight / iconSize);
-  late double responsiveIconTextFontSize =
-      _width / (_hDevWidth / iconTextFontSize);
-  late double responsiveButtonLength = _width / (_hDevWidth / buttonLength);
-  late double responsiveButtonRoundness =
-      _width / (_hDevWidth / buttonRoundness);
   List<Map<String, dynamic>> _lastEcgData = [];
   bool _lastEcgIsLoading = true;
 
@@ -60291,20 +60285,6 @@ class _ECGMonitoringHomeScreenState extends State<ECGMonitoringHomeScreen> {
                 ElectrodePlacementInstructionsScreen(widget._user)));
   }
 
-  // void _onTapTempBtn() async {
-  //   try {
-  //     File ecgFile = await _saveLeadsToFile();
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (BuildContext context) => ECGDiagnosisScreen(file: ecgFile),
-  //       ),
-  //     );
-  //   } catch (e) {
-  //     print("Error saving ECG data to file: $e");
-  //     // Optionally, show an error message to the user
-  //   }
-  // }
   void _onTapTempBtn() async {
     try {
       File ecgFile = await _saveLeadsToFile();
