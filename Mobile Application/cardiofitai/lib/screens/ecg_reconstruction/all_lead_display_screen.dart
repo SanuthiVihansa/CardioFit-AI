@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/services/ecg_service.dart';
@@ -7,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 import '../../models/response.dart';
+import '../defect_prediction/ecg_plot.dart';
 
 class AllLeadDisplayScreen extends StatefulWidget {
   const AllLeadDisplayScreen(this.l1Data, this._user, {super.key});
@@ -308,7 +311,9 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
                     Padding(
                       padding: EdgeInsets.only(left: _width / (_devWidth / 20)),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _onTapDiagnoseBtn();
+                        },
                         style: ButtonStyle(
                           fixedSize: WidgetStateProperty.all<Size>(
                             Size(
@@ -640,6 +645,47 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
                 _calcMax(predv6Data), Colors.blue)),
       ],
     );
+  }
+
+  Future<void> _onTapDiagnoseBtn() async {
+    try {
+      File ecgFile = await _saveLeadsToFile();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) =>
+              ECGDiagnosisScreen(file: ecgFile, user: widget._user),
+        ),
+      );
+    } catch (e) {
+      // print("Error saving ECG data to file: $e");
+      // Optionally, show an error message to the user
+    }
+  }
+
+  Future<File> _saveLeadsToFile() async {
+    Map<String, List<double>> ecgData = {
+      'l1': widget.l1Data,
+      'l2': predl2Data,
+      'l3': predl3Data,
+      'avr': predavrData,
+      'avl': predavlData,
+      'avf': predavfData,
+      'v1': predv1Data,
+      'v2': predv2Data,
+      'v3': predv3Data,
+      'v4': predv4Data,
+      'v5': predv5Data,
+      'v6': predv6Data,
+    };
+
+    String jsonString = jsonEncode(ecgData);
+
+    Directory directory = await getApplicationDocumentsDirectory();
+    String filePath = '${directory.path}/ecg_data.txt';
+    File file = File(filePath);
+
+    return file.writeAsString(jsonString);
   }
 
   @override
