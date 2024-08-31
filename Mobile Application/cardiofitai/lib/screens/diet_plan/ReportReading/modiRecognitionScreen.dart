@@ -430,41 +430,95 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             final responseData = await http.Response.fromStream(response);
             Map<String, dynamic> responseJson = json.decode(responseData.body);
             responseJson = responseJson["extracted_text"];
-
             _singleReportDataRows.add(DataRow(cells: [
-              DataCell(Text("Total Cholestrol")),
-              DataCell(Text(responseJson["Total Cholestrol?"].toString())),
-              DataCell(Text(responseJson["Total Cholestrol Result"].toString()))
+              DataCell(Text("WBC")),
+              DataCell(Text(responseJson["WBC?"].toString())),
+              DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
-              DataCell(Text("Triglycerides")),
-              DataCell(Text(responseJson["Triglycerides?"].toString())),
-              DataCell(Text(responseJson["Triglycerides Result"].toString()))
+              DataCell(Text("Neutrophils")),
+              DataCell(Text(responseJson["Neutrophils"].toString())),
+              DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
-              DataCell(Text("HDL Cholesterol")),
-              DataCell(Text(responseJson["HDL Cholesterol?"].toString())),
-              DataCell(Text(responseJson["HDL Cholesterol Result"].toString()))
+              DataCell(Text("Lymphocytes")),
+              DataCell(Text(responseJson["Lymphocytes?"].toString())),
+              DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
-              DataCell(Text("LDL Cholesterol")),
-              DataCell(Text(responseJson["LDL Cholesterol?"].toString())),
-              DataCell(Text(responseJson["LDL Cholesterol Result"].toString()))
+              DataCell(Text("Eosinophils")),
+              DataCell(Text(responseJson["Eosinophils"].toString())),
+              DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
-              DataCell(Text("VLDL")),
-              DataCell(Text(responseJson["VLDL?"].toString())),
-              DataCell(Text(responseJson["VLDL Result?"].toString()))
+              DataCell(Text("Monocytes")),
+              DataCell(Text(responseJson["Monocytes?"].toString())),
+              DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
-              DataCell(Text("CHOL/HDLC")),
-              DataCell(Text(responseJson["CHOL/HDLC?"].toString())),
-              DataCell(Text(responseJson["CHOL/HDLC Result"].toString()))
+              DataCell(Text("Basophils")),
+              DataCell(Text(responseJson["Basophils"].toString())),
+              DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
-              DataCell(Text("Non HDL Cholestrol")),
-              DataCell(Text(responseJson["Non HDL Cholestrol?"].toString())),
-              DataCell(Text(responseJson["Non HDL Cholestrol unit"].toString()))
+              DataCell(Text("Haemoglobin")),
+              DataCell(Text(responseJson["Haemoglobin?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("PCV")),
+              DataCell(Text(responseJson["PCV?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("MCHC")),
+              DataCell(Text(responseJson["MCHC?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("RBC")),
+              DataCell(Text(responseJson["RBC?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("MCH")),
+              DataCell(Text(responseJson["MCH?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("MCV")),
+              DataCell(Text(responseJson["MCV?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Neutrophils absolute count")),
+              DataCell(Text(responseJson["Neutrophils absolute count?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Lymphocytes absolute count")),
+              DataCell(Text(responseJson["Lymphocytes absolute count?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Eosinophil absolute count")),
+              DataCell(Text(responseJson["Eosinophil absolute count?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Monocytes absolute count")),
+              DataCell(Text(responseJson["Monocytes absolute count?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Basophils absolute count")),
+              DataCell(Text(responseJson["Basophils absolute count?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Platelet count")),
+              DataCell(Text(responseJson["Platelet count?"].toString())),
+              DataCell(Text(""))
             ]));
 
             _reportDataRows.add(_singleReportDataRows);
