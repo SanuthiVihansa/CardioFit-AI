@@ -462,10 +462,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             builder: (BuildContext context) => DietHomePage(widget.user)));
   }
 
-  void _onClickDiseasePredictionBtn() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (BuildContext context) => ReportHome()));
-  }
+  // void _onClickDiseasePredictionBtn() {
+  //   Navigator.push(context,
+  //       MaterialPageRoute(builder: (BuildContext context) => ReportHome()));
+  // }
 
   @override
   Widget build(BuildContext context) {

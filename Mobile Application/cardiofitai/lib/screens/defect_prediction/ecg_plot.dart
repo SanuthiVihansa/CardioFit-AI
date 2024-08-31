@@ -8,12 +8,16 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import '../../models/user.dart';
+import '../../services/user_information_service.dart';
 import 'EmergencyDialog.dart';
+
 
 class ECGDiagnosisScreen extends StatefulWidget {
   final File file;
+  final User user;
 
-  const ECGDiagnosisScreen({Key? key, required this.file}) : super(key: key);
+  const ECGDiagnosisScreen({Key? key, required this.file, required this.user}) : super(key: key);
 
   @override
   _ECGDiagnosisScreenState createState() => _ECGDiagnosisScreenState();
@@ -38,6 +42,38 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
     _processFile();
   }
 
+
+  // Future<void> _processFile() async {
+  //   try {
+  //     var ecgData = await _readFile(_selectedFile!);
+  //
+  //     setState(() {
+  //       _ecgDataLead1 = ecgData['lead1']!;
+  //       _ecgDataLead2 = ecgData['lead2']!;
+  //     });
+  //
+  //     String predictedLabel = await _predictLabel(_selectedFile!);
+  //     setState(() {
+  //       _predictedLabel = predictedLabel;
+  //       _isLoading = false;
+  //     });
+  //
+  //     // Extract features for both leads
+  //     _extractFeatures(_ecgDataLead1, _featureIndicesLead1);
+  //     _extractFeatures(_ecgDataLead2, _featureIndicesLead2);
+  //
+  //     // Check for emergency condition
+  //     if (predictedLabel == 'Incomplete Right Bundle Branch Block') {
+  //       _showEmergencyDialog(widget.user.memberRelationship);
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       _errorMessage = 'Error: $e';
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
+
   Future<void> _processFile() async {
     try {
       var ecgData = await _readFile(_selectedFile!);
@@ -53,18 +89,48 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
         _isLoading = false;
       });
 
+      // Determine the cardiac condition based on the predicted label
+      String cardiacCondition = (predictedLabel == 'Normal') ? 'Yes' : 'No';
+
+      // Update the user's cardiac condition in Firestore
+      await _updateCardiacCondition(cardiacCondition);
+
       // Extract features for both leads
       _extractFeatures(_ecgDataLead1, _featureIndicesLead1);
       _extractFeatures(_ecgDataLead2, _featureIndicesLead2);
 
       // Check for emergency condition
-      if (predictedLabel == 'Incomplete Right Bundle Branch Block') {
-        _showEmergencyDialog('94714204648');
+      if (predictedLabel == 'Incomplete Right Bundle Branch Block'||
+          predictedLabel == 'Abnormal QRS'||
+          predictedLabel == 'Inferior Myocardial Infarction'||
+          predictedLabel == 'Ventricular Tachycardia') {
+        _showEmergencyDialog(widget.user.memberRelationship);
       }
     } catch (e) {
       setState(() {
         _errorMessage = 'Error: $e';
         _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _updateCardiacCondition(String cardiacCondition) async {
+    try {
+      // Create an instance of the UserLoginService
+      UserLoginService userLoginService = UserLoginService();
+
+      // Update the user object with the new cardiac condition
+      User updatedUser = widget.user.copyWith(cardiacCondition: cardiacCondition);
+
+      // Call the updateUser method to save the changes in Firestore
+      await UserLoginService.updateUser(updatedUser);
+
+      setState(() {
+        widget.user.cardiacCondition = cardiacCondition; // Update the local user object
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to update cardiac condition: $e';
       });
     }
   }
