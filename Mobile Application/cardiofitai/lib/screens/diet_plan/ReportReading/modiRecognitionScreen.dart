@@ -277,8 +277,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             }
             _reportDataRows.add(_singleReportDataRows);
           }
-        } else if (_selectedReports[i]["UploadedReport"] ==
-            "Urine Full Report") {
+        }
+        else if (_selectedReports[i]["UploadedReport"] == "Urine Full Report") {
           var request = http.MultipartRequest(
               "POST",
               Uri.parse(
@@ -394,29 +394,87 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
             _reportDataRows.add(_singleReportDataRows);
           }
-        } else if (_selectedReports[i]["UploadedReport"] == "Lipid Profile") {
-        } else if (_selectedReports[i]["UploadedReport"] ==
-            "Full Blood Count Report") {
-          List<String> results = [];
-          results = await apiService.sendImagesToGPT4VisionReports(
-              images: _pickedImages);
-          Map<String, dynamic> decodedJson =
-              json.decode(results[0].substring(8, results[0].length - 4));
-          for (int i = 0; i < decodedJson.keys.toList().length; i++) {
+        }
+        else if (_selectedReports[i]["UploadedReport"] == "Lipid profile")  {
+          var request = http.MultipartRequest(
+              "POST",
+              Uri.parse(
+                  "https://sanuthivihansa.pythonanywhere.com/lipid/extract-text"));
+          request.files.add(
+              await http.MultipartFile.fromPath('file', _pickedImages[i].path));
+          final response = await request.send();
+          if (response.statusCode == 200) {
+            final responseData = await http.Response.fromStream(response);
+            Map<String, dynamic> responseJson = json.decode(responseData.body);
+            responseJson = responseJson["extracted_text"];
+
             _singleReportDataRows.add(DataRow(cells: [
-              DataCell(Text(decodedJson.keys.toList()[i])),
-              DataCell(
-                  Text(decodedJson[decodedJson.keys.toList()[i].toString()])),
-              const DataCell(Text(""))
+              DataCell(Text("Total Cholestrol")),
+              DataCell(Text(responseJson["Total Cholestrol?"].toString())),
+              DataCell(Text(responseJson["Total Cholestrol Result"].toString()))
             ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Triglycerides")),
+              DataCell(Text(responseJson["Triglycerides?"].toString())),
+              DataCell(Text(responseJson["Triglycerides Result"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("HDL Cholesterol")),
+              DataCell(Text(responseJson["HDL Cholesterol?"].toString())),
+              DataCell(Text(responseJson["HDL Cholesterol Result"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("LDL Cholesterol")),
+              DataCell(Text(responseJson["LDL Cholesterol?"].toString())),
+              DataCell(Text(responseJson["LDL Cholesterol Result"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("VLDL")),
+              DataCell(Text(responseJson["VLDL?"].toString())),
+              DataCell(Text(responseJson["VLDL Result?"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("CHOL/HDLC")),
+              DataCell(Text(responseJson["CHOL/HDLC?"].toString())),
+              DataCell(Text(responseJson["CHOL/HDLC Result"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Non HDL Cholestrol")),
+              DataCell(Text(responseJson["Non HDL Cholestrol?"].toString())),
+              DataCell(Text(responseJson["Non HDL Cholestrol unit"].toString()))
+            ]));
+
+
+            _reportDataRows.add(_singleReportDataRows);
           }
+        }
+        else if (_selectedReports[i]["UploadedReport"] == "Full Blood Count Report") {
+          List<String> results = [];
+
+
+
+
+
+
+          //Code to get results using GPT-4.0 model
+          // results = await apiService.sendImagesToGPT4VisionReports(
+          //     images: _pickedImages);
+          // Map<String, dynamic> decodedJson =
+          //     json.decode(results[0].substring(8, results[0].length - 4));
+          // for (int i = 0; i < decodedJson.keys.toList().length; i++) {
+          //   _singleReportDataRows.add(DataRow(cells: [
+          //     DataCell(Text(decodedJson.keys.toList()[i])),
+          //     DataCell(
+          //         Text(decodedJson[decodedJson.keys.toList()[i].toString()])),
+          //     const DataCell(Text(""))
+          //   ]));
+          // }
           _reportDataRows.add(_singleReportDataRows);
         }
       }
     }
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => ReportAnalysisScreen(
-            // extractedText,
             _selectedReports,
             _reportDataRows,
             widget.user)));
