@@ -31,7 +31,7 @@
       <excludeFolder url="file://$MODULE_DIR$/Mobile Application/cardiofitai/linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/Mobile Application/cardiofitai/linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux/example/build" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="research" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />
     <orderEntry type="library" name="Dart Packages" level="project" />
