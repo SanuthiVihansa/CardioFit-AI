@@ -1,5 +1,5 @@
 import processing.serial.*;
- 
+
 Serial myPort;        // The serial port
 int xPos = 1;         // horizontal position of the graph
 float height_old = 0;
@@ -12,12 +12,12 @@ int beatIndex;
 float threshold = 620.0;  //Threshold at which BPM calculation occurs
 boolean belowThreshold = true;
 PFont font;
- 
- 
+
+
 void setup () {
   // set the window size:
-  size(1000, 400);        
- 
+  size(1000, 400);
+
   // List all the available serial ports
   println(Serial.list());
   // Open whatever port is the one you're using.
@@ -28,25 +28,25 @@ void setup () {
   background(0xff);
   font = createFont("Ariel", 12, true);
 }
- 
- 
+
+
 void draw () {
   //Map and draw the line for new data point
   inByte = map(inByte, 0, 1023, 0, height);
-  height_new = height - inByte; 
+  height_new = height - inByte;
   line(xPos - 1, height_old, xPos, height_new);
   height_old = height_new;
-    
+
   // at the edge of the screen, go back to the beginning:
   if (xPos >= width) {
     xPos = 0;
     background(0xff);
-  } 
+  }
   else {
     // increment the horizontal position:
     xPos++;
   }
-      
+
   // draw text for BPM periodically
   if (millis() % 128 == 0){
     fill(0xFF);
@@ -55,26 +55,26 @@ void draw () {
     text("BPM: " + inByte, 15, 10);
   }
 }
- 
-void serialEvent (Serial myPort) 
+
+void serialEvent (Serial myPort)
 {
   // get the ASCII string:
   String inString = myPort.readStringUntil('\n');
- 
+
   if (inString != null){
     // trim off any whitespace:
     inString = trim(inString);
- 
+
     // If leads off detection is true notify with blue line
-    if (inString.equals("!")){ 
+    if (inString.equals("!")){
       stroke(0, 0, 0xff); //Set stroke to blue ( R, G, B)
       inByte = 512;  // middle of the ADC range (Flat Line)
     }
     // If the data is good let it through
     else{
       stroke(0xff, 0, 0); //Set stroke to red ( R, G, B)
-      inByte = float(inString); 
-      
+      inByte = float(inString);
+
       // BPM calculation check
       if (inByte > threshold && belowThreshold == true){
         calculateBPM();
@@ -86,8 +86,8 @@ void serialEvent (Serial myPort)
     }
   }
 }
-  
-void calculateBPM (){  
+
+void calculateBPM (){
   int beat_new = millis();    // get the current millisecond
   int diff = beat_new - beat_old;    // find the time between the last two beats
   float currentBPM = 60000 / diff;    // convert to beats per minute

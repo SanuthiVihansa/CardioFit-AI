@@ -3,20 +3,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter, savgol_filter, resample
 
-# GPT
+# Version 1
 def butter_lowpass(cutoff, fs, order=5):
     nyq = 0.5 * fs
     normal_cutoff = cutoff / nyq
     b, a = butter(order, normal_cutoff, btype='low', analog=False)
     return b, a
 
-# GPT
+# Version 1
 def butter_lowpass_filter(data, cutoff, fs, order=5):
     b, a = butter_lowpass(cutoff, fs, order=order)
     y = lfilter(b, a, data)
     return y
 
-# MY FUNCTION
+# Version 2
 def apply_savitzky_golay_filter_x(data):
   window_length = 31
   polyorder = 3
@@ -24,7 +24,7 @@ def apply_savitzky_golay_filter_x(data):
   x = savgol_filter(x.squeeze(), window_length, polyorder)
   return x[:, np.newaxis]
 
-# my function
+# Version 2
 def butter_highpass_filter(data, cutoff_frequency, fs, order=4):
     nyquist = 0.5 * fs
     normal_cutoff = cutoff_frequency / nyquist
@@ -32,7 +32,7 @@ def butter_highpass_filter(data, cutoff_frequency, fs, order=4):
     filtered_data = lfilter(b, a, data)
     return filtered_data
 
-# my function
+# Version 2
 def butter_lowpass_filter(data, cutoff_frequency, fs, order=4):
     nyquist = 0.5 * fs
     normal_cutoff = cutoff_frequency / nyquist
