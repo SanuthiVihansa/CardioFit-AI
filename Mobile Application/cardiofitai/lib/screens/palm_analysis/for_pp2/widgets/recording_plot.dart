@@ -109,7 +109,7 @@ class RecordingPlot extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "Lead II ECG Signal",
+                "Lead I ECG Signal",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               // Text("Remaining time: $_countdown s")
