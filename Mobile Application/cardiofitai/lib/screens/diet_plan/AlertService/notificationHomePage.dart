@@ -4,7 +4,7 @@ import 'package:alarm/model/alarm_settings.dart';
 import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/medicineAlertScreen.dart';
-import 'package:cardiofitai/screens/diet_plan/AlertService/ring.dart';
+import 'package:cardiofitai/screens/diet_plan/AlertService/alarmNotfication.dart';
 import 'package:cardiofitai/services/medicineReminderService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
