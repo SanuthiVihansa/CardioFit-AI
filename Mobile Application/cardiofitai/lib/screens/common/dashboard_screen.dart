@@ -487,6 +487,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         backgroundColor: const Color(0xFFFF5B61),
+        leading: Icon(CupertinoIcons.back,color: Colors.red,),
       ),
       // drawer: LeftNavBar(
       //   user: widget.user,
