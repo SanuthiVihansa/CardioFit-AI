@@ -1191,8 +1191,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.red,
           leading: IconButton(
-            color: Colors.black,
+            color: Colors.white,
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)=>DashboardScreen(widget.user)));
@@ -1200,7 +1201,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
           ),
           title: Align(
               alignment: Alignment.center,
-              child: Text('Customised Dietary Advice')),
+              child: Text('Customised Dietary Advice',style: TextStyle(color: Colors.white),)),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
