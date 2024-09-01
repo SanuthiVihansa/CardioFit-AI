@@ -19,6 +19,7 @@ class User {
   String memberRelationship;
   String memberPhoneNo;
   bool newUser;
+  String gender;
 
   User(
       this.name,
@@ -38,5 +39,6 @@ class User {
       this.memberName,
       this.memberPhoneNo,
       this.memberRelationship,
-      this.newUser);
+      this.newUser,
+      this.gender);
 }

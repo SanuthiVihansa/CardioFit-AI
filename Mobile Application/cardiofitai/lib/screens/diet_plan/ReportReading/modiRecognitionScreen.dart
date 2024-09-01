@@ -603,7 +603,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                     widget.user.memberName,
                                     widget.user.memberRelationship,
                                     widget.user.memberPhoneNo,
-                                    false // Update newUser field to false
+                                    false,
+                                  widget.user.gender
                                     );
 
                                 Response response =

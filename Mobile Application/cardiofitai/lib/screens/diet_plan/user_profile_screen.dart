@@ -29,6 +29,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final _weightController = TextEditingController();
   final _caluclateBMIController = TextEditingController();
   final DateTime _dateOfBirth = DateTime.now();
+  final _genderController = TextEditingController();
+
   String dropdownValue = 'Less Active';
   late QuerySnapshot<Object?> _userSignUpInfo;
 
@@ -53,6 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _weightController.text = _userSignUpInfo.docs[0]["weight"];
     _caluclateBMIController.text = _userSignUpInfo.docs[0]["bmi"];
     dropdownValue = _userSignUpInfo.docs[0]["activeLevel"];
+    _genderController.text = _userSignUpInfo.docs[0]["gender"];
   }
 
   //Function to calculate BMI
@@ -87,6 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 userName(),
                 dateOfBirth(),
+                GenderDropdown(),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Row(
@@ -316,7 +320,9 @@ class _ProfilePageState extends State<ProfilePage> {
             widget.user.memberName,
             widget.user.memberRelationship,
             widget.user.memberPhoneNo,
-            false);
+            false,
+            _genderController.text
+        );
         UserLoginService.updateUser(updatedUserInfo);
         if(widget.user.newUser == false){
           Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -328,4 +334,28 @@ class _ProfilePageState extends State<ProfilePage> {
         }
 
       });
+  Widget GenderDropdown() => DropdownButtonFormField<String>(
+    value: _genderController.text.isNotEmpty ? _genderController.text : null,
+    onChanged: (String? newValue) {
+      setState(() {
+        _genderController.text = newValue!;
+      });
+    },
+    decoration: InputDecoration(
+      labelText: 'Gender',
+      border: OutlineInputBorder(),
+    ),
+    items: const [
+      DropdownMenuItem<String>(
+        value: 'Female',
+        child: Text('Female'),
+      ),
+      DropdownMenuItem<String>(
+        value: 'Male',
+        child: Text('Male'),
+      ),
+    ],
+  );
+
+
 }

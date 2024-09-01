@@ -261,7 +261,7 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       widget.user.memberName,
       widget.user.memberRelationship,
       widget.user.memberPhoneNo,
-      widget.user.newUser,
+      widget.user.newUser, widget.user.gender
     );
 
     // Update the user information in the database

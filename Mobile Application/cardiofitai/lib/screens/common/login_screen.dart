@@ -114,6 +114,9 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["memberPhone"] +
         '", "newUser" : "' +
         doc["newUser"].toString() +
+        '"}'+
+        '", "gender" : "' +
+        doc["gender"].toString() +
         '"}';
 
     User user = User(
@@ -134,7 +137,8 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["memberName"],
         doc["memberRelationship"],
         doc["memberPhone"],
-        doc["newUser"]);
+        doc["newUser"],
+        doc["gender"]);
 
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;

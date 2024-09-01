@@ -34,7 +34,8 @@ class UserLoginService {
       String memberName,
       String memberRelationship,
       String memberPhone,
-      bool newUser
+      bool newUser,
+      String gender
       ) async {
     Response response = Response();
     Map<String, dynamic> data = <String, dynamic>{
@@ -55,7 +56,8 @@ class UserLoginService {
       "memberName": memberName,
       "memberRelationship": memberRelationship,
       "memberPhone": memberPhone,
-      "newUser":newUser
+      "newUser":newUser,
+      "gender":gender
     };
 
     await userCollectionReference.doc().set(data).whenComplete(() {
@@ -97,7 +99,8 @@ class UserLoginService {
           "memberName" :user.memberName,
           "memberRelationship" : user.memberRelationship,
           "memberPhoneNo": user.memberPhoneNo,
-          "newUser":user.newUser
+          "newUser":user.newUser,
+          "gender":user.gender
         };
 
         await document.reference.update(data); // Update the document
@@ -140,6 +143,8 @@ class UserLoginService {
             data["memberPhone"] +
             '", "newUser" : "' +
             data["newUser"].toString() +
+            '", "gender" : "' +
+            data["gender"].toString() +
             '"}';
 
         final directory = await getApplicationDocumentsDirectory();
