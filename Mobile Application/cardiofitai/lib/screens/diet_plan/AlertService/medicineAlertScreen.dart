@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:cardiofitai/models/user.dart';
-import 'package:cardiofitai/screens/diet_plan/AlertService/confirmAlarmScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
