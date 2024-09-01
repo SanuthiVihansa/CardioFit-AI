@@ -114,7 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
         doc["memberPhone"] +
         '", "newUser" : "' +
         doc["newUser"].toString() +
-        '"}'+
         '", "gender" : "' +
         doc["gender"].toString() +
         '"}';

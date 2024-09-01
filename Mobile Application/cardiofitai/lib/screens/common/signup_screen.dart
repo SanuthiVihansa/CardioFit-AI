@@ -19,8 +19,10 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _memberNameController = TextEditingController();
-  final TextEditingController _memberRelationshipController = TextEditingController();
-  final TextEditingController _memberPhoneNoController = TextEditingController();
+  final TextEditingController _memberRelationshipController =
+      TextEditingController();
+  final TextEditingController _memberPhoneNoController =
+      TextEditingController();
   late double _width;
   late double _height;
 
@@ -68,6 +70,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
     return null;
   }
+
   //Member Relationship Field Validation
   String? _validateMemberRelationship(String text) {
     if (text == "") {
@@ -90,9 +93,6 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
-
-
-
   Future<void> _onTapCreateAccount() async {
     Response response = await UserLoginService.addAccount(
         _nameController.text,
@@ -112,8 +112,8 @@ class _SignUpPageState extends State<SignUpPage> {
         _memberNameController.text,
         _memberRelationshipController.text,
         _memberPhoneNoController.text,
-      true,""
-    );
+        true,
+        "");
     if (response.code == 200) {
       Fluttertoast.showToast(
           msg: "Account Created Successfully!🎉",
@@ -232,9 +232,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             suffixIcon: _memberNameController.text.isEmpty
                                 ? Container(width: 0)
                                 : IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () => _memberNameController.clear(),
-                            ),
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () =>
+                                        _memberNameController.clear(),
+                                  ),
                             border: const OutlineInputBorder(),
                           ),
                         ),
@@ -253,12 +254,14 @@ class _SignUpPageState extends State<SignUpPage> {
                             labelText: "Guardian Relationship",
                             hintText: 'Mother',
                             prefixIcon: const Icon(Icons.person),
-                            suffixIcon: _memberRelationshipController.text.isEmpty
+                            suffixIcon: _memberRelationshipController
+                                    .text.isEmpty
                                 ? Container(width: 0)
                                 : IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () => _memberRelationshipController.clear(),
-                            ),
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () =>
+                                        _memberRelationshipController.clear(),
+                                  ),
                             border: const OutlineInputBorder(),
                           ),
                         ),
@@ -280,9 +283,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             suffixIcon: _memberPhoneNoController.text.isEmpty
                                 ? Container(width: 0)
                                 : IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () => _memberPhoneNoController.clear(),
-                            ),
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () =>
+                                        _memberPhoneNoController.clear(),
+                                  ),
                             border: const OutlineInputBorder(),
                           ),
                         ),

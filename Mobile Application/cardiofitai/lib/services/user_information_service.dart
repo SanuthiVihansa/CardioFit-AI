@@ -35,8 +35,7 @@ class UserLoginService {
       String memberRelationship,
       String memberPhone,
       bool newUser,
-      String gender
-      ) async {
+      String gender) async {
     Response response = Response();
     Map<String, dynamic> data = <String, dynamic>{
       "name": name,
@@ -56,8 +55,8 @@ class UserLoginService {
       "memberName": memberName,
       "memberRelationship": memberRelationship,
       "memberPhone": memberPhone,
-      "newUser":newUser,
-      "gender":gender
+      "newUser": newUser,
+      "gender": gender
     };
 
     await userCollectionReference.doc().set(data).whenComplete(() {
@@ -96,11 +95,11 @@ class UserLoginService {
           "bloodCholestrolLevel": user.bloodCholestrolLevel,
           "cardiacCondition": user.cardiacCondition,
           "bloodTestType": user.bloodTestType,
-          "memberName" :user.memberName,
-          "memberRelationship" : user.memberRelationship,
+          "memberName": user.memberName,
+          "memberRelationship": user.memberRelationship,
           "memberPhoneNo": user.memberPhoneNo,
-          "newUser":user.newUser,
-          "gender":user.gender
+          "newUser": user.newUser,
+          "gender": user.gender
         };
 
         await document.reference.update(data); // Update the document
@@ -151,12 +150,6 @@ class UserLoginService {
         final path = directory.path;
         File file = File('$path/userdata.txt');
         file.writeAsString(userData);
-
-
-
-
-
-
       } else {
         response.code = 404;
         response.message = "User not found";
@@ -185,22 +178,57 @@ class UserLoginService {
         QueryDocumentSnapshot document = querySnapshot.docs[0];
 
         // Create a map containing only the newUser field
-        Map<String, dynamic> data = <String, dynamic>{
-          "newUser": user.newUser
-        };
+        Map<String, dynamic> data = <String, dynamic>{"newUser": user.newUser};
 
         // Update the document with the newUser field
         await document.reference.update(data);
 
         response.code = 200;
         response.message = "User Information updated!";
-        String userData = '{"newUser" : "' + data["newUser"].toString() + '"}';
+        String userData = '{"name" : "' +
+            user.name.toString() +
+            '", "email" : "' +
+            user.email.toString() +
+            '", "password" : "' +
+            user.password.toString() +
+            '", "age" : "' +
+            user.age.toString() +
+            '", "height" : "' +
+            user.height.toString() +
+            '", "weight" : "' +
+            user.weight.toString() +
+            '", "bmi" : "' +
+            user.bmi.toString() +
+            '","dob" : "' +
+            user.dob.toString() +
+            '","activeLevel" : "' +
+            user.activeLevel.toString() +
+            '", "type" : "' +
+            user.type.toString() +
+            '", "bloodGlucoseLevel" : "' +
+            user.bloodGlucoseLevel.toString() +
+            '", "bloodCholestrolLevel" : "' +
+            user.bloodCholestrolLevel.toString() +
+            '", "cardiacCondition" : "' +
+            user.cardiacCondition.toString()+
+            '", "bloodTestType" : "' +
+            user.bloodTestType.toString() +
+            '", "memberName" : "' +
+            user.memberName.toString() +
+            '", "memberRelationship" : "' +
+            user.memberRelationship.toString() +
+            '", "memberPhone" : "' +
+            user.memberPhoneNo.toString() +
+            '", "newUser" : "' +
+            user.newUser.toString() +
+            '", "gender" : "' +
+            user.gender.toString() +
+            '"}';
 
         final directory = await getApplicationDocumentsDirectory();
         final path = directory.path;
         File file = File('$path/userdata.txt');
         file.writeAsString(userData);
-
       } else {
         response.code = 404;
         response.message = "User not found";
@@ -212,6 +240,4 @@ class UserLoginService {
 
     return response;
   }
-
-
 }
