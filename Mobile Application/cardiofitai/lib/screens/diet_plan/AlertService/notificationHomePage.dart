@@ -126,7 +126,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       }).toList();
     });
   }
-
+//View items in the list view in detail
   void _showReminderDetails(BuildContext context, DocumentSnapshot reminder) {
     showDialog(
       context: context,
@@ -177,6 +177,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
+  //When a particular alarm needs to be editted
   void _showEditDialog(BuildContext context, DocumentSnapshot reminder) async {
     final int reminderNo = reminder['reminderNo'];
 
@@ -341,9 +342,10 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-
+//Alarm Package data are recreated based on the modified changes
   void _reCreateAlarm(int alarmId, DateTime dateTime, String medicineName,
       int pillIntake, int dosage) {
+    //Stop the previous date and set the current time and date
     Alarm.stop(alarmId).then((_) async {
       final alarmSettings = AlarmSettings(
         id: alarmId,
@@ -417,7 +419,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       _showErrorSnackBar('Error updating reminder: ${e.toString()}');
     }
   }
-
+//Update the firebase collection of alarms scheduled
   Future<void> _updateReminderAlarmStatusTrue(int alarmIdNo) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -673,26 +675,26 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label,
-      TextInputType keyboardType) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(color: Colors.black),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.red, width: 2.0),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black, width: 1.0),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-      ),
-      keyboardType: keyboardType,
-      cursorColor: Colors.red,
-    );
-  }
+  // Widget _buildTextField(TextEditingController controller, String label,
+  //     TextInputType keyboardType) {
+  //   return TextField(
+  //     controller: controller,
+  //     decoration: InputDecoration(
+  //       labelText: label,
+  //       labelStyle: TextStyle(color: Colors.black),
+  //       focusedBorder: OutlineInputBorder(
+  //         borderSide: BorderSide(color: Colors.red, width: 2.0),
+  //         borderRadius: BorderRadius.circular(12.0),
+  //       ),
+  //       enabledBorder: OutlineInputBorder(
+  //         borderSide: BorderSide(color: Colors.black, width: 1.0),
+  //         borderRadius: BorderRadius.circular(12.0),
+  //       ),
+  //     ),
+  //     keyboardType: keyboardType,
+  //     cursorColor: Colors.red,
+  //   );
+  // }
 
   Widget _buildDatePickerTextField(TextEditingController controller,
       String label, BuildContext context, int index) {
