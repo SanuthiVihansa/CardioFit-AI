@@ -530,6 +530,15 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
           ),
         ),
         backgroundColor: Colors.red,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.red,
+          ),
+          onPressed: () {
+
+          },
+        ),
       ),
       body: Row(
         children: [
