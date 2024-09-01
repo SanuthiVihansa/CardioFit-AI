@@ -196,7 +196,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       _showErrorSnackBar('Failed to parse prescription info');
     }
   }
-
+//when the edit icon is clicked the relevant matching data is inserted to the controls
   void _populateFieldsForEditing(Map<String, dynamic> medicine) {
     _medicineNameController.text = medicine['name'] ?? '';
     _dosageController.text = medicine['dosage'] ?? '';
@@ -311,12 +311,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             medicine['startDate'].isEmpty ||
             medicine['endDate'].isEmpty ||
             medicine['startTime'].isEmpty) {
-          _showErrorSnackBar(
-              'Please edit the entry for ${medicine['name']} to include frequency, duration, start date, start time, and end date.');
+          _showErrorSnackBar('Please edit the entry for ${medicine['name']} to include frequency, duration, start date, start time, and end date.');
           return;
         } else {
           for (var extractedMedicine in _medicines) {
             _lastSubmitRecordNo += 1;
+            //Generate an increment number and store the reminder in firebase in the collection medicineReminder
             await MedicineReminderService.medicineReminder(
               _lastSubmitRecordNo,
               widget.user.email,
@@ -357,7 +357,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     }
     _showErrorSnackBar('No Items added to set reminder');
   }
-
+//Setting the alarms - Alarm package related.
   Future<void> scheduleAlarmsForMedicine({
     required String medicineName,
     required String dosage,
@@ -396,7 +396,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           final alarmSettings = AlarmSettings(
             id: alarmIdHash,
             dateTime: alarmTime,
-            assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
+            assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.mp3',
             loopAudio: true,
             vibrate: true,
             volume: 0.8,
