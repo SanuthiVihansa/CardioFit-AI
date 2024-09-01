@@ -350,7 +350,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       final alarmSettings = AlarmSettings(
         id: alarmId,
         dateTime: dateTime,
-        assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
+        assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.mp3',
         loopAudio: true,
         vibrate: true,
         volume: 0.8,
