@@ -34,35 +34,49 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
         'Underweight': {
           'No': {
             'Normal': {
-              'Normal': 'According to the information provided your BMI states your underweight,has no cardiac arrhythmia,blood cholestrol and blood sugar levels normal.\n You should focus on increasing caloric intake with balanced meals that include lean proteins, whole grains, healthy fats, and a variety of fruits and vegetables. \nIncorporating healthy snacks between meals, such as nuts, yogurt, or whole-grain products, can help boost calorie intake. \nIt`s essential to maintain a regular meal schedule and include energy-dense foods like avocados, nuts, seeds, and olive oil to promote healthy weight gain. While their current blood cholesterol and sugar levels are normal,\n it`s important to continue choosing foods that support cardiovascular health and stable blood sugar levels. Regular physical activity, such as strength training, can also support muscle growth and overall health.~Consume a balance diet diet',
-              'Low': 'According to the information provided your BMI states your underweight,has no cardiac arrhythmia,blood blood sugar normal cholestrol sugar LOW.\n Focus on gaining weight and improving cholesterol levels through a nutrient-dense diet.\n You should consume a balanced diet rich in healthy fats, such as those found in avocados, nuts, seeds, and olive oil, which can help raise cholesterol to healthy levels. Including lean proteins, whole grains, and a variety of fruits and vegetables in their meals will provide the necessary nutrients to support overall health. Small, frequent meals and healthy snacks can help increase caloric intake.\n Regular monitoring of cholesterol levels is important to ensure they reach and maintain a healthy range.',
-              'High': 'According to the information provided your BMI states your underweight,has no cardiac arrhythmia,blood blood sugar normal cholestrol sugar HIGH.\n Focus should on gaining weight in a healthy way while managing cholesterol levels. \n You should consume a balanced diet that is rich in lean proteins, whole grains, fruits, and vegetables, while limiting intake of saturated fats and cholesterol-rich foods. Healthy fats, such as those found in avocados, nuts, seeds, and olive oil, should be included, but foods high in trans fats and processed foods should be avoided. Small, frequent meals can help increase calorie intake without compromising cholesterol management.\n Regular physical activity, particularly aerobic exercises, can also help improve cholesterol levels while supporting healthy weight gain.',
+              'Normal':
+                  'According to the information provided your BMI states your underweight,has no cardiac arrhythmia,blood cholestrol and blood sugar levels normal.\n You should focus on increasing caloric intake with balanced meals that include lean proteins, whole grains, healthy fats, and a variety of fruits and vegetables. \nIncorporating healthy snacks between meals, such as nuts, yogurt, or whole-grain products, can help boost calorie intake. \nIt`s essential to maintain a regular meal schedule and include energy-dense foods like avocados, nuts, seeds, and olive oil to promote healthy weight gain. While their current blood cholesterol and sugar levels are normal,\n it`s important to continue choosing foods that support cardiovascular health and stable blood sugar levels. Regular physical activity, such as strength training, can also support muscle growth and overall health.~Consume a balance diet diet',
+              'Low':
+                  'According to the information provided your BMI states your underweight,has no cardiac arrhythmia,blood blood sugar normal cholestrol sugar LOW.\n Focus on gaining weight and improving cholesterol levels through a nutrient-dense diet.\n You should consume a balanced diet rich in healthy fats, such as those found in avocados, nuts, seeds, and olive oil, which can help raise cholesterol to healthy levels. Including lean proteins, whole grains, and a variety of fruits and vegetables in their meals will provide the necessary nutrients to support overall health. Small, frequent meals and healthy snacks can help increase caloric intake.\n Regular monitoring of cholesterol levels is important to ensure they reach and maintain a healthy range.',
+              'High':
+                  'According to the information provided your BMI states your underweight,has no cardiac arrhythmia,blood blood sugar normal cholestrol sugar HIGH.\n Focus should on gaining weight in a healthy way while managing cholesterol levels. \n You should consume a balanced diet that is rich in lean proteins, whole grains, fruits, and vegetables, while limiting intake of saturated fats and cholesterol-rich foods. Healthy fats, such as those found in avocados, nuts, seeds, and olive oil, should be included, but foods high in trans fats and processed foods should be avoided. Small, frequent meals can help increase calorie intake without compromising cholesterol management.\n Regular physical activity, particularly aerobic exercises, can also help improve cholesterol levels while supporting healthy weight gain.',
             },
             'High': {
-              'Normal': 'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, high blood sugar, and normal cholesterol level:\n Focus on gaining weight through a balanced diet that includes lean proteins, whole grains, and healthy fats like avocados, nuts, and olive oil. It`s important to manage your high blood sugar by avoiding sugary foods and refined carbohydrates, instead opting for complex carbohydrates that provide sustained energy. Small, frequent meals throughout the day can help stabilize your blood sugar while promoting healthy weight gain.\nGet a balanced diet, Limit high sugary foods',
-              'High': 'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, high blood sugar, and high cholesterol level:\n To address both your high blood sugar and high cholesterol, it`s important to focus on nutrient-dense foods that are low in saturated fats and sugar. Incorporate lean proteins, whole grains, and a variety of fruits and vegetables into your meals. Limit foods high in cholesterol and trans fats, and opt for heart-healthy fats like those in nuts, seeds, and fish. Regular, balanced meals can help manage your blood sugar while supporting healthy weight gain and improving cholesterol levels.\nLimit high sugary foods, Limit deep fried foods',
-              'Low': 'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, high blood sugar, and low cholesterol level:\n Your diet should aim to increase your weight while managing high blood sugar and raising your cholesterol to a healthy level. Focus on eating nutrient-rich foods, including lean proteins, whole grains, and healthy fats such as avocados, nuts, and seeds. Avoid sugary foods and simple carbohydrates, and instead, choose complex carbohydrates and fiber-rich foods to stabilize your blood sugar. Small, frequent meals can help ensure adequate calorie intake and support healthy cholesterol levels.',
+              'Normal':
+                  'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, high blood sugar, and normal cholesterol level:\n Focus on gaining weight through a balanced diet that includes lean proteins, whole grains, and healthy fats like avocados, nuts, and olive oil. It`s important to manage your high blood sugar by avoiding sugary foods and refined carbohydrates, instead opting for complex carbohydrates that provide sustained energy. Small, frequent meals throughout the day can help stabilize your blood sugar while promoting healthy weight gain.\nGet a balanced diet, Limit high sugary foods',
+              'High':
+                  'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, high blood sugar, and high cholesterol level:\n To address both your high blood sugar and high cholesterol, it`s important to focus on nutrient-dense foods that are low in saturated fats and sugar. Incorporate lean proteins, whole grains, and a variety of fruits and vegetables into your meals. Limit foods high in cholesterol and trans fats, and opt for heart-healthy fats like those in nuts, seeds, and fish. Regular, balanced meals can help manage your blood sugar while supporting healthy weight gain and improving cholesterol levels.\nLimit high sugary foods, Limit deep fried foods',
+              'Low':
+                  'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, high blood sugar, and low cholesterol level:\n Your diet should aim to increase your weight while managing high blood sugar and raising your cholesterol to a healthy level. Focus on eating nutrient-rich foods, including lean proteins, whole grains, and healthy fats such as avocados, nuts, and seeds. Avoid sugary foods and simple carbohydrates, and instead, choose complex carbohydrates and fiber-rich foods to stabilize your blood sugar. Small, frequent meals can help ensure adequate calorie intake and support healthy cholesterol levels.',
             },
             'Low': {
-              'Normal': 'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, low blood sugar, and normal cholesterol level: \nTo manage low blood sugar and promote weight gain, it’s important to eat frequent, balanced meals that include a mix of protein, complex carbohydrates, and healthy fats. Choose whole grains, lean proteins, and foods rich in healthy fats like nuts and avocados. These will provide sustained energy and help prevent blood sugar dips. Additionally, including small, healthy snacks between meals can help stabilize blood sugar and contribute to healthy weight gain.\nGet a balanced diet',
-              'High': 'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, low blood sugar, and high cholesterol level: \nYour diet should focus on increasing weight while managing cholesterol and preventing low blood sugar. Opt for nutrient-dense foods that include lean proteins, whole grains, and heart-healthy fats such as those in nuts, seeds, and avocados. Avoid foods high in saturated fats and simple sugars, and instead, choose complex carbohydrates to stabilize blood sugar levels. Eating small, frequent meals throughout the day can help maintain energy levels and improve overall health.\nGet a balanced diet, Limit high sugary foods',
-              'Low': 'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, low blood sugar, and low cholesterol level:\n Focus on a diet that supports weight gain and improves both blood sugar and cholesterol levels. Incorporate healthy fats, such as those in avocados, nuts, and olive oil, along with lean proteins and whole grains. Avoid sugary foods and simple carbohydrates, and instead, choose foods that provide sustained energy, such as complex carbohydrates and fiber-rich options. Regular, balanced meals with healthy snacks in between will help stabilize your blood sugar and promote a healthy increase in cholesterol levels.',
+              'Normal':
+                  'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, low blood sugar, and normal cholesterol level: \nTo manage low blood sugar and promote weight gain, it’s important to eat frequent, balanced meals that include a mix of protein, complex carbohydrates, and healthy fats. Choose whole grains, lean proteins, and foods rich in healthy fats like nuts and avocados. These will provide sustained energy and help prevent blood sugar dips. Additionally, including small, healthy snacks between meals can help stabilize blood sugar and contribute to healthy weight gain.\nGet a balanced diet',
+              'High':
+                  'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, low blood sugar, and high cholesterol level: \nYour diet should focus on increasing weight while managing cholesterol and preventing low blood sugar. Opt for nutrient-dense foods that include lean proteins, whole grains, and heart-healthy fats such as those in nuts, seeds, and avocados. Avoid foods high in saturated fats and simple sugars, and instead, choose complex carbohydrates to stabilize blood sugar levels. Eating small, frequent meals throughout the day can help maintain energy levels and improve overall health.\nGet a balanced diet, Limit high sugary foods',
+              'Low':
+                  'You are a female with age between 1-19, underweight according to BMI, no cardiac condition, low blood sugar, and low cholesterol level:\n Focus on a diet that supports weight gain and improves both blood sugar and cholesterol levels. Incorporate healthy fats, such as those in avocados, nuts, and olive oil, along with lean proteins and whole grains. Avoid sugary foods and simple carbohydrates, and instead, choose foods that provide sustained energy, such as complex carbohydrates and fiber-rich options. Regular, balanced meals with healthy snacks in between will help stabilize your blood sugar and promote a healthy increase in cholesterol levels.',
             },
           },
           'Yes': {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
-              'High': 'Be aware of salt and fat intake, Limit high sugary foods',
+              'High':
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
-              'Normal':'You are a female with age between 1-19, underweight according to BMI, present cardiac condition, high blood sugar, and normal cholesterol level\nBe aware of salt and fat intake, and limit high sugary foods to manage your high blood sugar. Focus on consuming nutrient-dense foods like lean proteins, whole grains, and healthy fats such as avocados, nuts, and olive oil. Regular meals with a balance of carbohydrates, proteins, and fats can help stabilize your blood sugar while supporting heart health.\nBe aware of salt and fat intake, Limit high sugary foods',
-              'High': 'You are a female with age between 1-19, underweight according to BMI, present cardiac condition, high blood sugar, and high cholesterol level:\nBe aware of salt intake, limit high sugary foods, and avoid deep-fried foods to manage both your high blood sugar and high cholesterol levels. Emphasize a diet rich in fruits, vegetables, whole grains, and lean proteins while incorporating heart-healthy fats like those found in fish, nuts, and olive oil. Regular, small meals can help you gain weight healthily without worsening cholesterol or blood sugar levels.\nBe aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'You are a female with age between 1-19, underweight according to BMI, present cardiac condition, high blood sugar, and low cholesterol level:\nMeet a dietitian for personalized advice on how to raise your cholesterol to a healthy level while managing high blood sugar. Your diet should focus on increasing calorie intake with healthy fats, such as those found in avocados, nuts, and seeds, along with lean proteins and whole grains. Avoid sugary foods and focus on complex carbohydrates to help stabilize your blood sugar.\nMeet a dietitian',
+              'Normal':
+                  'You are a female with age between 1-19, underweight according to BMI, present cardiac condition, high blood sugar, and normal cholesterol level\nBe aware of salt and fat intake, and limit high sugary foods to manage your high blood sugar. Focus on consuming nutrient-dense foods like lean proteins, whole grains, and healthy fats such as avocados, nuts, and olive oil. Regular meals with a balance of carbohydrates, proteins, and fats can help stabilize your blood sugar while supporting heart health.\nBe aware of salt and fat intake, Limit high sugary foods',
+              'High':
+                  'You are a female with age between 1-19, underweight according to BMI, present cardiac condition, high blood sugar, and high cholesterol level:\nBe aware of salt intake, limit high sugary foods, and avoid deep-fried foods to manage both your high blood sugar and high cholesterol levels. Emphasize a diet rich in fruits, vegetables, whole grains, and lean proteins while incorporating heart-healthy fats like those found in fish, nuts, and olive oil. Regular, small meals can help you gain weight healthily without worsening cholesterol or blood sugar levels.\nBe aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+              'Low':
+                  'You are a female with age between 1-19, underweight according to BMI, present cardiac condition, high blood sugar, and low cholesterol level:\nMeet a dietitian for personalized advice on how to raise your cholesterol to a healthy level while managing high blood sugar. Your diet should focus on increasing calorie intake with healthy fats, such as those found in avocados, nuts, and seeds, along with lean proteins and whole grains. Avoid sugary foods and focus on complex carbohydrates to help stabilize your blood sugar.\nMeet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
-              'High': 'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+              'High':
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -77,7 +91,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'High': {
               'Normal': 'Get a balanced diet, Limit high sugary foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -90,20 +104,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             }
           },
@@ -117,9 +131,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -132,20 +146,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -159,9 +173,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -174,20 +188,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -203,9 +217,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -218,20 +232,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -245,9 +259,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -260,20 +274,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -287,9 +301,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -302,20 +316,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -329,9 +343,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -344,20 +358,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -375,9 +389,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -390,20 +404,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -417,14 +431,15 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Meet a dietitian',
-              'High': 'You are a female with age between 20-65, Overweight according to BMI,No cardiac condition,low sugar but high cholestrol. Limit oily food and meet a dietitian as soon as possible to get a diet plan',
+              'High':
+                  'You are a female with age between 20-65, Overweight according to BMI,No cardiac condition,low sugar but high cholestrol. Limit oily food and meet a dietitian as soon as possible to get a diet plan',
               'Low': 'Meet a dietitian',
             },
           },
@@ -432,20 +447,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -459,9 +474,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -474,20 +489,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -501,9 +516,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -516,20 +531,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -545,9 +560,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -560,20 +575,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -587,9 +602,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -602,20 +617,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -629,9 +644,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -644,20 +659,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -671,9 +686,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -686,20 +701,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -717,9 +732,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -732,20 +747,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -759,9 +774,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -774,20 +789,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -801,9 +816,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -816,20 +831,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -843,9 +858,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -858,20 +873,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -887,9 +902,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -902,20 +917,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -929,9 +944,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -944,20 +959,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -971,9 +986,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -986,20 +1001,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -1013,9 +1028,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             },
             'High': {
               'Normal':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
-              'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
+                  'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
@@ -1028,20 +1043,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'Low': 'Meet a dietitian',
             },
             'High': {
               'Normal':
-              'Be aware of salt and fat intake, Limit high sugary foods',
+                  'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
-              'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
+                  'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
               'Low': 'Meet a dietitian',
             },
           },
@@ -1050,9 +1065,6 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
     }, //65+
   };
 
-
-
-
   String categorizeBloodSugar(String testType, double sugar) {
     if (testType == 'Fasting') {
       if (sugar < 70) {
@@ -1060,25 +1072,26 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
       } else if (sugar >= 70 && sugar <= 99) {
         return 'Normal';
       } else {
-        return 'High';  // This includes both 'Prediabetes' and 'Diabetes'
+        return 'High'; // This includes both 'Prediabetes' and 'Diabetes'
       }
     } else if (testType == 'Random') {
       if (sugar < 140) {
         return 'Normal';
       } else {
-        return 'High';  // This includes both 'Prediabetes' and 'Diabetes'
+        return 'High'; // This includes both 'Prediabetes' and 'Diabetes'
       }
     }
     return 'Unknown';
   }
 
-
   void provideDietAdvice() {
     int age = int.parse(ageController.text);
     String ageRange = '';
-    if (age >= 1 && age <= 19) { // Fix: Change from <=19 to match '1-19'
+    if (age >= 1 && age <= 19) {
+      // Fix: Change from <=19 to match '1-19'
       ageRange = '1-19';
-    } else if (age >= 20 && age <= 65) { // Fix: Properly define the range for 20-65
+    } else if (age >= 20 && age <= 65) {
+      // Fix: Properly define the range for 20-65
       ageRange = '20-65';
     } else {
       ageRange = '65+';
@@ -1101,12 +1114,11 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
     if (cholesterol < 200) {
       return 'Low';
     } else if (cholesterol >= 200 && cholesterol <= 239) {
-      return 'Medium';
+      return 'Normal';
     } else {
       return 'High';
     }
   }
-
 
   Future<void> _userInfo() async {
     _userSignUpInfo = await UserLoginService.getUserByEmail(widget.user.email);
@@ -1115,7 +1127,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
     cholesterolController.text =
         _userSignUpInfo.docs[0]["bloodCholestrolLevel"];
     sugarController.text = _userSignUpInfo.docs[0]["bloodGlucoseLevel"];
-    gender="Female";//_userSignUpInfo.docs[0]["gender"];
+    gender = "Female"; //_userSignUpInfo.docs[0]["gender"];
     cardiacCondition = _userSignUpInfo.docs[0]["cardiacCondition"];
     setState(() {});
   }
@@ -1133,7 +1145,8 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
       double cholesterol = double.tryParse(cholesterolController.text) ?? 0.0;
       cholesterolResult = categorizeCholesterol(cholesterol);
       double sugar = double.tryParse(sugarController.text) ?? 0.0;
-      bloodSugarResult = categorizeBloodSugar( 'Fasting',sugar); // or 'Random', as needed
+      bloodSugarResult =
+          categorizeBloodSugar('Fasting', sugar); // or 'Random', as needed
 
       int age = int.parse(ageController.text);
       if (age <= 19) {
@@ -1154,12 +1167,18 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
       if (dietAdvice.containsKey(ageRange)) {
         if (dietAdvice[ageRange].containsKey(gender)) {
           if (dietAdvice[ageRange][gender].containsKey(bmiCategory)) {
-            if (dietAdvice[ageRange][gender][bmiCategory].containsKey(cardiacCondition)) {
-              if (dietAdvice[ageRange][gender][bmiCategory][cardiacCondition].containsKey(bloodSugarResult)) {
-                if (dietAdvice[ageRange][gender][bmiCategory][cardiacCondition][bloodSugarResult].containsKey(cholesterolResult)) {
-                  advice = dietAdvice[ageRange][gender][bmiCategory][cardiacCondition][bloodSugarResult][cholesterolResult];
+            if (dietAdvice[ageRange][gender][bmiCategory]
+                .containsKey(cardiacCondition)) {
+              if (dietAdvice[ageRange][gender][bmiCategory][cardiacCondition]
+                  .containsKey(bloodSugarResult)) {
+                if (dietAdvice[ageRange][gender][bmiCategory][cardiacCondition]
+                        [bloodSugarResult]
+                    .containsKey(cholesterolResult)) {
+                  advice = dietAdvice[ageRange][gender][bmiCategory]
+                      [cardiacCondition][bloodSugarResult][cholesterolResult];
                 } else {
-                  advice = 'No advice available for the given cholesterol result';
+                  advice =
+                      'No advice available for the given cholesterol result';
                 }
               } else {
                 advice = 'No advice available for the given blood sugar result';
@@ -1179,7 +1198,6 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -1188,12 +1206,17 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             color: Colors.white,
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)=>DashboardScreen(widget.user)));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      DashboardScreen(widget.user)));
             },
           ),
           title: Align(
               alignment: Alignment.center,
-              child: Text('Customised Dietary Advice',style: TextStyle(color: Colors.white),)),
+              child: Text(
+                'Customised Dietary Advice',
+                style: TextStyle(color: Colors.white),
+              )),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -1311,25 +1334,33 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               SizedBox(height: 20),
               Center(
                 child: Align(
-                  alignment: Alignment.centerRight,  // Aligns the button to the right
+                  alignment: Alignment.centerRight,
+                  // Aligns the button to the right
                   child: ElevatedButton(
                     onPressed: generatePrediction,
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white, backgroundColor: Colors.red, // Text (foreground) color
-                      padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0), // Padding
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.red,
+                      // Text (foreground) color
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 24.0, vertical: 12.0),
+                      // Padding
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                        borderRadius:
+                            BorderRadius.circular(10.0), // Rounded corners
                       ),
                     ),
                     child: Text(
                       'Generate',
-                      style: TextStyle(fontSize: 16.0), // Adjust font size as needed
+                      style: TextStyle(
+                          fontSize: 16.0), // Adjust font size as needed
                     ),
                   ),
                 ),
               ),
               SizedBox(height: 20),
-              Text('Dietary Advice given for a patient with following conditions is,',
+              Text(
+                  'Dietary Advice given for a patient with following conditions is,',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               SizedBox(height: 10),
               Row(
