@@ -179,7 +179,27 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
 
   void _showEditDialog(BuildContext context, DocumentSnapshot reminder) async {
     final int reminderNo = reminder['reminderNo'];
+
+    // Show a loading indicator while fetching alarms
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
     await getSavedAlarms(reminderNo);
+
+    Navigator.of(context).pop(); // Close the loading indicator
+
+    if (_filteredAlerts.isEmpty) {
+      // Show an error if no data was loaded
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No alarms found for editing.'), backgroundColor: Colors.red),
+      );
+      return;
+    }
 
     showDialog(
       context: context,
@@ -197,8 +217,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                   children: [
                     Text(
                       'Edit Alarms for ${reminder['medicineName']}',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     Expanded(
                       child: ListView.builder(
@@ -206,21 +225,21 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                         itemBuilder: (context, index) {
                           final alarm = _filteredAlerts[index];
                           final DateTime scheduledAlarmDateTime =
-                              DateTime.parse(alarm['scheduledAlarmDateTime']);
+                          DateTime.parse(alarm['scheduledAlarmDateTime']);
                           final TextEditingController dateController =
-                              TextEditingController(
+                          TextEditingController(
                             text: DateFormat('yyyy-MM-dd')
                                 .format(scheduledAlarmDateTime),
                           );
                           final TextEditingController timeController =
-                              TextEditingController(
+                          TextEditingController(
                             text: DateFormat('HH:mm')
                                 .format(scheduledAlarmDateTime),
                           );
                           bool alarmStatus = alarmStatusList[index];
                           final DateTime updatedDateTime =
-                              DateFormat('yyyy-MM-dd HH:mm').parse(
-                                  '${dateController.text} ${timeController.text}');
+                          DateFormat('yyyy-MM-dd HH:mm').parse(
+                              '${dateController.text} ${timeController.text}');
 
                           return Column(
                             children: [
@@ -255,7 +274,6 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                                           alarmStatusList[index] = value;
                                         });
                                         if (value) {
-                                          //alarmStatus=true;
                                           _updateReminderAlarmStatusTrue(
                                               alarm['alarmIdNo']);
                                           _reCreateAlarm(
@@ -270,7 +288,6 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                                         } else {
                                           _updateReminderAlarmStatus(
                                               alarm['alarmIdNo']);
-                                          //alarmStatus=false;
                                           Alarm.stop(alarm['alarmIdNo']);
                                         }
                                       }),
@@ -323,6 +340,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       },
     );
   }
+
 
   void _reCreateAlarm(int alarmId, DateTime dateTime, String medicineName,
       int pillIntake, int dosage) {
@@ -501,6 +519,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       ),
       body: Row(
         children: [
+          //Put the navigation component to the screen
           NavigationPanelComponent("alarm", widget.user),
           Expanded(
             child: SingleChildScrollView(
@@ -518,7 +537,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       backgroundColor: Colors.white,
     );
   }
-
+//Current date and Add Reminder button
   Widget _addTaskBar(double screenWidth) {
     return Container(
       margin: EdgeInsets.only(
@@ -538,14 +557,14 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                   Text(
                     DateFormat.yMMMMd().format(DateTime.now()),
                     style: TextStyle(
-                        fontSize: screenWidth * 0.06,
+                        fontSize: screenWidth * 0.03,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
                   Text(
                     "Today",
                     style: TextStyle(
-                        fontSize: screenWidth * 0.05,
+                        fontSize: screenWidth * 0.04,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
@@ -558,7 +577,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      MedicineAlertPage(widget.user),
+                      MedicineAlertPage(widget.user), //-------------------------------------------------------//
                 ),
               );
             },
@@ -580,7 +599,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       ),
     );
   }
-
+//Horizontal Scrollable date bar
   Widget _addDateBar(double screenWidth) {
     return Container(
       margin: EdgeInsets.only(top: 20, left: screenWidth * 0.05),
