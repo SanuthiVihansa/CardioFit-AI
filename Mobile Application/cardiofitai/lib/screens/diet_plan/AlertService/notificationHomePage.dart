@@ -95,7 +95,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       _filterAlertsForSelectedDate();
     });
   }
-
+//Fetch all the alarms which belong to the user
   Future<void> getSavedAlarms(int reminderNo) async {
     final QuerySnapshot alarmSnapshot = await FirebaseFirestore.instance
         .collection('alarms')
@@ -107,7 +107,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       _assignUpdatedScheduledDateTimes(_filteredAlerts);
     });
   }
-
+//Update when the alarm times are editted
   void _assignUpdatedScheduledDateTimes(List<DocumentSnapshot> filteredAlerts) {
     for (var alarm in _filteredAlerts) {
       _updatedScheduledDateTimes
@@ -621,7 +621,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       ),
     );
   }
-
+//Logic to check if there are alarms available and if yes put them to a list view else show a msg
   Widget _showReminders(double screenHeight, double screenWidth) {
     if (_filteredAlerts.isEmpty) {
       return Center(
@@ -639,6 +639,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
+  //Medicine Reminders : List view details
   Widget _buildReminderItem(DocumentSnapshot reminder, double screenWidth) {
     final data = reminder.data() as Map<String, dynamic>?;
 
@@ -653,7 +654,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               ? data['medicineName']
               : 'No Medicine Name',
           style: TextStyle(
-            fontSize: screenWidth * 0.03,
+            fontSize: screenWidth * 0.02,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -661,10 +662,10 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         subtitle: Text(
           'Pill Intake: ${data != null && data.containsKey('pillIntake') ? data['pillIntake'] : 'N/A'}\n'
           'Frequency: ${data != null && data.containsKey('interval') ? data['interval'].toString() + ' times' : 'N/A'}',
-          style: TextStyle(fontSize: screenWidth * 0.028, color: Colors.black),
+          style: TextStyle(fontSize: screenWidth * 0.02, color: Colors.black),
         ),
         trailing: Icon(Icons.chevron_right,
-            color: Colors.grey, size: screenWidth * 0.08),
+            color: Colors.grey, size: screenWidth * 0.02),
         onTap: () {
           _showReminderDetails(context, reminder);
         },
