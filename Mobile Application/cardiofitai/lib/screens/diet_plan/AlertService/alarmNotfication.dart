@@ -35,16 +35,20 @@ class _ExampleAlarmRingScreenState extends State<ExampleAlarmRingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              'Reminder to take your Medicine !! \n Medicine Name : ${widget.alarmSettings.notificationTitle} \n ${widget.alarmSettings.notificationBody}',
-              style: Theme.of(context).textTheme.titleLarge,
-              textAlign: TextAlign.center,
-            ),
+              "Reminder to take your Medicine !!",
+              style: TextStyle(
+                  fontSize: screenWidth * 0.04,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,),
+              textAlign: TextAlign.center,),
+
             _controller.value.isInitialized
                 ? Container(
               height: 500, // Set the height of the video container to 500 pixels
@@ -54,6 +58,11 @@ class _ExampleAlarmRingScreenState extends State<ExampleAlarmRingScreen> {
               ),
             )
                 : CircularProgressIndicator(), // Show a loader until the video is initialized
+            Text('Medicine Name : ${widget.alarmSettings.notificationTitle} \n ${widget.alarmSettings.notificationBody}',
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
