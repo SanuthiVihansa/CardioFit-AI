@@ -30,6 +30,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   List<DataRow> _rows = [];
   List<List<DataRow>> _reportDataRows = [];
   List<File> _pickedImages = [];
+  bool _isLoading = false;
 
   //Drop down control values
   List<String> reports = [
@@ -207,6 +208,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   }
 
   void _onTapAnalyseBtn() async {
+    setState(() {
+      _isLoading = true;
+    });
     _reportDataRows = [];
     if (_pickedImages.isNotEmpty) {
       for (int i = 0; i < _pickedImages.length; i++) {
@@ -492,27 +496,32 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             ]));
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Neutrophils absolute count")),
-              DataCell(Text(responseJson["Neutrophils absolute count?"].toString())),
+              DataCell(
+                  Text(responseJson["Neutrophils absolute count?"].toString())),
               DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Lymphocytes absolute count")),
-              DataCell(Text(responseJson["Lymphocytes absolute count?"].toString())),
+              DataCell(
+                  Text(responseJson["Lymphocytes absolute count?"].toString())),
               DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Eosinophil absolute count")),
-              DataCell(Text(responseJson["Eosinophil absolute count?"].toString())),
+              DataCell(
+                  Text(responseJson["Eosinophil absolute count?"].toString())),
               DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Monocytes absolute count")),
-              DataCell(Text(responseJson["Monocytes absolute count?"].toString())),
+              DataCell(
+                  Text(responseJson["Monocytes absolute count?"].toString())),
               DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Basophils absolute count")),
-              DataCell(Text(responseJson["Basophils absolute count?"].toString())),
+              DataCell(
+                  Text(responseJson["Basophils absolute count?"].toString())),
               DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
@@ -526,6 +535,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         }
       }
     }
+    setState(() {
+      _isLoading = false;
+    });
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => ReportAnalysisScreen(
             _selectedReports, _reportDataRows, widget.user)));
@@ -604,8 +616,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                     widget.user.memberRelationship,
                                     widget.user.memberPhoneNo,
                                     false,
-                                  widget.user.gender
-                                    );
+                                    widget.user.gender);
 
                                 Response response =
                                     await UserLoginService.updateNewUser(
@@ -622,12 +633,21 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                             child: Text(widget.user.newUser ? "Skip" : "Back")),
                         SizedBox(width: 30),
                         ElevatedButton(
-                            onPressed: () {
-                              _onTapAnalyseBtn();
-                            },
+                            onPressed: _isLoading == false
+                                ? () {
+                                    _onTapAnalyseBtn();
+                                  }
+                                : null,
                             child: Text("Analyse")),
+                        _isLoading == true
+                            ? Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: CircularProgressIndicator(),
+                              )
+                            : SizedBox()
                       ],
                     ),
+
                     SizedBox(height: 30),
                     // wordPairs.length != 0 ? _displayOutputTable() : SizedBox()
                   ],
