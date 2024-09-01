@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
   final _caluclateBMIController = TextEditingController();
-  final DateTime _dateOfBirth = DateTime.now();
+  final _dobController = TextEditingController();
   final _genderController = TextEditingController();
 
   String dropdownValue = 'Less Active';
@@ -50,12 +50,14 @@ class _ProfilePageState extends State<ProfilePage> {
   //Function to generate a Report number
   Future<void> _userInfo() async {
     _userSignUpInfo = await UserLoginService.getUserByEmail(widget.user.email);
+    _dobController.text = _userSignUpInfo.docs[0]["dob"];
     _ageController.text = _userSignUpInfo.docs[0]["age"];
     _heightController.text = _userSignUpInfo.docs[0]["height"];
     _weightController.text = _userSignUpInfo.docs[0]["weight"];
     _caluclateBMIController.text = _userSignUpInfo.docs[0]["bmi"];
     dropdownValue = _userSignUpInfo.docs[0]["activeLevel"];
     _genderController.text = _userSignUpInfo.docs[0]["gender"];
+    setState(() {});
   }
 
   //Function to calculate BMI
@@ -112,7 +114,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Row(
                     children: [
                       backBtn(),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       saveInfoBtn()
                     ],
                   ),
@@ -189,14 +193,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget dateOfBirth() {
     return TextFormField(
+      controller: _dobController,
       decoration: InputDecoration(
         labelText: 'DOB',
         border: OutlineInputBorder(),
       ),
-      controller: TextEditingController(
-        text: _dateOfBirth.toString().substring(
-            0, 10), // Display selected date in the format yyyy-MM-dd.
-      ),
+      // controller: TextEditingController(
+      //   text: _dateOfBirth.toString().substring(
+      //       0, 10), // Display selected date in the format yyyy-MM-dd.
+      // ),
     );
   }
 
@@ -310,7 +315,7 @@ class _ProfilePageState extends State<ProfilePage> {
             _heightController.text,
             _weightController.text,
             _caluclateBMIController.text,
-            _dateOfBirth.toString(),
+            _dobController.text,
             dropdownValue.characters.string,
             widget.user.type,
             "0",
@@ -321,41 +326,40 @@ class _ProfilePageState extends State<ProfilePage> {
             widget.user.memberRelationship,
             widget.user.memberPhoneNo,
             false,
-            _genderController.text
-        );
+            _genderController.text);
         UserLoginService.updateUser(updatedUserInfo);
-        if(widget.user.newUser == false){
+        if (widget.user.newUser == false) {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (BuildContext context) => DashboardScreen(widget.user)));
-        } else{
+        } else {
           // IF NEW USER
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => RecognitionScreen(widget.user)));
+              builder: (BuildContext context) =>
+                  RecognitionScreen(widget.user)));
         }
-
       });
+
   Widget GenderDropdown() => DropdownButtonFormField<String>(
-    value: _genderController.text.isNotEmpty ? _genderController.text : null,
-    onChanged: (String? newValue) {
-      setState(() {
-        _genderController.text = newValue!;
-      });
-    },
-    decoration: InputDecoration(
-      labelText: 'Gender',
-      border: OutlineInputBorder(),
-    ),
-    items: const [
-      DropdownMenuItem<String>(
-        value: 'Female',
-        child: Text('Female'),
-      ),
-      DropdownMenuItem<String>(
-        value: 'Male',
-        child: Text('Male'),
-      ),
-    ],
-  );
-
-
+        value:
+            _genderController.text.isNotEmpty ? _genderController.text : null,
+        onChanged: (String? newValue) {
+          setState(() {
+            _genderController.text = newValue!;
+          });
+        },
+        decoration: InputDecoration(
+          labelText: 'Gender',
+          border: OutlineInputBorder(),
+        ),
+        items: const [
+          DropdownMenuItem<String>(
+            value: 'Female',
+            child: Text('Female'),
+          ),
+          DropdownMenuItem<String>(
+            value: 'Male',
+            child: Text('Male'),
+          ),
+        ],
+      );
 }
