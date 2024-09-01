@@ -591,7 +591,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      MedicineAlertPage(widget.user), //-------------------------------------------------------//
+                      MedicineAlertPage(widget.user),
                 ),
               );
             },
