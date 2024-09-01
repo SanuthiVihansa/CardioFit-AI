@@ -60,7 +60,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   };
   late QuerySnapshot<Object?> _lastSubmittedRecordInfo;
   int _lastSubmitRecordNo = 0;
-  int _thisAlarmReferenceNo = 0;
 
   @override
   void initState() {
@@ -243,26 +242,26 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     }
   }
 
-  String _getDayName(int dayNumber) {
-    switch (dayNumber) {
-      case DateTime.monday:
-        return "Mon";
-      case DateTime.tuesday:
-        return "Tue";
-      case DateTime.wednesday:
-        return "Wed";
-      case DateTime.thursday:
-        return "Thu";
-      case DateTime.friday:
-        return "Fri";
-      case DateTime.saturday:
-        return "Sat";
-      case DateTime.sunday:
-        return "Sun";
-      default:
-        return "";
-    }
-  }
+  // String _getDayName(int dayNumber) {
+  //   switch (dayNumber) {
+  //     case DateTime.monday:
+  //       return "Mon";
+  //     case DateTime.tuesday:
+  //       return "Tue";
+  //     case DateTime.wednesday:
+  //       return "Wed";
+  //     case DateTime.thursday:
+  //       return "Thu";
+  //     case DateTime.friday:
+  //       return "Fri";
+  //     case DateTime.saturday:
+  //       return "Sat";
+  //     case DateTime.sunday:
+  //       return "Sun";
+  //     default:
+  //       return "";
+  //   }
+  // }
 
   void _calculateEndDate() {
     if (_startDateController.text.isNotEmpty &&
@@ -437,7 +436,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       appBar: AppBar(
         title: Center(
             child: Text(
-              'Set Reminder',
+              'Set Medicine Reminder',
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             )),
         leading: IconButton(
@@ -477,7 +476,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ),
     );
   }
-
+//Title related styling
   Widget _buildTitle(String title) {
     return Text(
       title,
@@ -485,7 +484,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
     );
   }
-
+//two options to upload prescriptions to the system
   Widget _buildImagePickerOptions() {
     return Column(
       children: [
@@ -501,7 +500,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ],
     );
   }
-
+//Display the scanned Image in the app
   Widget _buildImagePickerButton(
       String text, IconData icon, VoidCallback onPressed) {
     return ElevatedButton(
@@ -532,19 +531,21 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     return pickedImage == null
         ? Center(
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.5,
+        // height: MediaQuery.of(context).size.height * 0.5,
+        height: 500,
         child: Image.asset('assets/pick1.png'),
       ),
     )
         : Container(
       width: double.infinity,
+      height: 500,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
       padding: const EdgeInsets.all(20),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Image.file(
           pickedImage!,
-          fit: BoxFit.cover,
+          fit: BoxFit.fitHeight,
         ),
       ),
     );
