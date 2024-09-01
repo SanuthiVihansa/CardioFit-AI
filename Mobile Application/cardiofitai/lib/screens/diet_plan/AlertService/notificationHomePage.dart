@@ -326,14 +326,6 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                             }
                           },
                         ),
-                        // TextButton(
-                        //   child: Text('Cancel'),
-                        //   onPressed: () {
-                        //     if (mounted) {
-                        //       Navigator.of(dialogContext).pop();
-                        //     }
-                        //   },
-                        // ),
                       ],
                     ),
                   ],
