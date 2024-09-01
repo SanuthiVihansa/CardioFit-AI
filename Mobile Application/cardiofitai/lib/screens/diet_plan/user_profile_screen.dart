@@ -1,3 +1,5 @@
+import 'package:cardiofitai/screens/common/dashboard_screen.dart';
+import 'package:cardiofitai/screens/diet_plan/ReportReading/modiRecognitionScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,9 @@ class _ProfilePageState extends State<ProfilePage> {
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
   final _caluclateBMIController = TextEditingController();
-  final DateTime _dateOfBirth = DateTime.now();
+  final _dobController = TextEditingController();
+  final _genderController = TextEditingController();
+
   String dropdownValue = 'Less Active';
   late QuerySnapshot<Object?> _userSignUpInfo;
 
@@ -41,16 +45,27 @@ class _ProfilePageState extends State<ProfilePage> {
     _userInfo();
   }
 
-  // in kilograms
+  int _calculateAge(DateTime birthDate) {
+    DateTime today = DateTime.now();
+    int age = today.year - birthDate.year;
+    if (today.month < birthDate.month ||
+        (today.month == birthDate.month && today.day < birthDate.day)) {
+      age--;
+    }
+    return age;
+  }
 
   //Function to generate a Report number
   Future<void> _userInfo() async {
     _userSignUpInfo = await UserLoginService.getUserByEmail(widget.user.email);
+    _dobController.text = _userSignUpInfo.docs[0]["dob"];
     _ageController.text = _userSignUpInfo.docs[0]["age"];
     _heightController.text = _userSignUpInfo.docs[0]["height"];
     _weightController.text = _userSignUpInfo.docs[0]["weight"];
     _caluclateBMIController.text = _userSignUpInfo.docs[0]["bmi"];
     dropdownValue = _userSignUpInfo.docs[0]["activeLevel"];
+    _genderController.text = _userSignUpInfo.docs[0]["gender"];
+    setState(() {});
   }
 
   //Function to calculate BMI
@@ -84,7 +99,19 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 userName(),
-                dateOfBirth(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    // Arrange Age and Height widgets horizontally
+                    children: [
+                      Expanded(child: dateOfBirth()),
+                      // Use Expanded to fill available space
+                      SizedBox(width: 16.0),
+                      // Add some horizontal spacing between widgets
+                      Expanded(child: GenderDropdown()),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Row(
@@ -98,15 +125,30 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                Weight(),
-                BMI(),
-                ActiveLevel(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    // Arrange Age and Height widgets horizontally
+                    children: [
+                      Expanded(child: Weight()),
+                      // Use Expanded to fill available space
+                      SizedBox(width: 16.0),
+                      // Add some horizontal spacing between widgets
+                      Expanded(child: BMI()),
+                    ],
+                  ),
+                ),
+
+                // ActiveLevel(),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Row(
                     children: [
-                      saveInfoBtn(),
                       backBtn(),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      saveInfoBtn()
                     ],
                   ),
                 )
@@ -182,14 +224,33 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget dateOfBirth() {
     return TextFormField(
+      controller: _dobController,
       decoration: InputDecoration(
+        errorText: "",
         labelText: 'DOB',
         border: OutlineInputBorder(),
       ),
-      controller: TextEditingController(
-        text: _dateOfBirth.toString().substring(
-            0, 10), // Display selected date in the format yyyy-MM-dd.
-      ),
+      readOnly: true,
+      // Make the field read-only so that only the date picker can set the value
+      onTap: () async {
+        DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(), // The current date as the initial date
+          firstDate: DateTime(1900), // Start date
+          lastDate: DateTime
+              .now(), // End date, ensuring the date can't be in the future
+        );
+
+        if (pickedDate != null) {
+          String formattedDate = "${pickedDate.toLocal()}".split(' ')[0];
+          setState(() {
+            _dobController.text =
+                formattedDate; // Set the date in the controller
+            _ageController.text = _calculateAge(pickedDate)
+                .toString(); // Calculate and set the age
+          });
+        }
+      },
     );
   }
 
@@ -289,7 +350,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Text("Back"),
       onPressed: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => DietHomePage(widget.user)));
+            builder: (BuildContext context) => DashboardScreen(widget.user)));
       });
 
   Widget saveInfoBtn() => ElevatedButton(
@@ -303,18 +364,52 @@ class _ProfilePageState extends State<ProfilePage> {
             _heightController.text,
             _weightController.text,
             _caluclateBMIController.text,
-            _dateOfBirth.toString(),
+            _dobController.text,
             dropdownValue.characters.string,
             widget.user.type,
-            "REPLACE THE VARIABLE OF bloodGlucoseLevel",
-            "REPLACE THE VARIABLE OF bloodCholestrolLevel",
-            "REPLACE THE VARIABLE OF cardiacCondition",
-            "REPLACE THE VARIABLE OF bloodTestType",
+            widget.user.bloodGlucoseLevel,
+            widget.user.bloodCholestrolLevel,
+            widget.user.cardiacCondition,
+            widget.user.bloodTestType,
             widget.user.memberName,
             widget.user.memberRelationship,
-            widget.user.memberPhoneNo);
+            widget.user.memberPhoneNo,
+            false,
+            _genderController.text);
         UserLoginService.updateUser(updatedUserInfo);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => DietHomePage(widget.user)));
+        if (widget.user.newUser == false) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => DashboardScreen(widget.user)));
+        } else {
+          // IF NEW USER
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  RecognitionScreen(widget.user)));
+        }
       });
+
+  Widget GenderDropdown() => DropdownButtonFormField<String>(
+        value:
+            _genderController.text.isNotEmpty ? _genderController.text : null,
+        onChanged: (String? newValue) {
+          setState(() {
+            _genderController.text = newValue!;
+          });
+        },
+        decoration: InputDecoration(
+          errorText: "",
+          labelText: 'Gender',
+          border: OutlineInputBorder(),
+        ),
+        items: const [
+          DropdownMenuItem<String>(
+            value: 'Female',
+            child: Text('Female'),
+          ),
+          DropdownMenuItem<String>(
+            value: 'Male',
+            child: Text('Male'),
+          ),
+        ],
+      );
 }

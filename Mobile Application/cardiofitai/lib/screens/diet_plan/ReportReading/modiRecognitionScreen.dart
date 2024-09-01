@@ -1,16 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/screens/common/dashboard_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/ReportReading/reportAnalysisScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../../../services/prescription_reading_api_service.dart';
+import '../../../models/response.dart';
+import '../../../services/user_information_service.dart';
 
 class RecognitionScreen extends StatefulWidget {
   const RecognitionScreen(this.user, {super.key});
@@ -21,44 +21,16 @@ class RecognitionScreen extends StatefulWidget {
   State<RecognitionScreen> createState() => _RecognitionScreenState();
 }
 
-class WordIndex {
-  final String phrase;
-  final int startIndex;
-  final int endIndex;
-  final String nextWord;
-  final int nextWordIndex;
-
-  WordIndex(this.phrase, this.startIndex, this.endIndex, this.nextWord,
-      this.nextWordIndex);
-}
-
-class WordPair {
-  final String word;
-  final String nextWord;
-
-  WordPair(this.word, this.nextWord);
-}
-
 class _RecognitionScreenState extends State<RecognitionScreen> {
-  final apiService = ApiService();
   File? pickedImage;
   XFile? image;
-  bool detecting = false;
   late double halfScreenWidth;
-  late double height;
-  bool scanning = false;
-  String scannedText = '';
-
-  Map<String, dynamic> apiData = {};
-  List<WordPair> wordPairs = [];
-  List<List<WordPair>> extractedText = [];
-  String? selectedReport = 'Select Report';
-  String diagnosis = "";
-  late List<Map<String, dynamic>> addMultipleReports = [];
-  String noSpace = "";
-  List<DataRow> rows = [];
-  List<List<DataRow>> setRows = [];
-  List<File> pickedImages = [];
+  String? _selectedReport = 'Select Report';
+  late List<Map<String, dynamic>> _selectedReports = [];
+  List<DataRow> _rows = [];
+  List<List<DataRow>> _reportDataRows = [];
+  List<File> _pickedImages = [];
+  bool _isLoading = false;
 
   //Drop down control values
   List<String> reports = [
@@ -69,8 +41,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     'Full Blood Count Report'
   ];
 
-  User? get user => null;
-
   Widget _multipleAttachmentControl() {
     return Container(
       height: 300,
@@ -78,18 +48,15 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       margin: const EdgeInsets.only(right: 20, bottom: 10),
       child: Material(
         borderRadius: BorderRadius.all(Radius.circular(20)),
-        color: Colors.white54,
-        elevation: 4,
+        //color: Colors.white54,
+        //elevation: 4,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(
               height: 80,
             ),
-            Center(
-                child: Text("\nPlease upload the medical reports\n",
-                    style: TextStyle(color: Colors.grey, fontSize: 20))),
-            Column(
+            Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
@@ -100,7 +67,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: DropdownButton<String>(
-                    value: selectedReport,
+                    value: _selectedReport,
                     elevation: 16,
                     style: const TextStyle(color: Colors.blueGrey),
                     alignment: Alignment.topLeft,
@@ -109,7 +76,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                     onChanged: (String? newValue) {
                       if (newValue != null) {
                         setState(() {
-                          selectedReport = newValue;
+                          _selectedReport = newValue;
                         });
                       }
                     },
@@ -125,7 +92,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  width: 10,
                 ),
                 Flexible(
                   child: ElevatedButton(
@@ -135,22 +102,21 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                       if (image != null) {
                         File pickedImage = File(image.path);
                         if (pickedImage.path.isNotEmpty &&
-                            selectedReport != 'Select Report') {
-                          addMultipleReports.add({
-                            "UploadedReport": selectedReport,
+                            _selectedReport != 'Select Report') {
+                          _selectedReports.add({
+                            "UploadedReport": _selectedReport,
                             "UploadedImage": pickedImage,
                             "ScannedItems": "",
                             "ExtractedText": "",
-                            "obtainedRows": rows,
+                            "obtainedRows": _rows,
                           });
-                          pickedImages
+                          _pickedImages
                               .add(pickedImage); // Add image to the list
                           setState(() {});
-                          print(addMultipleReports);
                         }
                       }
                     },
-                    child: Text("Attach Report"),
+                    child: Text("Attach"),
                   ),
                 ),
               ],
@@ -185,7 +151,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               DataColumn(label: Text('Report Type')),
               DataColumn(label: Text('Action')),
             ],
-            rows: addMultipleReports.map((e) {
+            rows: _selectedReports.map((e) {
               return DataRow(cells: [
                 DataCell(
                   Image.file(e["UploadedImage"], width: 50, height: 50),
@@ -227,8 +193,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  addMultipleReports.remove(item);
-                  pickedImages.remove(
+                  _selectedReports.remove(item);
+                  _pickedImages.remove(
                       item["UploadedImage"]); // Remove image from the list
                 });
                 Navigator.of(context).pop();
@@ -241,564 +207,340 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     );
   }
 
-  // Future<void> _pickImage() async {
-  //   final pickedFile =
-  //       await ImagePicker().pickImage(source: pickedImage, imageQuality: 50);
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       pickedImage = File(pickedFile.path);
-  //     });
-  //   }
-  // }
-  //
-  // detectReportContent() async {
-  //   setState(() {
-  //     detecting = true;
-  //   });
-  //   try {
-  //     scannedText = await apiService.sendImageToGPT4Vision(image: pickedImage!);
-  //     _reportDataAnalysis();
-  //   } catch (error) {
-  //     _showErrorSnackBar(error);
-  //   } finally {
-  //     setState(() {
-  //       detecting = false;
-  //     });
-  //   }
-  // }
-  //
-  // void _showErrorSnackBar(Object error) {
-  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //     content: Text(error.toString()),
-  //     backgroundColor: Colors.red,
-  //   ));
-  // }
-  //
-  // void _reportDataAnalysis() {
-  //   for (var item in addMultipleReports) {
-  //     if (item["UploadedImage"] != null) {
-  //       final image = item["UploadedImage"];
-  //       try {
-  //         // final result = jsonDecode(response.body);
-  //         // final scannedText = result["ParsedResults"][0]["ParsedText"];
-  //
-  //         item["ScannedText"] =
-  //             scannedText; // Add or update the ScannedText field
-  //         print(scannedText);
-  //         _removeSpaces(scannedText);
-  //         List<String> lines = noSpace.split('\n');
-  //
-  //         if (item["UploadedReport"] != 'Select Report') {
-  //           if (item["UploadedReport"] == 'Full Blood Count Report') {
-  //             List<String> bloodComponents = [
-  //               'WBC',
-  //               'Neutrophils',
-  //               'Lymphocytes',
-  //               'Monocytes',
-  //               'Eosinophils',
-  //               'Basophills',
-  //               'NeutrophilsAbsoluteCount',
-  //               'LymphocytesAbsoluteCount',
-  //               'MonocytesAbsoluteCount',
-  //               'EosinophilsAbsoluteCount',
-  //               'RBC',
-  //               'Haemoglobin',
-  //               'PackedCellVolume(PCV)',
-  //               'MCV',
-  //               'MCH',
-  //               'MCHC',
-  //               'RDW',
-  //               'PlateletCount'
-  //             ];
-  //             List<String> unitsComponents = [
-  //               '/Cumm',
-  //               '0/0',
-  //               '0/0',
-  //               '0/0',
-  //               '0/0',
-  //               '0/0',
-  //               '/Cumm',
-  //               '/Cumm',
-  //               '/Cumm',
-  //               '/Cumm',
-  //               'Million/pL',
-  //               'g/dl',
-  //               '0/0',
-  //               'fL',
-  //               'pg',
-  //               'g/dL',
-  //               '0/0',
-  //               '/Cumm'
-  //             ];
-  //             String selectedText = item["UploadedReport"];
-  //             // Update rows here
-  //             rows = _buildRows(
-  //                 bloodComponents, unitsComponents, lines, selectedText);
-  //             setRows.add(rows);
-  //             item["obtainedRows"] = rows;
-  //             setState(() {});
-  //           } else if (item["UploadedReport"] == 'Lipid profile') {
-  //             List<String> bloodComponents = [
-  //               'Cholesterol-Total',
-  //               'Triglycerides',
-  //               'HDL-C',
-  //               'LDL-C',
-  //               'VLDL-C',
-  //               'CHO/HDL-CRatio'
-  //             ];
-  //             List<String> unitsComponents = [
-  //               'mg/dL',
-  //               'mg/dL',
-  //               'mg/dL',
-  //               'mg/dL',
-  //               'mg/dL',
-  //               ' '
-  //             ];
-  //             String selectedText = item["UploadedReport"];
-  //             // Update rows here
-  //             rows = _buildRows(
-  //                 bloodComponents, unitsComponents, lines, selectedText);
-  //             setRows.add(rows);
-  //             item["obtainedRows"] = rows;
-  //             setState(() {});
-  //           } else if (item["UploadedReport"] == 'Fasting blood Sugar') {
-  //             List<String> bloodComponents = [
-  //               'FastingPlasmaGlucose',
-  //               'FastingBloodSugar',
-  //               'FaøngmasmaGlucose'
-  //             ];
-  //             List<String> unitsComponents = ['mg/dL', 'me/dl', 'mg/dL'];
-  //             String selectedText = item["UploadedReport"];
-  //             // Update rows here
-  //             rows = _buildRows(
-  //                 bloodComponents, unitsComponents, lines, selectedText);
-  //             setRows.add(rows);
-  //             item["obtainedRows"] = rows;
-  //             setState(() {});
-  //           } else if (item["UploadedReport"] == "Urine Full Report") {
-  //             List<String> bloodComponents = [
-  //               'Colour',
-  //               'Appearance',
-  //               'SpecificGravity',
-  //               'pH',
-  //               'Glucose',
-  //               'Protein',
-  //               'KetoneBodies',
-  //               'Bilirubin',
-  //               'Urobilinogen',
-  //               'PusCells',
-  //               'RedBloodCells',
-  //               'EpithelialCells',
-  //               'Organisms',
-  //               'Crystals',
-  //               'Casts'
-  //             ];
-  //             List<String> unitsComponents = [];
-  //             String selectedText = item["UploadedReport"];
-  //             rows = _buildRows(
-  //                 bloodComponents, unitsComponents, lines, selectedText);
-  //             setRows.add(rows);
-  //             item["obtainedRows"] = rows;
-  //             setState(() {});
-  //           }
-  //         }
-  //         item["ExtractedText"] = extractedText;
-  //       } catch (error) {
-  //         _showErrorSnackBar('Failed to parse prescription info');
-  //       }
-  //     }
-  //   }
-  //   Navigator.of(context).pushReplacement(MaterialPageRoute(
-  //       builder: (BuildContext context) =>
-  //           ReportAnalysisScreen(extractedText, addMultipleReports, setRows)));
-  // }
-  void _pickImage() async {
-    if (pickedImages.isNotEmpty) {
-      List<String> results = [];
-      if (selectedReport != "Urine Full Report" &&
-          selectedReport != "Full Blood Count Report") {
-        if (selectedReport == "Fasting blood Sugar") {
-          for (File img in pickedImages) {
-            var request = await http.MultipartRequest(
-                "POST",
-                Uri.parse(
-                    "https://sanuthivihansa.pythonanywhere.com/glucose/extract-text"));
-            request.files
-                .add(await http.MultipartFile.fromPath('file', img.path));
-            final response = await request.send();
-            if (response.statusCode == 200) {
-              final responseData = await http.Response.fromStream(response);
-              final Map<String, dynamic> responseJson = json.decode(responseData.body);
-              print("STOP");
+  void _onTapAnalyseBtn() async {
+    setState(() {
+      _isLoading = true;
+    });
+    _reportDataRows = [];
+    if (_pickedImages.isNotEmpty) {
+      for (int i = 0; i < _pickedImages.length; i++) {
+        List<DataRow> _singleReportDataRows = [];
+        if (_selectedReports[i]["UploadedReport"] == "Fasting blood Sugar") {
+          var request = http.MultipartRequest(
+              "POST",
+              Uri.parse(
+                  "https://sanuthivihansa.pythonanywhere.com/glucose/extract-text"));
+          request.files.add(
+              await http.MultipartFile.fromPath('file', _pickedImages[i].path));
+          final response = await request.send();
+          if (response.statusCode == 200) {
+            final responseData = await http.Response.fromStream(response);
+            final Map<String, dynamic> responseJson =
+                json.decode(responseData.body);
+
+            if (responseJson["extracted_text"]["Fasting Blood Sugar value?"] ==
+                null) {
+              _singleReportDataRows.add(DataRow(cells: [
+                DataCell(Text("Fasting Plasma Glucose")),
+                DataCell(Text(responseJson["extracted_text"]
+                    ["Fasting Plasma Glucose value?"])),
+                DataCell(Text(responseJson["extracted_text"]
+                    ["Fasting Plasma Glucose unit?"]))
+              ]));
+            } else {
+              _singleReportDataRows.add(DataRow(cells: [
+                const DataCell(Text("Fasting Blood Sugar")),
+                DataCell(Text(responseJson["extracted_text"]
+                    ["Fasting Blood Sugar value?"])),
+                DataCell(Text(responseJson["extracted_text"]
+                    ["Fasting Blood Sugar unit?"]))
+              ]));
             }
+            _reportDataRows.add(_singleReportDataRows);
           }
-        }
-      } else {
-        results = await apiService.sendImagesToGPT4VisionReports(
-            images: pickedImages);
-      }
+        } else if (_selectedReports[i]["UploadedReport"] ==
+            "Urine Full Report") {
+          var request = http.MultipartRequest(
+              "POST",
+              Uri.parse(
+                  "https://sanuthivihansa.pythonanywhere.com/urine/extract-text"));
+          request.files.add(
+              await http.MultipartFile.fromPath('file', _pickedImages[i].path));
+          final response = await request.send();
+          if (response.statusCode == 200) {
+            final responseData = await http.Response.fromStream(response);
+            Map<String, dynamic> responseJson = json.decode(responseData.body);
+            responseJson = responseJson["extracted_text"];
 
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Appearance")),
+              DataCell(Text(responseJson["Appearance result?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Bacteria")),
+              DataCell(Text(responseJson["Bacteria result?"].toString())),
+              DataCell(Text(responseJson["Bacteria unit?"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Bilirubin")),
+              DataCell(Text(responseJson["Bilirubin result?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Blood")),
+              DataCell(Text(responseJson["Blood result?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Color")),
+              DataCell(Text(responseJson["Color result?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Epithelial cells")),
+              DataCell(
+                  Text(responseJson["Epithelial cells result?"].toString())),
+              DataCell(Text(responseJson["Epithelial cells units"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Specific Gravity")),
+              DataCell(
+                  Text(responseJson["Specific Gravity result?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("pH")),
+              DataCell(Text(responseJson["pH result"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Protein")),
+              DataCell(Text(responseJson["Protein result?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Glucose-Urine ")),
+              DataCell(Text(responseJson["Glucose-Urine result?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Ketone bodies")),
+              DataCell(Text(responseJson["Ketone bodies result?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Urobilinogen")),
+              DataCell(Text(responseJson["Urobilinogen result"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Nitrite")),
+              DataCell(Text(responseJson["Nitrite result"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Leucocyte test")),
+              DataCell(Text(responseJson["Leucocyte test result"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("White Blood Cells")),
+              DataCell(
+                  Text(responseJson["White Blood Cells result?"].toString())),
+              DataCell(
+                  Text(responseJson["White Blood Cells units?"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Red Blood Cells")),
+              DataCell(
+                  Text(responseJson["Red Blood Cells result?"].toString())),
+              DataCell(Text(responseJson["Red Blood Cells units?"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Bacteria")),
+              DataCell(Text(responseJson["Bacteria result?"].toString())),
+              DataCell(Text(responseJson["Bacteria unit?"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("casts")),
+              DataCell(Text(responseJson["casts result?"].toString())),
+              DataCell(Text(responseJson["casts unit?"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("crystals")),
+              DataCell(Text(responseJson["crystals results?"].toString())),
+              DataCell(Text(responseJson["crystals units?"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Other")),
+              DataCell(Text(responseJson["other results?"].toString())),
+              DataCell(Text(responseJson["other units?"].toString()))
+            ]));
 
-
-
-
-
-
-      for (int i = 0; i < results.length; i++) {
-        String scannedText = results[i];
-        if (i >= addMultipleReports.length) {
-          print('Index out of bounds: $i');
-          continue;
-        }
-        Map<String, dynamic> item = addMultipleReports[i];
-        item["ScannedText"] =
-            scannedText; // Add or update the ScannedText field
-        print(scannedText);
-        _removeSpaces(scannedText);
-        List<String> lines = noSpace.split('\n');
-
-        if (item["UploadedReport"] != 'Select Report') {
-          List<String> bloodComponents = [];
-          List<String> unitsComponents = [];
-
-          switch (item["UploadedReport"]) {
-            case 'Full Blood Count Report':
-              bloodComponents = [
-                'WBC',
-                'Neutrophils',
-                'Lymphocytes',
-                'Monocytes',
-                'Eosinophils',
-                'Basophills',
-                'NeutrophilsAbsoluteCount',
-                'LymphocytesAbsoluteCount',
-                'MonocytesAbsoluteCount',
-                'EosinophilsAbsoluteCount',
-                'RBC',
-                'Haemoglobin',
-                'PackedCellVolume(PCV)',
-                'MCV',
-                'MCH',
-                'MCHC',
-                'RDW',
-                'PlateletCount'
-              ];
-              unitsComponents = [
-                '/Cumm',
-                '0/0',
-                '0/0',
-                '0/0',
-                '0/0',
-                '0/0',
-                '/Cumm',
-                '/Cumm',
-                '/Cumm',
-                '/Cumm',
-                'Million/pL',
-                'g/dl',
-                '0/0',
-                'fL',
-                'pg',
-                'g/dL',
-                '0/0',
-                '/Cumm'
-              ];
-              break;
-            case 'Lipid profile':
-              bloodComponents = [
-                'Cholesterol-Total',
-                'Triglycerides',
-                'HDL-C',
-                'LDL-C',
-                'VLDL-C',
-                'CHO/HDL-CRatio'
-              ];
-              unitsComponents = [
-                'mg/dL',
-                'mg/dL',
-                'mg/dL',
-                'mg/dL',
-                'mg/dL',
-                ' '
-              ];
-              break;
-            case 'Fasting blood Sugar':
-              bloodComponents = [
-                'FastingPlasmaGlucose',
-                'FastingBloodSugar',
-                'FaøngmasmaGlucose'
-              ];
-              unitsComponents = ['mg/dL', 'me/dl', 'mg/dL'];
-              break;
-            case 'Urine Full Report':
-              bloodComponents = [
-                'Colour',
-                'Appearance',
-                'SpecificGravity',
-                'pH',
-                'Glucose',
-                'Protein',
-                'KetoneBodies',
-                'Bilirubin',
-                'Urobilinogen',
-                'PusCells',
-                'RedBloodCells',
-                'EpithelialCells',
-                'Organisms',
-                'Crystals',
-                'Casts'
-              ];
-              unitsComponents = [];
-              break;
+            _reportDataRows.add(_singleReportDataRows);
           }
+        } else if (_selectedReports[i]["UploadedReport"] == "Lipid profile") {
+          var request = http.MultipartRequest(
+              "POST",
+              Uri.parse(
+                  "https://sanuthivihansa.pythonanywhere.com/lipid/extract-text"));
+          request.files.add(
+              await http.MultipartFile.fromPath('file', _pickedImages[i].path));
+          final response = await request.send();
+          if (response.statusCode == 200) {
+            final responseData = await http.Response.fromStream(response);
+            Map<String, dynamic> responseJson = json.decode(responseData.body);
+            responseJson = responseJson["extracted_text"];
 
-          String selectedText = item["UploadedReport"];
-          rows =
-              _buildRows(bloodComponents, unitsComponents, lines, selectedText);
-          setRows.add(rows);
-          item["obtainedRows"] = rows;
-          setState(() {});
-        }
-        item["ExtractedText"] = extractedText;
-      }
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Total Cholestrol")),
+              DataCell(Text(responseJson["Total Cholestrol?"].toString())),
+              DataCell(Text(responseJson["Total Cholestrol Result"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Triglycerides")),
+              DataCell(Text(responseJson["Triglycerides?"].toString())),
+              DataCell(Text(responseJson["Triglycerides Result"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("HDL Cholesterol")),
+              DataCell(Text(responseJson["HDL Cholesterol?"].toString())),
+              DataCell(Text(responseJson["HDL Cholesterol Result"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("LDL Cholesterol")),
+              DataCell(Text(responseJson["LDL Cholesterol?"].toString())),
+              DataCell(Text(responseJson["LDL Cholesterol Result"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("VLDL")),
+              DataCell(Text(responseJson["VLDL?"].toString())),
+              DataCell(Text(responseJson["VLDL Result?"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("CHOL/HDLC")),
+              DataCell(Text(responseJson["CHOL/HDLC?"].toString())),
+              DataCell(Text(responseJson["CHOL/HDLC Result"].toString()))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Non HDL Cholestrol")),
+              DataCell(Text(responseJson["Non HDL Cholestrol?"].toString())),
+              DataCell(Text(responseJson["Non HDL Cholestrol unit"].toString()))
+            ]));
 
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => ReportAnalysisScreen(
-              extractedText, addMultipleReports, setRows, widget.user)));
-    }
-  }
+            _reportDataRows.add(_singleReportDataRows);
+          }
+        } else if (_selectedReports[i]["UploadedReport"] ==
+            "Full Blood Count Report") {
+          var request = http.MultipartRequest(
+              "POST",
+              Uri.parse(
+                  "https://sanuthivihansa.pythonanywhere.com/fbc/extract-text"));
+          request.files.add(
+              await http.MultipartFile.fromPath('file', _pickedImages[i].path));
+          final response = await request.send();
+          if (response.statusCode == 200) {
+            final responseData = await http.Response.fromStream(response);
+            Map<String, dynamic> responseJson = json.decode(responseData.body);
+            responseJson = responseJson["extracted_text"];
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("WBC")),
+              DataCell(Text(responseJson["WBC?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Neutrophils")),
+              DataCell(Text(responseJson["Neutrophils"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Lymphocytes")),
+              DataCell(Text(responseJson["Lymphocytes?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Eosinophils")),
+              DataCell(Text(responseJson["Eosinophils"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Monocytes")),
+              DataCell(Text(responseJson["Monocytes?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Basophils")),
+              DataCell(Text(responseJson["Basophils"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Haemoglobin")),
+              DataCell(Text(responseJson["Haemoglobin?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("PCV")),
+              DataCell(Text(responseJson["PCV?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("MCHC")),
+              DataCell(Text(responseJson["MCHC?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("RBC")),
+              DataCell(Text(responseJson["RBC?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("MCH")),
+              DataCell(Text(responseJson["MCH?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("MCV")),
+              DataCell(Text(responseJson["MCV?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Neutrophils absolute count")),
+              DataCell(
+                  Text(responseJson["Neutrophils absolute count?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Lymphocytes absolute count")),
+              DataCell(
+                  Text(responseJson["Lymphocytes absolute count?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Eosinophil absolute count")),
+              DataCell(
+                  Text(responseJson["Eosinophil absolute count?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Monocytes absolute count")),
+              DataCell(
+                  Text(responseJson["Monocytes absolute count?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Basophils absolute count")),
+              DataCell(
+                  Text(responseJson["Basophils absolute count?"].toString())),
+              DataCell(Text(""))
+            ]));
+            _singleReportDataRows.add(DataRow(cells: [
+              DataCell(Text("Platelet count")),
+              DataCell(Text(responseJson["Platelet count?"].toString())),
+              DataCell(Text(""))
+            ]));
 
-//correct code
-// void _pickImage() async {
-//   for (var item in addMultipleReports) {
-//     if (item["UploadedImage"] != null) {
-//       final image = item["UploadedImage"];
-//       if (image != null) {
-//         // final pickedImage = File(image.path);
-//         // final bytes = await pickedImage.readAsBytes();
-//         // final img64 = base64Encode(bytes);
-//         //
-//         // final url = "https://api.ocr.space/parse/image";
-//         // final data = {
-//         //   "base64Image": "data:image/jpg;base64,$img64",
-//         //   "isTable": "true",
-//         // };
-//         // final header = {"apikey": "K81742525988957"};
-//         // final response =
-//         // await http.post(Uri.parse(url), body: data, headers: header);
-//
-//         //final result = jsonDecode(response.body);
-//         // final scannedText = result["ParsedResults"][0]["ParsedText"];
-//         final scannedText = await apiService.sendImageToGPT4VisionReport(image: pickedImage!);
-//
-//         item["ScannedText"] = scannedText; // Add or update the ScannedText field
-//         print(scannedText);
-//         _removeSpaces(scannedText);
-//         List<String> lines = noSpace.split('\n');
-//         if(item["UploadedReport"]!='Select Report'){
-//           if(item["UploadedReport"]=='Full Blood Count Report'){
-//             List<String> bloodComponents = ['WBC', 'Neutrophils', 'Lymphocytes', 'Monocytes', 'Eosinophils', 'Basophills','NeutrophilsAbsoluteCount','LymphocytesAbsoluteCount','MonocytesAbsoluteCount','EosinophilsAbsoluteCount','RBC','Haemoglobin','PackedCellVolume(PCV)','MCV','MCH','MCHC','RDW','PlateletCount'];
-//             List<String> unitsComponents = ['/Cumm', '0/0', '0/0', '0/0', '0/0', '0/0','/Cumm','/Cumm','/Cumm','/Cumm','Million/pL','g/dl','0/0','fL','pg','g/dL','0/0','/Cumm'];
-//             String selectedText=item["UploadedReport"];
-//             // Update rows here
-//             rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
-//             setRows.add(rows);
-//             item["obtainedRows"]=rows;
-//             setState(() {});
-//           }
-//           else if(item["UploadedReport"] == 'Lipid profile'){
-//             List<String> bloodComponents = ['Cholesterol-Total', 'Triglycerides', 'HDL-C', 'LDL-C', 'VLDL-C', 'CHO/HDL-CRatio'];
-//             List<String> unitsComponents = ['mg/dL', 'mg/dL', 'mg/dL', 'mg/dL', 'mg/dL', ' '];
-//             String selectedText=item["UploadedReport"];
-//             // Update rows here
-//             rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
-//             setRows.add(rows);
-//             item["obtainedRows"]=rows;
-//             setState(() {});
-//           }
-//           else if(item["UploadedReport"] == 'Fasting blood Sugar'){
-//             List<String> bloodComponents = ['FastingPlasmaGlucose', 'FastingBloodSugar','FaøngmasmaGlucose'];
-//             List<String> unitsComponents = ['mg/dL', 'me/dl','mg/dL'];
-//             String selectedText=item["UploadedReport"];
-//             // Update rows here
-//             rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
-//             setRows.add(rows);
-//             item["obtainedRows"]=rows;
-//             setState(() {});
-//           }
-//           else if(item["UploadedReport"]=="Urine Full Report"){
-//             List<String> bloodComponents = ['Colour', 'Appearance','SpecificGravity','pH','Glucose','Protein','KetoneBodies','Bilirubin','Urobilinogen','PusCells','RedBloodCells','EpithelialCells','Organisms','Crystals','Casts'];
-//             List<String> unitsComponents = [];
-//             String selectedText=item["UploadedReport"];
-//             rows = _buildRows(bloodComponents, unitsComponents, lines,selectedText);
-//             setRows.add(rows);
-//             item["obtainedRows"]=rows;
-//             setState(() {});
-//           }
-//         }
-//         item["ExtractedText"] = extractedText;
-//
-//       }
-//     }
-//   }
-//   Navigator.of(context).pushReplacement(MaterialPageRoute(
-//       builder: (BuildContext context) =>
-//           ReportAnalysisScreen(extractedText,addMultipleReports,setRows)));
-// }
-
-  String _removeSpaces(String text) {
-    noSpace = text.replaceAll(RegExp(r'\s+'), '');
-
-    return noSpace;
-  }
-
-//
-// List<DataRow> _buildRows(List<String> bloodComponents, List<String> unitsComponents, List<String> lines) {
-//   List<DataRow> rows = [];
-//   int startIndex=0;
-//   int endIndex=0;
-//
-//   // Filter out lines that contain any of the blood components
-//   List<String> filteredLines = lines.where((line) => bloodComponents.any((component) => line.contains(component))).toList();
-//
-//   for (String line in filteredLines) {
-//     // Iterate through each line of text
-//     if(selectedReport=="Fasting blood Sugar"){
-//       startIndex = line.indexOf("2022");
-//       endIndex = line.indexOf("Referencerange:");
-//     }
-//     //int startIndex = line.indexOf("FullBloodcount(FBC)");
-//     //int startIndex = line.indexOf("LipidProfile");
-//
-//     if (startIndex == -1) {
-//       continue; // Skip lines that don't contain "FullBloodcount(FBC)"
-//     }
-//
-//     //int endIndex = line.indexOf("LipidProfileReference:");
-//     if (endIndex == -1) {
-//       continue; // Skip lines that don't contain "References:"
-//     }
-//
-//     String dataSection = line.substring(startIndex, endIndex);
-//     print(dataSection);
-//
-//     // Keep track of which components have been found in this line
-//     Set<String> foundComponents = {};
-//
-//     // Iterate through each blood component and unit component
-//     for (int i = 0; i < bloodComponents.length; i++) {
-//       String bloodComponent = bloodComponents[i];
-//       String unitComponent = unitsComponents[i];
-//
-//       int bloodIndex = dataSection.indexOf(bloodComponent);
-//       int unitIndex = dataSection.indexOf(unitComponent, bloodIndex + bloodComponent.length);
-//
-//       while (bloodIndex != -1 && unitIndex != -1) {
-//         // Extract the value between the blood component and unit component
-//         String value = dataSection.substring(bloodIndex + bloodComponent.length, unitIndex).trim();
-//
-//         rows.add(DataRow(cells: [
-//           DataCell(Text(bloodComponent)),
-//           DataCell(Text(value.trim())),
-//           DataCell(Text(unitComponent)),
-//         ]));
-//
-//         // Add the found component to the set
-//         foundComponents.add(bloodComponent);
-//         foundComponents.add(unitComponent);
-//
-//         // If all components have been found, break the loop
-//         if (foundComponents.length == bloodComponents.length * 2) {
-//           break;
-//         }
-//
-//         // Update indices for the next occurrence
-//         bloodIndex = dataSection.indexOf(bloodComponent, unitIndex);
-//         unitIndex = dataSection.indexOf(unitComponent, bloodIndex + bloodComponent.length);
-//       }
-//
-//       // If all components have been found, break the loop
-//       if (foundComponents.length == bloodComponents.length * 2) {
-//         break;
-//       }
-//     }
-//
-//     // If all components have been found, break the outer loop
-//     if (foundComponents.length == bloodComponents.length * 2) {
-//       break;
-//     }
-//   }
-//
-//   return rows;
-// }
-
-  List<DataRow> _buildRows(List<String> bloodComponents,
-      List<String> unitsComponents, List<String> lines, String selectedText) {
-    List<DataRow> rows = [];
-
-    // Mapping of blood component names to display names
-    Map<String, String> componentMap = {
-      'FastingPlasmaGlucose': 'Fasting Plasma Glucose',
-      'FastingBloodSugar': 'Fasting Blood Sugar',
-      // Add more mappings as needed
-    };
-
-    // Filter out lines that contain any of the blood components
-    List<String> filteredLines = lines
-        .where((line) =>
-            bloodComponents.any((component) => line.contains(component)))
-        .toList();
-
-    for (String line in filteredLines) {
-      print("Processing line: $line"); // Debug print
-
-      // Iterate through each blood component and unit component
-      for (int i = 0; i < bloodComponents.length; i++) {
-        String bloodComponent = bloodComponents[i];
-        String unitComponent =
-            unitsComponents.length > i ? unitsComponents[i] : '';
-
-        int bloodIndex = line.indexOf(bloodComponent);
-        int unitIndex =
-            line.indexOf(unitComponent, bloodIndex + bloodComponent.length);
-
-        // Ensure the indices are valid
-        if (bloodIndex == -1 || unitIndex == -1) {
-          continue;
-        }
-
-        while (bloodIndex != -1 && unitIndex != -1) {
-          // Extract the value between the blood component and unit component
-          String value = line
-              .substring(bloodIndex + bloodComponent.length, unitIndex)
-              .trim();
-
-          // Debug print to verify extracted values
-          print(
-              "Component: $bloodComponent, Value: $value, Unit: $unitComponent");
-
-          rows.add(DataRow(cells: [
-            DataCell(Text(componentMap.containsKey(bloodComponent)
-                ? componentMap[bloodComponent]!
-                : bloodComponent)),
-            DataCell(Text(value.trim())),
-            DataCell(Text(unitComponent)),
-          ]));
-
-          // Update indices for the next occurrence
-          bloodIndex = line.indexOf(bloodComponent, unitIndex);
-          unitIndex =
-              line.indexOf(unitComponent, bloodIndex + bloodComponent.length);
-
-          // Ensure the indices are valid
-          if (bloodIndex == -1 || unitIndex == -1) {
-            break;
+            _reportDataRows.add(_singleReportDataRows);
           }
         }
       }
     }
-
-    return rows;
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => ReportAnalysisScreen(
+            _selectedReports, _reportDataRows, widget.user)));
   }
 
   @override
@@ -806,15 +548,15 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     halfScreenWidth = (MediaQuery.of(context).size.width - 10) - 50;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          color: Colors.white,
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        // leading: IconButton(
+        //   color: Colors.white,
+        //   icon: const Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
         title: const Text(
-          "CardioFit AI",
+          "Laboratory Report Diagnosis",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.red,
@@ -831,7 +573,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                     SizedBox(
                       height: 55 + MediaQuery.of(context).viewInsets.top,
                     ),
-                    Text("Laboratory Report Diagnosis",
+                    Text("Please upload your medical reports",
                         style: TextStyle(
                             fontSize: 30,
                             color: Colors.blueGrey,
@@ -843,7 +585,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                     SizedBox(
                       height: 30,
                     ),
-                    addMultipleReports.length != 0
+                    _selectedReports.length != 0
                         ? _showAttachedItems()
                         : SizedBox(),
                     SizedBox(
@@ -853,18 +595,59 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
+                            onPressed: () async {
+                              if (widget.user.newUser == true) {
+                                User updateNewUserField = User(
+                                    widget.user.name,
+                                    widget.user.email,
+                                    widget.user.password,
+                                    widget.user.age,
+                                    widget.user.height,
+                                    widget.user.weight,
+                                    widget.user.bmi,
+                                    widget.user.dob,
+                                    widget.user.activeLevel,
+                                    widget.user.type,
+                                    widget.user.bloodGlucoseLevel,
+                                    widget.user.bloodCholestrolLevel,
+                                    widget.user.cardiacCondition,
+                                    widget.user.bloodTestType,
+                                    widget.user.memberName,
+                                    widget.user.memberRelationship,
+                                    widget.user.memberPhoneNo,
+                                    false,
+                                    widget.user.gender);
+
+                                Response response =
+                                    await UserLoginService.updateNewUser(
+                                        updateNewUserField);
+                              }
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DashboardScreen(widget.user)),
+                              );
                             },
-                            child: Text("Back")),
+                            child: Text(widget.user.newUser ? "Skip" : "Back")),
                         SizedBox(width: 30),
                         ElevatedButton(
-                            onPressed: () {
-                              _pickImage();
-                            },
+                            onPressed: _isLoading == false
+                                ? () {
+                                    _onTapAnalyseBtn();
+                                  }
+                                : null,
                             child: Text("Analyse")),
+                        _isLoading == true
+                            ? Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: CircularProgressIndicator(),
+                              )
+                            : SizedBox()
                       ],
                     ),
+
                     SizedBox(height: 30),
                     // wordPairs.length != 0 ? _displayOutputTable() : SizedBox()
                   ],

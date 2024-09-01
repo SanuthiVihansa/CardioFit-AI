@@ -1,5 +1,5 @@
 import 'package:cardiofitai/models/user.dart';
-import 'package:cardiofitai/screens/palm_analysis/for_pp2/all_lead_display_screen.dart';
+import 'package:cardiofitai/screens/ecg_reconstruction/all_lead_display_screen.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -109,7 +109,7 @@ class RecordingPlot extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "Lead II ECG Signal",
+                "Lead I ECG Signal",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               // Text("Remaining time: $_countdown s")

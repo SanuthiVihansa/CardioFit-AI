@@ -1,4 +1,3 @@
-import 'package:cardiofitai/components/navbar_component.dart';
 import 'package:cardiofitai/components/navigation_panel_component.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -198,12 +197,7 @@ class _DietHomePageState extends State<DietHomePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFE9E9E9),
       key: _scaffoldKey,
-      drawer: LeftNavBar(
-          user: widget.user,
-          name: widget.user.name,
-          email: widget.user.email,
-          width: 150,
-          height: 300),
+
       body: Row(
         children: [
           NavigationPanelComponent("diet plan", widget.user),

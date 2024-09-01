@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:cardiofitai/models/user.dart';
-import 'package:cardiofitai/screens/diet_plan/AlertService/confirmAlarmScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +60,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   };
   late QuerySnapshot<Object?> _lastSubmittedRecordInfo;
   int _lastSubmitRecordNo = 0;
-  int _thisAlarmReferenceNo = 0;
 
   @override
   void initState() {
@@ -95,7 +93,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       });
     }
   }
-
+//When the analyse button is clicked,call the API get its respond and call _addMedicinesFromPrescriptionInfo method
   detectDisease() async {
     setState(() {
       detecting = true;
@@ -156,7 +154,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     if (match != null) return int.parse(match.group(1)!);
     return 0; // Default to 0 if unable to parse
   }
-
+//Extract the string which was passed from the API, break down into parts and store in _medicines list
   void _addMedicinesFromPrescriptionInfo() {
     try {
       final jsonStartIndex = prescriptionInfo.indexOf('[');
@@ -198,7 +196,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       _showErrorSnackBar('Failed to parse prescription info');
     }
   }
-
+//when the edit icon is clicked the relevant matching data is inserted to the controls
   void _populateFieldsForEditing(Map<String, dynamic> medicine) {
     _medicineNameController.text = medicine['name'] ?? '';
     _dosageController.text = medicine['dosage'] ?? '';
@@ -222,7 +220,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       desc: content,
       btnOkText: 'Got it',
       btnOkColor: Colors.red,
-      btnOkOnPress: () {},
+      btnOkOnPress: () { // Only navigate after successfully saving all reminders
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (buildContext) => NotificationHomePage(widget.user)));},
     ).show();
   }
 
@@ -243,28 +243,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       _selectedDays.add(_daysOfWeek[dayOfWeek]!);
     }
   }
-
-  String _getDayName(int dayNumber) {
-    switch (dayNumber) {
-      case DateTime.monday:
-        return "Mon";
-      case DateTime.tuesday:
-        return "Tue";
-      case DateTime.wednesday:
-        return "Wed";
-      case DateTime.thursday:
-        return "Thu";
-      case DateTime.friday:
-        return "Fri";
-      case DateTime.saturday:
-        return "Sat";
-      case DateTime.sunday:
-        return "Sun";
-      default:
-        return "";
-    }
-  }
-
+//Calculate end date upon number of days and starting date logic
   void _calculateEndDate() {
     if (_startDateController.text.isNotEmpty &&
         _daysController.text.isNotEmpty) {
@@ -276,7 +255,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       _autoSelectDays(startDate, days);
     }
   }
-
+//When the add button is clicked add the alarm details to the list and clear the controls
   void _addMedicine() {
     setState(() {
       _medicines.add({
@@ -304,58 +283,58 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       _selectedDays.clear();
     });
   }
-
+//when set alarm button is clicked it navigates here
   Future<void> _onTapSubmitBtn(BuildContext context) async {
-    for (var medicine in _medicines) {
-      if (medicine['interval'].isEmpty ||
-          medicine['days'] == 0 ||
-          medicine['startDate'].isEmpty ||
-          medicine['endDate'].isEmpty ||
-          medicine['startTime'].isEmpty) {
-        _showErrorSnackBar(
-            'Please edit the entry for ${medicine['name']} to include frequency, duration, start date, start time, and end date.');
-        return;
-      } else {
-        for (var extractedMedicine in _medicines) {
-          _lastSubmitRecordNo += 1;
-          await MedicineReminderService.medicineReminder(
-            _lastSubmitRecordNo,
-            widget.user.email,
-            extractedMedicine["name"] ?? '',
-            extractedMedicine["dosage"] ?? '',
-            extractedMedicine["pillintake"] ?? '',
-            extractedMedicine["interval"] ?? '',
-            extractedMedicine["days"] ?? 0,
-            extractedMedicine["startDate"] ?? '',
-            extractedMedicine["endDate"] ?? '',
-            extractedMedicine["additionalInstructions"] ?? '',
-            List<String>.from(extractedMedicine["selectedDays"] ?? []),
-            extractedMedicine["startTime"] ?? '',
-          );
-
-          await scheduleAlarmsForMedicine(
-            medicineName: extractedMedicine["name"],
-            dosage: extractedMedicine["dosage"],
-            pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
-            frequency: extractedMedicine["interval"],
-            startDate:
-            DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
-            endDate:
-            DateFormat('yyyy-MM-dd').parse(extractedMedicine["endDate"]),
-            selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
-            startTime: extractedMedicine["startTime"],
-          );
+    if (_medicines.isNotEmpty) {
+      for (var medicine in _medicines) {
+        if (medicine['interval'].isEmpty ||
+            medicine['days'] == 0 ||
+            medicine['startDate'].isEmpty ||
+            medicine['endDate'].isEmpty ||
+            medicine['startTime'].isEmpty) {
+          _showErrorSnackBar(
+              'Please edit the entry for ${medicine['name']} to include frequency, duration, start date, start time, and end date.');
+          return; // Exit the function if there's an error
         }
-
-        _showSuccessDialog('Reminders set successfully', '');
-
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (buildContext) =>
-                NotificationHomePage(widget.user)));
       }
+
+      // If there are no errors, proceed with saving the reminders
+      for (var extractedMedicine in _medicines) {
+        _lastSubmitRecordNo += 1;
+        await MedicineReminderService.medicineReminder(
+          _lastSubmitRecordNo,
+          widget.user.email,
+          extractedMedicine["name"] ?? '',
+          extractedMedicine["dosage"] ?? '',
+          extractedMedicine["pillintake"] ?? '',
+          extractedMedicine["interval"] ?? '',
+          extractedMedicine["days"] ?? 0,
+          extractedMedicine["startDate"] ?? '',
+          extractedMedicine["endDate"] ?? '',
+          extractedMedicine["additionalInstructions"] ?? '',
+          List<String>.from(extractedMedicine["selectedDays"] ?? []),
+          extractedMedicine["startTime"] ?? '',
+        );
+
+        await scheduleAlarmsForMedicine(
+          medicineName: extractedMedicine["name"],
+          dosage: extractedMedicine["dosage"],
+          pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
+          frequency: extractedMedicine["interval"],
+          startDate: DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
+          endDate: DateFormat('yyyy-MM-dd').parse(extractedMedicine["endDate"]),
+          selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
+          startTime: extractedMedicine["startTime"],
+        );
+      }
+
+      _showSuccessDialog('Reminders set successfully', '');
+    } else {
+      _showErrorSnackBar('No Items added to set reminder');
     }
   }
 
+//Setting the alarms - Alarm package related.
   Future<void> scheduleAlarmsForMedicine({
     required String medicineName,
     required String dosage,
@@ -394,7 +373,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           final alarmSettings = AlarmSettings(
             id: alarmIdHash,
             dateTime: alarmTime,
-            assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
+            assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.mp3',
             loopAudio: true,
             vibrate: true,
             volume: 0.8,
@@ -438,7 +417,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       appBar: AppBar(
         title: Center(
             child: Text(
-              'Set Reminder',
+              'Set Medicine Reminder',
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             )),
         leading: IconButton(
@@ -478,7 +457,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ),
     );
   }
-
+//Title related styling
   Widget _buildTitle(String title) {
     return Text(
       title,
@@ -486,7 +465,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
     );
   }
-
+//two options to upload prescriptions to the system
   Widget _buildImagePickerOptions() {
     return Column(
       children: [
@@ -502,7 +481,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ],
     );
   }
-
+//Display the scanned Image in the app
   Widget _buildImagePickerButton(
       String text, IconData icon, VoidCallback onPressed) {
     return ElevatedButton(
@@ -528,29 +507,32 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ),
     );
   }
-
+  //Display the uploaded image, else show the default image
   Widget _buildPickedImage() {
     return pickedImage == null
         ? Center(
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.5,
+        // height: MediaQuery.of(context).size.height * 0.5,
+        height: 500,
         child: Image.asset('assets/pick1.png'),
       ),
     )
         : Container(
       width: double.infinity,
+      height: 500,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
       padding: const EdgeInsets.all(20),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Image.file(
           pickedImage!,
-          fit: BoxFit.cover,
+          fit: BoxFit.fitHeight,
         ),
       ),
     );
   }
 
+  //When an image is uploaded, display the analyse button
   Widget _buildDetectButton() {
     return detecting
         ? SpinKitWave(
@@ -594,6 +576,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
+  //Divide the section either to add details mannually
   Widget _buildDivider() {
     return Center(
       child: Text(
@@ -604,6 +587,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
+  //Controld to mannual setting reimders
   Widget _setRemindersManuallyForm() {
     return Column(
       children: [
@@ -717,7 +701,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ],
     );
   }
-
+//Styling of the controls of mannual setting part
   Widget _buildTextField(TextEditingController controller, String label,
       TextInputType keyboardType,
       {ValueChanged<String>? onChanged}) {
@@ -740,10 +724,12 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       cursorColor: Colors.red,
     );
   }
-
+//Mannually setting Reimders controls start here
   Widget _buildDropdownButtonFormField() {
     return DropdownButtonFormField<String>(
-      value: _selectedFrequency,
+      value: _selectedFrequency.isNotEmpty && _frequencyOptions.contains(_selectedFrequency)
+          ? _selectedFrequency
+          : null, // Set to null if no match is found to avoid errors
       items: _frequencyOptions.map((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -764,12 +750,11 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ),
       onChanged: (newValue) {
         setState(() {
-          _selectedFrequency = newValue!;
+          _selectedFrequency = newValue ?? _frequencyOptions.first;
         });
       },
     );
   }
-
   Widget _buildDatePickerTextField() {
     return TextField(
       controller: _startDateController,
@@ -807,7 +792,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       cursorColor: Colors.red,
     );
   }
-
   Widget _buildEndDatePickerTextField() {
     return TextField(
       controller: _endDateController,
@@ -844,7 +828,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       cursorColor: Colors.red,
     );
   }
-
   Widget _buildTimePickerTextField() {
     return TextField(
       controller: _startTimeController,
@@ -885,7 +868,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       cursorColor: Colors.red,
     );
   }
-
   Widget _buildDayToggle(String day) {
     final isSelected = _selectedDays.contains(day);
     return ChoiceChip(
@@ -901,7 +883,10 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ),
     );
   }
+//Mannually setting Reimders controls End here
 
+/*List to display the medicine reminders fetched when edit icon click populate to the _populateFieldsForEditing(medicine) or if delete remove the
+  prescription from medicine list.*/
   Widget _buildMedicineList() {
     return ListView.builder(
       shrinkWrap: true,
@@ -952,7 +937,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       },
     );
   }
-
+//When set alarm button is clicked
   Widget _buildSetAlarmButton() {
     return Container(
       width: double.infinity,

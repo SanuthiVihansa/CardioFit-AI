@@ -375,22 +375,28 @@ import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/screens/common/ecg_monitoring_home_screen.dart';
 import 'package:cardiofitai/screens/defect_prediction/report_home_screen.dart';
 import 'package:cardiofitai/screens/diet_plan/diet_,mainhome_page.screen.dart';
+import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:cardiofitai/screens/ecg_comparison_and_analysis/analysis_file_selection_screen.dart';
 import 'package:cardiofitai/screens/ecg_comparison_and_analysis/comparison_file_selection_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_future_use/pmb_device_connection_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_future_use/real_time_record.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/electrode_placement_instructions_screen.dart';
 import 'package:cardiofitai/screens/palm_analysis/for_pp2/serial_monitor.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
-import '../../components/navbar_component.dart';
 import '../../models/user.dart';
+import '../../services/ecg_service.dart';
+import '../../services/user_information_service.dart';
 
 class DashboardScreen extends StatefulWidget {
-  final User user;
+  User user;
 
-  const DashboardScreen(this.user, {super.key});
+  DashboardScreen(this.user, {super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -398,12 +404,55 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late double _width;
+  late double _height;
+  final double _devWidth = 753.4545454545455;
+  final double _devHeight = 392.72727272727275;
+  List<Map<String, dynamic>> _lastEcgData = [];
+  bool _lastEcgIsLoading = true;
 
   @override
   void initState() {
     super.initState();
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    _getLastEcg();
+  }
+
+  Future<void> _getLastEcg() async {
+    _lastEcgData = await EcgService.getLastEcg(widget.user.email);
+    setState(() {
+      _lastEcgIsLoading = false;
+    });
+    _getUpdatedValues();
+  }
+
+  Future<void> _getUpdatedValues() async {
+    QuerySnapshot snapshot =
+        await UserLoginService.getUserByEmail(widget.user.email);
+    User newUser = User(
+        snapshot.docs[0]["name"],
+        snapshot.docs[0]["email"],
+        snapshot.docs[0]["password"],
+        snapshot.docs[0]["age"],
+        snapshot.docs[0]["height"],
+        snapshot.docs[0]["weight"],
+        snapshot.docs[0]["bmi"],
+        snapshot.docs[0]["dob"],
+        snapshot.docs[0]["activeLevel"],
+        snapshot.docs[0]["type"],
+        snapshot.docs[0]["bloodGlucoseLevel"],
+        snapshot.docs[0]["bloodCholestrolLevel"],
+        snapshot.docs[0]["cardiacCondition"],
+        snapshot.docs[0]["bloodTestType"],
+        snapshot.docs[0]["memberName"],
+        snapshot.docs[0]["memberPhone"],
+        snapshot.docs[0]["memberRelationship"],
+        snapshot.docs[0]["newUser"],
+        snapshot.docs[0]["gender"]);
+    setState(() {
+      widget.user = newUser;
+    });
   }
 
   void _navigateTo(Widget screen) {
@@ -445,13 +494,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             builder: (BuildContext context) => DietHomePage(widget.user)));
   }
 
-  void _onClickDiseasePredictionBtn() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (BuildContext context) => ReportHome()));
-  }
+  // void _onClickDiseasePredictionBtn() {
+  //   Navigator.push(context,
+  //       MaterialPageRoute(builder: (BuildContext context) => ReportHome()));
+  // }
 
   @override
   Widget build(BuildContext context) {
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -486,6 +537,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         backgroundColor: const Color(0xFFFF5B61),
+        leading: Icon(
+          CupertinoIcons.back,
+          color: Colors.red,
+        ),
       ),
       // drawer: LeftNavBar(
       //   user: widget.user,
@@ -504,7 +559,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   // Your dashboard content goes here
                   ProfileHeader(user: widget.user),
                   CurrentHealthInfo(user: widget.user),
-                  ActivitiesGraph(),
+                  ActivitiesGraph(_lastEcgData, _height, _width, _devHeight,
+                      _devWidth, _lastEcgIsLoading),
 
                   // Additional widgets...
                 ],
@@ -528,9 +584,22 @@ class ProfileHeader extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 40,
-            child: Image.asset("assets/profile_avatar.png"),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ProfilePage(user)));
+            },
+            child: CircleAvatar(
+              radius: 40,
+              child: ClipOval(
+                child: Image.network(
+                  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
           ),
           SizedBox(width: 16),
           Column(
@@ -643,6 +712,110 @@ class StatCard extends StatelessWidget {
 }
 
 class ActivitiesGraph extends StatelessWidget {
+  final List<Map<String, dynamic>> lastEcgData;
+  final double _height;
+  final double _width;
+  final double _devHeight;
+  final double _devWidth;
+  final bool lastEcgIsLoading;
+
+  const ActivitiesGraph(this.lastEcgData, this._height, this._width,
+      this._devHeight, this._devWidth, this.lastEcgIsLoading,
+      {super.key});
+
+  Widget _ecgPlot(
+      List<double> data, double minValue, double maxValue, Color color) {
+    return Padding(
+      padding: EdgeInsets.only(
+          top: _height / (_devHeight / 1),
+          left: _width / (_devWidth / 16),
+          right: _width / (_devWidth / 16),
+          bottom: _height / (_devHeight / 16)),
+      child: IgnorePointer(
+        ignoring: true,
+        child: LineChart(
+          LineChartData(
+            lineBarsData: [
+              LineChartBarData(
+                spots: List.generate(
+                  data.length,
+                  (index) => FlSpot(index.toDouble(), data[index]),
+                ),
+                isCurved: false,
+                colors: [color],
+                barWidth: 2,
+                isStrokeCapRound: true,
+                dotData: FlDotData(
+                  show: false,
+                ),
+              ),
+            ],
+            minY: minValue,
+            // Adjust these values based on your data range
+            maxY: maxValue,
+            titlesData: FlTitlesData(
+              bottomTitles: SideTitles(
+                showTitles: true,
+                getTitles: (value) {
+                  if (value % 500 == 0) {
+                    return (value ~/ 500).toString();
+                  } else {
+                    return "";
+                  }
+                },
+              ),
+              leftTitles: SideTitles(
+                showTitles: true,
+              ),
+            ),
+            borderData: FlBorderData(
+              show: true,
+              border: Border.all(color: Colors.black),
+            ),
+            gridData: FlGridData(
+              show: true,
+              drawHorizontalLine: true,
+              drawVerticalLine: true,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  double _calcMin(List<double> data) {
+    double minValue =
+        data.reduce((value, element) => value < element ? value : element) -
+            0.1;
+    return minValue;
+  }
+
+  double _calcMax(List<double> data) {
+    double maxValue =
+        data.reduce((value, element) => value > element ? value : element) +
+            0.1;
+    return maxValue;
+  }
+
+  Widget _lead1Plot(List<double> l1Data) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: _height / (_devHeight / 10)),
+          child: Text(
+            "Lead I",
+            style: TextStyle(fontSize: _width / (_devWidth / 10)),
+          ),
+        ),
+        SizedBox(
+            height: _height / (_devHeight / 130),
+            child: _ecgPlot(
+                l1Data, _calcMin(l1Data), _calcMax(l1Data), Colors.blue)),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -651,15 +824,49 @@ class ActivitiesGraph extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'ECG Graphical Illustrations',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            'Recent ECG Report         ',
+            style: TextStyle(
+              fontSize: _height / (_devHeight / 10),
+              fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(height: 8),
           Container(
-            height: 200,
+            height: _height / (_devHeight / 180),
             color: Colors.blueGrey[50], // Placeholder for graph
             child: Center(
-              child: Text('Graph Placeholder'),
+              child: lastEcgIsLoading == true
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(top: _height / (_devHeight / 8)),
+                          child: Text('Loading'),
+                        ),
+                      ],
+                    )
+                  : lastEcgData.length == 0
+                      ? Center(
+                          child: Text('No ECG Report'),
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _lead1Plot(lastEcgData[0]["l1"].cast<double>()),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: _width / (_devWidth / 30)),
+                              child: Text(
+                                'Date: ${DateFormat('yyyy-MM-dd').format(lastEcgData[0]["datetime"].toDate())}         Time: ${DateFormat('HH:mm:ss').format(lastEcgData[0]["datetime"].toDate())}',
+                                style: TextStyle(
+                                  fontSize: _height / (_devHeight / 10),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
             ),
           ),
         ],
