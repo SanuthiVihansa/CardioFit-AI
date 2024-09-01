@@ -1,3 +1,4 @@
+import 'package:cardiofitai/screens/common/dashboard_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -29,22 +30,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
   String ageRange = '';
   String advice = '';
 
-//Dictionary key for Diet advice proposal
-//   final Map<String, dynamic> dietAdvice = {
-//     '18-65': {
-//       'Female': {
-//         'Obese': {
-//           'Yes': {
-//             'Normal': {
-//               'Normal': 'Get a balanced diet',
-//               'High': 'Get a balanced diet, Limit high sugary foods',
-//               'Low': 'Get a balanced diet',
-//             },
-//           },
-//         },
-//       },
-//     },
-//   };
+
 
   final Map<String, dynamic> dietAdvice = {
     '0-19': {
@@ -1204,18 +1190,12 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        // drawer: LeftNavBar(
-        //     user: widget.user,
-        //     name: widget.user.name,
-        //     email: widget.user.email,
-        //     width: 150,
-        //     height: 300),
         appBar: AppBar(
           leading: IconButton(
             color: Colors.black,
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)=>DashboardScreen(widget.user)));
             },
           ),
           title: Align(
