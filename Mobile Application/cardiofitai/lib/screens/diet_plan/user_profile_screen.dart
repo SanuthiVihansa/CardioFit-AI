@@ -48,12 +48,12 @@ class _ProfilePageState extends State<ProfilePage> {
   int _calculateAge(DateTime birthDate) {
     DateTime today = DateTime.now();
     int age = today.year - birthDate.year;
-    if (today.month < birthDate.month || (today.month == birthDate.month && today.day < birthDate.day)) {
+    if (today.month < birthDate.month ||
+        (today.month == birthDate.month && today.day < birthDate.day)) {
       age--;
     }
     return age;
   }
-
 
   //Function to generate a Report number
   Future<void> _userInfo() async {
@@ -138,7 +138,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-
 
                 // ActiveLevel(),
                 Padding(
@@ -231,20 +230,24 @@ class _ProfilePageState extends State<ProfilePage> {
         labelText: 'DOB',
         border: OutlineInputBorder(),
       ),
-      readOnly: true, // Make the field read-only so that only the date picker can set the value
+      readOnly: true,
+      // Make the field read-only so that only the date picker can set the value
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(), // The current date as the initial date
           firstDate: DateTime(1900), // Start date
-          lastDate: DateTime.now(), // End date, ensuring the date can't be in the future
+          lastDate: DateTime
+              .now(), // End date, ensuring the date can't be in the future
         );
 
         if (pickedDate != null) {
           String formattedDate = "${pickedDate.toLocal()}".split(' ')[0];
           setState(() {
-            _dobController.text = formattedDate; // Set the date in the controller
-            _ageController.text = _calculateAge(pickedDate).toString(); // Calculate and set the age
+            _dobController.text =
+                formattedDate; // Set the date in the controller
+            _ageController.text = _calculateAge(pickedDate)
+                .toString(); // Calculate and set the age
           });
         }
       },
@@ -364,10 +367,10 @@ class _ProfilePageState extends State<ProfilePage> {
             _dobController.text,
             dropdownValue.characters.string,
             widget.user.type,
-            "0",
-            "0",
-            "No",
-            "0",
+            widget.user.bloodGlucoseLevel,
+            widget.user.bloodCholestrolLevel,
+            widget.user.cardiacCondition,
+            widget.user.bloodTestType,
             widget.user.memberName,
             widget.user.memberRelationship,
             widget.user.memberPhoneNo,
