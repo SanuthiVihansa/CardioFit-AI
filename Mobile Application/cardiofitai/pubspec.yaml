@@ -132,7 +132,7 @@ flutter:
     - assets/defect_prediction/icons8-play-button-circled.gif
     - assets/defect_prediction/icons8-play-button-50.png
     - assets/pick1.png
-    - assets/diet_component/audio_assets/alarmsound.wav
+    - assets/diet_component/audio_assets/alarmsound.mp3
     - assets/cardioFitAI.jpg
   #   - images/a_dot_ham.jpeg
 
