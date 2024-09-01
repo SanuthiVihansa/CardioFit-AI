@@ -1123,7 +1123,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
     cholesterolController.text =
         _userSignUpInfo.docs[0]["bloodCholestrolLevel"];
     sugarController.text = _userSignUpInfo.docs[0]["bloodGlucoseLevel"];
-    //gender=_userSignUpInfo.docs[0]["gender"];
+    gender="Female";//_userSignUpInfo.docs[0]["gender"];
     cardiacCondition = _userSignUpInfo.docs[0]["cardiacCondition"];
     setState(() {});
   }
