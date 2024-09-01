@@ -100,9 +100,6 @@ class UserLoginService {
           "memberPhoneNo": user.memberPhoneNo,
           "newUser": user.newUser,
           "gender": user.gender
-          "memberName" :user.memberName,
-          "memberRelationship" : user.memberPhoneNo,
-          "memberPhone": user.memberRelationship,
         };
 
         await document.reference.update(data); // Update the document
