@@ -305,23 +305,28 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                       children: [
                         TextButton(
                           child: Text('Save'),
-                          onPressed: () {
+                          onPressed: () async {
                             int index1 = 0;
-                            for (var alarm in _filteredAlerts) {
-                              _updateReminder(
-                                alarm['alarmIdNo'],
-                                DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
-                                    .format(_updatedScheduledDateTimes[index1]),
-                              );
-                              _reCreateAlarm(
-                                  int.parse(alarm["alarmIdNo"].toString()),
-                                  _updatedScheduledDateTimes[index1],
-                                  alarm["medicineName"],
-                                  int.parse(alarm["pillIntake"].toString()),
-                                  int.parse(alarm["dosage"].toString()));
-                              index1++;
+                            try {
+                              for (var alarm in _filteredAlerts) {
+                                await _updateReminder(
+                                  alarm['alarmIdNo'],
+                                  DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
+                                      .format(_updatedScheduledDateTimes[index1]),
+                                );
+                                await _reCreateAlarm(
+                                    int.parse(alarm["alarmIdNo"].toString()),
+                                    _updatedScheduledDateTimes[index1],
+                                    alarm["medicineName"],
+                                    int.parse(alarm["pillIntake"].toString()),
+                                    int.parse(alarm["dosage"].toString()));
+                                index1++;
+                              }
+                            } catch (error) {
+                              _showErrorSnackBar('Error saving alarms: $error');
+                            } finally {
+                              Navigator.of(context).pop(); // Ensure this is only called once
                             }
-                            Navigator.of(context).pop();
                           },
                         ),
                         TextButton(
@@ -343,10 +348,32 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
   }
 
 //Alarm Package data are recreated based on the modified changes
-  void _reCreateAlarm(int alarmId, DateTime dateTime, String medicineName,
-      int pillIntake, int dosage) {
-    //Stop the previous date and set the current time and date
-    Alarm.stop(alarmId).then((_) async {
+//   void _reCreateAlarm(int alarmId, DateTime dateTime, String medicineName,
+//       int pillIntake, int dosage) {
+//     //Stop the previous date and set the current time and date
+//     Alarm.stop(alarmId).then((_) async {
+//       final alarmSettings = AlarmSettings(
+//         id: alarmId,
+//         dateTime: dateTime,
+//         assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.mp3',
+//         loopAudio: true,
+//         vibrate: true,
+//         volume: 0.8,
+//         fadeDuration: 2,
+//         notificationTitle: medicineName,
+//         notificationBody:
+//             'Take $pillIntake pill(s) of $medicineName. $dosage mg.',
+//       );
+//       await Alarm.set(alarmSettings: alarmSettings);
+//     });
+//     setState(() {
+//       _filterAlertsForSelectedDate();
+//     });
+//   }
+  Future<void> _reCreateAlarm(int alarmId, DateTime dateTime, String medicineName,
+      int pillIntake, int dosage) async {
+    // Stop the previous alarm and then set the new alarm
+    await Alarm.stop(alarmId).then((_) async {
       final alarmSettings = AlarmSettings(
         id: alarmId,
         dateTime: dateTime,
@@ -357,10 +384,11 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         fadeDuration: 2,
         notificationTitle: medicineName,
         notificationBody:
-            'Take $pillIntake pill(s) of $medicineName. $dosage mg.',
+        'Take $pillIntake pill(s) of $medicineName. $dosage mg.',
       );
       await Alarm.set(alarmSettings: alarmSettings);
     });
+
     setState(() {
       _filterAlertsForSelectedDate();
     });
