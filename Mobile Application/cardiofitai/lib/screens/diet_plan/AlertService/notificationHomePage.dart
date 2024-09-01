@@ -95,6 +95,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       _filterAlertsForSelectedDate();
     });
   }
+
 //Fetch all the alarms which belong to the user
   Future<void> getSavedAlarms(int reminderNo) async {
     final QuerySnapshot alarmSnapshot = await FirebaseFirestore.instance
@@ -107,6 +108,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       _assignUpdatedScheduledDateTimes(_filteredAlerts);
     });
   }
+
 //Update when the alarm times are editted
   void _assignUpdatedScheduledDateTimes(List<DocumentSnapshot> filteredAlerts) {
     _updatedScheduledDateTimes.clear(); // Clear previous data
@@ -118,6 +120,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       alarmStatusList.add(alarm['isActive']);
     }
   }
+
   //Filter alerts upon selection of dates
   void _filterAlertsForSelectedDate() {
     setState(() {
@@ -129,6 +132,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       }).toList();
     });
   }
+
 //View items in the list view in detail
   void _showReminderDetails(BuildContext context, DocumentSnapshot reminder) {
     showDialog(
@@ -179,6 +183,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       },
     );
   }
+
   //When a particular alarm needs to be editted
   void _showEditDialog(BuildContext context, DocumentSnapshot reminder) async {
     final int reminderNo = reminder['reminderNo'];
@@ -224,7 +229,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                   children: [
                     Text(
                       'Edit Alarms for ${reminder['medicineName']}',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     Expanded(
                       child: ListView.builder(
@@ -233,41 +239,57 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                           final alarm = _filteredAlerts[index];
 
                           // Cast the document data to a Map
-                          final Map<String, dynamic> alarmData = alarm.data() as Map<String, dynamic>;
+                          final Map<String, dynamic> alarmData =
+                              alarm.data() as Map<String, dynamic>;
 
                           // Check if 'scheduledAlarmDateTime' exists
-                          final scheduledAlarmDateTime = alarmData.containsKey('scheduledAlarmDateTime')
-                              ? DateTime.parse(alarmData['scheduledAlarmDateTime'])
-                              : DateTime.now(); // Fallback to current time if missing
+                          final scheduledAlarmDateTime = alarmData
+                                  .containsKey('scheduledAlarmDateTime')
+                              ? DateTime.parse(
+                                  alarmData['scheduledAlarmDateTime'])
+                              : DateTime
+                                  .now(); // Fallback to current time if missing
 
-                          final TextEditingController dateController = TextEditingController(
-                            text: DateFormat('yyyy-MM-dd').format(scheduledAlarmDateTime),
+                          final TextEditingController dateController =
+                              TextEditingController(
+                            text: DateFormat('yyyy-MM-dd')
+                                .format(scheduledAlarmDateTime),
                           );
-                          final TextEditingController timeController = TextEditingController(
-                            text: DateFormat('HH:mm').format(scheduledAlarmDateTime),
+                          final TextEditingController timeController =
+                              TextEditingController(
+                            text: DateFormat('HH:mm')
+                                .format(scheduledAlarmDateTime),
                           );
 
                           bool alarmStatus = alarmStatusList[index];
-                          final DateTime updatedDateTime = DateFormat('yyyy-MM-dd HH:mm')
-                              .parse('${dateController.text} ${timeController.text}');
+                          final DateTime updatedDateTime =
+                              DateFormat('yyyy-MM-dd HH:mm').parse(
+                                  '${dateController.text} ${timeController.text}');
 
                           return Column(
                             children: [
                               Text(
                                 'Alarm ${index + 1}',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: 20),
                               Row(
                                 children: [
                                   Expanded(
                                     child: _buildDatePickerTextField(
-                                        dateController, 'Scheduled Date', context, index),
+                                        dateController,
+                                        'Scheduled Date',
+                                        context,
+                                        index),
                                   ),
                                   SizedBox(width: 20),
                                   Expanded(
                                     child: _buildTimePickerTextField(
-                                        timeController, 'Scheduled Time', context, index),
+                                        timeController,
+                                        'Scheduled Time',
+                                        context,
+                                        index),
                                   ),
                                   SizedBox(width: 20),
                                   Switch(
@@ -277,15 +299,19 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                                         alarmStatusList[index] = value;
                                       });
                                       if (value) {
-                                        _updateReminderAlarmStatusTrue(alarmData['alarmIdNo']);
+                                        _updateReminderAlarmStatusTrue(
+                                            alarmData['alarmIdNo']);
                                         _reCreateAlarm(
                                             alarmData['alarmIdNo'],
                                             updatedDateTime,
                                             alarmData["medicineName"],
-                                            int.parse(alarmData["pillIntake"].toString()),
-                                            int.parse(alarmData["dosage"].toString()));
+                                            int.parse(alarmData["pillIntake"]
+                                                .toString()),
+                                            int.parse(alarmData["dosage"]
+                                                .toString()));
                                       } else {
-                                        _updateReminderAlarmStatus(alarmData['alarmIdNo']);
+                                        _updateReminderAlarmStatus(
+                                            alarmData['alarmIdNo']);
                                         Alarm.stop(alarmData['alarmIdNo']);
                                       }
                                     },
@@ -306,23 +332,28 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                           onPressed: () async {
                             int index1 = 0;
                             for (var alarm in _filteredAlerts) {
-                              final alarmData = alarm.data() as Map<String, dynamic>;
+                              final alarmData =
+                                  alarm.data() as Map<String, dynamic>;
                               await _updateReminder(
                                 alarmData['alarmIdNo'],
                                 DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
                                     .format(_updatedScheduledDateTimes[index1]),
                               );
+
                               await _reCreateAlarm(
                                   int.parse(alarmData["alarmIdNo"].toString()),
                                   _updatedScheduledDateTimes[index1],
                                   alarmData["medicineName"],
                                   int.parse(alarmData["pillIntake"].toString()),
-                                  int.parse(alarmData["dosage"].toString()));
+                                  int.parse(alarmData["dosage"]
+                                      .toString()
+                                      .replaceAll(RegExp(r'[^0-9]'), '')));
                               index1++;
                             }
                             if (mounted) {
                               Navigator.of(dialogContext).pop();
                               _showSuccessSnackBar("Alarm Updated");
+                              // getSavedAlerts();
                             }
                           },
                         ),
@@ -337,6 +368,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       },
     );
   }
+
 //Show success msg upon updating the alarms
   void _showSuccessSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -344,6 +376,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       backgroundColor: Colors.green,
     ));
   }
+
   //Show error message when something goes wrong
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -351,9 +384,10 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       backgroundColor: Colors.red,
     ));
   }
+
   //When updating delete the existing and recreate alarms
-  Future<void> _reCreateAlarm(
-      int alarmId, DateTime dateTime, String medicineName, int pillIntake, int dosage) async {
+  Future<void> _reCreateAlarm(int alarmId, DateTime dateTime,
+      String medicineName, int pillIntake, int dosage) async {
     try {
       // Stop the previous alarm
       await Alarm.stop(alarmId);
@@ -368,7 +402,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         volume: 0.8,
         fadeDuration: 2,
         notificationTitle: medicineName,
-        notificationBody: 'Take $pillIntake pill(s) of $medicineName. $dosage mg.',
+        notificationBody:
+            'Take $pillIntake pill(s) of $medicineName. $dosage mg.',
       );
       await Alarm.set(alarmSettings: alarmSettings);
     } catch (e) {
@@ -377,8 +412,10 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       rethrow; // Re-throw the error to handle it in the calling function
     }
   }
+
 //Update the editted content in firebase collection
-  Future<void> _updateReminder(int alarmIdNo, String scheduledAlarmDateTime) async {
+  Future<void> _updateReminder(
+      int alarmIdNo, String scheduledAlarmDateTime) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('alarms')
@@ -404,6 +441,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       rethrow; // Re-throw the error to handle it in the calling function
     }
   }
+
 //When an reminder needs to be set as active or inactive, update status in firbase collection
   Future<void> _updateReminderAlarmStatus(int alarmIdNo) async {
     try {
@@ -430,6 +468,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       _showErrorSnackBar('Error updating reminder: ${e.toString()}');
     }
   }
+
 //Update the firebase collection of alarms scheduled
   Future<void> _updateReminderAlarmStatusTrue(int alarmIdNo) async {
     try {
@@ -456,6 +495,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       _showErrorSnackBar('Error updating reminder: ${e.toString()}');
     }
   }
+
   //When delete button is clicked
   Future<void> _deleteReminder(DocumentSnapshot reminder) async {
     final reminderNo = reminder['reminderNo'];
@@ -527,9 +567,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
             Icons.arrow_back,
             color: Colors.red,
           ),
-          onPressed: () {
-
-          },
+          onPressed: () {},
         ),
       ),
       body: Row(
@@ -552,6 +590,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       backgroundColor: Colors.white,
     );
   }
+
 //Current date and Add Reminder button
   Widget _addTaskBar(double screenWidth) {
     return Container(
@@ -614,6 +653,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       ),
     );
   }
+
 //Horizontal Scrollable date bar
   Widget _addDateBar(double screenWidth) {
     return Container(
@@ -636,6 +676,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       ),
     );
   }
+
 //Logic to check if there are alarms available and if yes put them to a list view else show a msg
   Widget _showReminders(double screenHeight, double screenWidth) {
     if (_filteredAlerts.isEmpty) {
@@ -687,7 +728,6 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       ),
     );
   }
-
 
   Widget _buildDatePickerTextField(TextEditingController controller,
       String label, BuildContext context, int index) {
