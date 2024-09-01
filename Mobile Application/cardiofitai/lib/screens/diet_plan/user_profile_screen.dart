@@ -91,8 +91,19 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 userName(),
-                dateOfBirth(),
-                GenderDropdown(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    // Arrange Age and Height widgets horizontally
+                    children: [
+                      Expanded(child: dateOfBirth()),
+                      // Use Expanded to fill available space
+                      SizedBox(width: 16.0),
+                      // Add some horizontal spacing between widgets
+                      Expanded(child: GenderDropdown()),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Row(
@@ -106,8 +117,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                Weight(),
-                BMI(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    // Arrange Age and Height widgets horizontally
+                    children: [
+                      Expanded(child: Weight()),
+                      // Use Expanded to fill available space
+                      SizedBox(width: 16.0),
+                      // Add some horizontal spacing between widgets
+                      Expanded(child: BMI()),
+                    ],
+                  ),
+                ),
+
+
                 // ActiveLevel(),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
@@ -195,13 +219,10 @@ class _ProfilePageState extends State<ProfilePage> {
     return TextFormField(
       controller: _dobController,
       decoration: InputDecoration(
+        errorText: "",
         labelText: 'DOB',
         border: OutlineInputBorder(),
       ),
-      // controller: TextEditingController(
-      //   text: _dateOfBirth.toString().substring(
-      //       0, 10), // Display selected date in the format yyyy-MM-dd.
-      // ),
     );
   }
 
@@ -348,6 +369,7 @@ class _ProfilePageState extends State<ProfilePage> {
           });
         },
         decoration: InputDecoration(
+          errorText: "",
           labelText: 'Gender',
           border: OutlineInputBorder(),
         ),
