@@ -93,7 +93,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       });
     }
   }
-
+//When the analyse button is clicked,call the API get its respond and call _addMedicinesFromPrescriptionInfo method
   detectDisease() async {
     setState(() {
       detecting = true;
@@ -154,7 +154,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     if (match != null) return int.parse(match.group(1)!);
     return 0; // Default to 0 if unable to parse
   }
-
+//Extract the string which was passed from the API, break down into parts and store in _medicines list
   void _addMedicinesFromPrescriptionInfo() {
     try {
       final jsonStartIndex = prescriptionInfo.indexOf('[');
@@ -302,56 +302,60 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       _selectedDays.clear();
     });
   }
-
+//when set alarm button is clicked it navigates here
   Future<void> _onTapSubmitBtn(BuildContext context) async {
-    for (var medicine in _medicines) {
-      if (medicine['interval'].isEmpty ||
-          medicine['days'] == 0 ||
-          medicine['startDate'].isEmpty ||
-          medicine['endDate'].isEmpty ||
-          medicine['startTime'].isEmpty) {
-        _showErrorSnackBar(
-            'Please edit the entry for ${medicine['name']} to include frequency, duration, start date, start time, and end date.');
-        return;
-      } else {
-        for (var extractedMedicine in _medicines) {
-          _lastSubmitRecordNo += 1;
-          await MedicineReminderService.medicineReminder(
-            _lastSubmitRecordNo,
-            widget.user.email,
-            extractedMedicine["name"] ?? '',
-            extractedMedicine["dosage"] ?? '',
-            extractedMedicine["pillintake"] ?? '',
-            extractedMedicine["interval"] ?? '',
-            extractedMedicine["days"] ?? 0,
-            extractedMedicine["startDate"] ?? '',
-            extractedMedicine["endDate"] ?? '',
-            extractedMedicine["additionalInstructions"] ?? '',
-            List<String>.from(extractedMedicine["selectedDays"] ?? []),
-            extractedMedicine["startTime"] ?? '',
-          );
+    if(_medicines.isNotEmpty) {
+      for (var medicine in _medicines) {
+        if (medicine['interval'].isEmpty ||
+            medicine['days'] == 0 ||
+            medicine['startDate'].isEmpty ||
+            medicine['endDate'].isEmpty ||
+            medicine['startTime'].isEmpty) {
+          _showErrorSnackBar(
+              'Please edit the entry for ${medicine['name']} to include frequency, duration, start date, start time, and end date.');
+          return;
+        } else {
+          for (var extractedMedicine in _medicines) {
+            _lastSubmitRecordNo += 1;
+            await MedicineReminderService.medicineReminder(
+              _lastSubmitRecordNo,
+              widget.user.email,
+              extractedMedicine["name"] ?? '',
+              extractedMedicine["dosage"] ?? '',
+              extractedMedicine["pillintake"] ?? '',
+              extractedMedicine["interval"] ?? '',
+              extractedMedicine["days"] ?? 0,
+              extractedMedicine["startDate"] ?? '',
+              extractedMedicine["endDate"] ?? '',
+              extractedMedicine["additionalInstructions"] ?? '',
+              List<String>.from(extractedMedicine["selectedDays"] ?? []),
+              extractedMedicine["startTime"] ?? '',
+            );
 
-          await scheduleAlarmsForMedicine(
-            medicineName: extractedMedicine["name"],
-            dosage: extractedMedicine["dosage"],
-            pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
-            frequency: extractedMedicine["interval"],
-            startDate:
-            DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
-            endDate:
-            DateFormat('yyyy-MM-dd').parse(extractedMedicine["endDate"]),
-            selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
-            startTime: extractedMedicine["startTime"],
-          );
+            await scheduleAlarmsForMedicine(
+              medicineName: extractedMedicine["name"],
+              dosage: extractedMedicine["dosage"],
+              pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
+              frequency: extractedMedicine["interval"],
+              startDate:
+              DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
+              endDate:
+              DateFormat('yyyy-MM-dd').parse(extractedMedicine["endDate"]),
+              selectedDays: List<String>.from(
+                  extractedMedicine["selectedDays"]),
+              startTime: extractedMedicine["startTime"],
+            );
+          }
+
+          _showSuccessDialog('Reminders set successfully', '');
+
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (buildContext) =>
+                  NotificationHomePage(widget.user)));
         }
-
-        _showSuccessDialog('Reminders set successfully', '');
-
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (buildContext) =>
-                NotificationHomePage(widget.user)));
       }
     }
+    _showErrorSnackBar('No Items added to set reminder');
   }
 
   Future<void> scheduleAlarmsForMedicine({
@@ -526,7 +530,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ),
     );
   }
-
+  //Display the uploaded image, else show the default image
   Widget _buildPickedImage() {
     return pickedImage == null
         ? Center(
@@ -551,6 +555,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
+  //When an image is uploaded, display the analyse button
   Widget _buildDetectButton() {
     return detecting
         ? SpinKitWave(
@@ -594,6 +599,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
+  //Divide the section either to add details mannually
   Widget _buildDivider() {
     return Center(
       child: Text(
@@ -604,6 +610,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
+  //Controld to mannual setting reimders
   Widget _setRemindersManuallyForm() {
     return Column(
       children: [
@@ -717,7 +724,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ],
     );
   }
-
+//Styling of the controls of mannual setting part
   Widget _buildTextField(TextEditingController controller, String label,
       TextInputType keyboardType,
       {ValueChanged<String>? onChanged}) {
@@ -901,7 +908,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ),
     );
   }
-
+/*List to display the medicine reminders fetched when edit icon click populate to the _populateFieldsForEditing(medicine) or if delete remove the
+  prescription from medicine list.*/
   Widget _buildMedicineList() {
     return ListView.builder(
       shrinkWrap: true,
@@ -952,7 +960,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       },
     );
   }
-
+//When set alarm button is clicked
   Widget _buildSetAlarmButton() {
     return Container(
       width: double.infinity,
