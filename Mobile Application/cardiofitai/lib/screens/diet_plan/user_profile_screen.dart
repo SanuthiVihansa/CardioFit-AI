@@ -320,7 +320,7 @@ class _ProfilePageState extends State<ProfilePage> {
         UserLoginService.updateUser(updatedUserInfo);
         if(widget.user.newUser == false){
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => DietHomePage(widget.user)));
+              builder: (BuildContext context) => DashboardScreen(widget.user)));
         } else{
           // IF NEW USER
           Navigator.of(context).pushReplacement(MaterialPageRoute(
