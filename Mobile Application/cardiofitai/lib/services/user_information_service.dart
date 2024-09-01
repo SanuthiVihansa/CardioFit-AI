@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cardiofitai/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path_provider/path_provider.dart';
 import '../models/response.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -30,7 +33,9 @@ class UserLoginService {
       String bloodTestType,
       String memberName,
       String memberRelationship,
-      String memberPhone) async {
+      String memberPhone,
+      bool newUser,
+      String gender) async {
     Response response = Response();
     Map<String, dynamic> data = <String, dynamic>{
       "name": name,
@@ -49,7 +54,9 @@ class UserLoginService {
       "bloodTestType": bloodTestType,
       "memberName": memberName,
       "memberRelationship": memberRelationship,
-      "memberPhone": memberPhone
+      "memberPhone": memberPhone,
+      "newUser": newUser,
+      "gender": gender
     };
 
     await userCollectionReference.doc().set(data).whenComplete(() {
@@ -88,6 +95,11 @@ class UserLoginService {
           "bloodCholestrolLevel": user.bloodCholestrolLevel,
           "cardiacCondition": user.cardiacCondition,
           "bloodTestType": user.bloodTestType,
+          "memberName": user.memberName,
+          "memberRelationship": user.memberRelationship,
+          "memberPhoneNo": user.memberPhoneNo,
+          "newUser": user.newUser,
+          "gender": user.gender
           "memberName" :user.memberName,
           "memberRelationship" : user.memberPhoneNo,
           "memberPhone": user.memberRelationship,
@@ -96,6 +108,51 @@ class UserLoginService {
         await document.reference.update(data); // Update the document
         response.code = 200;
         response.message = "User Information updated!";
+
+        String userData = '{"name" : "' +
+            data["name"] +
+            '", "email" : "' +
+            data["email"] +
+            '", "password" : "' +
+            data["password"] +
+            '", "age" : "' +
+            data["age"] +
+            '", "height" : "' +
+            data["height"] +
+            '", "weight" : "' +
+            data["weight"] +
+            '", "bmi" : "' +
+            data["bmi"] +
+            '","dob" : "' +
+            data["dob"] +
+            '","activeLevel" : "' +
+            data["activeLevel"] +
+            '", "type" : "' +
+            data["type"] +
+            '", "bloodGlucoseLevel" : "' +
+            data["bloodGlucoseLevel"] +
+            '", "bloodCholestrolLevel" : "' +
+            data["bloodCholestrolLevel"] +
+            '", "cardiacCondition" : "' +
+            data["cardiacCondition"] +
+            '", "bloodTestType" : "' +
+            data["bloodTestType"] +
+            '", "memberName" : "' +
+            data["memberName"] +
+            '", "memberRelationship" : "' +
+            data["memberRelationship"] +
+            '", "memberPhone" : "' +
+            data["memberPhone"] +
+            '", "newUser" : "' +
+            data["newUser"].toString() +
+            '", "gender" : "' +
+            data["gender"].toString() +
+            '"}';
+
+        final directory = await getApplicationDocumentsDirectory();
+        final path = directory.path;
+        File file = File('$path/userdata.txt');
+        file.writeAsString(userData);
       } else {
         response.code = 404;
         response.message = "User not found";
@@ -103,6 +160,84 @@ class UserLoginService {
     } catch (e) {
       response.code = 500;
       // response.message = e.toString();
+      response.message = "Server Error";
+    }
+
+    return response;
+  }
+
+  //Update new user parameter
+  static Future<Response> updateNewUser(User user) async {
+    Response response = Response();
+
+    try {
+      // Query the collection to find the user by email
+      QuerySnapshot querySnapshot = await userCollectionReference
+          .where("email", isEqualTo: user.email)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Get the first document from the query result
+        QueryDocumentSnapshot document = querySnapshot.docs[0];
+
+        // Create a map containing only the newUser field
+        Map<String, dynamic> data = <String, dynamic>{"newUser": user.newUser};
+
+        // Update the document with the newUser field
+        await document.reference.update(data);
+
+        response.code = 200;
+        response.message = "User Information updated!";
+        String userData = '{"name" : "' +
+            user.name.toString() +
+            '", "email" : "' +
+            user.email.toString() +
+            '", "password" : "' +
+            user.password.toString() +
+            '", "age" : "' +
+            user.age.toString() +
+            '", "height" : "' +
+            user.height.toString() +
+            '", "weight" : "' +
+            user.weight.toString() +
+            '", "bmi" : "' +
+            user.bmi.toString() +
+            '","dob" : "' +
+            user.dob.toString() +
+            '","activeLevel" : "' +
+            user.activeLevel.toString() +
+            '", "type" : "' +
+            user.type.toString() +
+            '", "bloodGlucoseLevel" : "' +
+            user.bloodGlucoseLevel.toString() +
+            '", "bloodCholestrolLevel" : "' +
+            user.bloodCholestrolLevel.toString() +
+            '", "cardiacCondition" : "' +
+            user.cardiacCondition.toString()+
+            '", "bloodTestType" : "' +
+            user.bloodTestType.toString() +
+            '", "memberName" : "' +
+            user.memberName.toString() +
+            '", "memberRelationship" : "' +
+            user.memberRelationship.toString() +
+            '", "memberPhone" : "' +
+            user.memberPhoneNo.toString() +
+            '", "newUser" : "' +
+            user.newUser.toString() +
+            '", "gender" : "' +
+            user.gender.toString() +
+            '"}';
+
+        final directory = await getApplicationDocumentsDirectory();
+        final path = directory.path;
+        File file = File('$path/userdata.txt');
+        file.writeAsString(userData);
+      } else {
+        response.code = 404;
+        response.message = "User not found";
+      }
+    } catch (e) {
+      response.code = 500;
       response.message = "Server Error";
     }
 

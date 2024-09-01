@@ -16,8 +16,8 @@ class User {
   String memberName;
   String memberPhoneNo;
   String memberRelationship;
-
-
+  bool newUser;
+  String gender;
 
   User(
       this.name,
@@ -36,7 +36,9 @@ class User {
       this.bloodTestType,
       this.memberName,
       this.memberPhoneNo,
-      this.memberRelationship);
+      this.memberRelationship,
+      this.newUser,
+      this.gender);
 
   User copyWith({
     String? name,
@@ -56,6 +58,8 @@ class User {
     String? memberName,
     String? memberPhoneNo,
     String? memberRelationship,
+    bool? newUser,
+    String? gender,
   }) {
     return User(
       name ?? this.name,
@@ -75,6 +79,8 @@ class User {
       memberName ?? this.memberName,
       memberPhoneNo ?? this.memberPhoneNo,
       memberRelationship ?? this.memberRelationship,
+      newUser ?? this.newUser,
+      gender ?? this.gender,
     );
   }
 }

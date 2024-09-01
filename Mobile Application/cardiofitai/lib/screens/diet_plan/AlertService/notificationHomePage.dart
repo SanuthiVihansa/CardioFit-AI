@@ -4,7 +4,7 @@ import 'package:alarm/model/alarm_settings.dart';
 import 'package:cardiofitai/components/navigation_panel_component.dart';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/diet_plan/AlertService/medicineAlertScreen.dart';
-import 'package:cardiofitai/screens/diet_plan/AlertService/ring.dart';
+import 'package:cardiofitai/screens/diet_plan/AlertService/alarmNotfication.dart';
 import 'package:cardiofitai/services/medicineReminderService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
@@ -96,6 +96,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     });
   }
 
+//Fetch all the alarms which belong to the user
   Future<void> getSavedAlarms(int reminderNo) async {
     final QuerySnapshot alarmSnapshot = await FirebaseFirestore.instance
         .collection('alarms')
@@ -108,14 +109,19 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     });
   }
 
+//Update when the alarm times are editted
   void _assignUpdatedScheduledDateTimes(List<DocumentSnapshot> filteredAlerts) {
-    for (var alarm in _filteredAlerts) {
+    _updatedScheduledDateTimes.clear(); // Clear previous data
+    alarmStatusList.clear(); // Clear previous statuses
+
+    for (var alarm in filteredAlerts) {
       _updatedScheduledDateTimes
           .add(DateTime.parse(alarm["scheduledAlarmDateTime"]));
       alarmStatusList.add(alarm['isActive']);
     }
   }
 
+  //Filter alerts upon selection of dates
   void _filterAlertsForSelectedDate() {
     setState(() {
       _filteredAlerts = _allAlerts.where((alert) {
@@ -127,6 +133,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     });
   }
 
+//View items in the list view in detail
   void _showReminderDetails(BuildContext context, DocumentSnapshot reminder) {
     showDialog(
       context: context,
@@ -177,13 +184,38 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
+  //When a particular alarm needs to be editted
   void _showEditDialog(BuildContext context, DocumentSnapshot reminder) async {
     final int reminderNo = reminder['reminderNo'];
+
+    // Show a loading indicator while fetching alarms
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
     await getSavedAlarms(reminderNo);
+
+    if (!mounted) return; // Check if the widget is still mounted
+
+    Navigator.of(context).pop(); // Close the loading indicator
+
+    if (_filteredAlerts.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No alarms found for editing.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return Dialog(
           insetPadding: EdgeInsets.all(10),
           child: Container(
@@ -205,8 +237,19 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                         itemCount: _filteredAlerts.length,
                         itemBuilder: (context, index) {
                           final alarm = _filteredAlerts[index];
-                          final DateTime scheduledAlarmDateTime =
-                              DateTime.parse(alarm['scheduledAlarmDateTime']);
+
+                          // Cast the document data to a Map
+                          final Map<String, dynamic> alarmData =
+                              alarm.data() as Map<String, dynamic>;
+
+                          // Check if 'scheduledAlarmDateTime' exists
+                          final scheduledAlarmDateTime = alarmData
+                                  .containsKey('scheduledAlarmDateTime')
+                              ? DateTime.parse(
+                                  alarmData['scheduledAlarmDateTime'])
+                              : DateTime
+                                  .now(); // Fallback to current time if missing
+
                           final TextEditingController dateController =
                               TextEditingController(
                             text: DateFormat('yyyy-MM-dd')
@@ -217,6 +260,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                             text: DateFormat('HH:mm')
                                 .format(scheduledAlarmDateTime),
                           );
+
                           bool alarmStatus = alarmStatusList[index];
                           final DateTime updatedDateTime =
                               DateFormat('yyyy-MM-dd HH:mm').parse(
@@ -249,31 +293,29 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                                   ),
                                   SizedBox(width: 20),
                                   Switch(
-                                      value: alarmStatus,
-                                      onChanged: (bool value) {
-                                        setState(() {
-                                          alarmStatusList[index] = value;
-                                        });
-                                        if (value) {
-                                          //alarmStatus=true;
-                                          _updateReminderAlarmStatusTrue(
-                                              alarm['alarmIdNo']);
-                                          _reCreateAlarm(
-                                              int.parse(alarm["alarmIdNo"]
-                                                  .toString()),
-                                              updatedDateTime,
-                                              alarm["medicineName"],
-                                              int.parse(alarm["pillIntake"]
-                                                  .toString()),
-                                              int.parse(
-                                                  alarm["dosage"].toString()));
-                                        } else {
-                                          _updateReminderAlarmStatus(
-                                              alarm['alarmIdNo']);
-                                          //alarmStatus=false;
-                                          Alarm.stop(alarm['alarmIdNo']);
-                                        }
-                                      }),
+                                    value: alarmStatus,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        alarmStatusList[index] = value;
+                                      });
+                                      if (value) {
+                                        _updateReminderAlarmStatusTrue(
+                                            alarmData['alarmIdNo']);
+                                        _reCreateAlarm(
+                                            alarmData['alarmIdNo'],
+                                            updatedDateTime,
+                                            alarmData["medicineName"],
+                                            int.parse(alarmData["pillIntake"]
+                                                .toString()),
+                                            int.parse(alarmData["dosage"]
+                                                .toString()));
+                                      } else {
+                                        _updateReminderAlarmStatus(
+                                            alarmData['alarmIdNo']);
+                                        Alarm.stop(alarmData['alarmIdNo']);
+                                      }
+                                    },
+                                  ),
                                 ],
                               ),
                               SizedBox(height: 20),
@@ -287,29 +329,32 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                       children: [
                         TextButton(
                           child: Text('Save'),
-                          onPressed: () {
+                          onPressed: () async {
                             int index1 = 0;
                             for (var alarm in _filteredAlerts) {
-                              _updateReminder(
-                                alarm['alarmIdNo'],
+                              final alarmData =
+                                  alarm.data() as Map<String, dynamic>;
+                              await _updateReminder(
+                                alarmData['alarmIdNo'],
                                 DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
                                     .format(_updatedScheduledDateTimes[index1]),
                               );
-                              _reCreateAlarm(
-                                  int.parse(alarm["alarmIdNo"].toString()),
+
+                              await _reCreateAlarm(
+                                  int.parse(alarmData["alarmIdNo"].toString()),
                                   _updatedScheduledDateTimes[index1],
-                                  alarm["medicineName"],
-                                  int.parse(alarm["pillIntake"].toString()),
-                                  int.parse(alarm["dosage"].toString()));
+                                  alarmData["medicineName"],
+                                  int.parse(alarmData["pillIntake"].toString()),
+                                  int.parse(alarmData["dosage"]
+                                      .toString()
+                                      .replaceAll(RegExp(r'[^0-9]'), '')));
                               index1++;
                             }
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
+                            if (mounted) {
+                              Navigator.of(dialogContext).pop();
+                              _showSuccessSnackBar("Alarm Updated");
+                              // getSavedAlerts();
+                            }
                           },
                         ),
                       ],
@@ -324,13 +369,34 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  void _reCreateAlarm(int alarmId, DateTime dateTime, String medicineName,
-      int pillIntake, int dosage) {
-    Alarm.stop(alarmId).then((_) async {
+//Show success msg upon updating the alarms
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.green,
+    ));
+  }
+
+  //Show error message when something goes wrong
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+    ));
+  }
+
+  //When updating delete the existing and recreate alarms
+  Future<void> _reCreateAlarm(int alarmId, DateTime dateTime,
+      String medicineName, int pillIntake, int dosage) async {
+    try {
+      // Stop the previous alarm
+      await Alarm.stop(alarmId);
+
+      // Set the new alarm
       final alarmSettings = AlarmSettings(
         id: alarmId,
         dateTime: dateTime,
-        assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.wav',
+        assetAudioPath: 'assets/diet_component/audio_assets/alarmsound.mp3',
         loopAudio: true,
         vibrate: true,
         volume: 0.8,
@@ -340,12 +406,14 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
             'Take $pillIntake pill(s) of $medicineName. $dosage mg.',
       );
       await Alarm.set(alarmSettings: alarmSettings);
-    });
-    setState(() {
-      _filterAlertsForSelectedDate();
-    });
+    } catch (e) {
+      print('Error recreating alarm: $e');
+      _showErrorSnackBar('Error recreating alarm: ${e.toString()}');
+      rethrow; // Re-throw the error to handle it in the calling function
+    }
   }
 
+//Update the editted content in firebase collection
   Future<void> _updateReminder(
       int alarmIdNo, String scheduledAlarmDateTime) async {
     try {
@@ -367,13 +435,14 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
           'scheduledAlarmDateTime': scheduledAlarmDateTime,
         });
       }
-      Navigator.of(context).pop();
     } catch (e) {
       print('Error updating reminder: $e');
       _showErrorSnackBar('Error updating reminder: ${e.toString()}');
+      rethrow; // Re-throw the error to handle it in the calling function
     }
   }
 
+//When an reminder needs to be set as active or inactive, update status in firbase collection
   Future<void> _updateReminderAlarmStatus(int alarmIdNo) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -400,6 +469,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     }
   }
 
+//Update the firebase collection of alarms scheduled
   Future<void> _updateReminderAlarmStatusTrue(int alarmIdNo) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -426,13 +496,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     }
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.red,
-    ));
-  }
-
+  //When delete button is clicked
   Future<void> _deleteReminder(DocumentSnapshot reminder) async {
     final reminderNo = reminder['reminderNo'];
     final userEmail = reminder['userEmail'];
@@ -498,9 +562,17 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
           ),
         ),
         backgroundColor: Colors.red,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.red,
+          ),
+          onPressed: () {},
+        ),
       ),
       body: Row(
         children: [
+          //Put the navigation component to the screen
           NavigationPanelComponent("alarm", widget.user),
           Expanded(
             child: SingleChildScrollView(
@@ -519,6 +591,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
+//Current date and Add Reminder button
   Widget _addTaskBar(double screenWidth) {
     return Container(
       margin: EdgeInsets.only(
@@ -538,14 +611,14 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                   Text(
                     DateFormat.yMMMMd().format(DateTime.now()),
                     style: TextStyle(
-                        fontSize: screenWidth * 0.06,
+                        fontSize: screenWidth * 0.03,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
                   Text(
                     "Today",
                     style: TextStyle(
-                        fontSize: screenWidth * 0.05,
+                        fontSize: screenWidth * 0.04,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
@@ -581,6 +654,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
+//Horizontal Scrollable date bar
   Widget _addDateBar(double screenWidth) {
     return Container(
       margin: EdgeInsets.only(top: 20, left: screenWidth * 0.05),
@@ -603,6 +677,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
+//Logic to check if there are alarms available and if yes put them to a list view else show a msg
   Widget _showReminders(double screenHeight, double screenWidth) {
     if (_filteredAlerts.isEmpty) {
       return Center(
@@ -620,6 +695,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
+  //Medicine Reminders : List view details
   Widget _buildReminderItem(DocumentSnapshot reminder, double screenWidth) {
     final data = reminder.data() as Map<String, dynamic>?;
 
@@ -634,7 +710,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               ? data['medicineName']
               : 'No Medicine Name',
           style: TextStyle(
-            fontSize: screenWidth * 0.03,
+            fontSize: screenWidth * 0.02,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -642,35 +718,14 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
         subtitle: Text(
           'Pill Intake: ${data != null && data.containsKey('pillIntake') ? data['pillIntake'] : 'N/A'}\n'
           'Frequency: ${data != null && data.containsKey('interval') ? data['interval'].toString() + ' times' : 'N/A'}',
-          style: TextStyle(fontSize: screenWidth * 0.028, color: Colors.black),
+          style: TextStyle(fontSize: screenWidth * 0.02, color: Colors.black),
         ),
         trailing: Icon(Icons.chevron_right,
-            color: Colors.grey, size: screenWidth * 0.08),
+            color: Colors.grey, size: screenWidth * 0.02),
         onTap: () {
           _showReminderDetails(context, reminder);
         },
       ),
-    );
-  }
-
-  Widget _buildTextField(TextEditingController controller, String label,
-      TextInputType keyboardType) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(color: Colors.black),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.red, width: 2.0),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black, width: 1.0),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-      ),
-      keyboardType: keyboardType,
-      cursorColor: Colors.red,
     );
   }
 

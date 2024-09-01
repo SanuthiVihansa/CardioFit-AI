@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cardiofitai/models/user.dart';
 import 'package:cardiofitai/screens/common/dashboard_screen.dart';
 import 'package:cardiofitai/screens/common/signup_screen.dart';
+import 'package:cardiofitai/screens/diet_plan/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -40,31 +41,37 @@ class _LoginExchangeScreenState extends State<LoginExchangeScreen> {
             decodedUser["dob"],
             decodedUser["activeLevel"],
             decodedUser["type"],
-          decodedUser["bloodGlucoseLevel"],
-          decodedUser["bloodCholestrolLevel"],
-          decodedUser["cardiacCondition"],
-          decodedUser["bloodTestType"],
+            decodedUser["bloodGlucoseLevel"],
+            decodedUser["bloodCholestrolLevel"],
+            decodedUser["cardiacCondition"],
+            decodedUser["bloodTestType"],
             decodedUser["memberName"],
             decodedUser["memberRelationship"],
-            decodedUser["memberPhone"]
+            decodedUser["memberPhone"],
+            decodedUser["newUser"] == "true",
+            decodedUser["gender"],
         );
 
         _navigate(user);
       } else {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (BuildContext context) => const SignUpPage()));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => const SignUpPage()));
       }
     } catch (e) {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (BuildContext context) => const SignUpPage()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => const SignUpPage()));
     }
   }
 
   void _navigate(User user) {
     if (user.type == "user") {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          // builder: (BuildContext context) => DietHomePage(user)));
-          builder: (BuildContext context) => DashboardScreen(user)));
+      if (user.newUser == false) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => DashboardScreen(user)));
+      } else {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => ProfilePage(user)));
+      }
     } else {
       // For Doctor Login
     }

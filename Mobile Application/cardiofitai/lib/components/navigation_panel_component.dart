@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../screens/common/signup_screen.dart';
+import '../screens/diet_plan/DietPlan/dietaryplanprediction-homepage.dart';
 
 class NavigationPanelComponent extends StatelessWidget {
   NavigationPanelComponent(this._currentScreen, this._user, {super.key});
@@ -52,8 +53,10 @@ class NavigationPanelComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Container(
       width: 80,
+      height: screenHeight,
       color: Colors.blueGrey, // Set your desired color
       child: SingleChildScrollView(
         child: Column(
@@ -102,11 +105,11 @@ class NavigationPanelComponent extends StatelessWidget {
             ),
             NavigationItem(
               icon: Icons.emoji_food_beverage,
-              label: 'Diet Plan',
+              label: 'Diet',
               onTap: () {
                 if (_currentScreen != "diet plan") {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (BuildContext) => DietHomePage(_user)));
+                      builder: (BuildContext) => DietaryPlanHomePage(_user)));
                 }
               },
             ),
