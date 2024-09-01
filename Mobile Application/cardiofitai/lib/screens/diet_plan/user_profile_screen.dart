@@ -311,7 +311,7 @@ class _ProfilePageState extends State<ProfilePage> {
             widget.user.type,
             "0",
             "0",
-            "0",
+            "No",
             "0",
             widget.user.memberName,
             widget.user.memberRelationship,
