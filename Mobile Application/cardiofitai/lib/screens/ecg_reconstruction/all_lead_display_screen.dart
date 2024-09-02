@@ -315,7 +315,7 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
                           _onTapDiagnoseBtn();
                         },
                         style: ButtonStyle(
-                          fixedSize: WidgetStateProperty.all<Size>(
+                          fixedSize: MaterialStateProperty.all<Size>(
                             Size(
                                 _width / (_devWidth / 120.0),
                                 _height /
@@ -336,7 +336,7 @@ class _AllLeadDisplayScreenState extends State<AllLeadDisplayScreen> {
                           _onClickHomeBtn();
                         },
                         style: ButtonStyle(
-                          fixedSize: WidgetStateProperty.all<Size>(
+                          fixedSize: MaterialStateProperty.all<Size>(
                             Size(
                                 _width / (_devWidth / 120.0),
                                 _height /
