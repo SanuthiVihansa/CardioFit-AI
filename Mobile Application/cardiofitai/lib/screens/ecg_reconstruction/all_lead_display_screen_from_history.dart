@@ -206,7 +206,7 @@ class _AllLeadDisplayScreenFromHistoryState
                           _onTapDiagnoseBtn();
                         },
                         style: ButtonStyle(
-                          fixedSize: WidgetStateProperty.all<Size>(
+                          fixedSize: MaterialStateProperty.all<Size>(
                             Size(
                                 _width / (_devWidth / 120.0),
                                 _height /
@@ -227,7 +227,7 @@ class _AllLeadDisplayScreenFromHistoryState
                           _onTapHomeBtn();
                         },
                         style: ButtonStyle(
-                          fixedSize: WidgetStateProperty.all<Size>(
+                          fixedSize: MaterialStateProperty.all<Size>(
                             Size(
                                 _width / (_devWidth / 120.0),
                                 _height /
