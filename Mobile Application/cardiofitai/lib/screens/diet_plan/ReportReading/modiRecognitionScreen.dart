@@ -621,6 +621,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                 Response response =
                                     await UserLoginService.updateNewUser(
                                         updateNewUserField);
+
                               }
 
                               Navigator.push(
