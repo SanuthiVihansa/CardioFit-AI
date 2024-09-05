@@ -529,7 +529,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               DataCell(Text(responseJson["Platelet count?"].toString())),
               DataCell(Text(""))
             ]));
-
+// Set validations here
             _reportDataRows.add(_singleReportDataRows);
           }
         }
@@ -538,6 +538,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     setState(() {
       _isLoading = false;
     });
+
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => ReportAnalysisScreen(
             _selectedReports, _reportDataRows, widget.user)));
@@ -548,13 +549,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     halfScreenWidth = (MediaQuery.of(context).size.width - 10) - 50;
     return Scaffold(
       appBar: AppBar(
-        // leading: IconButton(
-        //   color: Colors.white,
-        //   icon: const Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
         title: const Text(
           "Laboratory Report Diagnosis",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
