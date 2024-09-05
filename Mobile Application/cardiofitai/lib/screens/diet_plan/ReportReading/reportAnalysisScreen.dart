@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import '../../../models/user.dart';
 import '../../../services/user_information_service.dart';
+import '../../common/dashboard_screen.dart';
+import '../../palm_analysis/for_pp2/electrode_placement_instructions_screen.dart';
 import 'modiRecognitionScreen.dart';
 
 class ReportAnalysisScreen extends StatefulWidget {
   ReportAnalysisScreen(
       // this._extractedResult,
-      this._selectedReports, this.rows, this.user, {super.key});
+      this._selectedReports,
+      this.rows,
+      this.user,
+      {super.key});
 
   // final List<List<WordPair>> _extractedResult;
   final List<Map<String, dynamic>> _selectedReports;
@@ -21,139 +26,6 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
   @override
   int findIndex = -1;
 
-  // String compareValues(List<List<DataRow>> rows) {
-  //   int fastingPlasmaGlucose = 0;
-  //   int randomPlasmaGlucose = 0;
-  //   int randomBloodSugar = 0;
-  //   int fastingBloodSugar = 0;
-  //   int cholesterolTotal = 0;
-  //   int ldlC = 0;
-  //   int hdlC = 0;
-  //   int triglycerides = 0;
-  //   int wbc = 0;
-  //   int neutrophils = 0;
-  //   int lymphocytes = 0;
-  //
-  //   for (List<DataRow> dataRows in rows) {
-  //     for (DataRow row in dataRows) {
-  //       String component = (row.cells[0].child as Text).data!.toLowerCase().trim();
-  //       String result = (row.cells[1].child as Text).data!.toLowerCase().trim();
-  //
-  //       RegExp regex = RegExp(r'\d+');
-  //       RegExpMatch? match = regex.firstMatch(result);
-  //       if (match != null) {
-  //         String numericValue = match.group(0)!;
-  //         result = numericValue;
-  //       }
-  //
-  //       int numericResult = int.tryParse(result) ?? 0;
-  //
-  //       // Handle glucose levels
-  //       if (component.contains("fasting plasma glucose")) {
-  //         fastingPlasmaGlucose = numericResult;
-  //       } else if (component.contains("fasting blood sugar")) {
-  //         fastingBloodSugar = numericResult;
-  //       } else if (component.contains("random plasma glucose")) {
-  //         randomPlasmaGlucose = numericResult;
-  //       } else if (component.contains("random blood sugar")) {
-  //         randomBloodSugar = numericResult;
-  //       }
-  //
-  //       // Handle Lipid Profile
-  //       else if (component.contains("total cholestrol")) {
-  //         cholesterolTotal = numericResult;
-  //       } else if (component.contains("ldl cholesterol")) {
-  //         ldlC = numericResult;
-  //       } else if (component.contains("hdl cholesterol")) {
-  //         hdlC = numericResult;
-  //       } else if (component.contains("triglycerides")) {
-  //         triglycerides = numericResult;
-  //       }
-  //
-  //       // Handle Full Blood Count
-  //       else if (component.contains("wbc")) {
-  //         wbc = numericResult;
-  //       } else if (component.contains("neutrophils")) {
-  //         neutrophils = numericResult;
-  //       } else if (component.contains("lymphocytes")) {
-  //         lymphocytes = numericResult;
-  //       }
-  //     }
-  //   }
-  //
-  //   // Determine blood glucose level
-  //   int bloodGlucoseLevel = randomPlasmaGlucose != 0
-  //       ? randomPlasmaGlucose
-  //       : (randomBloodSugar != 0
-  //       ? randomBloodSugar
-  //       : (fastingPlasmaGlucose != 0
-  //       ? fastingPlasmaGlucose
-  //       : fastingBloodSugar));
-  //
-  //   // Update the user object with extracted information
-  //   User updatedUser = User(
-  //     widget.user.name,
-  //     widget.user.email,
-  //     widget.user.password,
-  //     widget.user.age,
-  //     widget.user.height,
-  //     widget.user.weight,
-  //     widget.user.bmi,
-  //     widget.user.dob,
-  //     widget.user.activeLevel,
-  //     widget.user.type,
-  //     bloodGlucoseLevel != 0 ? bloodGlucoseLevel.toString() : widget.user.bloodGlucoseLevel,
-  //     cholesterolTotal != 0 ? cholesterolTotal.toString() : widget.user.bloodCholestrolLevel,
-  //     "No",
-  //     "0",
-  //     widget.user.memberName,
-  //     widget.user.memberRelationship,
-  //     widget.user.memberPhoneNo,
-  //     widget.user.newUser,
-  //   );
-  //
-  //   // Update the user information in the database
-  //   updateUserInformation(updatedUser);
-  //
-  //   // Diagnose based on extracted values
-  //   List<String> diagnoses = [];
-  //
-  //   // Diagnose Diabetes or Pre-Diabetes
-  //   if (fastingPlasmaGlucose >= 126 || fastingBloodSugar >= 126 || randomPlasmaGlucose > 200 || randomBloodSugar > 200) {
-  //     diagnoses.add("Diabetes Mellitus");
-  //   } else if ((fastingPlasmaGlucose > 100 && fastingPlasmaGlucose < 125) ||
-  //       (fastingBloodSugar > 100 && fastingBloodSugar < 125) ||
-  //       (randomPlasmaGlucose > 140 && randomPlasmaGlucose < 199) ||
-  //       (randomBloodSugar > 140 && randomBloodSugar < 199)) {
-  //     diagnoses.add("Pre Diabetes");
-  //   }
-  //
-  //   // Diagnose High Cholesterol
-  //   if (cholesterolTotal > 180) {
-  //     diagnoses.add("High Cholesterol");
-  //   }
-  //
-  //   // Diagnose LDL/HDL-related issues
-  //   if (ldlC > 150) {
-  //     diagnoses.add("LDL: High - Heart Disease Risk");
-  //   }
-  //   if (hdlC < 40) {
-  //     diagnoses.add("HDL: Low - Heart Disease Risk");
-  //   } else if (hdlC >= 60) {
-  //     diagnoses.add("HDL: High");
-  //   }
-  //
-  //   // Diagnose other possible issues (based on blood count, etc.)
-  //   if (wbc > 11000) {
-  //     diagnoses.add("WBC: High - Possible Infection or Inflammation");
-  //   }
-  //
-  //   if (diagnoses.isEmpty) {
-  //     return "Normal: No defects identified";
-  //   } else {
-  //     return diagnoses.join(", ");
-  //   }
-  // }
   String compareValues(List<List<DataRow>> rows) {
     int fastingPlasmaGlucose = 0;
     int randomPlasmaGlucose = 0;
@@ -175,7 +47,8 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
 
     for (List<DataRow> dataRows in rows) {
       for (DataRow row in dataRows) {
-        String component = (row.cells[0].child as Text).data!.toLowerCase().trim();
+        String component =
+            (row.cells[0].child as Text).data!.toLowerCase().trim();
         String result = (row.cells[1].child as Text).data!.toLowerCase().trim();
 
         RegExp regex = RegExp(r'\d+');
@@ -239,30 +112,36 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     int bloodGlucoseLevel = randomPlasmaGlucose != 0
         ? randomPlasmaGlucose
         : (randomBloodSugar != 0
-        ? randomBloodSugar
-        : (fastingPlasmaGlucose != 0 ? fastingPlasmaGlucose : fastingBloodSugar));
+            ? randomBloodSugar
+            : (fastingPlasmaGlucose != 0
+                ? fastingPlasmaGlucose
+                : fastingBloodSugar));
 
     // Update the user object with extracted information
     User updatedUser = User(
-      widget.user.name,
-      widget.user.email,
-      widget.user.password,
-      widget.user.age,
-      widget.user.height,
-      widget.user.weight,
-      widget.user.bmi,
-      widget.user.dob,
-      widget.user.activeLevel,
-      widget.user.type,
-      bloodGlucoseLevel != 0 ? bloodGlucoseLevel.toString() : widget.user.bloodGlucoseLevel,
-      cholesterolTotal != 0 ? cholesterolTotal.toString() : widget.user.bloodCholestrolLevel,
-      "No",
-      "0",
-      widget.user.memberName,
-      widget.user.memberRelationship,
-      widget.user.memberPhoneNo,
-      widget.user.newUser, widget.user.gender
-    );
+        widget.user.name,
+        widget.user.email,
+        widget.user.password,
+        widget.user.age,
+        widget.user.height,
+        widget.user.weight,
+        widget.user.bmi,
+        widget.user.dob,
+        widget.user.activeLevel,
+        widget.user.type,
+        bloodGlucoseLevel != 0
+            ? bloodGlucoseLevel.toString()
+            : widget.user.bloodGlucoseLevel,
+        cholesterolTotal != 0
+            ? cholesterolTotal.toString()
+            : widget.user.bloodCholestrolLevel,
+        "No",
+        "0",
+        widget.user.memberName,
+        widget.user.memberRelationship,
+        widget.user.memberPhoneNo,
+        widget.user.newUser,
+        widget.user.gender);
 
     // Update the user information in the database
     updateUserInformation(updatedUser);
@@ -271,7 +150,10 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     List<String> diagnoses = [];
 
     // Diagnose Diabetes or Pre-Diabetes
-    if (fastingPlasmaGlucose >= 126 || fastingBloodSugar >= 126 || randomPlasmaGlucose > 200 || randomBloodSugar > 200) {
+    if (fastingPlasmaGlucose >= 126 ||
+        fastingBloodSugar >= 126 ||
+        randomPlasmaGlucose > 200 ||
+        randomBloodSugar > 200) {
       diagnoses.add("Diabetes Mellitus");
     } else if ((fastingPlasmaGlucose > 100 && fastingPlasmaGlucose < 125) ||
         (fastingBloodSugar > 100 && fastingBloodSugar < 125) ||
@@ -282,7 +164,9 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
 
     // Diagnose Dyslipidemia
     if (cholesterolTotal >= 200) {
-      diagnoses.add(cholesterolTotal >= 240 ? "High Total Cholesterol" : "Borderline High Total Cholesterol");
+      diagnoses.add(cholesterolTotal >= 240
+          ? "High Total Cholesterol"
+          : "Borderline High Total Cholesterol");
     }
     if (triglycerides >= 150) {
       if (triglycerides >= 500) {
@@ -327,7 +211,8 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       diagnoses.add("High Pus Cells: Possible Urine Infection");
     }
     if (redCells > 3) {
-      diagnoses.add("High Red Cells: Possible Renal Disease, Urine Infection, Renal Calculi, or Cancer");
+      diagnoses.add(
+          "High Red Cells: Possible Renal Disease, Urine Infection, Renal Calculi, or Cancer");
     }
     if (protein > 150) {
       diagnoses.add("High Protein: Possible Renal Disease");
@@ -346,7 +231,6 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     }
   }
 
-
   void updateUserInformation(User updatedUser) async {
     await UserLoginService.updateUser(updatedUser);
   }
@@ -356,13 +240,19 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     String overallDiagnosis = compareValues(widget.rows);
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          color: Colors.white,
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: widget.user.newUser == false
+            ? IconButton(
+                color: Colors.white,
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            : IconButton(
+                color: Colors.red,
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {},
+              ),
         title: const Text(
           "CardioFit AI",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
@@ -376,13 +266,78 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
+                SizedBox(
+                  height: 50,
+                ),
+                if (widget.user.newUser)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      DashboardScreen(widget.user)),
+                            );
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: Colors.red, width: 2),
+                            // Red border
+                            backgroundColor: Colors.white,
+                            // White background
+                            padding: EdgeInsets.all(16), // Even padding
+                          ),
+                          child: Text(
+                            "Skip",
+                            style: TextStyle(color: Colors.black), // Black text
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ElectrodePlacementInstructionsScreen(
+                                        widget.user),
+                              ),
+                            );
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: Colors.red, width: 2),
+                            // Red border
+                            backgroundColor: Colors.white,
+                            // White background
+                            padding: EdgeInsets.all(16), // Even padding
+                          ),
+                          child: Text(
+                            "Next",
+                            style: TextStyle(color: Colors.black), // Black text
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                SizedBox(
+                  height: 80,
+                ),
                 ...widget.rows.map((e) {
                   findIndex += 1;
                   if (findIndex < widget._selectedReports.length) {
                     return Column(
                       children: [
-                        Image.file(widget._selectedReports[findIndex]["UploadedImage"], width: 200, height: 200),
-                        Text(widget._selectedReports[findIndex]['UploadedReport']),
+                        Image.file(
+                            widget._selectedReports[findIndex]["UploadedImage"],
+                            width: 200,
+                            height: 200),
+                        Text(widget._selectedReports[findIndex]
+                            ['UploadedReport']),
                         DataTable(
                           columns: const [
                             DataColumn(label: Text('Component')),
@@ -394,7 +349,8 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
                       ],
                     );
                   } else {
-                    return SizedBox.shrink(); // Safeguard against out-of-bound access
+                    return SizedBox
+                        .shrink(); // Safeguard against out-of-bound access
                   }
                 }).toList(),
                 SizedBox(height: 20),
