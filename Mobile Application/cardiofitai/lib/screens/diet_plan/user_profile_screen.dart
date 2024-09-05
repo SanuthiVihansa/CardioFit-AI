@@ -374,9 +374,10 @@ class _ProfilePageState extends State<ProfilePage> {
             widget.user.memberName,
             widget.user.memberRelationship,
             widget.user.memberPhoneNo,
-            false,
+            true,
             _genderController.text);
         UserLoginService.updateUser(updatedUserInfo);
+        UserLoginService.updateNewUser(updatedUserInfo);
         if (widget.user.newUser == false) {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (BuildContext context) => DashboardScreen(widget.user)));
@@ -384,7 +385,7 @@ class _ProfilePageState extends State<ProfilePage> {
           // IF NEW USER
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (BuildContext context) =>
-                  RecognitionScreen(widget.user)));
+                  RecognitionScreen(updatedUserInfo)));
         }
       });
 
