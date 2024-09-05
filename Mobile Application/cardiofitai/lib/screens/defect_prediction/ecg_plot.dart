@@ -119,6 +119,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
 
       // Update the user object with the new cardiac condition
       User updatedUser =
+      widget.user.copyWith(newUser: false);
           widget.user.copyWith(cardiacCondition: cardiacCondition);
 
       // Call the updateUser method to save the changes in Firestore
