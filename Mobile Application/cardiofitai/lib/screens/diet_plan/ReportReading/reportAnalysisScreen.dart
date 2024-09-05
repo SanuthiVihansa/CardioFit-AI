@@ -152,43 +152,68 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     // Diagnose Diabetes or Pre-Diabetes
     if (fastingPlasmaGlucose >= 126 ||
         fastingBloodSugar >= 126 ||
-        randomPlasmaGlucose > 200 ||
-        randomBloodSugar > 200) {
-      diagnoses.add("Diabetes Mellitus");
-    } else if ((fastingPlasmaGlucose > 100 && fastingPlasmaGlucose < 125) ||
-        (fastingBloodSugar > 100 && fastingBloodSugar < 125) ||
-        (randomPlasmaGlucose > 140 && randomPlasmaGlucose < 199) ||
-        (randomBloodSugar > 140 && randomBloodSugar < 199)) {
-      diagnoses.add("Pre Diabetes");
+        randomPlasmaGlucose >= 200 ||
+        randomBloodSugar >= 200) {
+      diagnoses.add("Diagnosed with Diabetes Mellitus condition.");
+    } else if ((fastingPlasmaGlucose >= 100 && fastingPlasmaGlucose <= 125) ||
+        (fastingBloodSugar >= 100 && fastingBloodSugar <= 125) ||
+        (randomPlasmaGlucose >= 140 && randomPlasmaGlucose <= 199) ||
+        (randomBloodSugar >= 140 && randomBloodSugar <= 199)) {
+      diagnoses.add("Diagnosed with Pre Diabetes condition.");
     }
 
     // Diagnose Dyslipidemia
-    if (cholesterolTotal >= 200) {
-      diagnoses.add(cholesterolTotal >= 240
-          ? "High Total Cholesterol"
-          : "Borderline High Total Cholesterol");
-    }
-    if (triglycerides >= 150) {
-      if (triglycerides >= 500) {
-        diagnoses.add("Very High Triglycerides");
-      } else if (triglycerides >= 200) {
-        diagnoses.add("High Triglycerides");
+    if (cholesterolTotal > 0) {
+      if (cholesterolTotal >= 200) {
+        diagnoses.add(cholesterolTotal >= 240
+            ? "High Total Cholesterol indicates increased risk of heart disease due to excess cholesterol in the blood."
+            : "Borderline High Total Cholesterol suggests you are approaching risky levels, and lifestyle changes may be needed.");
       } else {
-        diagnoses.add("Borderline High Triglycerides");
+        diagnoses.add(
+            "Desirable Total Cholesterol means your blood cholesterol is within a healthy range, reducing the risk of heart disease.");
       }
-    }
-    if (hdlC < 40) {
-      diagnoses.add("Low HDL Cholesterol");
-    } else if (hdlC >= 60) {
-      diagnoses.add("High HDL Cholesterol");
-    }
-    if (ldlC >= 100) {
-      if (ldlC >= 190) {
-        diagnoses.add("High LDL Cholesterol");
-      } else if (ldlC >= 130) {
-        diagnoses.add("Borderline High LDL Cholesterol");
+
+      if (triglycerides >= 150) {
+        if (triglycerides >= 500) {
+          diagnoses.add(
+              "Very High Triglycerides puts you at serious risk for pancreatitis and cardiovascular diseases due to extremely high fat levels.");
+        } else if (triglycerides >= 200) {
+          diagnoses.add(
+              "High Triglycerides increases the risk of heart disease, indicating too much fat is circulating in your blood.");
+        } else {
+          diagnoses.add(
+              "Borderline High Triglycerides means slightly elevated fat levels, which can increase risk for heart and liver diseases.");
+        }
       } else {
-        diagnoses.add("Near Optimal LDL Cholesterol");
+        diagnoses.add(
+            "Normal Triglycerides suggests that your fat levels in the blood are well-managed, reducing risks of heart disease.");
+      }
+
+      if (hdlC < 40) {
+        diagnoses.add(
+            "Low HDL Cholesterol means inadequate 'good' cholesterol, reducing the body's ability to remove excess fat from arteries.");
+      } else if (hdlC >= 60) {
+        diagnoses.add(
+            "High HDL Cholesterol means your 'good' cholesterol is efficiently protecting against heart disease by clearing bad cholesterol.");
+      }
+
+      if (ldlC >= 100) {
+        if (ldlC >= 190) {
+          diagnoses.add(
+              "Very High LDL Cholesterol signals a major risk for heart disease as too much 'bad' cholesterol clogs arteries.");
+        } else if (ldlC >= 160) {
+          diagnoses.add(
+              "High LDL Cholesterol significantly increases your risk for heart attack and stroke due to excess cholesterol in the arteries.");
+        } else if (ldlC >= 130) {
+          diagnoses.add(
+              "Borderline High LDL Cholesterol suggests that you're near the risk zone for heart problems, requiring dietary changes.");
+        } else {
+          diagnoses.add(
+              "Near Optimal LDL Cholesterol means your 'bad' cholesterol levels are close to being ideal but could improve further.");
+        }
+      } else {
+        diagnoses.add(
+            "Optimal LDL Cholesterol indicates a healthy level of 'bad' cholesterol, minimizing your risk of developing heart disease.");
       }
     }
 
