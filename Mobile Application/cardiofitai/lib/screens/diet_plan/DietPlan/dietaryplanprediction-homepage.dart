@@ -427,20 +427,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Meet a dietitian, Since your BMI state your overweight and has Low blood cholestrol level, design a diet plan matching to your medical reports',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Meet a dietitian, Since your BMI state your overweight and has high blood sugar and low blood cholestrol, design a deit plan matching to your reports',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
+              'Normal': 'Meet a dietitian, Since your BMI state your overweight with low blood sugar, it is required for you to get medical help to make a diet plan',
               'High':
                   'You are a female with age between 20-65, Overweight according to BMI,No cardiac condition,low sugar but high cholestrol. Limit oily food and meet a dietitian as soon as possible to get a diet plan',
-              'Low': 'Meet a dietitian',
+              'Low': 'Meet a dietitian, BMI with overweight and low cholestrol and low sugar level is quite abnormal, hence its better for you to get medicine experts help',
             },
           },
           'Yes': {
@@ -448,20 +448,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'You have a cardiac abnormality, your sugar level seems to be normal, but your cholestrol level is low, kindly Meet a dietitian to make a personalised healthy plan matching to your test results',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'You have a cardic abnormality plus high blood glucose level, your cholestrol level seems to be low, its high time for you to Meet a dietitian and choose a food pattern which aligns with your test results',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Meet a dietitian, since you have low sugar and low cholestrol levels its adviced to get experise help on this regard',
             },
           },
         },
