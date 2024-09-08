@@ -43,6 +43,7 @@ class _SerialMonitorState extends State<SerialMonitor> {
     //Listen for USB Attach/detach events
     _usbSubscription = UsbSerial.usbEventStream!.listen((UsbEvent event) {
       if (event.event == UsbEvent.ACTION_USB_ATTACHED) {
+        print('USB attached');
         _initUsb();
       }
     });
@@ -112,7 +113,7 @@ class _SerialMonitorState extends State<SerialMonitor> {
   }
 
   void _handleIncomingData(String data) async {
-    if (_ecgData.isEmpty) {
+    if (_ecgData.length == 1) {
       _startCountdown();
     }
 
