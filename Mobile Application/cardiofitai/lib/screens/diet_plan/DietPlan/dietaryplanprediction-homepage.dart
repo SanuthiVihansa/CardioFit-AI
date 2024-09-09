@@ -63,7 +63,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Focus on lean proteins, whole grains, fruits, vegetables, and heart-healthy fats. Ensure balanced meals, avoid excess salt, and prioritize hydration,for more guidance meet a dietitian',
             },
             'High': {
               'Normal':
@@ -77,7 +77,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'You are underweight according to BMI and with cardiac arrhythmia and low blood sugar and cholesterol, focus on frequent small meals rich in whole grains, lean proteins, fruits, and healthy fats - Meet a dietitian for more guidance',
             },
           },
         },
@@ -92,12 +92,12 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Get a balanced diet, Limit high sugary foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'You are overweight with cardiac arrhythmia, high blood sugar, and low cholesterol: prioritize fiber-rich foods, lean proteins, whole grains, and limit sugar and processed carbs. Avoid trans fats.- Meet a dietitian for more guidance.',
             },
             'Low': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'You are overweight with cardiac arrhythmia, low blood sugar, and low cholesterol: eat whole grains, lean proteins, healthy fats, frequent small meals, and avoid sugary foods. Stay hydrated.',
             },
           },
           'Yes': {
@@ -105,20 +105,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re overweight. Focus on whole grains, lean proteins, healthy fats like avocado, and plenty of vegetables. Avoid processed sugars, limit sodium, and eat small, frequent meals for heart health.',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re overweight. Focus on fiber-rich foods, lean proteins, and healthy fats. Limit sugars, processed carbs, and sodium. Prioritize heart-healthy vegetables and small, balanced meals to manage sugar levels.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re overweight. Eat balanced meals with lean proteins, whole grains, and heart-healthy fats. Include frequent snacks to maintain blood sugar and avoid processed foods high in sodium.',
             }
           },
         },
@@ -127,19 +127,19 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re obese. Focus on portion control, eat fiber-rich fruits, vegetables, lean proteins, and whole grains. Avoid sugary drinks and processed foods to maintain healthy cholesterol and weight.',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re obese. Limit sugary foods, focus on whole grains, lean proteins, and healthy fats like avocado. Include fiber-rich vegetables and fruits, while avoiding processed foods to control blood sugar.',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI states you`re obese. Eat balanced meals rich in lean protein, whole grains, and healthy fats. Focus on complex carbs like sweet potatoes and whole grains to maintain stable blood sugar.',
+              'High': 'MYour BMI states you`re obese. Limit saturated fats and cholesterol-rich foods. Focus on lean proteins, vegetables, and fiber-rich fruits. Include complex carbs and healthy fats like nuts and seeds for balanced blood sugar.',
+              'Low': 'Your BMI states you`re obese. Increase intake of nutrient-dense foods like lean proteins, whole grains, and fiber-rich vegetables. Opt for healthy fats like olive oil and avocados to support blood sugar balance.',
             },
           },
           'Yes': {
