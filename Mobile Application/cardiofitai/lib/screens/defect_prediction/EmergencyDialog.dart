@@ -44,7 +44,7 @@ class EmergencyDialog extends StatelessWidget {
       Position position = await LocationService.getCurrentLocation();
       String message = 'Greetings,\n\n'
           'This is an urgent notification from CardioFitAI. Your loved one has been diagnosed with a critical condition and requires immediate attention. '
-          'The current location of the user is provided below:\n\n'
+          'The current location of the patient is provided below:\n\n'
           'Location: https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}\n\n'
           'Please act promptly to ensure their safety.\n\n'
           'Regards,\n'
