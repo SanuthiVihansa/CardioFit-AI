@@ -102,7 +102,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
           predictedLabel == 'Abnormal QRS' ||
           predictedLabel == 'Inferior Myocardial Infarction' ||
           predictedLabel == 'Ventricular Tachycardia') {
-        _showEmergencyDialog(widget.user.memberRelationship);
+        _showEmergencyDialog(widget.user.memberPhoneNo);
       }
     } catch (e) {
       setState(() {
