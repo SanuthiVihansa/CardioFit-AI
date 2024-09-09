@@ -81,10 +81,85 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  bool _isValidName(String name) {
+    final nameRegex = RegExp(r"^[a-zA-Z\s]+$");
+    return nameRegex.hasMatch(name) && name.isNotEmpty;
+  }
+
+  bool _isValidNumber(String number) {
+    final numberRegex = RegExp(r"^\d+$");
+    return numberRegex.hasMatch(number) && number.isNotEmpty;
+  }
+
+  bool _isValidHeight(String height) {
+    try {
+      double h = double.parse(height);
+      return h > 0 && h < 300;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool _isValidWeight(String weight) {
+    try {
+      double w = double.parse(weight);
+      return w > 0 && w < 500;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool _isValidDOB(DateTime dob) {
+    return dob.isBefore(DateTime.now());
+  }
+
+  void _saveUserInfo() {
+    if (!_isValidName(_userNameController.text) ||
+        !_isValidNumber(_ageController.text) ||
+        !_isValidHeight(_heightController.text) ||
+        !_isValidWeight(_weightController.text)) {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please fill all fields correctly')));
+      return;
+    }else{
+      User updatedUserInfo = User(
+          widget.user.name,
+          widget.user.email,
+          widget.user.password,
+          _ageController.text,
+          _heightController.text,
+          _weightController.text,
+          _caluclateBMIController.text,
+          _dobController.text,
+          dropdownValue.characters.string,
+          widget.user.type,
+          widget.user.bloodGlucoseLevel,
+          widget.user.bloodCholestrolLevel,
+          widget.user.cardiacCondition,
+          widget.user.bloodTestType,
+          widget.user.memberName,
+          widget.user.memberRelationship,
+          widget.user.memberPhoneNo,
+          true,
+          _genderController.text);
+      UserLoginService.updateUser(updatedUserInfo);
+      UserLoginService.updateNewUser(updatedUserInfo);
+      if (widget.user.newUser == false) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => DashboardScreen(widget.user)));
+      } else {
+        // IF NEW USER
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) =>
+                RecognitionScreen(updatedUserInfo)));
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(), // Assuming you have an AppBar
+      appBar: AppBar(),
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -215,44 +290,53 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget userName() => TextField(
         controller: _userNameController,
         decoration: InputDecoration(
-          errorText: "",
+          errorText:
+              _isValidName(_userNameController.text) ? null : "Invalid Name",
           labelText: "Name",
           border: OutlineInputBorder(),
         ),
-        onChanged: (text) {},
+        onChanged: (text) {
+          setState(() {}); // Trigger UI update for validation check
+        },
       );
 
   Widget dateOfBirth() {
     return TextFormField(
       controller: _dobController,
       decoration: InputDecoration(
-        errorText: "",
         labelText: 'DOB',
+        errorText: _dobController.text.isNotEmpty && !_isValidDOB(DateTime.parse(_dobController.text))
+            ? 'Invalid DOB. Please select a valid date.'
+            : null,
         border: OutlineInputBorder(),
       ),
       readOnly: true,
-      // Make the field read-only so that only the date picker can set the value
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
           context: context,
-          initialDate: DateTime.now(), // The current date as the initial date
-          firstDate: DateTime(1900), // Start date
-          lastDate: DateTime
-              .now(), // End date, ensuring the date can't be in the future
+          initialDate: DateTime.now(),
+          firstDate: DateTime(1900),
+          lastDate: DateTime.now(),
         );
 
         if (pickedDate != null) {
-          String formattedDate = "${pickedDate.toLocal()}".split(' ')[0];
-          setState(() {
-            _dobController.text =
-                formattedDate; // Set the date in the controller
-            _ageController.text = _calculateAge(pickedDate)
-                .toString(); // Calculate and set the age
-          });
+          if (_isValidDOB(pickedDate)) {
+            String formattedDate = "${pickedDate.toLocal()}".split(' ')[0];
+            setState(() {
+              _dobController.text = formattedDate; // Set the date in the controller
+              _ageController.text = _calculateAge(pickedDate).toString(); // Set the age
+            });
+          } else {
+            // Handle invalid DOB case
+            setState(() {
+              _dobController.text = ""; // Clear the field if the date is invalid
+            });
+          }
         }
       },
     );
   }
+
 
   Widget Age() => TextField(
         controller: _ageController,
@@ -266,34 +350,39 @@ class _ProfilePageState extends State<ProfilePage> {
       );
 
   Widget Height() => TextField(
-        controller: _heightController,
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          errorText: "",
-          labelText: 'Height',
-          suffix: Text("cm"),
-          border: OutlineInputBorder(),
-        ),
-        onChanged: (text) {
-          // double height = double.parse(_heightController.text);
-
-          calculateBMI(weight, height);
-        },
-      );
+    controller: _heightController,
+    keyboardType: TextInputType.number,
+    decoration: InputDecoration(
+      labelText: 'Height',
+      suffix: const Text("cm"),
+      errorText: _isValidHeight(_heightController.text)
+          ? null
+          : "Invalid Height",
+      border: OutlineInputBorder(),
+    ),
+    onChanged: (text) {
+      setState(() {
+        calculateBMI(weight, height);
+      });
+    },
+  );
 
   Widget Weight() => TextField(
-        controller: _weightController,
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          errorText: "",
-          labelText: 'Weight',
-          border: OutlineInputBorder(),
-          suffix: Text("Kg"),
-        ),
-        onChanged: (text) {
-          calculateBMI(weight, height);
-        },
-      );
+    controller: _weightController,
+    keyboardType: TextInputType.number,
+    decoration: InputDecoration(
+      labelText: 'Weight',
+      suffix: Text("Kg"),
+      errorText: _isValidWeight(_weightController.text) ? null : "Invalid Weight",
+      border: OutlineInputBorder(),
+    ),
+    onChanged: (text) {
+      setState(() {
+        calculateBMI(weight, height);
+      });
+    },
+  );
+
 
   Widget BMI() => TextField(
         readOnly: true,
@@ -354,63 +443,35 @@ class _ProfilePageState extends State<ProfilePage> {
       });
 
   Widget saveInfoBtn() => ElevatedButton(
+
       child: Text("Save"),
       onPressed: () {
-        User updatedUserInfo = User(
-            widget.user.name,
-            widget.user.email,
-            widget.user.password,
-            _ageController.text,
-            _heightController.text,
-            _weightController.text,
-            _caluclateBMIController.text,
-            _dobController.text,
-            dropdownValue.characters.string,
-            widget.user.type,
-            widget.user.bloodGlucoseLevel,
-            widget.user.bloodCholestrolLevel,
-            widget.user.cardiacCondition,
-            widget.user.bloodTestType,
-            widget.user.memberName,
-            widget.user.memberRelationship,
-            widget.user.memberPhoneNo,
-            true,
-            _genderController.text);
-        UserLoginService.updateUser(updatedUserInfo);
-        UserLoginService.updateNewUser(updatedUserInfo);
-        if (widget.user.newUser == false) {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => DashboardScreen(widget.user)));
-        } else {
-          // IF NEW USER
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  RecognitionScreen(updatedUserInfo)));
-        }
+        _saveUserInfo();
+
       });
 
   Widget GenderDropdown() => DropdownButtonFormField<String>(
-        value:
-            _genderController.text.isNotEmpty ? _genderController.text : null,
-        onChanged: (String? newValue) {
-          setState(() {
-            _genderController.text = newValue!;
-          });
-        },
-        decoration: InputDecoration(
-          errorText: "",
-          labelText: 'Gender',
-          border: OutlineInputBorder(),
-        ),
-        items: const [
-          DropdownMenuItem<String>(
-            value: 'Female',
-            child: Text('Female'),
-          ),
-          DropdownMenuItem<String>(
-            value: 'Male',
-            child: Text('Male'),
-          ),
-        ],
-      );
+    value: _genderController.text.isNotEmpty ? _genderController.text : null,
+    onChanged: (String? newValue) {
+      setState(() {
+        _genderController.text = newValue!;
+      });
+    },
+    decoration: InputDecoration(
+      labelText: 'Gender',
+      errorText: _genderController.text.isNotEmpty ? null : "Please select Gender",
+      border: OutlineInputBorder(),
+    ),
+    items: const [
+      DropdownMenuItem<String>(
+        value: 'Female',
+        child: Text('Female'),
+      ),
+      DropdownMenuItem<String>(
+        value: 'Male',
+        child: Text('Male'),
+      ),
+    ],
+  );
+
 }
