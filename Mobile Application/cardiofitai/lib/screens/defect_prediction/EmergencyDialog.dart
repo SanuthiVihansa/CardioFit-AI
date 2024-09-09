@@ -88,7 +88,7 @@ class EmergencyDialog extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'Incomplete Right Bundle Branch Block detected. Contact the following number:',
+              'Diagnosis that requires immediate medical attention is detected. Contact the following number:',
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
