@@ -566,9 +566,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Low': 'Meet a dietitian',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI states you`re underweight. Focus on calorie-dense meals with healthy fats, lean proteins, and whole grains. Eat frequent meals to stabilize blood sugar and maintain cholesterol levels',
+              'High': 'Your BMI states you`re underweight. Prioritize healthy fats, lean proteins, and fiber-rich foods. Avoid saturated fats, eat frequently to manage blood sugar, and focus on heart-healthy foods.',
+              'Low': 'Your BMI states you`re underweight. Eat nutrient-rich meals with lean proteins, healthy fats, and whole grains. Increase meal frequency to stabilize blood sugar and raise cholesterol levels naturally',
             },
           },
           'Yes': {
@@ -608,9 +608,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Low': 'Meet a dietitian',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI states you`re overweight. Focus on lean proteins, whole grains, and vegetables. Eat small, frequent meals to stabilize blood sugar and maintain normal cholesterol levels',
+              'High': 'Your BMI states you`re overweight. Prioritize fiber-rich foods, lean proteins, and healthy fats. Limit saturated fats to reduce cholesterol, and eat regularly to manage low blood sugar',
+              'Low': 'Your BMI states you`re overweight. Eat nutrient-dense meals with lean proteins, whole grains, and healthy fats. Increase meal frequency to stabilize blood sugar and improve cholesterol levels..',
             },
           },
           'Yes': {
@@ -650,9 +650,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Low': 'Meet a dietitian',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI states you`re obese. Focus on lean proteins, whole grains, and healthy fats. Eat small, frequent meals to manage blood sugar and maintain your cholesterol at a healthy level.',
+              'High': 'Your BMI states you`re obese. Focus on lean proteins, fiber-rich foods, and healthy fats. Avoid saturated fats to lower cholesterol, and eat more frequent meals to stabilize blood sugar.',
+              'Low': 'Your BMI states you`re obese. Prioritize nutrient-dense meals with lean proteins, whole grains, and healthy fats. Eat frequent meals to stabilize blood sugar and improve cholesterol naturally',
             },
           },
           'Yes': {
@@ -692,9 +692,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Low': 'Meet a dietitian',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI is maintained perfectly. Focus on balanced meals with whole grains, lean proteins, and healthy fats. Eat small, frequent meals to stabilize blood sugar and maintain your cholesterol.',
+              'High': 'Your BMI is maintained perfectly. Focus on lean proteins, fiber-rich foods, and healthy fats. Limit saturated fats to reduce cholesterol and eat frequently to manage low blood sugar.',
+              'Low': 'Your BMI is maintained perfectly. Prioritize nutrient-dense meals with lean proteins, whole grains, and healthy fats. Eat more frequent meals to stabilize blood sugar and improve cholesterol.',
             },
           },
           'Yes': {
