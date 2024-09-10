@@ -10,7 +10,7 @@ class EmergencyDialog extends StatelessWidget {
   const EmergencyDialog({Key? key, required this.contactNumber}) : super(key: key);
 
   Future<void> _sendSms(String contactNumber, String message) async {
-    final String apiKey = 'jDkkmVFn2VkdIdOWCLvw'; // Replace with your notify.lk API key
+    final String apiKey = 'AUS4ssj4nA8vBGpJgyZX'; // Replace with your notify.lk API key
     final String senderId = 'NotifyDEMO'; // Replace with your sender ID (if any)
 
     try {
@@ -21,7 +21,7 @@ class EmergencyDialog extends StatelessWidget {
           'Authorization': 'Bearer $apiKey',
         },
         body: jsonEncode({
-          'user_id': '27374', // Replace with your user ID
+          'user_id': '27903', // Replace with your user ID
           'api_key': apiKey,
           'sender_id': senderId,
           'to': contactNumber,
@@ -44,7 +44,7 @@ class EmergencyDialog extends StatelessWidget {
       Position position = await LocationService.getCurrentLocation();
       String message = 'Greetings,\n\n'
           'This is an urgent notification from CardioFitAI. Your loved one has been diagnosed with a critical condition and requires immediate attention. '
-          'The current location of the user is provided below:\n\n'
+          'The current location of the patient is provided below:\n\n'
           'Location: https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}\n\n'
           'Please act promptly to ensure their safety.\n\n'
           'Regards,\n'
@@ -88,7 +88,7 @@ class EmergencyDialog extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'Incomplete Right Bundle Branch Block detected. Contact the following number:',
+              'Diagnosis that requires immediate medical attention is detected. Contact the following number:',
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),

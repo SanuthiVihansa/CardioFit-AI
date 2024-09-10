@@ -274,12 +274,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             ]));
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Bilirubin")),
-              DataCell(Text(responseJson["Bilirubin result?"].toString())),
+              DataCell(Text(responseJson["Bilirubin result"].toString())),
               DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Blood")),
-              DataCell(Text(responseJson["Blood result?"].toString())),
+              DataCell(Text(responseJson["Blood result"].toString())),
               DataCell(Text(""))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
@@ -290,8 +290,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Epithelial cells")),
               DataCell(
-                  Text(responseJson["Epithelial cells result?"].toString())),
-              DataCell(Text(responseJson["Epithelial cells units"].toString()))
+                  Text(responseJson["Epithelial cells results?"].toString())),
+              DataCell(Text(responseJson["Epithelial cells units?"].toString()))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Specific Gravity")),
@@ -434,65 +434,114 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             final responseData = await http.Response.fromStream(response);
             Map<String, dynamic> responseJson = json.decode(responseData.body);
             responseJson = responseJson["extracted_text"];
+
+            String WBCRaw = responseJson["WBC Result and Unit?"].toString();
+            Map<String, String> WBCValues = splitRBCResultAndUnit(WBCRaw);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("WBC")),
-              DataCell(Text(responseJson["WBC?"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(WBCValues["result"]!)),
+              DataCell(Text(WBCValues["unit"]!))
             ]));
+
+            String Neutrophils = responseJson["Neutrophils Result and Unit"].toString();
+            Map<String, String> neutrophils = splitRBCResultAndUnit(Neutrophils);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Neutrophils")),
-              DataCell(Text(responseJson["Neutrophils"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(neutrophils["result"]!)),
+              DataCell(Text(neutrophils["unit"]!))
             ]));
+
+            String Lymphocytes = responseJson["Lymphocytes Result and Unit?"].toString();
+            Map<String, String> lymphocytes = splitRBCResultAndUnit(Lymphocytes);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Lymphocytes")),
-              DataCell(Text(responseJson["Lymphocytes?"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(lymphocytes["result"]!)),
+              DataCell(Text(lymphocytes["unit"]!))
             ]));
+
+            String Eosinophils = responseJson["Eosinophils Result and Unit"].toString();
+            Map<String, String> eosinophils = splitRBCResultAndUnit(Eosinophils);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Eosinophils")),
-              DataCell(Text(responseJson["Eosinophils"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(eosinophils["result"]!)),
+              DataCell(Text(eosinophils["unit"]!))
             ]));
+
+            String Monocytes = responseJson["Monocytes Result and unit?"].toString();
+            Map<String, String> monocytes = splitRBCResultAndUnit(Monocytes);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Monocytes")),
-              DataCell(Text(responseJson["Monocytes?"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(monocytes["result"]!)),
+              DataCell(Text(monocytes["unit"]!))
             ]));
+
+            String Basophils = responseJson["Basophils Result and Unit"].toString();
+            Map<String, String> basophils = splitRBCResultAndUnit(Basophils);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Basophils")),
-              DataCell(Text(responseJson["Basophils"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(basophils["result"]!)),
+              DataCell(Text(basophils["unit"]!))
             ]));
+
+            String Haemoglobin = responseJson["Haemoglobin Result and Unit?"].toString();
+            Map<String, String> haemoglobin = splitRBCResultAndUnit(Haemoglobin);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Haemoglobin")),
-              DataCell(Text(responseJson["Haemoglobin?"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(haemoglobin["result"]!)),
+              DataCell(Text(haemoglobin["unit"]!))
             ]));
+
+            String PCV = responseJson["PCV Result and Unit?"].toString();
+            Map<String, String> pCV = splitRBCResultAndUnit(PCV);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("PCV")),
-              DataCell(Text(responseJson["PCV?"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(pCV["result"]!)),
+              DataCell(Text(pCV["unit"]!))
             ]));
+
+            String MCHC = responseJson["MCHC Result and Unit?"].toString();
+            Map<String, String> mCHC = splitRBCResultAndUnit(MCHC);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("MCHC")),
-              DataCell(Text(responseJson["MCHC?"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(mCHC["result"]!)),
+              DataCell(Text(mCHC["unit"]!))
             ]));
+
+            // RBC Extraction
+            String rbcRaw = responseJson["RBC Result and Unit?"].toString();
+            Map<String, String> rbcValues = splitRBCResultAndUnit(rbcRaw);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("RBC")),
-              DataCell(Text(responseJson["RBC?"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(rbcValues["result"]!)),
+              DataCell(Text("10^6 /UL"))
             ]));
+
+            String MCH = responseJson["MCH Result and Unit?"].toString();
+            Map<String, String> mCH = splitRBCResultAndUnit(MCH);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("MCH")),
-              DataCell(Text(responseJson["MCH?"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(mCH["result"]!)),
+              DataCell(Text(mCH["unit"]!))
             ]));
+
+            String MCV = responseJson["MCV Result and Unit?"].toString();
+            Map<String, String> mCV = splitRBCResultAndUnit(MCV);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("MCV")),
-              DataCell(Text(responseJson["MCV?"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(mCV["result"]!)),
+              DataCell(Text(mCV["unit"]!))
             ]));
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Neutrophils absolute count")),
@@ -524,12 +573,16 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                   Text(responseJson["Basophils absolute count?"].toString())),
               DataCell(Text(""))
             ]));
+
+            String PlateletCount = responseJson["Platelet Count Result and Units?"].toString();
+            Map<String, String> plateletCount = splitRBCResultAndUnit(PlateletCount);
+
             _singleReportDataRows.add(DataRow(cells: [
               DataCell(Text("Platelet count")),
-              DataCell(Text(responseJson["Platelet count?"].toString())),
-              DataCell(Text(""))
+              DataCell(Text(plateletCount["result"]!)),
+              DataCell(Text(plateletCount["unit"]!))
             ]));
-
+// Set validations here
             _reportDataRows.add(_singleReportDataRows);
           }
         }
@@ -538,9 +591,18 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     setState(() {
       _isLoading = false;
     });
+
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => ReportAnalysisScreen(
             _selectedReports, _reportDataRows, widget.user)));
+  }
+
+  // Helper function to split RBC result and unit
+  Map<String, String> splitRBCResultAndUnit(String input) {
+    List<String> parts = input.split(' ');
+    String result = parts[0]; // Extracting the result (e.g., "4.9")
+    String unit = parts.sublist(1).join(' '); // Extracting the unit (e.g., "10^6 /UL")
+    return {"result": result, "unit": unit};
   }
 
   @override
@@ -548,13 +610,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     halfScreenWidth = (MediaQuery.of(context).size.width - 10) - 50;
     return Scaffold(
       appBar: AppBar(
-        // leading: IconButton(
-        //   color: Colors.white,
-        //   icon: const Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
         title: const Text(
           "Laboratory Report Diagnosis",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
@@ -621,6 +676,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                 Response response =
                                     await UserLoginService.updateNewUser(
                                         updateNewUserField);
+
                               }
 
                               Navigator.push(
