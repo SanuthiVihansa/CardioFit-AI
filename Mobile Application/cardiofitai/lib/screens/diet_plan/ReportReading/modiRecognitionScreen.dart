@@ -97,6 +97,14 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 ),
                 Flexible(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.circular(10.0), // Rounded corners
+                        )
+                    ),
                     onPressed: () async {
                       final image = await ImagePicker()
                           .pickImage(source: ImageSource.gallery);
@@ -684,6 +692,14 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(10.0), // Rounded corners
+                                )
+                            ),
                             onPressed: () async {
                               if (widget.user.newUser == true) {
                                 User updateNewUserField = User(
@@ -723,6 +739,14 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                             child: Text(widget.user.newUser ? "Skip" : "Back")),
                         SizedBox(width: 30),
                         ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(10.0), // Rounded corners
+                                )
+                            ),
                             onPressed: _isLoading == false
                                 ? () {
 
