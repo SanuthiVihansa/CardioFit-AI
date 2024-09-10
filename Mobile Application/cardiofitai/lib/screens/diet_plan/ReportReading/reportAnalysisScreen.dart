@@ -36,18 +36,10 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     int hdlC = 0;
     int triglycerides = 0;
     int wbc = 0;
-    int neutrophils = 0;
-    int lymphocytes = 0;
-    int eosinophils = 0;
-    int monocytes = 0;
-    int basophils = 0;
-    int haemoglobin = 0;
+
 
     int plateletCount = 0;
-    int pCV = 0;
-    int mCHC = 0;
-    int mCH = 0;
-    int mCV = 0;
+
 
     print("Extracted data: $rows");
 
@@ -89,28 +81,8 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
         // Handle Full Blood Count
         else if (component.contains("wbc")) {
           wbc = numericResult;
-        } else if (component.contains("neutrophils")) {
-          neutrophils = numericResult;
-        } else if (component.contains("lymphocytes")) {
-          lymphocytes = numericResult;
-        } else if (component.contains("eosinophils")) {
-          eosinophils = numericResult;
-        } else if (component.contains("monocytes")) {
-          monocytes = numericResult;
-        } else if (component.contains("basophils")) {
-          basophils = numericResult;
-        } else if (component.contains("haemoglobin")) {
-          haemoglobin = numericResult;
-        } else if (component.contains("platelet count")) {
+        }  else if (component.contains("platelet count")) {
           plateletCount = numericResult;
-        } else if (component.contains("pCV")) {
-          pCV = numericResult;
-        } else if (component.contains("mCHC")) {
-          mCHC = numericResult;
-        } else if (component.contains("mCH")) {
-          mCH = numericResult;
-        } else if (component.contains("mCV")) {
-          mCV = numericResult;
         }
       }
     }
@@ -215,31 +187,6 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
       diagnoses.add("Low WBC: Possible Autoimmune Disease or Bone Marrow Issue.");
     }}
 
-    // if (neutrophils > 7000) {
-    //   diagnoses.add("High Neutrophils: Possible Bacterial Infection.");
-    // }
-    //
-    // if (lymphocytes > 4000) {
-    //   diagnoses.add("High Lymphocytes: Possible Viral Infection.");
-    // }
-    //
-    // if (eosinophils > 500) {
-    //   diagnoses.add("High Eosinophils: Possible Allergic Reaction or Parasitic Infection.");
-    // }
-    //
-    // if (monocytes > 800) {
-    //   diagnoses.add("High Monocytes: Chronic Infection or Inflammation.");
-    // }
-    //
-    // if (basophils > 100) {
-    //   diagnoses.add("High Basophils: Allergic Reaction or Chronic Inflammation.");
-    // }
-
-    // if (haemoglobin < 11.0) {
-    //   diagnoses.add("Low haemoglobin: Anemia or Blood Loss.");
-    // } else if (haemoglobin > 16.5) {
-    //   diagnoses.add("High haemoglobin: Possible Polycythemia or Dehydration.");
-    // }
 
     if(plateletCount!=0){
     if (plateletCount < 150000) {
