@@ -147,20 +147,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re obese. Focus on low-fat, high-fiber foods like vegetables, whole grains, and lean proteins to manage weight and support heart health. Avoid salty, processed foods',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re obese. Limit sugar, refined carbs, and processed foods. Emphasize vegetables, lean proteins, and whole grains to stabilize blood sugar and support heart health.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re obese. Focus on balanced meals with lean proteins, whole grains, and healthy fats to stabilize blood sugar and support heart health. Avoid sugary, processed, and high-salt foods.',
             },
           },
         },
@@ -169,19 +169,19 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods.',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re perfect (normal). Focus on balanced meals rich in whole grains, lean proteins, and healthy fats. Continue to avoid processed and high-salt foods to maintain good health.',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re perfect (normal). Focus on whole grains, lean proteins, and fiber-rich vegetables. Limit sugary foods and refined carbs to keep blood sugar levels stable and cholesterol low.',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI states you`re perfect (normal). Maintain your health with balanced meals including fruits, vegetables, lean proteins, and whole grains. Continue avoiding processed foods and excess sugars for long-term wellness.',
+              'High': 'Your BMI states you`re perfect (normal). Focus on fiber-rich vegetables, lean proteins, and whole grains. Avoid sugary and high-fat foods to lower blood sugar and cholesterol, supporting overall heart health.',
+              'Low': 'Your BMI states you`re perfect (normal). Eat regular meals with lean proteins, whole grains, and healthy fats to keep blood sugar stable. Avoid processed and sugary foods for heart and cholesterol health.',
             },
           },
           'Yes': {
@@ -189,20 +189,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re perfect (normal). Focus on heart-friendly foods like whole grains, lean proteins, and healthy fats. Avoid high-salt, processed foods to maintain stable heart rhythms and cholesterol.',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re perfect (normal). Prioritize heart-healthy foods, limit sugar and refined carbs, and include lean proteins and whole grains to manage blood sugar and support heart health.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re perfect (normal). Focus on balanced meals with lean proteins, whole grains, and healthy fats to stabilize blood sugar and support heart function. Avoid high-salt and sugary foods.',
             },
           },
         },
@@ -385,19 +385,19 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods.',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re underweight. Focus on nutrient-dense foods like nuts, avocados, lean proteins, and whole grains. Incorporate healthy fats to boost weight and cholesterol levels naturally.',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re underweight. Include lean proteins, healthy fats, and fiber-rich carbs. Avoid sugary foods while eating calorie-dense, nutritious meals to manage blood sugar and improve cholesterol.',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI states you`re underweight. Focus on calorie-dense, fiber-rich foods like whole grains, lean proteins, and healthy fats. Limit sugary foods to manage blood sugar while maintaining balanced nutrition',
+              'High': 'Your BMI states you`re underweight. Prioritize lean proteins, whole grains, and healthy fats. Avoid saturated fats while eating small, frequent meals to stabilize blood sugar and improve cholesterol levels.',
+              'Low': 'Your BMI states you`re underweight. Eat small, frequent meals with lean proteins, whole grains, and healthy fats. Focus on nutrient-dense foods to stabilize blood sugar and increase cholesterol naturally.',
             },
           },
           'Yes': {
@@ -405,20 +405,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re underweight. Focus on nutrient-dense foods like lean proteins, whole grains, and healthy fats. Avoid salty foods to support heart health and improve cholesterol levels.',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re underweight. Emphasize fiber-rich foods, lean proteins, and healthy fats. Limit sugary foods to manage blood sugar while supporting heart health and raising cholesterol levels.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI states you`re underweight. Eat small, frequent meals rich in lean proteins, healthy fats, and whole grains. Stabilize blood sugar and improve cholesterol while avoiding processed and high-salt foods',
             },
           },
         },
@@ -480,9 +480,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Low': 'Meet a dietitian',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI states you`re obese. Focus on lean proteins, whole grains, and healthy fats. Eat small, frequent meals to stabilize blood sugar and maintain cholesterol levels.',
+              'High': 'Your BMI states you`re obese. Prioritize fiber-rich foods, lean proteins, and healthy fats. Avoid saturated fats to reduce cholesterol and eat frequent meals to manage blood sugar.',
+              'Low': 'Your BMI states you`re obese. Focus on healthy fats, lean proteins, and whole grains. Eat regularly to stabilize blood sugar and incorporate nutrient-dense foods to boost cholesterol.',
             },
           },
           'Yes': {
@@ -522,9 +522,9 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Low': 'Meet a dietitian',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI is maintained perfectly. Focus on balanced meals with lean proteins, whole grains, and healthy fats. Eat small, frequent meals to stabilize blood sugar and maintain cholesterol levels.',
+              'High': 'Your BMI is maintained perfectly. Prioritize fiber-rich foods, lean proteins, and healthy fats. Avoid saturated fats to lower cholesterol, while eating regularly to stabilize blood sugar',
+              'Low': 'Your BMI is maintained perfectly. Focus on nutrient-dense meals with lean proteins, whole grains, and healthy fats. Eat frequently to stabilize blood sugar and boost cholesterol levels naturally.',
             },
           },
           'Yes': {
