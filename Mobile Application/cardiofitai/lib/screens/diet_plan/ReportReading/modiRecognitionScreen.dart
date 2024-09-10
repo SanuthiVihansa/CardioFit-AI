@@ -35,6 +35,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   //Drop down control values
   List<String> reports = [
     'Select Report',
+    'Random blood sugar',
     'Fasting blood Sugar',
     'Urine Full Report',
     'Lipid profile',
@@ -248,7 +249,41 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             }
             _reportDataRows.add(_singleReportDataRows);
           }
-        } else if (_selectedReports[i]["UploadedReport"] ==
+        }else if (_selectedReports[i]["UploadedReport"] == "Random blood sugar") {
+          var request = http.MultipartRequest(
+              "POST",
+              Uri.parse(
+                  "https://sanuthivihansa.pythonanywhere.com/glucose/extract-text"));
+          request.files.add(
+              await http.MultipartFile.fromPath('file', _pickedImages[i].path));
+          final response = await request.send();
+          if (response.statusCode == 200) {
+            final responseData = await http.Response.fromStream(response);
+            final Map<String, dynamic> responseJson =
+            json.decode(responseData.body);
+
+            if (responseJson["extracted_text"]["Random Plasma Glucose value?"] ==
+                null) {
+              _singleReportDataRows.add(DataRow(cells: [
+                DataCell(Text("Random Plasma Glucose")),
+                DataCell(Text(responseJson["extracted_text"]
+                ["Random Blood Sugar value?"])),
+                DataCell(Text(responseJson["extracted_text"]
+                ["Random Blood sugar unit"]))
+              ]));
+            } else {
+              _singleReportDataRows.add(DataRow(cells: [
+                const DataCell(Text("Random Blood Sugar")),
+                DataCell(Text(responseJson["extracted_text"]
+                ["Random Plasma Glucose value?"])),
+                DataCell(Text(responseJson["extracted_text"]
+                ["Random Plasma Glucose unit"]))
+              ]));
+            }
+            _reportDataRows.add(_singleReportDataRows);
+          }
+        }
+        else if (_selectedReports[i]["UploadedReport"] ==
             "Urine Full Report") {
           var request = http.MultipartRequest(
               "POST",
@@ -591,8 +626,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     setState(() {
       _isLoading = false;
     });
-
-    Navigator.of(context).push(MaterialPageRoute(
+  Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => ReportAnalysisScreen(
             _selectedReports, _reportDataRows, widget.user)));
   }
@@ -691,6 +725,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                         ElevatedButton(
                             onPressed: _isLoading == false
                                 ? () {
+
                                     _onTapAnalyseBtn();
                                   }
                                 : null,
