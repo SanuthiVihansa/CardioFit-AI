@@ -188,7 +188,7 @@ class _ElectrodePlacementInstructionsScreenState
             ],
           ),
           Image.asset(
-            "assets/palm_analysis/3_electrode_placement_palms.png",
+            "assets/palm_analysis/3_electrode_placement_palms2.png",
             scale: 1.5,
           )
         ],
