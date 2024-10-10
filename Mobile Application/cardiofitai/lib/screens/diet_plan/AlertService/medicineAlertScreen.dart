@@ -437,55 +437,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (_startTimeController.text.isEmpty) {
-      _startTimeController.text = TimeOfDay.now().format(context);
-    }
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(
-            child: Text(
-          'Set Medicine Reminder',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        )),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (buildContext) => NotificationHomePage(widget.user)));
-          },
-        ),
-        backgroundColor: Colors.red,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTitle('Upload Prescription'),
-              _buildImagePickerOptions(),
-              _buildPickedImage(),
-              if (pickedImage != null) _buildDetectButton(),
-              if (prescriptionInfo.isNotEmpty) _buildPrescriptionInfo(),
-              _buildDivider(),
-              _buildTitle('Set Reminder Manually'),
-              SizedBox(height: 10),
-              _setRemindersManuallyForm(),
-              SizedBox(height: 16),
-              _buildMedicineList(),
-              _buildSetAlarmButton(),
-              SizedBox(height: 16),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
 //Title related styling
   Widget _buildTitle(String title) {
@@ -1004,4 +955,56 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_startTimeController.text.isEmpty) {
+      _startTimeController.text = TimeOfDay.now().format(context);
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+            child: Text(
+              'Set Medicine Reminder',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            )),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (buildContext) => NotificationHomePage(widget.user)));
+          },
+        ),
+        backgroundColor: Colors.red,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTitle('Upload Prescription'),
+              _buildImagePickerOptions(),
+              _buildPickedImage(),
+              if (pickedImage != null) _buildDetectButton(),
+              if (prescriptionInfo.isNotEmpty) _buildPrescriptionInfo(),
+              _buildDivider(),
+              _buildTitle('Set Reminder Manually'),
+              SizedBox(height: 10),
+              _setRemindersManuallyForm(),
+              SizedBox(height: 16),
+              _buildMedicineList(),
+              _buildSetAlarmButton(),
+              SizedBox(height: 16),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
 }

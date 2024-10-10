@@ -107,7 +107,11 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       _filteredAlerts = alarmSnapshot.docs;
       _assignUpdatedScheduledDateTimes(_filteredAlerts);
     });
+
+    // Add this log to see if any alarms are fetched
+    print('Fetched ${_filteredAlerts.length} alarms for reminderNo: $reminderNo');
   }
+
 
 //Update when the alarm times are editted
   void _assignUpdatedScheduledDateTimes(List<DocumentSnapshot> filteredAlerts) {
