@@ -315,20 +315,40 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
 //when set alarm button is clicked it navigates here
   Future<void> _onTapSubmitBtn(BuildContext context) async {
+    // Check if there are any medicines added to the list
     if (_medicines.isNotEmpty) {
+      bool hasErrors = false; // To track if any errors were found
+
+      // Loop through each medicine and validate the fields
       for (var medicine in _medicines) {
-        if (medicine['interval'].isEmpty ||
+        if
+        (
+            medicine['interval'].isEmpty ||
             medicine['days'] == 0 ||
             medicine['startDate'].isEmpty ||
             medicine['endDate'].isEmpty ||
-            medicine['startTime'].isEmpty) {
+            medicine['startTime'].isEmpty ||
+            medicine['pillintake'].isEmpty ||
+            medicine['selectedDays'].isEmpty ||
+            medicine['name'].isEmpty ||
+            medicine['dosage'].isEmpty
+
+        )
+
+
+        {
           _showErrorSnackBar(
               'Please edit the entry for ${medicine['name']} to include frequency, duration, start date, start time, and end date.');
-          return; // Exit the function if there's an error
+          hasErrors = true; // Set error flag to true
         }
       }
 
-      // If there are no errors, proceed with saving the reminders
+      // If errors were found, exit the function without creating alarms
+      if (hasErrors) {
+        return;
+      }
+
+      // If no errors were found, proceed with setting the alarms
       for (var extractedMedicine in _medicines) {
         _lastSubmitRecordNo += 1;
         await MedicineReminderService.medicineReminder(
@@ -346,13 +366,13 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           extractedMedicine["startTime"] ?? '',
         );
 
+        // Schedule the alarms for this medicine
         await scheduleAlarmsForMedicine(
           medicineName: extractedMedicine["name"],
           dosage: extractedMedicine["dosage"],
           pillIntake: int.tryParse(extractedMedicine["pillintake"]) ?? 1,
           frequency: extractedMedicine["interval"],
-          startDate:
-              DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
+          startDate: DateFormat('yyyy-MM-dd').parse(extractedMedicine["startDate"]),
           endDate: DateFormat('yyyy-MM-dd').parse(extractedMedicine["endDate"]),
           selectedDays: List<String>.from(extractedMedicine["selectedDays"]),
           startTime: extractedMedicine["startTime"],
@@ -364,6 +384,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       _showErrorSnackBar('No Items added to set reminder');
     }
   }
+
 
 //Setting the alarms - Alarm package related.
   Future<void> scheduleAlarmsForMedicine({
@@ -584,7 +605,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             SizedBox(width: 20),
             Expanded(
               child: _buildTextField(
-                  _dosageController, 'Dosage in mg', TextInputType.number),
+                  _dosageController, 'Dosage', TextInputType.text),
             ),
           ],
         ),

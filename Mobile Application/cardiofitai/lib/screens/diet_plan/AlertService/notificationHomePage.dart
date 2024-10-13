@@ -114,16 +114,34 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
 
 
 //Update when the alarm times are editted
+//   void _assignUpdatedScheduledDateTimes(List<DocumentSnapshot> filteredAlerts) {
+//     _updatedScheduledDateTimes.clear(); // Clear previous data
+//     alarmStatusList.clear(); // Clear previous statuses
+//
+//     for (var alarm in filteredAlerts) {
+//       _updatedScheduledDateTimes
+//           .add(DateTime.parse(alarm["scheduledAlarmDateTime"]));
+//       alarmStatusList.add(alarm['isActive']);
+//     }
+//   }
+
   void _assignUpdatedScheduledDateTimes(List<DocumentSnapshot> filteredAlerts) {
     _updatedScheduledDateTimes.clear(); // Clear previous data
     alarmStatusList.clear(); // Clear previous statuses
 
+    DateTime currentDateTime = DateTime.now(); // Get current date and time
+
     for (var alarm in filteredAlerts) {
-      _updatedScheduledDateTimes
-          .add(DateTime.parse(alarm["scheduledAlarmDateTime"]));
-      alarmStatusList.add(alarm['isActive']);
+      DateTime scheduledDateTime = DateTime.parse(alarm["scheduledAlarmDateTime"]);
+
+      // Check if the alarm is scheduled for the current date and time or later
+      if (scheduledDateTime.isAfter(currentDateTime) || scheduledDateTime.isAtSameMomentAs(currentDateTime)) {
+        _updatedScheduledDateTimes.add(scheduledDateTime);
+        alarmStatusList.add(alarm['isActive']);
+      }
     }
   }
+
 
   //Filter alerts upon selection of dates
   void _filterAlertsForSelectedDate() {
@@ -188,7 +206,6 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
-  //When a particular alarm needs to be editted
   void _showEditDialog(BuildContext context, DocumentSnapshot reminder) async {
     final int reminderNo = reminder['reminderNo'];
 
@@ -203,7 +220,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
 
     await getSavedAlarms(reminderNo);
 
-    if (!mounted) return; // Check if the widget is still mounted
+    if (!mounted) return;
 
     Navigator.of(context).pop(); // Close the loading indicator
 
@@ -233,8 +250,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                   children: [
                     Text(
                       'Edit Alarms for ${reminder['medicineName']}',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     Expanded(
                       child: ListView.builder(
@@ -242,58 +258,49 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                         itemBuilder: (context, index) {
                           final alarm = _filteredAlerts[index];
 
-                          // Cast the document data to a Map
-                          final Map<String, dynamic> alarmData =
-                              alarm.data() as Map<String, dynamic>;
+                          // Ensure index exists in the lists before accessing them
+                          if (index >= _updatedScheduledDateTimes.length || index >= alarmStatusList.length) {
+                            // Log the issue or handle the error gracefully
+                            print("Index out of range for _updatedScheduledDateTimes or alarmStatusList at index: $index");
+                            return Container(); // Return an empty container for now
+                          }
 
-                          // Check if 'scheduledAlarmDateTime' exists
-                          final scheduledAlarmDateTime = alarmData
-                                  .containsKey('scheduledAlarmDateTime')
-                              ? DateTime.parse(
-                                  alarmData['scheduledAlarmDateTime'])
-                              : DateTime
-                                  .now(); // Fallback to current time if missing
+                          // Proceed with the rest of the logic safely
+                          final scheduledAlarmDateTime = _updatedScheduledDateTimes[index];
+                          final alarmStatus = alarmStatusList[index];
 
-                          final TextEditingController dateController =
-                              TextEditingController(
-                            text: DateFormat('yyyy-MM-dd')
-                                .format(scheduledAlarmDateTime),
+                          final TextEditingController dateController = TextEditingController(
+                            text: DateFormat('yyyy-MM-dd').format(scheduledAlarmDateTime),
                           );
-                          final TextEditingController timeController =
-                              TextEditingController(
-                            text: DateFormat('HH:mm')
-                                .format(scheduledAlarmDateTime),
+                          final TextEditingController timeController = TextEditingController(
+                            text: DateFormat('HH:mm').format(scheduledAlarmDateTime),
                           );
-
-                          bool alarmStatus = alarmStatusList[index];
-                          final DateTime updatedDateTime =
-                              DateFormat('yyyy-MM-dd HH:mm').parse(
-                                  '${dateController.text} ${timeController.text}');
 
                           return Column(
                             children: [
                               Text(
                                 'Alarm ${index + 1}',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: 20),
                               Row(
                                 children: [
                                   Expanded(
                                     child: _buildDatePickerTextField(
-                                        dateController,
-                                        'Scheduled Date',
-                                        context,
-                                        index),
+                                      dateController,
+                                      'Scheduled Date',
+                                      context,
+                                      index,
+                                    ),
                                   ),
                                   SizedBox(width: 20),
                                   Expanded(
                                     child: _buildTimePickerTextField(
-                                        timeController,
-                                        'Scheduled Time',
-                                        context,
-                                        index),
+                                      timeController,
+                                      'Scheduled Time',
+                                      context,
+                                      index,
+                                    ),
                                   ),
                                   SizedBox(width: 20),
                                   Switch(
@@ -303,20 +310,17 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                                         alarmStatusList[index] = value;
                                       });
                                       if (value) {
-                                        _updateReminderAlarmStatusTrue(
-                                            alarmData['alarmIdNo']);
+                                        _updateReminderAlarmStatusTrue(alarm['alarmIdNo']);
                                         _reCreateAlarm(
-                                            alarmData['alarmIdNo'],
-                                            updatedDateTime,
-                                            alarmData["medicineName"],
-                                            int.parse(alarmData["pillIntake"]
-                                                .toString()),
-                                            int.parse(alarmData["dosage"]
-                                                .toString()));
+                                            alarm['alarmIdNo'],
+                                            scheduledAlarmDateTime,
+                                            alarm["medicineName"],
+                                            int.parse(alarm["pillIntake"].toString()),
+                                            int.parse(alarm["dosage"].toString())
+                                        );
                                       } else {
-                                        _updateReminderAlarmStatus(
-                                            alarmData['alarmIdNo']);
-                                        Alarm.stop(alarmData['alarmIdNo']);
+                                        _updateReminderAlarmStatus(alarm['alarmIdNo']);
+                                        Alarm.stop(alarm['alarmIdNo']);
                                       }
                                     },
                                   ),
@@ -336,28 +340,25 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                           onPressed: () async {
                             int index1 = 0;
                             for (var alarm in _filteredAlerts) {
-                              final alarmData =
-                                  alarm.data() as Map<String, dynamic>;
-                              await _updateReminder(
-                                alarmData['alarmIdNo'],
-                                DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
-                                    .format(_updatedScheduledDateTimes[index1]),
-                              );
-
-                              await _reCreateAlarm(
-                                  int.parse(alarmData["alarmIdNo"].toString()),
-                                  _updatedScheduledDateTimes[index1],
-                                  alarmData["medicineName"],
-                                  int.parse(alarmData["pillIntake"].toString()),
-                                  int.parse(alarmData["dosage"]
-                                      .toString()
-                                      .replaceAll(RegExp(r'[^0-9]'), '')));
-                              index1++;
+                              if (index1 < _updatedScheduledDateTimes.length) {
+                                final alarmData = alarm.data() as Map<String, dynamic>;
+                                await _updateReminder(
+                                  alarmData['alarmIdNo'],
+                                  DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(_updatedScheduledDateTimes[index1]),
+                                );
+                                await _reCreateAlarm(
+                                    int.parse(alarmData["alarmIdNo"].toString()),
+                                    _updatedScheduledDateTimes[index1],
+                                    alarmData["medicineName"],
+                                    int.parse(alarmData["pillIntake"].toString()),
+                                    int.parse(alarmData["dosage"].toString().replaceAll(RegExp(r'[^0-9]'), ''))
+                                );
+                                index1++;
+                              }
                             }
                             if (mounted) {
                               Navigator.of(dialogContext).pop();
                               _showSuccessSnackBar("Alarm Updated");
-                              // getSavedAlerts();
                             }
                           },
                         ),
@@ -373,7 +374,194 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
     );
   }
 
+
+  //When a particular alarm needs to be editted
+  // void _showEditDialog(BuildContext context, DocumentSnapshot reminder) async {
+  //   final int reminderNo = reminder['reminderNo'];
+  //
+  //   // Show a loading indicator while fetching alarms
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return Center(child: CircularProgressIndicator());
+  //     },
+  //   );
+  //
+  //   await getSavedAlarms(reminderNo);
+  //
+  //   if (!mounted) return; // Check if the widget is still mounted
+  //
+  //   Navigator.of(context).pop(); // Close the loading indicator
+  //
+  //   if (_filteredAlerts.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('No alarms found for editing.'),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //     return;
+  //   }
+  //
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext dialogContext) {
+  //       return Dialog(
+  //         insetPadding: EdgeInsets.all(10),
+  //         child: Container(
+  //           width: MediaQuery.of(context).size.width * 0.9,
+  //           height: MediaQuery.of(context).size.height * 0.8,
+  //           padding: EdgeInsets.all(20),
+  //           child: StatefulBuilder(
+  //             builder: (BuildContext context, StateSetter setState) {
+  //               return Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     'Edit Alarms for ${reminder['medicineName']}',
+  //                     style:
+  //                         TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  //                   ),
+  //                   Expanded(
+  //                     child: ListView.builder(
+  //                       itemCount: _filteredAlerts.length,
+  //                       itemBuilder: (context, index) {
+  //                         final alarm = _filteredAlerts[index];
+  //
+  //                         // Cast the document data to a Map
+  //                         final Map<String, dynamic> alarmData =
+  //                             alarm.data() as Map<String, dynamic>;
+  //
+  //                         // Check if 'scheduledAlarmDateTime' exists
+  //                         final scheduledAlarmDateTime = alarmData
+  //                                 .containsKey('scheduledAlarmDateTime')
+  //                             ? DateTime.parse(
+  //                                 alarmData['scheduledAlarmDateTime'])
+  //                             : DateTime
+  //                                 .now(); // Fallback to current time if missing
+  //
+  //                         final TextEditingController dateController =
+  //                             TextEditingController(
+  //                           text: DateFormat('yyyy-MM-dd')
+  //                               .format(scheduledAlarmDateTime),
+  //                         );
+  //                         final TextEditingController timeController =
+  //                             TextEditingController(
+  //                           text: DateFormat('HH:mm')
+  //                               .format(scheduledAlarmDateTime),
+  //                         );
+  //
+  //                         bool alarmStatus = alarmStatusList[index];
+  //                         final DateTime updatedDateTime =
+  //                             DateFormat('yyyy-MM-dd HH:mm').parse(
+  //                                 '${dateController.text} ${timeController.text}');
+  //
+  //                         return Column(
+  //                           children: [
+  //                             Text(
+  //                               'Alarm ${index + 1}',
+  //                               style: TextStyle(
+  //                                   fontSize: 18, fontWeight: FontWeight.bold),
+  //                             ),
+  //                             SizedBox(height: 20),
+  //                             Row(
+  //                               children: [
+  //                                 Expanded(
+  //                                   child: _buildDatePickerTextField(
+  //                                       dateController,
+  //                                       'Scheduled Date',
+  //                                       context,
+  //                                       index),
+  //                                 ),
+  //                                 SizedBox(width: 20),
+  //                                 Expanded(
+  //                                   child: _buildTimePickerTextField(
+  //                                       timeController,
+  //                                       'Scheduled Time',
+  //                                       context,
+  //                                       index),
+  //                                 ),
+  //                                 SizedBox(width: 20),
+  //                                 Switch(
+  //                                   value: alarmStatus,
+  //                                   onChanged: (bool value) {
+  //                                     setState(() {
+  //                                       alarmStatusList[index] = value;
+  //                                     });
+  //                                     if (value) {
+  //                                       _updateReminderAlarmStatusTrue(
+  //                                           alarmData['alarmIdNo']);
+  //                                       _reCreateAlarm(
+  //                                           alarmData['alarmIdNo'],
+  //                                           updatedDateTime,
+  //                                           alarmData["medicineName"],
+  //                                           int.parse(alarmData["pillIntake"]
+  //                                               .toString()),
+  //                                           int.parse(alarmData["dosage"]
+  //                                               .toString()));
+  //                                     } else {
+  //                                       _updateReminderAlarmStatus(
+  //                                           alarmData['alarmIdNo']);
+  //                                       Alarm.stop(alarmData['alarmIdNo']);
+  //                                     }
+  //                                   },
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                             SizedBox(height: 20),
+  //                           ],
+  //                         );
+  //                       },
+  //                     ),
+  //                   ),
+  //                   Row(
+  //                     mainAxisAlignment: MainAxisAlignment.end,
+  //                     children: [
+  //                       TextButton(
+  //                         child: Text('Save'),
+  //                         onPressed: () async {
+  //                           int index1 = 0;
+  //                           for (var alarm in _filteredAlerts) {
+  //                             final alarmData =
+  //                                 alarm.data() as Map<String, dynamic>;
+  //                             await _updateReminder(
+  //                               alarmData['alarmIdNo'],
+  //                               DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
+  //                                   .format(_updatedScheduledDateTimes[index1]),
+  //                             );
+  //
+  //                             await _reCreateAlarm(
+  //                                 int.parse(alarmData["alarmIdNo"].toString()),
+  //                                 _updatedScheduledDateTimes[index1],
+  //                                 alarmData["medicineName"],
+  //                                 int.parse(alarmData["pillIntake"].toString()),
+  //                                 int.parse(alarmData["dosage"]
+  //                                     .toString()
+  //                                     .replaceAll(RegExp(r'[^0-9]'), '')));
+  //                             index1++;
+  //                           }
+  //                           if (mounted) {
+  //                             Navigator.of(dialogContext).pop();
+  //                             _showSuccessSnackBar("Alarm Updated");
+  //                             // getSavedAlerts();
+  //                           }
+  //                         },
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ],
+  //               );
+  //             },
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
 //Show success msg upon updating the alarms
+
   void _showSuccessSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
