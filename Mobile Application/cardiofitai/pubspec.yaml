@@ -138,6 +138,8 @@ flutter:
     - assets/diet_component/audio_assets/alarmsound.mp3
     - assets/cardioFitAI.jpg
     - assets/diet_component/medicinereimder.mp4
+    - assets/ai_icon.png
+    - assets/manual_icon.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
