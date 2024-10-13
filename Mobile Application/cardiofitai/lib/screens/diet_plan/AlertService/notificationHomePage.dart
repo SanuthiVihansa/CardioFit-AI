@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'medicinePrescriptionAnalysisOptionScreen.dart';
+
 class NotificationHomePage extends StatefulWidget {
   const NotificationHomePage(this.user, {super.key});
 
@@ -823,7 +825,8 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      MedicineAlertPage(widget.user),
+                      // MedicineAlertPage(widget.user)
+                  SetMedicineReminderScreen(),
                 ),
               );
             },
