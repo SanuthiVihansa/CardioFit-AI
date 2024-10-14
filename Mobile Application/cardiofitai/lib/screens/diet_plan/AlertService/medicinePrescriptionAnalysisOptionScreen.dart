@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'aiSchedule.dart';
+
 class SetMedicineReminderScreen extends StatefulWidget {
   @override
   _SetMedicineReminderScreenState createState() =>
@@ -43,6 +45,15 @@ class _SetMedicineReminderScreenState extends State<SetMedicineReminderScreen> {
                         'Schedule medicine reminders using AI',
                         screenWidth,
                         context,
+                            () {
+                          // Navigate to AI Schedule Screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AISchedule(),
+                            ),
+                          );
+                        },
                       ),
                     ),
                     SizedBox(width: 10),
@@ -53,6 +64,15 @@ class _SetMedicineReminderScreenState extends State<SetMedicineReminderScreen> {
                         'Set medicine reminders manually',
                         screenWidth,
                         context,
+                            () {
+                          // Navigate to Manual Schedule Screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ManualScheduleScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -66,11 +86,9 @@ class _SetMedicineReminderScreenState extends State<SetMedicineReminderScreen> {
   }
 
   Widget _buildCardButton(String imagePath, String title, String subtitle,
-      double screenWidth, BuildContext context) {
+      double screenWidth, BuildContext context, VoidCallback onTap) {
     return InkWell(
-      onTap: () {
-        // Add button functionality here
-      },
+      onTap: onTap,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -111,7 +129,6 @@ class _SetMedicineReminderScreenState extends State<SetMedicineReminderScreen> {
                       subtitle,
                       style: TextStyle(
                         color: Colors.black54,
-
                         fontSize: screenWidth * 0.02, // Adjusted font size
                       ),
                     ),
@@ -122,6 +139,27 @@ class _SetMedicineReminderScreenState extends State<SetMedicineReminderScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+// Screens for navigation
+class AIScheduleScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('AI Schedule')),
+      body: Center(child: Text('AI Schedule Screen')),
+    );
+  }
+}
+
+class ManualScheduleScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Manual Schedule')),
+      body: Center(child: Text('Manual Schedule Screen')),
     );
   }
 }
