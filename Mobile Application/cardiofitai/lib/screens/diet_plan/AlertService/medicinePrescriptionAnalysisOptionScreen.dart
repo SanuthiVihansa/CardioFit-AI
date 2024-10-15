@@ -3,6 +3,7 @@ import 'package:cardiofitai/screens/diet_plan/AlertService/medicineAlertScreen.d
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'ManualScheduleScreen.dart';
 import 'aiSchedule.dart';
 
 class SetMedicineReminderScreen extends StatefulWidget {
@@ -151,13 +152,3 @@ class _SetMedicineReminderScreenState extends State<SetMedicineReminderScreen> {
 }
 
 
-
-class ManualScheduleScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Manual Schedule')),
-      body: Center(child: Text('Manual Schedule Screen')),
-    );
-  }
-}
