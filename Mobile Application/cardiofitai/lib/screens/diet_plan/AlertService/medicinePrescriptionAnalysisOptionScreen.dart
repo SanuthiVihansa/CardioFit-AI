@@ -1,8 +1,15 @@
+import 'package:cardiofitai/models/user.dart';
+import 'package:cardiofitai/screens/diet_plan/AlertService/medicineAlertScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'aiSchedule.dart';
 
 class SetMedicineReminderScreen extends StatefulWidget {
+  const SetMedicineReminderScreen (this.user,{super.key});
+
+  final User user;
+
   @override
   _SetMedicineReminderScreenState createState() =>
       _SetMedicineReminderScreenState();
@@ -50,7 +57,7 @@ class _SetMedicineReminderScreenState extends State<SetMedicineReminderScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AISchedule(),
+                              builder: (context) => AIScheduleScreen(widget.user),
                             ),
                           );
                         },
@@ -143,16 +150,7 @@ class _SetMedicineReminderScreenState extends State<SetMedicineReminderScreen> {
   }
 }
 
-// Screens for navigation
-class AIScheduleScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('AI Schedule')),
-      body: Center(child: Text('AI Schedule Screen')),
-    );
-  }
-}
+
 
 class ManualScheduleScreen extends StatelessWidget {
   @override

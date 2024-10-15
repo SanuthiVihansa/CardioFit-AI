@@ -826,7 +826,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
                 MaterialPageRoute(
                   builder: (BuildContext context) =>
                       // MedicineAlertPage(widget.user)
-                  SetMedicineReminderScreen(),
+                  SetMedicineReminderScreen(widget.user),
                 ),
               );
             },
