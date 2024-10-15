@@ -77,7 +77,7 @@ class _SetMedicineReminderScreenState extends State<SetMedicineReminderScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ManualScheduleScreen(),
+                              builder: (context) => ManualScheduleScreen(widget.user),
                             ),
                           );
                         },
