@@ -1025,7 +1025,7 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
               _buildPickedImage(),
               if (pickedImage != null) _buildDetectButton(),
               if (prescriptionInfo.isNotEmpty) _buildPrescriptionInfo(),
-              _buildTitle('Edit Reminder'),
+             if(_isEditing==true) _buildTitle('Edit Reminder'),
               SizedBox(height: 10),
               Visibility(
                 visible: _isEditing,
@@ -1033,7 +1033,10 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
               ),
               SizedBox(height: 16),
               _buildMedicineList(),
-              _buildSetAlarmButton(),
+              if (_medicines.isNotEmpty) ...[
+                SizedBox(height: 16),
+                _buildSetAlarmButton(),  // Only show when medicines list is not empty
+              ],
               SizedBox(height: 16),
             ],
           ),
