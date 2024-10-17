@@ -323,9 +323,11 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
 
 //when set alarm button is clicked it navigates here
   Future<void> _onTapSubmitBtn(BuildContext context) async {
-    alarmSetting = true;
     // Check if there are any medicines added to the list
     if (_medicines.isNotEmpty) {
+      setState(() {
+        alarmSetting=true;
+      });
       bool hasErrors = false; // To track if any errors were found
 
       // Loop through each medicine and validate the fields
@@ -349,6 +351,10 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
           _showErrorSnackBar(
               'Please edit the entry for ${medicine['name']} to include frequency, duration, start date, start time, and end date.');
           hasErrors = true; // Set error flag to true
+
+          setState(() {
+            alarmSetting=false;
+          });
         }
       }
 
@@ -389,10 +395,14 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
       }
 
       _showSuccessDialog('Reminders set successfully', '');
-      alarmSetting=false;
+      setState(() {
+        alarmSetting=false;
+      });
     } else {
       _showErrorSnackBar('No Items added to set reminder');
-      alarmSetting =false;
+      setState(() {
+        alarmSetting=false;
+      });
     }
   }
 
