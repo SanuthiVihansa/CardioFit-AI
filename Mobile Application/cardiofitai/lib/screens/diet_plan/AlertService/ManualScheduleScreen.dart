@@ -318,6 +318,7 @@ class _ManualScheduleScreen extends State<ManualScheduleScreen> {
   Future<void> _onTapSubmitBtn(BuildContext context) async {
     // Check if there are any medicines added to the list
     if (_medicines.isNotEmpty) {
+      alarmSetting=true;
       bool hasErrors = false; // To track if any errors were found
 
       // Loop through each medicine and validate the fields
@@ -379,9 +380,10 @@ class _ManualScheduleScreen extends State<ManualScheduleScreen> {
           startTime: extractedMedicine["startTime"],
         );
       }
-
+      alarmSetting=false;
       _showSuccessDialog('Reminders set successfully', '');
     } else {
+      alarmSetting=false;
       _showErrorSnackBar('No Items added to set reminder');
     }
   }
