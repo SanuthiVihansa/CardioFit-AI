@@ -42,6 +42,7 @@ class _ManualScheduleScreen extends State<ManualScheduleScreen> {
   String prescriptionInfo = '';
   bool detecting = false;
   String _selectedFrequency = 'once';
+  bool alarmSetting =false;
   final List<String> _frequencyOptions = [
     'once',
     'twice',
@@ -953,24 +954,30 @@ class _ManualScheduleScreen extends State<ManualScheduleScreen> {
 
 //When set alarm button is clicked
   Widget _buildSetAlarmButton() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-      child: ElevatedButton(
-        onPressed: () => _onTapSubmitBtn(context),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+    return Align(
+      alignment: Alignment.centerRight,  // Align to the left
+      child: SizedBox(
+        width: 150,  // Set the button width to 150
+        child: alarmSetting ?
+        Center(  // Show progress bar when button is disabled
+          child: CircularProgressIndicator(),
+        )
+            :ElevatedButton(
+          onPressed: () => _onTapSubmitBtn(context),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
           ),
-        ),
-        child: Text(
-          'Set Alarm',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+          child: Text(
+            'Set Alarm',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

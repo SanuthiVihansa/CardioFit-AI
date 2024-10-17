@@ -42,6 +42,7 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
   String prescriptionInfo = '';
   bool detecting = false;
   String _selectedFrequency = 'once';
+  bool alarmSetting=false;
 
   final List<String> _frequencyOptions = [
     'once',
@@ -322,6 +323,7 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
 
 //when set alarm button is clicked it navigates here
   Future<void> _onTapSubmitBtn(BuildContext context) async {
+    alarmSetting = true;
     // Check if there are any medicines added to the list
     if (_medicines.isNotEmpty) {
       bool hasErrors = false; // To track if any errors were found
@@ -387,8 +389,10 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
       }
 
       _showSuccessDialog('Reminders set successfully', '');
+      alarmSetting=false;
     } else {
       _showErrorSnackBar('No Items added to set reminder');
+      alarmSetting =false;
     }
   }
 
@@ -967,7 +971,11 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
       alignment: Alignment.centerRight,  // Align to the left
       child: SizedBox(
         width: 150,  // Set the button width to 150
-        child: ElevatedButton(
+        child: alarmSetting ?
+        Center(  // Show progress bar when button is disabled
+          child: CircularProgressIndicator(),
+        )
+        :ElevatedButton(
           onPressed: () => _onTapSubmitBtn(context),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
