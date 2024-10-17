@@ -483,129 +483,6 @@ class _ManualScheduleScreen extends State<ManualScheduleScreen> {
     );
   }
 
-//two options to upload prescriptions to the system
-  Widget _buildImagePickerOptions() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildImagePickerButton('Open Gallery', Icons.image,
-                    () => _pickImage(ImageSource.gallery)),
-            _buildImagePickerButton('Start Camera', Icons.camera_alt,
-                    () => _pickImage(ImageSource.camera)),
-          ],
-        ),
-      ],
-    );
-  }
-
-//Display the scanned Image in the app
-  Widget _buildImagePickerButton(
-      String text, IconData icon, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        side: BorderSide(color: Colors.red, width: 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            text.toUpperCase(),
-            style: TextStyle(color: Colors.red),
-          ),
-          const SizedBox(width: 10),
-          Icon(
-            icon,
-            color: Colors.red,
-          ),
-        ],
-      ),
-    );
-  }
-
-  //Display the uploaded image, else show the default image
-  Widget _buildPickedImage() {
-    return pickedImage == null
-        ? Center(
-      child: Container(
-        // height: MediaQuery.of(context).size.height * 0.5,
-        height: 500,
-        child: Image.asset('assets/pick1.png'),
-      ),
-    )
-        : Container(
-      width: double.infinity,
-      height: 500,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-      padding: const EdgeInsets.all(20),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image.file(
-          pickedImage!,
-          fit: BoxFit.fitHeight,
-        ),
-      ),
-    );
-  }
-
-  //When an image is uploaded, display the analyse button
-  Widget _buildDetectButton() {
-    return detecting
-        ? SpinKitWave(
-      color: Colors.red,
-      size: 30,
-    )
-        : Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
-          padding:
-          const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-        ),
-        onPressed: () {
-          detectDisease();
-        },
-        child: const Text(
-          'Analyse',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPrescriptionInfo() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Text(""),
-      ),
-    );
-  }
-
-  //Divide the section either to add details mannually
-  Widget _buildDivider() {
-    return Center(
-      child: Text(
-        'OR',
-        style: TextStyle(
-            fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
 
   //Controld to mannual setting reimders
   Widget _setRemindersManuallyForm() {
@@ -910,8 +787,6 @@ class _ManualScheduleScreen extends State<ManualScheduleScreen> {
       ),
     );
   }
-
-//Mannually setting Reimders controls End here
 
 /*List to display the medicine reminders fetched when edit icon click populate to the _populateFieldsForEditing(medicine) or if delete remove the
   prescription from medicine list.*/
