@@ -333,21 +333,28 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
 
       // Loop through each medicine and validate the fields
       for (var medicine in _medicines) {
-        if
-        (
-        medicine['interval'].isEmpty ||
+        if (medicine['pillintake'].isEmpty || num.tryParse(medicine['pillintake']) == null) {
+          _showErrorSnackBar(
+              'Please enter a valid number for pill intake for ${medicine['name']}');
+          hasErrors = true;
+          setState(() {
+            alarmSetting = false;
+          });
+        }
+
+        if (
+            medicine['interval'].isEmpty ||
             medicine['days'] == 0 ||
             medicine['startDate'].isEmpty ||
             medicine['endDate'].isEmpty ||
             medicine['startTime'].isEmpty ||
             medicine['pillintake'].isEmpty ||
+            num.tryParse(medicine['pillintake']) == null ||
             medicine['selectedDays'].isEmpty ||
             medicine['name'].isEmpty ||
             medicine['dosage'].isEmpty
 
         )
-
-
         {
           _showErrorSnackBar(
               'Please edit the entry for ${medicine['name']} to include frequency, duration, start date, start time, and end date.');
