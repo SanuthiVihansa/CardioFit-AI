@@ -311,6 +311,7 @@ class _ManualScheduleScreen extends State<ManualScheduleScreen> {
       _endDateController.clear();
       _startTimeController.clear();
       _selectedDays.clear();
+      _daysOfWeek.clear();
     });
   }
 

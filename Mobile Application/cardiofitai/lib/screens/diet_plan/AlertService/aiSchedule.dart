@@ -314,6 +314,7 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
       _endDateController.clear();
       _startTimeController.clear();
       _selectedDays.clear();
+      _daysOfWeek.clear();
 
       // Hide the form after adding the medicine
       _isEditing = false;
