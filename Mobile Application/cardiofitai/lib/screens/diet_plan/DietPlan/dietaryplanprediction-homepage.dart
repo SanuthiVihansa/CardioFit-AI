@@ -1,4 +1,5 @@
 import 'package:cardiofitai/screens/common/dashboard_screen.dart';
+import 'package:cardiofitai/screens/diet_plan/DietPlan/foodMenuScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../models/user.dart';
@@ -1337,7 +1338,11 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
                   alignment: Alignment.centerRight,
                   // Aligns the button to the right
                   child: ElevatedButton(
-                    onPressed: generatePrediction,
+                    onPressed:() {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                  FoodMenuScreen(widget.user)));
+                  },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.red,
