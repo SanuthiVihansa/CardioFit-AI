@@ -1339,9 +1339,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
                   // Aligns the button to the right
                   child: ElevatedButton(
                     onPressed:() {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                  FoodMenuScreen(widget.user)));
+                      generatePrediction();
                   },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
@@ -1401,6 +1399,30 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
                   textAlign: TextAlign.center,
                 ),
               ),
+              ElevatedButton(
+                onPressed:() {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          FoodMenuScreen(widget.user)));
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.red,
+                  // Text (foreground) color
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 12.0),
+                  // Padding
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(10.0), // Rounded corners
+                  ),
+                ),
+                child: Text(
+                  'Suggested Recipes',
+                  style: TextStyle(
+                      fontSize: 16.0), // Adjust font size as needed
+                ),
+              )
             ],
           ),
         ),
