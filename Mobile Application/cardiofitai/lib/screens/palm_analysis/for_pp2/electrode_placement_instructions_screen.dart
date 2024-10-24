@@ -29,6 +29,7 @@ class _ElectrodePlacementInstructionsScreenState
 
   final String _upServerUrl =
       'http://poornasenadheera100.pythonanywhere.com/upforunet';
+  final String _upBaseLineServerUrl = 'http://swije.pythonanywhere.com/load/model';
 
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
   final Connectivity _connectivity = Connectivity();
@@ -77,6 +78,7 @@ class _ElectrodePlacementInstructionsScreenState
     if (result != ConnectivityResult.none) {
       _hasConnection = true;
       _upServer();
+      upBaseLineServer();
     } else {
       _hasConnection = false;
     }
@@ -89,6 +91,12 @@ class _ElectrodePlacementInstructionsScreenState
 
   Future<void> _upServer() async {
     await http.get(Uri.parse(_upServerUrl), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
+  }
+
+  Future<void> upBaseLineServer() async {
+    await http.get(Uri.parse(_upBaseLineServerUrl), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
   }
