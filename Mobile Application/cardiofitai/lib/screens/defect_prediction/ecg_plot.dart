@@ -815,7 +815,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all<Size>(
                           Size(
-                              _width / (_devWidth / 120.0),
+                              _width / (_devWidth / 230),
                               _height /
                                   (_devHeight /
                                       40)), // Button width and height
@@ -823,7 +823,7 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
                       ),
                       child: Text(
                         "View Prediction Features",
-                        style: TextStyle(fontSize: _width / (_devWidth / 10)),
+                        style: TextStyle(fontSize: _width / (_devWidth / 15)),
                       ),
                     ),
                   ],
