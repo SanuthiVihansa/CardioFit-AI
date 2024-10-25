@@ -84,7 +84,7 @@ class _AllLeadDisplayScreenFromHistoryState
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     _selectedLead = _dropDownMenuItems.first;
 
-    upBaseLineServer();
+    // upBaseLineServer();
   }
 
   @override

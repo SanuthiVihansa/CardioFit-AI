@@ -78,7 +78,7 @@ class _ElectrodePlacementInstructionsScreenState
     if (result != ConnectivityResult.none) {
       _hasConnection = true;
       _upServer();
-      upBaseLineServer();
+      // upBaseLineServer();
     } else {
       _hasConnection = false;
     }
