@@ -214,19 +214,19 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods.',
-              'Low': 'Meet a dietitian',
+              'Low': 'You1re underweight, so focus on nutrient-dense foods like lean proteins, whole grains, and healthy fats to promote healthy weight gain. Include foods that support low cholesterol, such as fatty fish, nuts, and seeds, while avoiding processed sugars and high-salt foods.',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re underweight, so focus on gaining healthy weight by consuming nutrient-dense foods like lean proteins, whole grains, and healthy fats. Since your blood sugar is high, prioritize low-glycemic foods like vegetables, whole grains, and legumes, and avoid sugary snacks while including healthy fats like nuts and seeds to support cholesterol levels.',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI indicates that you`re underweight, so focus on calorie-dense, nutrient-rich foods like lean proteins, whole grains, and healthy fats to promote healthy weight gain. Since your blood sugar is low, eat frequent meals with complex carbohydrates (like whole grains and legumes) and healthy fats (like nuts and avocados) to maintain stable energy levels, while continuing a balanced diet to support overall health.',
+              'High': 'Your BMI indicates that you`re underweight, so focus on nutrient-dense, high-calorie foods like lean proteins, whole grains, and healthy fats to promote weight gain. Since your blood sugar is low and cholesterol is high, prioritize low-glycemic, high-fiber foods (like vegetables and legumes) while incorporating healthy fats (like avocados and nuts) to help manage cholesterol, and avoid saturated fats and processed foods.',
+              'Low': 'Your BMI indicates that you`re underweight, so focus on nutrient-rich foods like lean proteins, whole grains, and healthy fats to promote healthy weight gain. Since your blood sugar is low, eat frequent, balanced meals that include complex carbohydrates (like oats and whole grains) and healthy fats (like avocados and nuts) to stabilize blood sugar, while also including foods like fatty fish, seeds, and nuts to support low cholesterol.',
             },
           },
           'Yes': {
@@ -234,20 +234,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re underweight, so focus on high-calorie, nutrient-dense foods like lean proteins, whole grains, and healthy fats to help gain weight. Since you have a cardiac abnormality and low cholesterol, prioritize heart-healthy fats (like avocados, nuts, and olive oil), along with lean proteins and fiber-rich foods, while avoiding processed foods and high-sodium items to support heart health.',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re underweight, so focus on nutrient-dense, high-calorie foods like lean proteins, whole grains, and healthy fats to support healthy weight gain. Since you have a cardiac abnormality, high blood sugar, and low cholesterol, prioritize heart-healthy, low-glycemic foods such as vegetables, legumes, and whole grains, while including healthy fats like nuts and avocados, and avoid sugary and high-sodium processed foods to protect your heart and manage blood sugar.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re underweight, so focus on high-calorie, nutrient-dense foods like lean proteins, whole grains, and healthy fats to promote healthy weight gain. Since you have a cardiac abnormality, low blood sugar, and low cholesterol, eat frequent meals with complex carbohydrates (like whole grains and legumes) and healthy fats (like avocados and nuts) to stabilize blood sugar, while supporting heart health with heart-healthy fats and avoiding high-sodium processed foods.',
             },
           },
         },
@@ -256,19 +256,19 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods.',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re overweight, so focus on weight management by incorporating balanced meals with lean proteins, whole grains, and plenty of vegetables. Since your cholesterol is low, include heart-healthy fats like avocados, nuts, and olive oil, while avoiding processed foods and excessive sugary snacks to maintain stable blood sugar and support overall health.',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re overweight, so focus on weight management by prioritizing nutrient-dense, low-calorie foods like lean proteins, vegetables, and whole grains. Since your blood sugar is high and cholesterol is low, focus on low-glycemic foods (like whole grains and legumes) to help control blood sugar, while incorporating heart-healthy fats (like avocados, nuts, and seeds) to support cholesterol levels. Avoid processed foods, sugary snacks, and refined carbohydrates.',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI indicates that you`re overweight, so focus on weight management by eating nutrient-dense, lower-calorie foods like lean proteins, whole grains, and vegetables. Since your blood sugar is low, include complex carbohydrates (like oats and whole grains) and healthy fats (like avocados and nuts) in your meals to maintain stable energy levels, while continuing a balanced diet to support normal cholesterol levels. Avoid excessive sugary and high-fat foods.',
+              'High': 'Your BMI indicates that you`re overweight, so focus on weight management by incorporating nutrient-dense, lower-calorie foods like lean proteins, whole grains, and vegetables. Since your blood sugar is low and cholesterol is high, include complex carbohydrates (like whole grains and legumes) and healthy fats (like nuts and seeds) to stabilize blood sugar, while avoiding saturated fats and processed foods to help lower cholesterol levels. Focus on heart-healthy fats, like olive oil and avocados, and reduce intake of sugary snacks and refined carbs.',
+              'Low': 'Your BMI indicates that you`re overweight, so focus on weight management by choosing nutrient-dense, lower-calorie foods like lean proteins, vegetables, and whole grains. Since your blood sugar is low and cholesterol is also low, eat frequent meals with complex carbohydrates (like whole grains and legumes) and healthy fats (like avocados and nuts) to maintain stable blood sugar, while continuing a balanced diet to support overall health. Avoid processed foods and excessive sugary snacks.',
             },
           },
           'Yes': {
@@ -276,20 +276,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re overweight, so focus on managing weight through a balanced diet that includes lean proteins, whole grains, and plenty of vegetables. Since your cholesterol is low, incorporate heart-healthy fats like avocados, nuts, and olive oil to support cholesterol levels. Continue to avoid processed and high-sugar foods to maintain stable blood sugar and promote overall health.',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re overweight, so focus on weight management by eating nutrient-dense, lower-calorie foods like lean proteins, vegetables, and whole grains. Since your blood sugar is high and cholesterol is low, prioritize low-glycemic foods like whole grains, legumes, and fiber-rich vegetables to help control blood sugar, while incorporating heart-healthy fats like avocados, nuts, and olive oil to support cholesterol levels. Avoid sugary snacks, refined carbohydrates, and processed foods.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re overweight, so focus on managing your weight by eating nutrient-dense, lower-calorie foods like lean proteins, whole grains, and vegetables. Since your blood sugar is low and cholesterol is low, include complex carbohydrates (like whole grains and legumes) and healthy fats (like nuts, seeds, and avocados) to stabilize blood sugar and support cholesterol levels. Avoid processed foods and sugary snacks while prioritizing balanced meals to maintain energy and overall health.',
             },
           },
         },
@@ -298,19 +298,19 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods.',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled diet that emphasizes nutrient-dense foods like lean proteins, vegetables, and whole grains to support healthy weight loss. Since your cholesterol is low, include heart-healthy fats such as avocados, nuts, seeds, and olive oil. Avoid processed foods, sugary snacks, and refined carbohydrates while focusing on balanced meals to improve overall health and support sustainable weight management.',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled diet rich in nutrient-dense foods like lean proteins, vegetables, and whole grains to support healthy weight loss. Since your blood sugar is high, prioritize low-glycemic foods such as whole grains, legumes, and fiber-rich vegetables to help manage blood sugar levels. To support low cholesterol, include heart-healthy fats like avocados, nuts, and olive oil while avoiding processed foods, sugary snacks, and refined carbohydrates.',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled diet with nutrient-dense foods like lean proteins, vegetables, and whole grains to aid in healthy weight loss. Since your blood sugar is low, include complex carbohydrates (like whole grains and legumes) and healthy fats (like avocados and nuts) to maintain stable energy levels. With normal cholesterol, maintain a balanced diet and avoid processed foods, sugary snacks, and refined carbohydrates to support overall health and effective weight management.',
+              'High': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled diet rich in nutrient-dense foods like lean proteins, vegetables, and whole grains to support weight loss. Since your blood sugar is low and cholesterol is high, include complex carbohydrates (like whole grains and legumes) and healthy fats (like avocados, nuts, and olive oil) to stabilize blood sugar while avoiding saturated fats and processed foods to help lower cholesterol. Prioritize fiber-rich foods and avoid sugary snacks and refined carbohydrates to promote overall health.',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled diet with nutrient-dense foods like lean proteins, vegetables, and whole grains to support healthy weight loss. Since your blood sugar is low and cholesterol is low, eat frequent meals with complex carbohydrates (like whole grains and legumes) and healthy fats (like avocados, nuts, and seeds) to stabilize blood sugar and support cholesterol levels. Avoid processed foods and sugary snacks while focusing on balanced meals to improve overall health and manage weight effectively.',
             },
           },
           'Yes': {
@@ -318,20 +318,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled diet rich in nutrient-dense foods like lean proteins, whole grains, and vegetables to promote weight loss. Since you have a cardiac abnormality and low cholesterol, prioritize heart-healthy fats (like avocados, nuts, and olive oil), along with fiber-rich foods like vegetables and whole grains. Avoid processed foods, high-sodium items, and sugary snacks to support heart health and overall well-being.',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled, nutrient-dense diet to promote weight loss, including lean proteins, whole grains, and plenty of vegetables. Since you have a cardiac abnormality, high blood sugar, and low cholesterol, prioritize low-glycemic, heart-healthy foods like vegetables, whole grains, and legumes to help control blood sugar. Incorporate healthy fats like avocados, nuts, and olive oil to support cholesterol levels, while avoiding processed foods, high-sodium items, and sugary snacks to protect your heart and manage blood sugar levels.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled diet with nutrient-dense foods like lean proteins, vegetables, and whole grains to support healthy weight loss. Since you have a cardiac abnormality, low blood sugar, and low cholesterol, eat frequent meals rich in complex carbohydrates (like whole grains and legumes) and healthy fats (like avocados, nuts, and olive oil) to stabilize blood sugar while supporting heart health and cholesterol levels. Avoid processed foods, sugary snacks, and high-sodium items to promote overall well-being and protect your heart.',
             },
           },
         },
@@ -340,19 +340,19 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods.',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re perfectly fit, so focus on maintaining a balanced diet that includes lean proteins, whole grains, and a variety of fruits and vegetables to support overall health. Since your cholesterol is low, include heart-healthy fats like avocados, nuts, seeds, and olive oil, while continuing to avoid excessive processed foods and sugary snacks to maintain optimal cholesterol levels and long-term well-being.',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re perfectly fit, so continue maintaining a balanced diet with lean proteins, whole grains, and plenty of vegetables. Since your blood sugar is high and cholesterol is low, focus on low-glycemic foods like whole grains, legumes, and fiber-rich vegetables to help control blood sugar. Include heart-healthy fats such as avocados, nuts, and olive oil to support cholesterol levels, while avoiding sugary snacks and processed foods.',
             },
             'Low': {
-              'Normal': 'Meet a dietitian',
-              'High': 'Meet a dietitian',
-              'Low': 'Meet a dietitian',
+              'Normal': 'Your BMI indicates that you`re perfectly fit, so focus on maintaining a balanced diet with lean proteins, whole grains, and a variety of fruits and vegetables. Since your blood sugar is low, eat frequent meals with complex carbohydrates (like whole grains and legumes) and healthy fats (like avocados and nuts) to stabilize blood sugar. With normal cholesterol, continue following a balanced diet while avoiding excessive sugary snacks and processed foods.',
+              'High': 'Your BMI indicates that you`re perfectly fit, so focus on maintaining a balanced diet with lean proteins, whole grains, and vegetables. Since your blood sugar is low and cholesterol is high, eat frequent meals with complex carbohydrates (like whole grains and legumes) to stabilize blood sugar, while incorporating heart-healthy fats like avocados, nuts, and olive oil. Avoid saturated fats and processed foods to help lower cholesterol, while prioritizing fiber-rich foods for overall heart health.',
+              'Low': 'Your BMI indicates that you`re perfectly fit, so continue maintaining a balanced diet with lean proteins, whole grains, and a variety of vegetables and fruits. Since both your blood sugar and cholesterol are low, eat frequent meals with complex carbohydrates (like whole grains and legumes) to stabilize blood sugar, and include healthy fats like avocados, nuts, and seeds to support cholesterol levels. Avoid processed foods and sugary snacks to maintain optimal overall health.',
             },
           },
           'Yes': {
@@ -360,20 +360,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re perfectly fit, so focus on maintaining a balanced diet with lean proteins, whole grains, and plenty of vegetables. Since you have a cardiac abnormality and low cholesterol, prioritize heart-healthy fats like avocados, nuts, seeds, and olive oil to support cholesterol levels and heart health. Continue avoiding processed foods and excessive sugary snacks, while incorporating fiber-rich foods like fruits, vegetables, and whole grains to maintain overall health and support your heart.',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re perfectly fit, so continue focusing on a balanced diet with lean proteins, whole grains, and vegetables. Since you have a cardiac abnormality, high blood sugar, and low cholesterol, prioritize low-glycemic foods like whole grains, legumes, and fiber-rich vegetables to help control blood sugar. Include heart-healthy fats such as avocados, nuts, seeds, and olive oil to support cholesterol levels, while avoiding processed foods, sugary snacks, and high-sodium items to protect your heart and manage blood sugar effectively.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re perfectly fit, so focus on maintaining a balanced diet with lean proteins, whole grains, and plenty of vegetables. Since you have a cardiac abnormality, low blood sugar, and low cholesterol, eat frequent meals with complex carbohydrates (like whole grains and legumes) and healthy fats (like avocados, nuts, and olive oil) to stabilize blood sugar and support cholesterol levels. Avoid high-sodium and processed foods to protect your heart and promote overall health.',
             },
           },
         },
@@ -471,14 +471,14 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled diet rich in nutrient-dense foods like lean proteins, whole grains, and vegetables to support healthy weight loss. Since your blood sugar is normal and cholesterol is low, include heart-healthy fats like avocados, nuts, seeds, and olive oil to improve cholesterol levels. Avoid processed foods, sugary snacks, and refined carbohydrates, while ensuring a balanced intake of fiber-rich foods to promote overall health and maintain stable energy levels.',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled diet with nutrient-dense foods like lean proteins, whole grains, and plenty of vegetables to support healthy weight loss. Since your blood sugar is high and cholesterol is low, prioritize low-glycemic, high-fiber foods like whole grains, legumes, and vegetables to help manage blood sugar. Include heart-healthy fats like avocados, nuts, seeds, and olive oil to support cholesterol levels, while avoiding processed foods, sugary snacks, and refined carbohydrates.',
             },
             'Low': {
               'Normal': 'Your BMI states you`re obese. Focus on lean proteins, whole grains, and healthy fats. Eat small, frequent meals to stabilize blood sugar and maintain cholesterol levels.',
@@ -491,36 +491,36 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled diet with nutrient-dense foods like lean proteins, whole grains, and vegetables to support healthy weight loss. Since you have a cardiac abnormality and low cholesterol, prioritize heart-healthy fats such as avocados, nuts, seeds, and olive oil to support cholesterol levels and protect your heart. Include fiber-rich foods like vegetables, fruits, and legumes, and avoid processed foods, high-sodium items, and sugary snacks to maintain overall health and support heart function.',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled, nutrient-dense diet to support healthy weight loss, including lean proteins, whole grains, and plenty of vegetables. Since you have a cardiac abnormality, high blood sugar, and low cholesterol, prioritize low-glycemic, heart-healthy foods such as vegetables, whole grains, and legumes to help manage blood sugar levels. Incorporate heart-healthy fats like avocados, nuts, seeds, and olive oil to support cholesterol, and avoid processed foods, sugary snacks, refined carbohydrates, and high-sodium items to protect your heart and stabilize blood sugar.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re obese, so focus on a calorie-controlled, nutrient-rich diet to support healthy weight loss, including lean proteins, whole grains, and vegetables. Since you have a cardiac abnormality, low blood sugar, and low cholesterol, eat frequent meals with complex carbohydrates (like whole grains and legumes) and heart-healthy fats (like avocados, nuts, and olive oil) to stabilize blood sugar and support cholesterol levels. Avoid high-sodium and processed foods to protect your heart, and include fiber-rich foods to promote overall health.',
             },
           },
         },
         'Normal': {
           'No': {
             'Normal': {
-              'Normal': 'Get a balanced diet',
+              'Normal': 'Your BMI is perfect, so focus on maintaining a balanced diet that includes lean proteins, whole grains, and a variety of vegetables and fruits. Keep sodium intake low by avoiding processed foods and high-sodium snacks, and continue following a balanced, nutrient-rich diet to promote overall health and support heart function.',
               'High': 'Get a balanced diet, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI is perfect, so focus on maintaining a balanced diet that includes lean proteins, whole grains, and plenty of vegetables to support overall health.incorporate heart-healthy fats like avocados, nuts, seeds, and olive oil to help support cholesterol levels. Avoid processed foods, high-sodium items, and sugary snacks to protect your heart and promote long-term well-being.',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI is perfect, so maintain it with a balanced diet that includes lean proteins, whole grains, and plenty of vegetables.Since you have high blood sugar, and low cholesterol, focus on low-glycemic, heart-healthy foods like whole grains, legumes, and fiber-rich vegetables to help manage blood sugar levels. Incorporate healthy fats such as avocados, nuts, seeds, and olive oil to support cholesterol levels, while avoiding sugary snacks, refined carbohydrates, and high-sodium processed foods to protect your heart and manage blood sugar.',
             },
             'Low': {
               'Normal': 'Your BMI is maintained perfectly. Focus on balanced meals with lean proteins, whole grains, and healthy fats. Eat small, frequent meals to stabilize blood sugar and maintain cholesterol levels.',
@@ -533,20 +533,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI is perfect, so maintain a balanced diet with lean proteins, whole grains, and plenty of vegetables and fruits. Since you have a cardiac abnormality and low cholesterol, focus on incorporating heart-healthy fats like avocados, nuts, seeds, and olive oil to support cholesterol levels. Avoid processed foods and high-sodium items to protect your heart, while continuing to follow a nutrient-rich, well-rounded diet to support overall health.',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI is perfect, so maintain it with a balanced diet that includes lean proteins, whole grains, and plenty of vegetables. Since you have a cardiac abnormality, high blood sugar, and low cholesterol, focus on low-glycemic, heart-healthy foods like whole grains, legumes, and fiber-rich vegetables to help manage blood sugar levels. Incorporate healthy fats such as avocados, nuts, seeds, and olive oil to support cholesterol levels, while avoiding sugary snacks, refined carbohydrates, and high-sodium processed foods to protect your heart and manage blood sugar.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI is perfect, so focus on maintaining it with a balanced diet that includes lean proteins, whole grains, and plenty of vegetables. Since you have a cardiac abnormality, low blood sugar, and low cholesterol, prioritize frequent meals with complex carbohydrates (like whole grains and legumes) to stabilize blood sugar, and incorporate heart-healthy fats (like avocados, nuts, seeds, and olive oil) to support cholesterol levels. Avoid processed foods, sugary snacks, and high-sodium items to protect your heart and maintain overall health.',
             },
           },
         },
@@ -557,14 +557,14 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
             'Normal': {
               'Normal': 'Get a balanced diet',
               'High': 'Get a balanced diet, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re underweight, so focus on gaining healthy weight by incorporating nutrient-dense foods like lean proteins, whole grains, and healthy fats. Since your cholesterol is low, include heart-healthy fats such as avocados, nuts, seeds, and olive oil. To maintain normal blood sugar, eat balanced meals regularly, and avoid processed foods and sugary snacks while ensuring a diet rich in fruits, vegetables, and whole grains to promote overall health and gradual weight gain.',
             },
             'High': {
               'Normal':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
               'High':
                   'Get a balanced diet, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re underweight, so focus on gaining healthy weight with nutrient-dense foods like lean proteins, whole grains, and healthy fats. Since your blood sugar is high, prioritize low-glycemic foods such as whole grains, legumes, and fiber-rich vegetables to help control blood sugar. Include heart-healthy fats like avocados, nuts, seeds, and olive oil to support cholesterol levels, and avoid sugary snacks, processed foods, and refined carbohydrates. Focus on regular, balanced meals to promote gradual weight gain and overall health.',
             },
             'Low': {
               'Normal': 'Your BMI states you`re underweight. Focus on calorie-dense meals with healthy fats, lean proteins, and whole grains. Eat frequent meals to stabilize blood sugar and maintain cholesterol levels',
@@ -577,20 +577,20 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt and fat intake, Limit high sugary foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re underweight, so focus on nutrient-dense, calorie-rich foods to promote healthy weight gain, such as lean proteins, whole grains, and healthy fats. Since you have a cardiac abnormality and low cholesterol, prioritize heart-healthy fats like avocados, nuts, seeds, and olive oil. Eat balanced meals regularly to maintain stable blood sugar, and avoid processed foods and high-sodium items to protect your heart while supporting gradual weight gain and overall well-being.',
             },
             'High': {
               'Normal':
                   'Be aware of salt and fat intake, Limit high sugary foods',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re underweight, so focus on gaining healthy weight by incorporating nutrient-dense, calorie-rich foods such as lean proteins, whole grains, and healthy fats. Since you have a cardiac abnormality and high blood sugar, prioritize low-glycemic foods like vegetables, whole grains, and legumes to help manage blood sugar. Include heart-healthy fats like avocados, nuts, seeds, and olive oil to support cholesterol levels, while avoiding sugary snacks, refined carbs, and high-sodium foods to protect your heart and stabilize blood sugar.',
             },
             'Low': {
               'Normal': 'Be aware of salt and fat intake',
               'High':
                   'Be aware of salt intake, Limit high sugary foods, Limit deep fried foods',
-              'Low': 'Meet a dietitian',
+              'Low': 'Your BMI indicates that you`re underweight, so focus on nutrient-dense, calorie-rich foods like lean proteins, whole grains, and healthy fats to promote healthy weight gain. Since you have a cardiac abnormality, low blood sugar, and low cholesterol, prioritize frequent meals with complex carbohydrates (like whole grains and legumes) to stabilize blood sugar. Include heart-healthy fats like avocados, nuts, seeds, and olive oil to support cholesterol levels, while avoiding processed foods and high-sodium items to protect your heart.',
             },
           },
         },
