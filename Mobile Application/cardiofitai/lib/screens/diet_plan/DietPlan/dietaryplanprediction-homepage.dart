@@ -28,6 +28,8 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
   String cholesterolResult = '';
   String ageRange = '';
   String advice = '';
+  String bmiCategory = '';
+
 
   final Map<String, dynamic> dietAdvice = {
     '1-19': {
@@ -1142,7 +1144,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
   void generatePrediction() {
     setState(() {
       double bmi = double.tryParse(bmiController.text) ?? 0.0;
-      String bmiCategory = categorizeBMI(bmi);
+      bmiCategory = categorizeBMI(bmi);
       double cholesterol = double.tryParse(cholesterolController.text) ?? 0.0;
       cholesterolResult = categorizeCholesterol(cholesterol);
       double sugar = double.tryParse(sugarController.text) ?? 0.0;
@@ -1232,6 +1234,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
                   Expanded(
                     child: TextField(
                       controller: ageController,
+                      readOnly: true,
                       decoration: InputDecoration(
                         labelText: 'Age',
                         border: OutlineInputBorder(),
@@ -1251,11 +1254,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: gender,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              gender = newValue!;
-                            });
-                          },
+                          onChanged: null,
                           items: <String>['Female', 'Male']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
@@ -1273,6 +1272,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
               SizedBox(height: 10),
               TextField(
                 controller: bmiController,
+                readOnly: true,
                 decoration: InputDecoration(
                   labelText: 'BMI (kg/m²)',
                   border: OutlineInputBorder(),
@@ -1285,6 +1285,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
                   Expanded(
                     child: TextField(
                       controller: cholesterolController,
+                      readOnly: true,
                       decoration: InputDecoration(
                         labelText: 'Blood Cholesterol Level',
                         border: OutlineInputBorder(),
@@ -1296,6 +1297,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
                   Expanded(
                     child: TextField(
                       controller: sugarController,
+                      readOnly: true,
                       decoration: InputDecoration(
                         labelText: 'Blood Sugar Level',
                         border: OutlineInputBorder(),
@@ -1316,11 +1318,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: cardiacCondition,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        cardiacCondition = newValue!;
-                      });
-                    },
+                    onChanged: null,
                     items: <String>['No', 'Yes']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
@@ -1370,7 +1368,7 @@ class _DietaryPlanHomePageState extends State<DietaryPlanHomePage> {
                 children: [
                   Expanded(child: Text('BMI')),
                   Expanded(
-                      child: Text(bmiController.text,
+                      child: Text(bmiCategory,
                           textAlign: TextAlign.center)),
                   Expanded(child: Text('Cardiac Condition')),
                   Expanded(
