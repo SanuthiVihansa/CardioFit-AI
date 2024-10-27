@@ -58,7 +58,7 @@ class _ECGPlotScreenState extends State<ECGPlotScreen> {
   }
 
   Future<void> sendECGData(Map<String, List<double>> ecgData) async {
-    final url = Uri.parse('http://swije.pythonanywhere.com/explain/shap');
+    final url = Uri.parse('http://swije.pythonanywhere.com/explain/combined');
     final response = await http.post(url, headers: {"Content-Type": "application/json"}, body: jsonEncode({'ecg': ecgData}));
 
     if (response.statusCode == 200) {
@@ -74,7 +74,7 @@ class _ECGPlotScreenState extends State<ECGPlotScreen> {
             .map((lead) => lead.replaceAll('Lead ', ''))
             .toList();
 
-        filteredShapValues = List<Map<String, dynamic>>.from(responseData['filtered_shap_values']); _isLoading = false;
+        filteredShapValues = List<Map<String, dynamic>>.from(responseData['filtered_values']); _isLoading = false;
       });
     } else {
       setState(() {
