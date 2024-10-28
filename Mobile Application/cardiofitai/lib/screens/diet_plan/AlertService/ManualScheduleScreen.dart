@@ -15,16 +15,16 @@ import '../../../services/medicineReminderService.dart';
 import '../../../services/prescription_reading_api_service.dart';
 import 'notificationHomePage.dart';
 
-class MedicineAlertPage extends StatefulWidget {
-  const MedicineAlertPage(this.user, {super.key});
+class ManualScheduleScreen extends StatefulWidget {
+  const ManualScheduleScreen(this.user, {super.key});
 
   final User user;
 
   @override
-  State<MedicineAlertPage> createState() => _MedicineAlertPageState();
+  State<ManualScheduleScreen> createState() => _ManualScheduleScreen();
 }
 
-class _MedicineAlertPageState extends State<MedicineAlertPage> {
+class _ManualScheduleScreen extends State<ManualScheduleScreen> {
   final apiService = ApiService();
   final TextEditingController _medicineNameController = TextEditingController();
   final TextEditingController _dosageController = TextEditingController();
@@ -42,6 +42,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   String prescriptionInfo = '';
   bool detecting = false;
   String _selectedFrequency = 'once';
+  bool alarmSetting =false;
   final List<String> _frequencyOptions = [
     'once',
     'twice',
@@ -70,8 +71,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   Future<void> _generateReminderNo() async {
     try {
       _lastSubmittedRecordInfo =
-          await MedicineReminderService.findLastReminderSubmitted(
-              widget.user.email);
+      await MedicineReminderService.findLastReminderSubmitted(
+          widget.user.email);
       if (_lastSubmittedRecordInfo.docs.isNotEmpty) {
         _lastSubmitRecordNo =
             _lastSubmittedRecordInfo.docs[0]["reminderNo"] ?? 0;
@@ -86,7 +87,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile =
-        await ImagePicker().pickImage(source: source, imageQuality: 50);
+    await ImagePicker().pickImage(source: source, imageQuality: 50);
     if (pickedFile != null) {
       setState(() {
         pickedImage = File(pickedFile.path);
@@ -101,7 +102,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     });
     try {
       prescriptionInfo =
-          await apiService.sendImageToGPT4Vision(image: pickedImage!);
+      await apiService.sendImageToGPT4Vision(image: pickedImage!);
       _addMedicinesFromPrescriptionInfo();
     } catch (error) {
       _showErrorSnackBar(error);
@@ -164,7 +165,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
       if (jsonStartIndex != -1 && jsonEndIndex != -1) {
         final jsonString =
-            prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
+        prescriptionInfo.substring(jsonStartIndex, jsonEndIndex);
 
         final List<dynamic> parsedInfo = jsonDecode(jsonString);
         for (var medicineInfo in parsedInfo) {
@@ -206,7 +207,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             'startTime': TimeOfDay(hour: startHour, minute: startMinute).format(context),
             'endDate': DateFormat('yyyy-MM-dd').format(endDate),
             'additionalInstructions':
-                medicineInfo['Additional Instructions'] ?? '',
+            medicineInfo['Additional Instructions'] ?? '',
             'selectedDays': _selectedDays,
           };
           setState(() {
@@ -276,7 +277,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     if (_startDateController.text.isNotEmpty &&
         _daysController.text.isNotEmpty) {
       final startDate =
-          DateFormat('yyyy-MM-dd').parse(_startDateController.text);
+      DateFormat('yyyy-MM-dd').parse(_startDateController.text);
       final days = int.tryParse(_daysController.text) ?? 0;
       final endDate = startDate.add(Duration(days: days));
       _endDateController.text = DateFormat('yyyy-MM-dd').format(endDate);
@@ -310,6 +311,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
       _endDateController.clear();
       _startTimeController.clear();
       _selectedDays.clear();
+      _daysOfWeek.clear();
     });
   }
 
@@ -317,10 +319,22 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   Future<void> _onTapSubmitBtn(BuildContext context) async {
     // Check if there are any medicines added to the list
     if (_medicines.isNotEmpty) {
+    setState(() {
+      alarmSetting=true;
+    });
+
       bool hasErrors = false; // To track if any errors were found
 
       // Loop through each medicine and validate the fields
       for (var medicine in _medicines) {
+        if (medicine['pillintake'].isEmpty || num.tryParse(medicine['pillintake']) == null) {
+          _showErrorSnackBar(
+              'Please enter a valid number for pill intake for ${medicine['name']}');
+          hasErrors = true;
+          setState(() {
+            alarmSetting = false;
+          });
+        }
         if
         (
             medicine['interval'].isEmpty ||
@@ -329,6 +343,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             medicine['endDate'].isEmpty ||
             medicine['startTime'].isEmpty ||
             medicine['pillintake'].isEmpty ||
+            num.tryParse(medicine['pillintake']) == null ||
             medicine['selectedDays'].isEmpty ||
             medicine['name'].isEmpty ||
             medicine['dosage'].isEmpty
@@ -340,6 +355,9 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           _showErrorSnackBar(
               'Please edit the entry for ${medicine['name']} to include frequency, duration, start date, start time, and end date.');
           hasErrors = true; // Set error flag to true
+          setState(() {
+            alarmSetting=false;
+          });
         }
       }
 
@@ -378,9 +396,16 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           startTime: extractedMedicine["startTime"],
         );
       }
+    setState(() {
+      alarmSetting=false;
+    });
+
 
       _showSuccessDialog('Reminders set successfully', '');
     } else {
+      setState(() {
+        alarmSetting=false;
+      });
       _showErrorSnackBar('No Items added to set reminder');
     }
   }
@@ -403,8 +428,8 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     final int startMinute = int.parse(timeParts[1].split(" ")[0]);
 
     for (DateTime currentDate = startDate;
-        currentDate.isBefore(endDate) || currentDate.isAtSameMomentAs(endDate);
-        currentDate = currentDate.add(Duration(days: 1))) {
+    currentDate.isBefore(endDate) || currentDate.isAtSameMomentAs(endDate);
+    currentDate = currentDate.add(Duration(days: 1))) {
       if (selectedDays.contains(DateFormat('E').format(currentDate))) {
         for (int j = 0; j < interval; j++) {
           final DateTime alarmTime = DateTime(
@@ -417,7 +442,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
           // Create a document in Firestore and get its ID
           final alarmDocRef =
-              FirebaseFirestore.instance.collection('alarms').doc();
+          FirebaseFirestore.instance.collection('alarms').doc();
           final alarmId = alarmDocRef.id;
           final int alarmIdHash = alarmId.hashCode;
 
@@ -431,7 +456,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
             fadeDuration: 2,
             notificationTitle: medicineName,
             notificationBody:
-                'Take $pillIntake pill(s) of $medicineName. $dosage mg. ${_additionalInstructions.text}',
+            'Take $pillIntake pill(s) of $medicineName. $dosage mg. ${_additionalInstructions.text}',
           );
 
           await Alarm.set(alarmSettings: alarmSettings);
@@ -468,129 +493,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
-//two options to upload prescriptions to the system
-  Widget _buildImagePickerOptions() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildImagePickerButton('Open Gallery', Icons.image,
-                () => _pickImage(ImageSource.gallery)),
-            _buildImagePickerButton('Start Camera', Icons.camera_alt,
-                () => _pickImage(ImageSource.camera)),
-          ],
-        ),
-      ],
-    );
-  }
-
-//Display the scanned Image in the app
-  Widget _buildImagePickerButton(
-      String text, IconData icon, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        side: BorderSide(color: Colors.red, width: 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            text.toUpperCase(),
-            style: TextStyle(color: Colors.red),
-          ),
-          const SizedBox(width: 10),
-          Icon(
-            icon,
-            color: Colors.red,
-          ),
-        ],
-      ),
-    );
-  }
-
-  //Display the uploaded image, else show the default image
-  Widget _buildPickedImage() {
-    return pickedImage == null
-        ? Center(
-            child: Container(
-              // height: MediaQuery.of(context).size.height * 0.5,
-              height: 500,
-              child: Image.asset('assets/pick1.png'),
-            ),
-          )
-        : Container(
-            width: double.infinity,
-            height: 500,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-            padding: const EdgeInsets.all(20),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.file(
-                pickedImage!,
-                fit: BoxFit.fitHeight,
-              ),
-            ),
-          );
-  }
-
-  //When an image is uploaded, display the analyse button
-  Widget _buildDetectButton() {
-    return detecting
-        ? SpinKitWave(
-            color: Colors.red,
-            size: 30,
-          )
-        : Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              onPressed: () {
-                detectDisease();
-              },
-              child: const Text(
-                'Analyse',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          );
-  }
-
-  Widget _buildPrescriptionInfo() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Text(""),
-      ),
-    );
-  }
-
-  //Divide the section either to add details mannually
-  Widget _buildDivider() {
-    return Center(
-      child: Text(
-        'OR',
-        style: TextStyle(
-            fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
 
   //Controld to mannual setting reimders
   Widget _setRemindersManuallyForm() {
@@ -687,7 +589,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -735,7 +637,7 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
   Widget _buildDropdownButtonFormField() {
     return DropdownButtonFormField<String>(
       value: _selectedFrequency.isNotEmpty &&
-              _frequencyOptions.contains(_selectedFrequency)
+          _frequencyOptions.contains(_selectedFrequency)
           ? _selectedFrequency
           : null, // Set to null if no match is found to avoid errors
       items: _frequencyOptions.map((String value) {
@@ -896,8 +798,6 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
     );
   }
 
-//Mannually setting Reimders controls End here
-
 /*List to display the medicine reminders fetched when edit icon click populate to the _populateFieldsForEditing(medicine) or if delete remove the
   prescription from medicine list.*/
   Widget _buildMedicineList() {
@@ -953,24 +853,30 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
 
 //When set alarm button is clicked
   Widget _buildSetAlarmButton() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-      child: ElevatedButton(
-        onPressed: () => _onTapSubmitBtn(context),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+    return Align(
+      alignment: Alignment.centerRight,  // Align to the left
+      child: SizedBox(
+        width: 150,  // Set the button width to 150
+        child: alarmSetting ?
+        Center(  // Show progress bar when button is disabled
+          child: CircularProgressIndicator(),
+        )
+            :ElevatedButton(
+          onPressed: () => _onTapSubmitBtn(context),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
           ),
-        ),
-        child: Text(
-          'Set Alarm',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+          child: Text(
+            'Set Alarm',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
@@ -1007,18 +913,21 @@ class _MedicineAlertPageState extends State<MedicineAlertPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTitle('Upload Prescription'),
-              _buildImagePickerOptions(),
-              _buildPickedImage(),
-              if (pickedImage != null) _buildDetectButton(),
-              if (prescriptionInfo.isNotEmpty) _buildPrescriptionInfo(),
-              _buildDivider(),
-              _buildTitle('Set Reminder Manually'),
+              // _buildTitle('Upload Prescription'),
+              // _buildImagePickerOptions(),
+              // _buildPickedImage(),
+              // if (pickedImage != null) _buildDetectButton(),
+              // if (prescriptionInfo.isNotEmpty) _buildPrescriptionInfo(),
+              // _buildDivider(),
               SizedBox(height: 10),
+              _buildTitle('Add Reminder Information'),
+              SizedBox(height: 20),
               _setRemindersManuallyForm(),
               SizedBox(height: 16),
-              _buildMedicineList(),
-              _buildSetAlarmButton(),
+              _buildMedicineList(),if (_medicines.isNotEmpty) ...[
+                SizedBox(height: 16),
+                _buildSetAlarmButton(),  // Only show when medicines list is not empty
+              ],
               SizedBox(height: 16),
             ],
           ),

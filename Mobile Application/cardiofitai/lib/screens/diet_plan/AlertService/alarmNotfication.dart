@@ -1,3 +1,4 @@
+/*This is the page which of the Medicine Reminder Notification.*/
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
