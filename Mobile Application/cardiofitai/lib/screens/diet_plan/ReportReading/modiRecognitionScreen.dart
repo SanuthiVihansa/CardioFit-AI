@@ -95,7 +95,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 SizedBox(
                   width: 10,
                 ),
-                Flexible(
+                if (_selectedReport != 'Select Report')
+                  Flexible(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
@@ -689,7 +690,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                       height: 30,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -738,6 +739,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                             },
                             child: Text(widget.user.newUser ? "Skip" : "Back")),
                         SizedBox(width: 30),
+              if (_pickedImages.isNotEmpty) ...[
                         ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.white,
@@ -753,7 +755,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                     _onTapAnalyseBtn();
                                   }
                                 : null,
-                            child: Text("Analyse")),
+                            child: Text("Analyse")),],
                         _isLoading == true
                             ? Padding(
                                 padding: const EdgeInsets.only(left: 20.0),

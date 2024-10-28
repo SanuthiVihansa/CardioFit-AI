@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../defect_prediction/ecg_plot.dart';
 
@@ -57,6 +58,7 @@ class _AllLeadDisplayScreenFromHistoryState
   late double _height;
   final double _devWidth = 753.4545454545455;
   final double _devHeight = 392.72727272727275;
+  final String _upBaseLineServerUrl = 'http://swije.pythonanywhere.com/load/model';
 
   final List<String> _dropDownMenuItems = [
     "Lead I",
@@ -81,11 +83,19 @@ class _AllLeadDisplayScreenFromHistoryState
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     _selectedLead = _dropDownMenuItems.first;
+
+    // upBaseLineServer();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> upBaseLineServer() async {
+    await http.get(Uri.parse(_upBaseLineServerUrl), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
   }
 
   double _calcMin(List<double> data) {

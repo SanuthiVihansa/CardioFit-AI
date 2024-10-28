@@ -524,6 +524,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:cardiofitai/screens/explainable_AI/model_feature_showcase_screen_for_shap.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/services.dart';
@@ -553,6 +555,11 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
   String _errorMessage = '';
   Map<String, List<int>> _featureIndicesLead1 = {};
   Map<String, List<int>> _featureIndicesLead2 = {};
+
+  late double _width;
+  late double _height;
+  final double _devWidth = 753.4545454545455;
+  final double _devHeight = 392.72727272727275;
 
   @override
   void initState() {
@@ -739,8 +746,20 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
     );
   }
 
+  void _onTapViewFeaturesBtn(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => ECGPlotScreen(ecgFile: widget.file, user: widget.user),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
@@ -779,9 +798,35 @@ class _ECGDiagnosisScreenState extends State<ECGDiagnosisScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  'Diagnosis: $_predictedLabel',
-                  style: const TextStyle(fontSize: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'Diagnosis: $_predictedLabel',
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _onTapViewFeaturesBtn();
+                      },
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all<Size>(
+                          Size(
+                              _width / (_devWidth / 230),
+                              _height /
+                                  (_devHeight /
+                                      40)), // Button width and height
+                        ),
+                      ),
+                      child: Text(
+                        "View Prediction Features",
+                        style: TextStyle(fontSize: _width / (_devWidth / 15)),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
