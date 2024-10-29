@@ -196,13 +196,42 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     }}
 
     // Return the final diagnosis as a concatenated string
-    return diagnoses.isNotEmpty ? diagnoses.join(", ") : "Normal: No defects identified.";
+    return diagnoses.isNotEmpty ? diagnoses.join("\n") : "Normal: No defects identified.";
   }
 
 
 
   void updateUserInformation(User updatedUser) async {
     await UserLoginService.updateUser(updatedUser);
+  }
+
+  void _showDiagnosisPopup(String overallDiagnosis) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Icon(Icons.health_and_safety, color: Colors.red, size: 28),
+              SizedBox(width: 10),
+              Text("Overall Diagnosis"),
+            ],
+          ),
+          content: Text(
+            overallDiagnosis,
+            style: TextStyle(fontSize: 16, height: 1.5),
+          ),
+          actions: [
+            TextButton(
+              child: Text("Close", style: TextStyle(color: Colors.red)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -324,10 +353,25 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
                   }
                 }).toList(),
                 SizedBox(height: 20),
-                Text(
-                  "Overall Diagnosis: $overallDiagnosis",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                // Add this button near the end of the widget tree
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () => _showDiagnosisPopup(overallDiagnosis),
+                  child: Text(
+                    "View Overall Diagnosis",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
+
+                // Text(
+                //   "Overall Diagnosis: $overallDiagnosis",
+                //   style: TextStyle(fontWeight: FontWeight.bold),
+                // ),
               ],
             ),
           ),
