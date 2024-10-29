@@ -10,7 +10,7 @@ class EmergencyDialog extends StatelessWidget {
   const EmergencyDialog({Key? key, required this.contactNumber}) : super(key: key);
 
   Future<void> _sendSms(String contactNumber, String message) async {
-    final String apiKey = 'AUS4ssj4nA8vBGpJgyZX'; // Replace with your notify.lk API key
+    final String apiKey = '0LqFxqP98ZEz9m1Ayfni'; // Replace with your notify.lk API key
     final String senderId = 'NotifyDEMO'; // Replace with your sender ID (if any)
 
     try {
@@ -21,7 +21,7 @@ class EmergencyDialog extends StatelessWidget {
           'Authorization': 'Bearer $apiKey',
         },
         body: jsonEncode({
-          'user_id': '27903', // Replace with your user ID
+          'user_id': '28285', // Replace with your user ID
           'api_key': apiKey,
           'sender_id': senderId,
           'to': contactNumber,

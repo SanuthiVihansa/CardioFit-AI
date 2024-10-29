@@ -44,98 +44,190 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
   Widget _multipleAttachmentControl() {
     return Container(
-      height: 300,
-      width: 500,
-      margin: const EdgeInsets.only(right: 20, bottom: 10),
-      child: Material(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        //color: Colors.white54,
-        //elevation: 4,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: 80,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  width: 250,
-                  decoration: BoxDecoration(
-                    border:
-                        Border.all(color: Colors.deepOrangeAccent, width: 2.0),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: DropdownButton<String>(
-                    value: _selectedReport,
-                    elevation: 16,
-                    style: const TextStyle(color: Colors.blueGrey),
-                    alignment: Alignment.topLeft,
-                    underline: SizedBox(),
-                    // Remove the underline
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        setState(() {
-                          _selectedReport = newValue;
-                        });
-                      }
-                    },
-                    items:
-                        reports.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Center(
-                          child: Text(value, textAlign: TextAlign.start),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                if (_selectedReport != 'Select Report')
-                  Flexible(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(10.0), // Rounded corners
-                        )
+      padding: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Wrap(
+            spacing: 20.0,
+            runSpacing: 20.0,
+            children: reports
+                .where((report) => report != 'Select Report')
+                .map((report) => GestureDetector(
+              onTap: () async {
+                setState(() {
+                  _selectedReport = report;
+                });
+                final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  File pickedImage = File(image.path);
+                  if (pickedImage.path.isNotEmpty) {
+                    _selectedReports.add({
+                      "UploadedReport": _selectedReport,
+                      "UploadedImage": pickedImage,
+                      "ScannedItems": "",
+                      "ExtractedText": "",
+                      "obtainedRows": _rows,
+                    });
+                    _pickedImages.add(pickedImage);
+                    setState(() {});
+                  }
+                }
+              },
+              child: Container(
+                width: 200,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey.shade500,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 5,
                     ),
-                    onPressed: () async {
-                      final image = await ImagePicker()
-                          .pickImage(source: ImageSource.gallery);
-                      if (image != null) {
-                        File pickedImage = File(image.path);
-                        if (pickedImage.path.isNotEmpty &&
-                            _selectedReport != 'Select Report') {
-                          _selectedReports.add({
-                            "UploadedReport": _selectedReport,
-                            "UploadedImage": pickedImage,
-                            "ScannedItems": "",
-                            "ExtractedText": "",
-                            "obtainedRows": _rows,
-                          });
-                          _pickedImages
-                              .add(pickedImage); // Add image to the list
-                          setState(() {});
-                        }
-                      }
-                    },
-                    child: Text("Attach"),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ],
-        ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      _getIconForReport(report),
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      report,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ))
+                .toList(),
+          ),
+        ],
       ),
     );
   }
+
+  IconData _getIconForReport(String reportType) {
+    switch (reportType) {
+      case 'Random blood sugar':
+        return Icons.bloodtype;
+      case 'Fasting blood Sugar':
+        return Icons.bloodtype;
+      case 'Urine Full Report':
+        return Icons.science;
+      case 'Lipid profile':
+        return Icons.bar_chart;
+      case 'Full Blood Count Report':
+        return Icons.health_and_safety;
+      default:
+        return Icons.insert_drive_file;
+    }
+  }
+
+  // Widget _multipleAttachmentControl() {
+  //   return Container(
+  //     height: 300,
+  //     width: 500,
+  //     margin: const EdgeInsets.only(right: 20, bottom: 10),
+  //     child: Material(
+  //       borderRadius: BorderRadius.all(Radius.circular(20)),
+  //       //color: Colors.white54,
+  //       //elevation: 4,
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.center,
+  //         children: <Widget>[
+  //           SizedBox(
+  //             height: 80,
+  //           ),
+  //           Row(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: <Widget>[
+  //               Container(
+  //                 width: 250,
+  //                 decoration: BoxDecoration(
+  //                   border:
+  //                       Border.all(color: Colors.deepOrangeAccent, width: 2.0),
+  //                   borderRadius: BorderRadius.circular(8.0),
+  //                 ),
+  //                 child: DropdownButton<String>(
+  //                   value: _selectedReport,
+  //                   elevation: 16,
+  //                   style: const TextStyle(color: Colors.blueGrey),
+  //                   alignment: Alignment.topLeft,
+  //                   underline: SizedBox(),
+  //                   // Remove the underline
+  //                   onChanged: (String? newValue) {
+  //                     if (newValue != null) {
+  //                       setState(() {
+  //                         _selectedReport = newValue;
+  //                       });
+  //                     }
+  //                   },
+  //                   items:
+  //                       reports.map<DropdownMenuItem<String>>((String value) {
+  //                     return DropdownMenuItem<String>(
+  //                       value: value,
+  //                       child: Center(
+  //                         child: Text(value, textAlign: TextAlign.start),
+  //                       ),
+  //                     );
+  //                   }).toList(),
+  //                 ),
+  //               ),
+  //               SizedBox(
+  //                 width: 10,
+  //               ),
+  //               if (_selectedReport != 'Select Report')
+  //                 Flexible(
+  //                 child: ElevatedButton(
+  //                   style: ElevatedButton.styleFrom(
+  //                       foregroundColor: Colors.white,
+  //                       backgroundColor: Colors.red,
+  //                       shape: RoundedRectangleBorder(
+  //                         borderRadius:
+  //                         BorderRadius.circular(10.0), // Rounded corners
+  //                       )
+  //                   ),
+  //                   onPressed: () async {
+  //                     final image = await ImagePicker()
+  //                         .pickImage(source: ImageSource.gallery);
+  //                     if (image != null) {
+  //                       File pickedImage = File(image.path);
+  //                       if (pickedImage.path.isNotEmpty &&
+  //                           _selectedReport != 'Select Report') {
+  //                         _selectedReports.add({
+  //                           "UploadedReport": _selectedReport,
+  //                           "UploadedImage": pickedImage,
+  //                           "ScannedItems": "",
+  //                           "ExtractedText": "",
+  //                           "obtainedRows": _rows,
+  //                         });
+  //                         _pickedImages
+  //                             .add(pickedImage); // Add image to the list
+  //                         setState(() {});
+  //                       }
+  //                     }
+  //                   },
+  //                   child: Text("Attach"),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _showAttachedItems() {
     return Padding(
@@ -216,6 +308,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
       },
     );
   }
+
 
   void _onTapAnalyseBtn() async {
     setState(() {
@@ -654,7 +747,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Laboratory Report Diagnosis",
+          "Laboratory Report Upload",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.red,
@@ -666,19 +759,18 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             child: SingleChildScrollView(
               child: Container(
                 alignment: Alignment.center,
+                padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 55 + MediaQuery.of(context).viewInsets.top,
+                    Text(
+                      "Select a Report Type to Upload",
+                      style: TextStyle(
+                        fontSize: 26,
+                        color: Colors.blueGrey.shade800,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                    Text("Please upload your medical reports",
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.blueGrey,
-                            fontWeight: FontWeight.w700)),
-                    SizedBox(
-                      height: 30,
-                    ),
+                    SizedBox(height: 20),
                     _multipleAttachmentControl(),
                     SizedBox(
                       height: 30,

@@ -314,7 +314,7 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
       _endDateController.clear();
       _startTimeController.clear();
       _selectedDays.clear();
-      _daysOfWeek.clear();
+
 
       // Hide the form after adding the medicine
       _isEditing = false;
@@ -612,16 +612,6 @@ class _AIScheduleScreen extends State<AIScheduleScreen> {
     );
   }
 
-  //Divide the section either to add details mannually
-  // Widget _buildDivider() {
-  //   return Center(
-  //     child: Text(
-  //       'OR',
-  //       style: TextStyle(
-  //           fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
-  //     ),
-  //   );
-  // }
 
   //Controld to mannual setting reimders
   Widget _setRemindersManuallyForm() {
